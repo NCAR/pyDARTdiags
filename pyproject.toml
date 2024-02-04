@@ -1,0 +1,22 @@
+[project]
+name = "pydart_helen"
+version = "0.0.1"
+authors = [
+  { name="Helen Kershaw", email="hkershaw@ucar.edu" },
+]
+description = "Observation Sequence Diagnostics for DART"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/hkershaw-brown/pyDART.git"
+Issues = "https://github.com/hkershaw-brown/pyDART.git/issues"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
