@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "pydart_helen"
-version = "0.0.2"
+version = "0.0.3"
 authors = [
   { name="Helen Kershaw", email="hkershaw@ucar.edu" },
 ]
@@ -17,7 +17,7 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-"pandas=2.2.0"
+    "pandas>=2.2.0"
 ]
 
 [project.urls]
