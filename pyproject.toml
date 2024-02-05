@@ -22,6 +22,6 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/hkershaw-brown/pyDART.git"
-Issues = "https://github.com/hkershaw-brown/pyDART.git/issues"
+Homepage = "https://github.com/NCAR/pyDARTdiags.git"
+Issues = "https://github.com/NCAR/pyDARTdiags/issues"
 
