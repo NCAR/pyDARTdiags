@@ -18,6 +18,7 @@ classifiers = [
 ]
 dependencies = [
     "pandas>=2.2.0"
+    "numpy>=1.26"
 ]
 
 [project.urls]
