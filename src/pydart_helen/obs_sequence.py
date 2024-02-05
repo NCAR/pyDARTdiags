@@ -1,10 +1,40 @@
 import pandas as pd
 
 class obs_sequence:
-    """Class for reading ascii observation sequence files
+    """Create an obs_sequence object from an ascii observation
+       sequence file.
 
-       usage: obs_seq = obs_sequence('/Users/hkershaw/DART/Projects/Diagnostics/data/obs_seq.final.ascii.small')
+       Attributes:
+       
+           df : pandas Dataframe containing all the observations
+           all_obs : list of all observations, each observation is a list
+           header : header from the ascii file
+           vert : dictionary of dart vertical units
+           types : dictionary of types in the observation sequence file
+           copie_names : names of copies in the observation sequence file
+           file : the input observation sequence ascii file
+       
+       usage: 
+         Read the observation sequence from file:
+              obs_seq = obs_sequence('/home/data/obs_seq.final.ascii.small')
+         Access the resutling pandas dataFrame:
+              obs_seq.df   
     """
+    ## static variables
+    # vertrical coordinate:
+    #   undefined 'VERTISUNDEF'
+    #   surface 'VERTISSURFACE' (value is surface elevation in m)
+    #   model level ''VERTISLEVEL'
+    #   pressure 'VERTISPRESSURE' (in pascals)
+    #   height 'VERTISHEIGHT' (in meters)
+    #   scale height 'VERTISSCALEHEIGHT' (unitless)
+    vert = {-2: 'undefined',              
+            -1: 'surface (m)', 
+             1: 'model level',
+             2: 'pressue (Pa)',
+             3: 'height (m)',
+             4: 'scale height' }
+    
     def __init__(self, file):
         self.file = file
         self.header, self.header_n = read_header(file)
@@ -14,8 +44,11 @@ class obs_sequence:
         self.all_obs = self.create_all_obs() # uses up the generator
         self.columns = self.column_headers()
         self.df = pd.DataFrame(self.all_obs, columns = self.columns)
-        
+    
     def create_all_obs(self):
+        """ steps thougth the generator to create a
+            list of all observations in the sequence 
+        """
         count = 0
         all_obs = []
         for obs in self.seq:
@@ -25,6 +58,9 @@ class obs_sequence:
         return all_obs
 
     def obs_to_list(self, obs):
+        """put single observation into a list
+           discards obs_def
+        """
         data = []
         data.append(obs[0].split()[1]) # obs_num
         data.extend(list(map(float,obs[1:self.n_copies+1]))) # all the copies
@@ -33,6 +69,7 @@ class obs_sequence:
         data.append(location[0]) # location x
         data.append(location[1]) # location y
         data.append(location[2]) # location z
+        data.append(obs_sequence.vert[int(location[3])])
         typeI = obs.index('kind') # type of observation
         type = obs[typeI + 1]
         data.append(self.types[type]) # observation type
@@ -47,7 +84,8 @@ class obs_sequence:
         heading.extend(self.copie_names)
         heading.append('longitude')
         heading.append('latitude')
-        heading.append('vertical')  # need to set from which_vert
+        heading.append('vertical')
+        heading.append('vert unit')
         heading.append('type')
         heading.append('seconds')
         heading.append('days')
