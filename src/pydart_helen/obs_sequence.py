@@ -1,4 +1,6 @@
 import pandas as pd
+import datetime as dt
+import numpy as np
 
 class obs_sequence:
     """Create an obs_sequence object from an ascii observation
@@ -19,6 +21,8 @@ class obs_sequence:
               obs_seq = obs_sequence('/home/data/obs_seq.final.ascii.small')
          Access the resutling pandas dataFrame:
               obs_seq.df   
+
+         latitude and longitude are in degress in the DataFrame
     """
     ## static variables
     # vertrical coordinate:
@@ -44,7 +48,9 @@ class obs_sequence:
         self.all_obs = self.create_all_obs() # uses up the generator
         self.columns = self.column_headers()
         self.df = pd.DataFrame(self.all_obs, columns = self.columns)
-    
+        self.df['longitude'] = np.rad2deg(self.df['longitude'])
+        self.df['latitude'] = np.rad2deg(self.df['latitude'])
+
     def create_all_obs(self):
         """ steps thougth the generator to create a
             list of all observations in the sequence 
@@ -66,19 +72,21 @@ class obs_sequence:
         data.extend(list(map(float,obs[1:self.n_copies+1]))) # all the copies
         locI = obs.index('loc3d')
         location = obs[locI+1].split()
-        data.append(location[0]) # location x
-        data.append(location[1]) # location y
-        data.append(location[2]) # location z
+        data.append(float(location[0])) # location x
+        data.append(float(location[1])) # location y
+        data.append(float(location[2])) # location z
         data.append(obs_sequence.vert[int(location[3])])
         typeI = obs.index('kind') # type of observation
         type_value = obs[typeI + 1]
         data.append(self.types[type_value]) # observation type
         time = obs[typeI + 2].split()
-        data.append(time[0]) # seconds
-        data.append(time[1]) # days
+        data.append(int(time[0])) # seconds
+        data.append(int(time[1])) # days
+        data.append(convert_dart_time(int(time[0]), int(time[1]))) # 
         return data
 
     def column_headers(self):
+        """define the columns for the dataframe """
         heading = []
         heading.append('obs_num')
         heading.extend(self.copie_names)
@@ -89,7 +97,18 @@ class obs_sequence:
         heading.append('type')
         heading.append('seconds')
         heading.append('days')
+        heading.append('time')
         return heading
+
+def convert_dart_time(seconds, days):
+    """covert from seconds, days after 1601 to datetime object
+
+    base year for Gregorian calendar is 1601
+    dart time is seconds, days since 1601
+    """
+    time = dt.datetime(1601,1,1) + dt.timedelta(days=days, seconds=seconds)
+    return time
+
 
 def read_header(file):
     """Read the header and number of lines in the header of an obs_seq file"""
