@@ -71,8 +71,8 @@ class obs_sequence:
         data.append(location[2]) # location z
         data.append(obs_sequence.vert[int(location[3])])
         typeI = obs.index('kind') # type of observation
-        type = obs[typeI + 1]
-        data.append(self.types[type]) # observation type
+        type_value = obs[typeI + 1]
+        data.append(self.types[type_value]) # observation type
         time = obs[typeI + 2].split()
         data.append(time[0]) # seconds
         data.append(time[1]) # days
@@ -105,7 +105,7 @@ def read_header(file):
 def collect_obs_types(header):
     """Create a dictionary for the observation types in the obs_seq header"""
     num_obs_types = int(header[2])
-    types = dict([x.split() for  x in header[3:num_obs_types]])
+    types = dict([x.split() for  x in header[3:num_obs_types+3]])
     return types
 
 def collect_copie_names(header):
