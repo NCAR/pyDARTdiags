@@ -79,10 +79,13 @@ class obs_sequence:
         typeI = obs.index('kind') # type of observation
         type_value = obs[typeI + 1]
         data.append(self.types[type_value]) # observation type
-        time = obs[typeI + 2].split()
+        # any observation specific obs def info is between here and the end of the list
+        time = obs[-2].split()
         data.append(int(time[0])) # seconds
         data.append(int(time[1])) # days
-        data.append(convert_dart_time(int(time[0]), int(time[1]))) # 
+        data.append(convert_dart_time(int(time[0]), int(time[1]))) # datetime
+        data.append(obs[-1]) # obs error variance ?convert to sd?
+        
         return data
 
     def column_headers(self):
@@ -93,11 +96,12 @@ class obs_sequence:
         heading.append('longitude')
         heading.append('latitude')
         heading.append('vertical')
-        heading.append('vert unit')
+        heading.append('vert_unit')
         heading.append('type')
         heading.append('seconds')
         heading.append('days')
         heading.append('time')
+        heading.append('obs_err_var')
         return heading
 
 def convert_dart_time(seconds, days):
