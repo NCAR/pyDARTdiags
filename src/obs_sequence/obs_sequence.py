@@ -26,10 +26,10 @@ class obs_sequence:
        sq_err = (mean-obs)**2
        bias = (mean-obs)
 
-       rmse = sum((mean-obs)**2)
-       bias = sum((mean-obs))
+       rmse = sqrt( sum((mean-obs)**2)/n )
+       bias = sum((mean-obs)/n)
        spread = sum(sd)
-       totalspread = sum(sd+obs_err_var) 
+       totalspread = sqrt(sum(sd+obs_err_var)) 
 
        
     """
