@@ -22,7 +22,16 @@ class obs_sequence:
          Access the resutling pandas dataFrame:
               obs_seq.df   
 
-         latitude and longitude are in degress in the DataFrame
+       latitude and longitude are in degress in the DataFrame
+       sq_err = (mean-obs)**2
+       bias = (mean-obs)
+
+       rmse = sum((mean-obs)**2)
+       bias = sum((mean-obs))
+       spread = sum(sd)
+       totalspread = sum(sd+obs_err_var) 
+
+       
     """
     ## static variables
     # vertrical coordinate:
@@ -50,6 +59,8 @@ class obs_sequence:
         self.df = pd.DataFrame(self.all_obs, columns = self.columns)
         self.df['longitude'] = np.rad2deg(self.df['longitude'])
         self.df['latitude'] = np.rad2deg(self.df['latitude'])
+        self.df['bias'] = (self.df['prior_ensemble_mean'] - self.df['observation'])
+        self.df['sq_err'] = self.df['bias']**2  # squared error
 
     def create_all_obs(self):
         """ steps thougth the generator to create a
