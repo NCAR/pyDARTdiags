@@ -19,10 +19,10 @@ class obs_sequence:
        usage: 
          Read the observation sequence from file:
               obs_seq = obs_sequence('/home/data/obs_seq.final.ascii.small')
-         Access the resutling pandas dataFrame:
+         Access the resulting pandas dataFrame:
               obs_seq.df   
 
-       latitude and longitude are in degress in the DataFrame
+       latitude and longitude are in degrees in the DataFrame
        sq_err = (mean-obs)**2
        bias = (mean-obs)
 
@@ -37,14 +37,14 @@ class obs_sequence:
     # vertrical coordinate:
     #   undefined 'VERTISUNDEF'
     #   surface 'VERTISSURFACE' (value is surface elevation in m)
-    #   model level ''VERTISLEVEL'
+    #   model level 'VERTISLEVEL'
     #   pressure 'VERTISPRESSURE' (in pascals)
     #   height 'VERTISHEIGHT' (in meters)
     #   scale height 'VERTISSCALEHEIGHT' (unitless)
     vert = {-2: 'undefined',              
             -1: 'surface (m)', 
              1: 'model level',
-             2: 'pressue (Pa)',
+             2: 'pressure (Pa)',
              3: 'height (m)',
              4: 'scale height' }
     
@@ -63,7 +63,7 @@ class obs_sequence:
         self.df['sq_err'] = self.df['bias']**2  # squared error
 
     def create_all_obs(self):
-        """ steps thougth the generator to create a
+        """ steps through the generator to create a
             list of all observations in the sequence 
         """
         count = 0
