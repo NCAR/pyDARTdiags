@@ -47,6 +47,12 @@ class obs_sequence:
              2: 'pressure (Pa)',
              3: 'height (m)',
              4: 'scale height' }
+
+    # synonyms for observation
+    synonyms_for_obs = ['NCEP BUFR observation',
+                        'AIRS observation', 
+                        'GTSPP observation', 
+                        'SST observation']
     
     def __init__(self, file):
         self.file = file
@@ -59,6 +65,9 @@ class obs_sequence:
         self.df = pd.DataFrame(self.all_obs, columns = self.columns)
         self.df['longitude'] = np.rad2deg(self.df['longitude'])
         self.df['latitude'] = np.rad2deg(self.df['latitude'])
+        # rename 'X observation' to observation
+        
+
         # calculate bias and sq_err is the obs_seq is an obs_seq.final
         if 'prior_ensemble_mean'.casefold() in map(str.casefold, self.columns):
             self.df['bias'] = (self.df['prior_ensemble_mean'] - self.df['observation'])
