@@ -59,8 +59,10 @@ class obs_sequence:
         self.df = pd.DataFrame(self.all_obs, columns = self.columns)
         self.df['longitude'] = np.rad2deg(self.df['longitude'])
         self.df['latitude'] = np.rad2deg(self.df['latitude'])
-        self.df['bias'] = (self.df['prior_ensemble_mean'] - self.df['observation'])
-        self.df['sq_err'] = self.df['bias']**2  # squared error
+        # calculate bias and sq_err is the obs_seq is an obs_seq.final
+        if 'prior_ensemble_mean'.casefold() in map(str.casefold, self.columns):
+            self.df['bias'] = (self.df['prior_ensemble_mean'] - self.df['observation'])
+            self.df['sq_err'] = self.df['bias']**2  # squared error
 
     def create_all_obs(self):
         """ steps through the generator to create a
