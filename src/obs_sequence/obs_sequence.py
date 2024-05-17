@@ -95,6 +95,7 @@ class obs_sequence:
         data = []
         data.append(obs[0].split()[1]) # obs_num
         data.extend(list(map(float,obs[1:self.n_copies+1]))) # all the copies
+        data.append(obs[self.n_copies+1])  # linked list info
         locI = obs.index('loc3d')
         location = obs[locI+1].split()
         data.append(float(location[0])) # location x
@@ -113,11 +114,27 @@ class obs_sequence:
         
         return data
 
+    def list_to_obs(self, data):
+        obs = []
+        obs.append('OBS        ' + str(data[0]))  # obs_num lots of space
+        obs.extend(data[1:self.n_copies+1])  # all the copies
+        obs.append(data[self.n_copies+1])  # linked list info
+        obs.append('loc3d')
+        obs.append(' '.join(map(str, data[self.n_copies+2:self.n_copies+6])))  # location x, y, z, vert
+        obs.append('kind')
+        obs.append(list(self.types.keys())[list(self.types.values()).index(data[self.n_copies+6])])  # observation type
+        obs.append(' '.join(map(str, data[-4:-2])))  # seconds, days
+        obs.append(data[-1])  # obs error variance
+
+        return obs
+
+
     def column_headers(self):
         """define the columns for the dataframe """
         heading = []
         heading.append('obs_num')
         heading.extend(self.copie_names)
+        heading.append('linked_list')
         heading.append('longitude')
         heading.append('latitude')
         heading.append('vertical')
@@ -128,6 +145,17 @@ class obs_sequence:
         heading.append('time')
         heading.append('obs_err_var')
         return heading
+
+    def write_obs_seq(self, file):
+        """write the obs_seq file to disk"""
+        with open(file, 'w') as f:
+            for line in self.header:
+                f.write(str(line) + '\n')
+            f.write("first: dummy last: dummy\n")
+            for obs in self.all_obs:
+                ob_write = self.list_to_obs(obs)
+                for line in ob_write:
+                    f.write(str(line) + '\n')
 
 def convert_dart_time(seconds, days):
     """covert from seconds, days after 1601 to datetime object
