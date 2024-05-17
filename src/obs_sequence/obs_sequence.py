@@ -13,7 +13,9 @@ class obs_sequence:
            header : header from the ascii file
            vert : dictionary of dart vertical units
            types : dictionary of types in the observation sequence file
-           copie_names : names of copies in the observation sequence file
+           copie_names : names of copies in the observation sequence file.
+                         Spelled copie to avoid conflict with python built-in copy function.
+                         Spaces are replaced with underscores in copie_names.
            file : the input observation sequence ascii file
        
        usage: 
@@ -66,8 +68,9 @@ class obs_sequence:
         self.df['longitude'] = np.rad2deg(self.df['longitude'])
         self.df['latitude'] = np.rad2deg(self.df['latitude'])
         # rename 'X observation' to observation
-        
-
+        self.synonyms_for_obs = [synonym.replace(' ', '_') for synonym in self.synonyms_for_obs]
+        rename_dict = {old: 'observation' for old in self.synonyms_for_obs  if old in self.df.columns}
+        self.df = self.df.rename(columns=rename_dict)
         # calculate bias and sq_err is the obs_seq is an obs_seq.final
         if 'prior_ensemble_mean'.casefold() in map(str.casefold, self.columns):
             self.df['bias'] = (self.df['prior_ensemble_mean'] - self.df['observation'])
@@ -154,13 +157,24 @@ def collect_obs_types(header):
     return types
 
 def collect_copie_names(header):
-   """Create list of copy names. Spelled copie"""
-   for i, line in enumerate(header):
-      if "num_obs:" in line and "max_num_obs:" in line:
-          first_copie = i+1
-          break
-   copie_names = ['_'.join(x.split()) for x in header[first_copie:]]
-   return copie_names, len(copie_names)
+    """
+    Extracts the names of the copies from the header of an obs_seq file.
+
+
+    Parameters:
+    header (list): A list of strings representing the lines in the header of the obs_seq file.
+
+    Returns:
+    tuple: A tuple containing two elements:
+        - copie_names (list): A list of strings representing the copy names with _ for spaces.
+        - len(copie_names) (int): The number of copy names.
+    """
+    for i, line in enumerate(header):
+       if "num_obs:" in line and "max_num_obs:" in line:
+           first_copie = i+1
+           break
+    copie_names = ['_'.join(x.split()) for x in header[first_copie:]]
+    return copie_names, len(copie_names)
 
 def obs_reader(file, n):
     """Reads the obs sequence file and returns a generator of the obs"""
