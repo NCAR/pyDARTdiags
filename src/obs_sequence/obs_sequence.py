@@ -80,12 +80,10 @@ class obs_sequence:
         """ steps through the generator to create a
             list of all observations in the sequence 
         """
-        count = 0
         all_obs = []
         for obs in self.seq:
             data = self.obs_to_list(obs)
             all_obs.append(data)
-            count = count+1    
         return all_obs
 
     def obs_to_list(self, obs):
