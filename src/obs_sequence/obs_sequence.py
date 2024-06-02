@@ -107,7 +107,7 @@ class obs_sequence:
         data.append(int(time[0])) # seconds
         data.append(int(time[1])) # days
         data.append(convert_dart_time(int(time[0]), int(time[1]))) # datetime
-        data.append(obs[-1]) # obs error variance ?convert to sd?
+        data.append(float(obs[-1])) # obs error variance ?convert to sd?
         
         return data
 
