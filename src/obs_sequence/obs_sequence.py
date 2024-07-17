@@ -60,10 +60,10 @@ class obs_sequence:
     def __init__(self, file):
         self.loc_mod = 'None'
         self.file = file
-        self.header, self.header_n = read_header(file)
-        self.types = collect_obs_types(self.header)
-        self.copie_names, self.n_copies = collect_copie_names(self.header)
-        self.seq = obs_reader(file, self.n_copies)
+        self.header, self.header_n = self.read_header(file)
+        self.types = self.collect_obs_types(self.header)
+        self.copie_names, self.n_copies = self.collect_copie_names(self.header)
+        self.seq = self.obs_reader(file, self.n_copies)
         self.all_obs = self.create_all_obs() # uses up the generator
         # at this point you know if the seq is loc3d or loc1d
         if self.loc_mod == 'None':
@@ -146,6 +146,88 @@ class obs_sequence:
         heading.append('obs_err_var')
         return heading
 
+    @staticmethod
+    def read_header(file):
+        """Read the header and number of lines in the header of an obs_seq file"""
+        header = []
+        with open(file, 'r') as f:
+            for line in f:
+                if "first:" in line and "last:" in line:
+                    break
+                else:
+                    header.append(line.strip())
+        return header, len(header)
+
+    @staticmethod
+    def collect_obs_types(header):
+        """Create a dictionary for the observation types in the obs_seq header"""
+        num_obs_types = int(header[2])
+        types = dict([x.split() for  x in header[3:num_obs_types+3]])
+        return types
+
+    @staticmethod
+    def collect_copie_names(header):
+        """
+        Extracts the names of the copies from the header of an obs_seq file.
+
+
+        Parameters:
+        header (list): A list of strings representing the lines in the header of the obs_seq file.
+
+        Returns:
+        tuple: A tuple containing two elements:
+            - copie_names (list): A list of strings representing the copy names with _ for spaces.
+            - len(copie_names) (int): The number of copy names.
+        """
+        for i, line in enumerate(header):
+            if "num_obs:" in line and "max_num_obs:" in line:
+                first_copie = i+1
+                break
+        copie_names = ['_'.join(x.split()) for x in header[first_copie:]]
+        return copie_names, len(copie_names)
+
+    @staticmethod
+    def obs_reader(file, n):
+        """Reads the obs sequence file and returns a generator of the obs"""
+        previous_line = ''
+        with open(file, 'r') as f:     
+            for line in f:
+                if "OBS" in line or "OBS" in previous_line:
+                    if "OBS" in line:
+                        obs = []
+                        obs.append(line.strip()) 
+                        for i in range(n+100): # number of copies + 100.  Needs to be bigger than any metadata
+                            try:
+                                next_line = next(f)
+                            except:
+                                yield obs
+                                StopIteration
+                                return
+                            if "OBS" in next_line:
+                                previous_line = next_line
+                                break
+                            else:
+                                obs.append(next_line.strip())
+                        yield obs
+                    elif "OBS" in previous_line: # previous line is because I cannot use f.tell with next
+                        obs = []
+                        obs.append(previous_line.strip()) 
+                        obs.append(line.strip()) 
+                        for i in range(n+100): # number of copies + 100.  Needs to be bigger than any metadata
+                            try:
+                                next_line = next(f)
+                            except:
+                                yield obs
+                                StopIteration
+                                return
+                            if "OBS" in next_line:
+                                previous_line = next_line
+                                break
+                            else:
+                                obs.append(next_line.strip())
+                                previous_line = next_line
+                        yield obs
+
 def convert_dart_time(seconds, days):
     """covert from seconds, days after 1601 to datetime object
 
@@ -154,82 +236,3 @@ def convert_dart_time(seconds, days):
     """
     time = dt.datetime(1601,1,1) + dt.timedelta(days=days, seconds=seconds)
     return time
-
-
-def read_header(file):
-    """Read the header and number of lines in the header of an obs_seq file"""
-    header = []
-    with open(file, 'r') as f:
-        for line in f:
-            if "first:" in line and "last:" in line:
-                break
-            else:
-                header.append(line.strip())
-    return header, len(header)
-
-def collect_obs_types(header):
-    """Create a dictionary for the observation types in the obs_seq header"""
-    num_obs_types = int(header[2])
-    types = dict([x.split() for  x in header[3:num_obs_types+3]])
-    return types
-
-def collect_copie_names(header):
-    """
-    Extracts the names of the copies from the header of an obs_seq file.
-
-
-    Parameters:
-    header (list): A list of strings representing the lines in the header of the obs_seq file.
-
-    Returns:
-    tuple: A tuple containing two elements:
-        - copie_names (list): A list of strings representing the copy names with _ for spaces.
-        - len(copie_names) (int): The number of copy names.
-    """
-    for i, line in enumerate(header):
-       if "num_obs:" in line and "max_num_obs:" in line:
-           first_copie = i+1
-           break
-    copie_names = ['_'.join(x.split()) for x in header[first_copie:]]
-    return copie_names, len(copie_names)
-
-def obs_reader(file, n):
-    """Reads the obs sequence file and returns a generator of the obs"""
-    previous_line = ''
-    with open(file, 'r') as f:     
-       for line in f:
-           if "OBS" in line or "OBS" in previous_line:
-               if "OBS" in line:
-                   obs = []
-                   obs.append(line.strip()) 
-                   for i in range(n+100): # number of copies + 100.  Needs to be bigger than any metadata
-                       try:
-                           next_line = next(f)
-                       except:
-                           yield obs
-                           StopIteration
-                           return
-                       if "OBS" in next_line:
-                           previous_line = next_line
-                           break
-                       else:
-                           obs.append(next_line.strip())
-                   yield obs
-               elif "OBS" in previous_line: # previous line is because I cannot use f.tell with next
-                   obs = []
-                   obs.append(previous_line.strip()) 
-                   obs.append(line.strip()) 
-                   for i in range(n+100): # number of copies + 100.  Needs to be bigger than any metadata
-                       try:
-                           next_line = next(f)
-                       except:
-                           yield obs
-                           StopIteration
-                           return
-                       if "OBS" in next_line:
-                           previous_line = next_line
-                           break
-                       else:
-                           obs.append(next_line.strip())
-                           previous_line = next_line
-                   yield obs
