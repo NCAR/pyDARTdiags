@@ -14,10 +14,6 @@ def plot_rank_histogram(df):
         trace.visible = 'legendonly'
     fig.show()
 
-#def plot_rank_histogram(rank, ens_size):
-#    fig = px.histogram(rank, nbins=ens_size, title='Rank Histogram', labels={'value':'Rank'})
-#    
-
 
 def calculate_rank(df):
     """
@@ -66,19 +62,53 @@ def calculate_rank(df):
     return (rank, ens_size, result_df)
 
 def plot_profile(df, levels):
+    """
+    Plots RMSE and Bias profiles for different observation types across specified pressure levels.
+
+    This function takes a DataFrame containing observational data and model predictions, categorizes
+    the data into specified pressure levels, and calculates the RMSE and Bias for each level and
+    observation type. It then plots two line charts: one for RMSE and another for Bias, both as functions
+    of pressure level. The pressure levels are plotted on the y-axis in reversed order to represent
+    the vertical profile in the atmosphere correctly.
+
+    Parameters:
+    - df (pd.DataFrame): The input DataFrame containing at least the 'vertical' column for pressure levels,
+      and other columns required by the `rmse_bias` function for calculating RMSE and Bias.
+    - levels (array-like): The bin edges for categorizing the 'vertical' column values into pressure levels.
+
+    Returns:
+    - tuple: A tuple containing the DataFrame with RMSE and Bias calculations, the RMSE plot figure, and the
+      Bias plot figure. The DataFrame includes a 'plevels' column representing the categorized pressure levels
+      and 'hPa' column representing the midpoint of each pressure level bin.
+
+    Raises:
+    - ValueError: If there are missing values in the 'vertical' column of the input DataFrame.
+
+    Note:
+    - The function modifies the input DataFrame by adding 'plevels' and 'hPa' columns.
+    - The 'hPa' values are calculated as half the midpoint of each pressure level bin, which may need
+      adjustment based on the specific requirements for pressure level representation.
+    - The plots are generated using Plotly Express and are displayed inline. The y-axis of the plots is
+      reversed to align with standard atmospheric pressure level representation.
+    """
 
     pd.options.mode.copy_on_write = True
     if df['vertical'].isnull().values.any(): # what about horizontal observations?
         raise ValueError("Missing values in 'vertical' column.")
     else:
         df.loc[:,'plevels'] = pd.cut(df['vertical'], levels)
-        df.loc[:,'hPa'] = df['plevels'].apply(lambda x: x.mid)
+        df.loc[:,'hPa'] = df['plevels'].apply(lambda x: x.mid / 1000.) # HK todo units
 
     df_profile = rmse_bias(df)
-    fig = px.line(df_profile, y='hPa', x='rmse', title='RMSE by Level', markers=True, color='type', width=800, height=800)
-    fig.update_yaxes(autorange="reversed")
-    fig.show()
-    return df_profile, fig
+    fig_rmse = px.line(df_profile, y='hPa', x='rmse', title='RMSE by Level', markers=True, color='type', width=800, height=800)
+    fig_rmse.update_yaxes(autorange="reversed")
+    fig_rmse.show()
+
+    fig_bias = px.line(df_profile, y='hPa', x='bias', title='Bias by Level', markers=True, color='type', width=800, height=800)
+    fig_bias.update_yaxes(autorange="reversed")
+    fig_bias.show()
+
+    return df_profile, fig_rmse, fig_bias
     
     
 def mean_then_sqrt(x):
