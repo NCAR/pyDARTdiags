@@ -273,5 +273,41 @@ def select_by_dart_qc(df, dart_qc):
     else:
         return df[df['DART_quality_control'] == dart_qc]
 
+def select_failed_qcs(df):
+    """
+    Selects rows from a DataFrame where the DART quality control flag is greater than 0.
 
+    Parameters:
+    df (DataFrame): A pandas DataFrame.
 
+    Returns:
+    DataFrame: A DataFrame containing only the rows with a DART quality control flag greater than 0.
+    """
+    return df[df['DART_quality_control'] > 0]
+
+def possible_vs_used(df):
+    """
+    Calculates the count of possible vs. used observations by type.
+
+    This function takes a DataFrame containing observation data, including a 'type' column for the observation
+    type and an 'observation' column. The number of used observations ('used'), is the total number
+    minus the observations that failed quality control checks (as determined by the `select_failed_qcs` function).
+    The result is a DataFrame with each observation type, the count of possible observations, and the count of
+    used observations.
+
+    Parameters:
+    - df (pd.DataFrame): A DataFrame with at least two columns: 'type' for the observation type and 'observation'
+      for the observation data. It may also contain other columns required by the `select_failed_qcs` function
+      to determine failed quality control checks.
+
+    Returns:
+    - pd.DataFrame: A DataFrame with three columns: 'type', 'possible', and 'used'. 'type' is the observation type,
+      'possible' is the count of all observations of that type, and 'used' is the count of observations of that type
+      that passed quality control checks.
+
+    """
+    possible = df.groupby('type')['observation'].count()
+    possible.rename('possible', inplace=True)
+    used = df.groupby('type')['observation'].count() - select_failed_qcs(df).groupby('type')['observation'].count()
+    used.rename('used', inplace=True)
+    return pd.concat([possible, used], axis=1).reset_index()
