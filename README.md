@@ -25,20 +25,6 @@ obs_seq = dart_os.obs_sequence('obs_seq.final.ascii')
 obs_seq.df.head()
 ```
 
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -198,20 +184,6 @@ obs_seq.df.head()
 dart_os.possible_vs_used(obs_seq.df)
 ```
 
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -356,7 +328,6 @@ dart_os.possible_vs_used(obs_seq.df)
     </tr>
   </tbody>
 </table>
-</div>
 
 
 ## Example plotting
