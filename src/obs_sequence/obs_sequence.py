@@ -233,32 +233,50 @@ class obs_sequence:
                         yield obs
 
     def composite_types(self, composite_types='use_default'):
-            """set up the composite types"""
-            if composite_types == 'use_default':
-                composite_yaml = self.default_composite_types
-            else:
-                composite_yaml = composite_types
-            self.composite_types_dict  = load_yaml_to_dict(composite_yaml)
-            
-            components = []
-            for value in self.composite_types_dict.values():
-                components.extend(value["components"])
+        """
+        Set up and construct composite types for the DataFrame.
 
-            if len(components) != len(set(components)):
-                raise Exception("There are repeat values in components.")
- 
-            df_comp = self.df[self.df['type'].str.upper().isin([component.upper() for component in components])]
-            df_no_comp = self.df[~self.df['type'].str.upper().isin([component.upper() for component in components])]
-   
-            df_new = pd.DataFrame(columns=df_comp.columns)
+        This function sets up composite types based on a provided YAML configuration or 
+        a default configuration. It constructs new composite rows by combining specified 
+        components and adds them to the DataFrame.
 
-            for key in self.composite_types_dict:
-                components = (self.composite_types_dict[key]['components'])
-                df_new = construct_composit(df_new, df_comp, key, components)
+        Parameters:
+        composite_types (str, optional): The YAML configuration for composite types.
+                                        If 'use_default', the default configuration is used.
+                                        Otherwise, a custom YAML configuration can be provided.
 
-            df_new = pd.concat([df_no_comp, df_new], axis=0)
+        Returns:
+        pd.DataFrame: The updated DataFrame with the new composite rows added.
 
-            return df_new
+        Raises:
+        Exception: If there are repeat values in the components.
+        """
+
+        if composite_types == 'use_default':
+            composite_yaml = self.default_composite_types
+        else:
+            composite_yaml = composite_types
+        self.composite_types_dict  = load_yaml_to_dict(composite_yaml)
+        
+        components = []
+        for value in self.composite_types_dict.values():
+            components.extend(value["components"])
+
+        if len(components) != len(set(components)):
+            raise Exception("There are repeat values in components.")
+
+        df_comp = self.df[self.df['type'].str.upper().isin([component.upper() for component in components])]
+        df_no_comp = self.df[~self.df['type'].str.upper().isin([component.upper() for component in components])]
+
+        df_new = pd.DataFrame(columns=df_comp.columns)
+
+        for key in self.composite_types_dict:
+            components = (self.composite_types_dict[key]['components'])
+            df_new = construct_composit(df_new, df_comp, key, components)
+
+        df_new = pd.concat([df_no_comp, df_new], axis=0)
+
+        return df_new
 
 def load_yaml_to_dict(file_path):
     """
@@ -354,16 +372,16 @@ def same_location_and_time(row1, row2):
     of two rows to determine if they represent the same location and time.
 
     Parameters:
-    row1 (pd.Series): The first row to compare.
-    row2 (pd.Series): The second row to compare.
+    row1 (namedtuple): The first row to compare.
+    row2 (namedtuple): The second row to compare.
 
     Returns:
     bool: True if the rows have the same location and time, False otherwise.
     """
-    return row1['latitude'] == row2['latitude'] and \
-           row1['longitude'] == row2['longitude'] and \
-           row1['vertical'] == row2['vertical'] and \
-           row1['time'] == row2['time']  # HK todo should we check days, seconds instead of time?
+    return row1.latitude == row2.latitude and \
+           row1.longitude == row2.longitude and \
+           row1.vertical == row2.vertical and \
+           row1.time == row2.time  # HK todo should we check days, seconds instead of time?
 
 
 def construct_composit(df_new, df_comp, composite, components):
@@ -390,16 +408,16 @@ def construct_composit(df_new, df_comp, composite, components):
     columns_to_combine = df_comp.filter(regex='ensemble').columns.tolist()
  
     # Loop through the selected rows
-    for index, row in selected_rows.iterrows():
-        for index_v, row_v in selected_rows_v.iterrows():
+    for row in selected_rows.itertuples(index=False):
+        for row_v in selected_rows_v.itertuples(index=False):
             if same_location_and_time(row, row_v):
   
                 # Create a new row with the composite type
-                new_row = row.copy()
+                new_row = row._asdict()
                 for col in columns_to_combine:
-                    new_row[col] = np.sqrt(row[col]**2 + row_v[col]**2)
+                    new_row[col] = np.sqrt(getattr(row, col)**2 + getattr(row_v, col)**2)
                 new_row['type'] = composite.upper()
-                
+                # HK todo recalculate bias and sq_err
                 df_new.loc[len(df_new)] = new_row
                 break
 
