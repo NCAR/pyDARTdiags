@@ -1,6 +1,8 @@
 import pandas as pd
 import datetime as dt
 import numpy as np
+import os
+import yaml
 
 class obs_sequence:
     """Create an obs_sequence object from an ascii observation
@@ -81,6 +83,8 @@ class obs_sequence:
         if 'prior_ensemble_mean'.casefold() in map(str.casefold, self.columns):
             self.df['bias'] = (self.df['prior_ensemble_mean'] - self.df['observation'])
             self.df['sq_err'] = self.df['bias']**2  # squared error
+        module_dir = os.path.dirname(__file__)
+        self.default_composite_types = os.path.join(module_dir,"composite_types.yaml")
 
     def create_all_obs(self):
         """ steps through the generator to create a
@@ -228,6 +232,52 @@ class obs_sequence:
                                 previous_line = next_line
                         yield obs
 
+    def composite_types(self, composite_types='use_default'):
+            """set up the composite types"""
+            if composite_types == 'use_default':
+                composite_yaml = self.default_composite_types
+            else:
+                composite_yaml = composite_types
+            self.composite_types_dict  = load_yaml_to_dict(composite_yaml)
+            
+            components = []
+            for value in self.composite_types_dict.values():
+                components.extend(value["components"])
+
+            if len(components) != len(set(components)):
+                raise Exception("There are repeat values in components.")
+ 
+            df_comp = self.df[self.df['type'].str.upper().isin([component.upper() for component in components])]
+            df_no_comp = self.df[~self.df['type'].str.upper().isin([component.upper() for component in components])]
+   
+            df_new = pd.DataFrame(columns=df_comp.columns)
+
+            for key in self.composite_types_dict:
+                components = (self.composite_types_dict[key]['components'])
+                df_new = construct_composit(df_new, df_comp, key, components)
+
+            df_new = pd.concat([df_no_comp, df_new], axis=0)
+
+            return df_new
+
+def load_yaml_to_dict(file_path):
+    """
+    Load a YAML file and convert it to a dictionary.
+
+    Parameters:
+    - file_path (str): The path to the YAML file.
+
+    Returns:
+    - dict: The YAML file content as a dictionary.
+    """
+    try:
+        with open(file_path, 'r') as file:
+            return yaml.safe_load(file)
+    except Exception as e:
+        print(f"Error loading YAML file: {e}")
+        return None        
+
+
 def convert_dart_time(seconds, days):
     """covert from seconds, days after 1601 to datetime object
 
@@ -236,23 +286,6 @@ def convert_dart_time(seconds, days):
     """
     time = dt.datetime(1601,1,1) + dt.timedelta(days=days, seconds=seconds)
     return time
-    """
-    Selects rows from a DataFrame based on the DART quality control flag.
-
-    Parameters:
-    df (DataFrame): A pandas DataFrame.
-    dart_qc (int): The DART quality control flag to select.
-
-    Returns:
-    DataFrame: A DataFrame containing only the rows with the specified DART quality control flag.
-
-    Raises:
-    ValueError: If the DART quality control flag is not present in the DataFrame.
-    """
-    if dart_qc not in df['DART_quality_control'].unique():
-        raise ValueError(f"DART quality control flag '{dart_qc}' not found in DataFrame.")
-    else:
-        return df[df['DART_quality_control'] == dart_qc]
     
 def select_by_dart_qc(df, dart_qc):
     """
@@ -311,3 +344,65 @@ def possible_vs_used(df):
     used = df.groupby('type')['observation'].count() - select_failed_qcs(df).groupby('type')['observation'].count()
     used.rename('used', inplace=True)
     return pd.concat([possible, used], axis=1).reset_index()
+
+
+def same_location_and_time(row1, row2):
+    """
+    Check if two rows have the same location and time.
+
+    This function compares the 'latitude', 'longitude', 'vertical', and 'time' fields
+    of two rows to determine if they represent the same location and time.
+
+    Parameters:
+    row1 (pd.Series): The first row to compare.
+    row2 (pd.Series): The second row to compare.
+
+    Returns:
+    bool: True if the rows have the same location and time, False otherwise.
+    """
+    return row1['latitude'] == row2['latitude'] and \
+           row1['longitude'] == row2['longitude'] and \
+           row1['vertical'] == row2['vertical'] and \
+           row1['time'] == row2['time']  # HK todo should we check days, seconds instead of time?
+
+
+def construct_composit(df_new, df_comp, composite, components):
+    """
+    Construct a composite DataFrame by combining rows from two components.
+
+    This function takes two DataFrames and combines rows from them based on matching
+    location and time. It creates a new row with a composite type by combining 
+    specified columns using the square root of the sum of squares method.
+
+    Parameters:
+    df_new (pd.DataFrame): The DataFrame to which the new composite rows will be added.
+    df_comp (pd.DataFrame): The DataFrame containing the component rows to be combined.
+    composite (str): The name for the new composite observation type.
+    components (list of str): A list containing the type names of the two components to be combined.
+
+    Returns:
+    pd.DataFrame: The updated DataFrame with the new composite rows added.
+    """
+
+    selected_rows = df_comp[df_comp['type'] == components[0].upper()]
+    selected_rows_v = df_comp[df_comp['type'] == components[1].upper()]
+
+    columns_to_combine = df_comp.filter(regex='ensemble').columns.tolist()
+ 
+    # Loop through the selected rows
+    for index, row in selected_rows.iterrows():
+        for index_v, row_v in selected_rows_v.iterrows():
+            if same_location_and_time(row, row_v):
+  
+                # Create a new row with the composite type
+                new_row = row.copy()
+                for col in columns_to_combine:
+                    new_row[col] = np.sqrt(row[col]**2 + row_v[col]**2)
+                new_row['type'] = composite.upper()
+                
+                df_new.loc[len(df_new)] = new_row
+                break
+
+    return df_new
+
+
