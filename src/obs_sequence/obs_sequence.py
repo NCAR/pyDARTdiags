@@ -268,21 +268,11 @@ class obs_sequence:
         df_comp = self.df[self.df['type'].str.upper().isin([component.upper() for component in components])]
         df_no_comp = self.df[~self.df['type'].str.upper().isin([component.upper() for component in components])]
 
-        print("rows in df_comp: ", df_comp.shape[0])   
-        print("rows in df_no_comp: ", df_no_comp.shape[0])
-        print("num composite types: ", df_comp.shape[0]/2)  
-        print('components: ', components)
-
-        #return df_comp, df_no_comp # for testing construct_composit
-  
         for key in self.composite_types_dict:
             df_new = construct_composit(df_comp, key, self.composite_types_dict[key]['components'])
             df_no_comp = pd.concat([df_no_comp, df_new], axis=0)
 
-        #df_new = construct_composit(df_comp, 'acars_horizontal_wind', self.composite_types_dict['acars_horizontal_wind']['components'])
-        #df_new = pd.concat([df_no_comp, df_new], axis=0)
-    
-        return df_no_comp, df_comp
+        return df_no_comp
         
 def load_yaml_to_dict(file_path):
     """
@@ -368,27 +358,6 @@ def possible_vs_used(df):
     used = df.groupby('type')['observation'].count() - select_failed_qcs(df).groupby('type')['observation'].count()
     used.rename('used', inplace=True)
     return pd.concat([possible, used], axis=1).reset_index()
-
-
-# TODO HK do not need with merged method
-def same_location_and_time(row1, row2):
-    """
-    Check if two rows have the same location and time.
-
-    This function compares the 'latitude', 'longitude', 'vertical', and 'time' fields
-    of two rows to determine if they represent the same location and time.
-
-    Parameters:
-    row1 (namedtuple): The first row to compare.
-    row2 (namedtuple): The second row to compare.
-
-    Returns:
-    bool: True if the rows have the same location and time, False otherwise.
-    """
-    return row1.latitude == row2.latitude and \
-           row1.longitude == row2.longitude and \
-           row1.vertical == row2.vertical and \
-           row1.time == row2.time  # HK todo should we check days, seconds instead of time?
 
 
 def construct_composit(df_comp, composite, components):
