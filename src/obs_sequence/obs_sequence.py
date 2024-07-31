@@ -268,16 +268,22 @@ class obs_sequence:
         df_comp = self.df[self.df['type'].str.upper().isin([component.upper() for component in components])]
         df_no_comp = self.df[~self.df['type'].str.upper().isin([component.upper() for component in components])]
 
-        df_new = pd.DataFrame(columns=df_comp.columns)
+        print("rows in df_comp: ", df_comp.shape[0])   
+        print("rows in df_no_comp: ", df_no_comp.shape[0])
+        print("num composite types: ", df_comp.shape[0]/2)  
+        print('components: ', components)
 
+        #return df_comp, df_no_comp # for testing construct_composit
+  
         for key in self.composite_types_dict:
-            components = (self.composite_types_dict[key]['components'])
-            df_new = construct_composit(df_new, df_comp, key, components)
+            df_new = construct_composit(df_comp, key, self.composite_types_dict[key]['components'])
+            df_no_comp = pd.concat([df_no_comp, df_new], axis=0)
 
-        df_new = pd.concat([df_no_comp, df_new], axis=0)
-
-        return df_new
-
+        #df_new = construct_composit(df_comp, 'acars_horizontal_wind', self.composite_types_dict['acars_horizontal_wind']['components'])
+        #df_new = pd.concat([df_no_comp, df_new], axis=0)
+    
+        return df_no_comp, df_comp
+        
 def load_yaml_to_dict(file_path):
     """
     Load a YAML file and convert it to a dictionary.
@@ -364,6 +370,7 @@ def possible_vs_used(df):
     return pd.concat([possible, used], axis=1).reset_index()
 
 
+# TODO HK do not need with merged method
 def same_location_and_time(row1, row2):
     """
     Check if two rows have the same location and time.
@@ -384,7 +391,7 @@ def same_location_and_time(row1, row2):
            row1.time == row2.time  # HK todo should we check days, seconds instead of time?
 
 
-def construct_composit(df_new, df_comp, composite, components):
+def construct_composit(df_comp, composite, components):
     """
     Construct a composite DataFrame by combining rows from two components.
 
@@ -393,34 +400,32 @@ def construct_composit(df_new, df_comp, composite, components):
     specified columns using the square root of the sum of squares method.
 
     Parameters:
-    df_new (pd.DataFrame): The DataFrame to which the new composite rows will be added.
     df_comp (pd.DataFrame): The DataFrame containing the component rows to be combined.
-    composite (str): The name for the new composite observation type.
+    composite (str): The type name for the new composite rows.
     components (list of str): A list containing the type names of the two components to be combined.
 
     Returns:
-    pd.DataFrame: The updated DataFrame with the new composite rows added.
+    merged_df (pd.DataFrame): The updated DataFrame with the new composite rows added.
     """
-
     selected_rows = df_comp[df_comp['type'] == components[0].upper()]
     selected_rows_v = df_comp[df_comp['type'] == components[1].upper()]
 
     columns_to_combine = df_comp.filter(regex='ensemble').columns.tolist()
- 
-    # Loop through the selected rows
-    for row in selected_rows.itertuples(index=False):
-        for row_v in selected_rows_v.itertuples(index=False):
-            if same_location_and_time(row, row_v):
-  
-                # Create a new row with the composite type
-                new_row = row._asdict()
-                for col in columns_to_combine:
-                    new_row[col] = np.sqrt(getattr(row, col)**2 + getattr(row_v, col)**2)
-                new_row['type'] = composite.upper()
-                # HK todo recalculate bias and sq_err
-                df_new.loc[len(df_new)] = new_row
-                break
+    columns_to_combine.append('observation')  # TODO HK: bias, sq_err, obs_err_var
+    merge_columns = ['latitude', 'longitude', 'vertical', 'time']
 
-    return df_new
+    print("duplicates in u: ", selected_rows[merge_columns].duplicated().sum())
+    print("duplicates in v: ",selected_rows_v[merge_columns].duplicated().sum())
 
+    # Merge the two DataFrames on location and time columns
+    merged_df = pd.merge(selected_rows, selected_rows_v, on=merge_columns, suffixes=('', '_v'))
 
+    # Apply the square root of the sum of squares method to the relevant columns
+    for col in columns_to_combine:
+        merged_df[col] = np.sqrt(merged_df[col]**2 + merged_df[f'{col}_v']**2)
+
+    # Create the new composite rows
+    merged_df['type'] = composite.upper()
+    merged_df = merged_df.drop(columns=[col for col in merged_df.columns if col.endswith('_v')])
+
+    return merged_df
