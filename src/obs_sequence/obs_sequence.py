@@ -75,8 +75,8 @@ class obs_sequence:
         self.columns = self.column_headers()
         self.df = pd.DataFrame(self.all_obs, columns = self.columns)
         if self.loc_mod == 'loc3d':
-            self.df['longitude'] = np.deg2rad(self.df['longitude'])
-            self.df['latitude'] = np.deg2rad(self.df['latitude'])
+            self.df['longitude'] = np.rad2deg(self.df['longitude'])
+            self.df['latitude'] = np.rad2deg(self.df['latitude'])
         # rename 'X observation' to observation
         self.synonyms_for_obs = [synonym.replace(' ', '_') for synonym in self.synonyms_for_obs]
         rename_dict = {old: 'observation' for old in self.synonyms_for_obs  if old in self.df.columns}
