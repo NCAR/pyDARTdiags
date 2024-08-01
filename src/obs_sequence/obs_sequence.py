@@ -52,6 +52,8 @@ class obs_sequence:
              3: 'height (m)',
              4: 'scale height' }
 
+    reversed_vert = {value: key for key, value in vert.items()}
+
     # synonyms for observation
     synonyms_for_obs = ['NCEP BUFR observation',
                         'AIRS observation', 
@@ -103,6 +105,7 @@ class obs_sequence:
         data = []
         data.append(obs[0].split()[1]) # obs_num
         data.extend(list(map(float,obs[1:self.n_copies+1]))) # all the copies
+        data.append(obs[self.n_copies+1]) # linked list info
         try:  # HK todo only have to check loc3d or loc1d for the first observation, the whole file is the same
             locI = obs.index('loc3d')
             location = obs[locI+1].split()
@@ -131,11 +134,43 @@ class obs_sequence:
         
         return data
 
+    def list_to_obs(self, data):
+        obs = []
+        obs.append('OBS        ' + str(data[0]))  # obs_num lots of space
+        obs.extend(data[1:self.n_copies+1])  # all the copies
+        obs.append(data[self.n_copies+1])  # linked list info
+        obs.append('obdef')  # TODO HK: metadata obs_def 
+        obs.append(self.loc_mod)
+        if self.loc_mod == 'loc3d':
+            obs.append('   '.join(map(str, data[self.n_copies+2:self.n_copies+5])) + '   ' + str(obs_sequence.reversed_vert[data[self.n_copies+5]]) )  # location x, y, z, vert
+            obs.append(list(self.types.keys())[list(self.types.values()).index(data[self.n_copies+6])])  # observation type
+        elif self.loc_mod == 'loc1d':
+            obs.append(data[self.n_copies+2])  # 1d location
+            obs.append('kind') # this is type of observation
+            obs.append(list(self.types.keys())[list(self.types.values()).index(data[self.n_copies+3])])  # observation type
+        obs.append(' '.join(map(str, data[-4:-2])))  # seconds, days
+        obs.append(data[-1])  # obs error variance
+
+        return obs
+
+    def write_obs_seq(self, file):
+        """write the obs_seq file to disk"""
+        with open(file, 'w') as f:
+            for line in self.header:
+                f.write(str(line) + '\n')
+            f.write("first: dummy last: dummy\n")
+            for obs in self.all_obs:
+                ob_write = self.list_to_obs(obs)
+                for line in ob_write:
+                    f.write(str(line) + '\n')
+
+
     def column_headers(self):
         """define the columns for the dataframe """
         heading = []
         heading.append('obs_num')
         heading.extend(self.copie_names)
+        heading.append('linked_list')
         if self.loc_mod == 'loc3d':
             heading.append('longitude')
             heading.append('latitude')
