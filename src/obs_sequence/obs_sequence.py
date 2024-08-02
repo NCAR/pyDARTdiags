@@ -66,6 +66,7 @@ class obs_sequence:
         self.file = file
         self.header, self.header_n = self.read_header(file)
         self.types = self.collect_obs_types(self.header)
+        self.reverse_types = {v: k for k, v in self.types.items()}
         self.copie_names, self.n_copies = self.collect_copie_names(self.header)
         self.seq = self.obs_reader(file, self.n_copies)
         self.all_obs = self.create_all_obs() # uses up the generator
@@ -142,27 +143,48 @@ class obs_sequence:
         obs.append('obdef')  # TODO HK: metadata obs_def 
         obs.append(self.loc_mod)
         if self.loc_mod == 'loc3d':
-            obs.append('   '.join(map(str, data[self.n_copies+2:self.n_copies+5])) + '   ' + str(obs_sequence.reversed_vert[data[self.n_copies+5]]) )  # location x, y, z, vert
-            obs.append(list(self.types.keys())[list(self.types.values()).index(data[self.n_copies+6])])  # observation type
+            obs.append('   '.join(map(str, data[self.n_copies+2:self.n_copies+5])) + '   ' + str(self.reversed_vert[data[self.n_copies+5]]) )  # location x, y, z, vert
+            obs.append('kind') # this is type of observation
+            obs.append(self.reverse_types[data[self.n_copies + 6]])  # observation type
         elif self.loc_mod == 'loc1d':
             obs.append(data[self.n_copies+2])  # 1d location
             obs.append('kind') # this is type of observation
-            obs.append(list(self.types.keys())[list(self.types.values()).index(data[self.n_copies+3])])  # observation type
+            obs.append(self.reverse_types[data[self.n_copies + 3]])  # observation type
         obs.append(' '.join(map(str, data[-4:-2])))  # seconds, days
         obs.append(data[-1])  # obs error variance
 
         return obs
 
-    def write_obs_seq(self, file):
+    def write_obs_seq(self, file, df=None):
         """write the obs_seq file to disk"""
         with open(file, 'w') as f:
             for line in self.header:
                 f.write(str(line) + '\n')
             f.write("first: dummy last: dummy\n")
-            for obs in self.all_obs:
-                ob_write = self.list_to_obs(obs)
-                for line in ob_write:
-                    f.write(str(line) + '\n')
+            
+            if df is not None:
+                # TODO HK is there something better than copying the whole thing here?
+                df_copy = df.copy()  # copy since you want to change for writing. 
+                # back to radians for obs_seq
+                if self.loc_mod == 'loc3d':
+                    df_copy['longitude'] = np.deg2rad(self.df['longitude'])
+                    df_copy['latitude'] = np.deg2rad(self.df['latitude'])
+                if 'bias' in df_copy.columns:
+                    df_copy = df_copy.drop(columns=['bias', 'sq_err'])                
+                # If a DataFrame is provided
+                def write_row(row):
+                    ob_write = self.list_to_obs(row.tolist())
+                    for line in ob_write:
+                        f.write(str(line) + '\n')
+                
+                df_copy.apply(write_row, axis=1)
+  
+            else:
+                # If no DataFrame is provided, use self.all_obs
+                for obs in self.all_obs:
+                    ob_write = self.list_to_obs(obs)
+                    for line in ob_write:
+                        f.write(str(line) + '\n')
 
 
     def column_headers(self):
