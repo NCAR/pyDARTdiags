@@ -64,7 +64,7 @@ class obs_sequence:
     def __init__(self, file):
         self.loc_mod = 'None'
         self.file = file
-        self.header, self.header_n = self.read_header(file)
+        self.header = self.read_header(file)
         self.types = self.collect_obs_types(self.header)
         self.reverse_types = {v: k for k, v in self.types.items()}
         self.copie_names, self.n_copies = self.collect_copie_names(self.header)
@@ -168,18 +168,42 @@ class obs_sequence:
         return result
 
     def write_obs_seq(self, file, df=None):
-        """write the obs_seq file to disk"""
+        """
+        Write the observation sequence to a file.
+
+        This function writes the observation sequence to disk. 
+        If no DataFrame is provided, it writes the obs_sequence object to a file using the
+        header and all observations stored in the object.
+        If a DataFrame is provided,it creates a header and linked list from the DataFrame, 
+        then writes the DataFrame obs to an obs_sequence file. Note the DataFrame is assumed
+        to have been created from obs_sequence object.
+        
+
+        Parameters:
+        file (str): The path to the file where the observation sequence will be written.
+        df (pandas.DataFrame, optional): A DataFrame containing the observation data. 
+                                        If not provided, the function uses self.header 
+                                        and self.all_obs.
+
+        Returns:
+        None
+
+        Usage:
+        obs_seq.write_obs_seq('/path/to/output/file')
+        obs_seq.write_obs_seq('/path/to/output/file', df=obs_seq.df)
+        """
         with open(file, 'w') as f:
             
             if df is not None:
                 # If a DataFrame is provided, update the header with the number of observations
                 num_rows = len(df)
-                replacement_string = f'num_obs: {num_rows} max_num_obs: {num_rows}'
+                replacement_string = f'num_obs: {num_rows:>10} max_num_obs: {num_rows:>10}'
                 new_header = [replacement_string if 'num_obs' in element else element for element in self.header]
 
-                for line in new_header:
+                for line in new_header[:-1]:
                     f.write(str(line) + '\n')
-                f.write("first: dummy last: dummy\n")
+                first = 1
+                f.write(f"first: {first:>12} last: {num_rows:>12}\n")
 
                 # TODO HK is there something better than copying the whole thing here?
                 df_copy = df.copy()  # copy since you want to change for writing. 
@@ -206,7 +230,6 @@ class obs_sequence:
                 # If no DataFrame is provided, use self.header and self.all_obs
                 for line in self.header:
                     f.write(str(line) + '\n')
-                f.write("first: dummy last: dummy\n")
                 for obs in self.all_obs:
                     ob_write = self.list_to_obs(obs)
                     for line in ob_write:
@@ -240,10 +263,11 @@ class obs_sequence:
         with open(file, 'r') as f:
             for line in f:
                 if "first:" in line and "last:" in line:
+                    header.append(line.strip())
                     break
                 else:
                     header.append(line.strip())
-        return header, len(header)
+        return header
 
     @staticmethod
     def collect_obs_types(header):
@@ -270,7 +294,7 @@ class obs_sequence:
             if "num_obs:" in line and "max_num_obs:" in line:
                 first_copie = i+1
                 break
-        copie_names = ['_'.join(x.split()) for x in header[first_copie:]]
+        copie_names = ['_'.join(x.split()) for x in header[first_copie:-1]] # first and last is last line of header
         return copie_names, len(copie_names)
 
     @staticmethod
