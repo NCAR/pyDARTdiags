@@ -155,14 +155,32 @@ class obs_sequence:
 
         return obs
 
+    @staticmethod
+    def generate_linked_list_pattern(n):
+        """Create a list of strings with the linked list pattern for n lines."""
+        result = []
+        for i in range(n-1):
+            col1 = i if i > 0 else -1
+            col2 = i + 2
+            col3 = -1
+            result.append(f"{col1:<12}{col2:<11}{col3}")
+        result.append(f"{n-1:<12}{'-1':<11}{'-1'}")
+        return result
+
     def write_obs_seq(self, file, df=None):
         """write the obs_seq file to disk"""
         with open(file, 'w') as f:
-            for line in self.header:
-                f.write(str(line) + '\n')
-            f.write("first: dummy last: dummy\n")
             
             if df is not None:
+                # If a DataFrame is provided, update the header with the number of observations
+                num_rows = len(df)
+                replacement_string = f'num_obs: {num_rows} max_num_obs: {num_rows}'
+                new_header = [replacement_string if 'num_obs' in element else element for element in self.header]
+
+                for line in new_header:
+                    f.write(str(line) + '\n')
+                f.write("first: dummy last: dummy\n")
+
                 # TODO HK is there something better than copying the whole thing here?
                 df_copy = df.copy()  # copy since you want to change for writing. 
                 # back to radians for obs_seq
@@ -171,7 +189,12 @@ class obs_sequence:
                     df_copy['latitude'] = np.deg2rad(self.df['latitude'])
                 if 'bias' in df_copy.columns:
                     df_copy = df_copy.drop(columns=['bias', 'sq_err'])                
-                # If a DataFrame is provided
+                
+                # linked list for reading by dart programs
+                df_copy = df_copy.sort_values(by=['time']) # sort the DataFrame by time
+                df_copy['obs_num'] = df.index + 1 # obs_num in time order
+                df_copy['linked_list'] = obs_sequence.generate_linked_list_pattern(len(df_copy)) # linked list pattern
+
                 def write_row(row):
                     ob_write = self.list_to_obs(row.tolist())
                     for line in ob_write:
@@ -180,7 +203,10 @@ class obs_sequence:
                 df_copy.apply(write_row, axis=1)
   
             else:
-                # If no DataFrame is provided, use self.all_obs
+                # If no DataFrame is provided, use self.header and self.all_obs
+                for line in self.header:
+                    f.write(str(line) + '\n')
+                f.write("first: dummy last: dummy\n")
                 for obs in self.all_obs:
                     ob_write = self.list_to_obs(obs)
                     for line in ob_write:
