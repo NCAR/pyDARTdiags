@@ -1,27 +1,31 @@
-# pyDARTdiag
+# pyDARTdiags
 
-pyDARTdiag is a python library for obsevation space diagnostics for the Data Assimilation Research Testbed ([DART](https://github.com/NCAR/DART)).
+pyDARTdiags is a python library for obsevation space diagnostics for the Data Assimilation Research Testbed ([DART](https://github.com/NCAR/DART)).
 
-pyDARTdiag is under initial development, so please use caution.
+pyDARTdiags is under initial development, so please use caution.
 The MATLAB [observation space diagnostics](https://docs.dart.ucar.edu/en/latest/guide/matlab-observation-space.html) are available through [DART](https://github.com/NCAR/DART).
 
-* obs\_sequence to DataFrame
+
+pyDARTdiags can be installed through pip.  We recommend installing pydartdiags in a virtual enviroment:
+
+
+```
+python3 -m venv dartdiags
+source dartdiags/bin/activate
+pip install pydartdiags
+```
 
 ## Example importing the obs\_sequence and plots modules
 
 ```python
-import sys
-import os
-sys.path.append(os.path.abspath("/Users/hkershaw/DART/Projects/Diagnostics/pyDART/src/obs_sequence"))
-
-import obs_sequence as dart_os
-import plots as dart_plots
+from pydartdiags.obs_sequence import obs_sequence as obs_seq
+from pydartdiags.plots import plots
 ```
 
 ## Examining the dataframe
 
 ```python
-obs_seq = dart_os.obs_sequence('obs_seq.final.ascii')
+obs_seq = obs_seq.obs_sequence('obs_seq.final.ascii')
 obs_seq.df.head()
 ```
 
@@ -179,9 +183,10 @@ obs_seq.df.head()
 </div>
 
 
+Find the numeber of assimilated (used) observations vs. possible observations by type
 
 ```python
-dart_os.possible_vs_used(obs_seq.df)
+obs_seq.possible_vs_used(obs_seq.df)
 ```
 
 <table border="1" class="dataframe">
@@ -332,17 +337,14 @@ dart_os.possible_vs_used(obs_seq.df)
 
 ## Example plotting
 
-
-
 ### rank histogram
 
 * Select only observations that were assimliated (QC === 0).
 * plot the rank histogram
 
 ```python
-
-df_qc0 = dart_os.select_by_dart_qc(obs_seq.df, 0)  # only qc 0
-df_profile, figrmse, figbias = dart_plots.plot_profile(df_qc0, plevels)
+df_qc0 = obs_seq.select_by_dart_qc(obs_seq.df, 0) 
+plots.plot_rank_histogram(df_qc0)
 ```
 ![Rank Histogram](docs/images/rankhist.png)
 
@@ -357,8 +359,8 @@ df_profile, figrmse, figbias = dart_plots.plot_profile(df_qc0, plevels)
 hPalevels = [0.0, 100.0,  150.0, 200.0, 250.0, 300.0, 400.0, 500.0, 700, 850, 925, 1000]# float("inf")] # Pa?
 plevels = [i * 100 for i in hPalevels]
 
-df_qc0 = dart_os.select_by_dart_qc(obs_seq.df, 0)  # only qc 0
-df_profile, figrmse, figbias = dart_plots.plot_profile(df_qc0, plevels)
+df_qc0 = obs_seq.select_by_dart_qc(obs_seq.df, 0)  # only qc 0
+df_profile, figrmse, figbias = plots.plot_profile(df_qc0, plevels)
 ```
 
 ![RMSE Plot](docs/images/rmse.png)
