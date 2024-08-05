@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "pydartdiags"
-version = "0.0.2"
+version = "0.0.3a"
 authors = [
   { name="Helen Kershaw", email="hkershaw@ucar.edu" },
 ]
@@ -27,4 +27,4 @@ Homepage = "https://github.com/NCAR/pyDARTdiags.git"
 Issues = "https://github.com/NCAR/pyDARTdiags/issues"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/obs_sequence", "src/plots"]
+packages = ["src/pydartdiags"]
