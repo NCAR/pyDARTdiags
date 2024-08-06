@@ -6,6 +6,7 @@ import pandas as pd
 def plot_rank_histogram(df):  
     """
     Plots a rank histogram colored by observation type.
+
     All histogram bars are initalized to be hidden and can be toggled visible in the plot's legend
     """
     _, _, df_hist = calculate_rank(df)
@@ -27,12 +28,12 @@ def calculate_rank(df):
     size plus one.
 
     Parameters:
-    - df (pd.DataFrame): A DataFrame with columns for mean, standard deviation, observed values,
-      ensemble size, and observation type. The DataFrame should have one row per observation.
+        df (pd.DataFrame): A DataFrame with columns for mean, standard deviation, observed values,
+        ensemble size, and observation type. The DataFrame should have one row per observation.
 
     Returns:
-    - tuple: A tuple containing the rank array, ensemble size, and a result DataFrame. The result
-      DataFrame contains columns for 'rank' and 'obstype'.
+        tuple: A tuple containing the rank array, ensemble size, and a result DataFrame. The result
+        DataFrame contains columns for 'rank' and 'obstype'.
     """
     ensemble_values = df.filter(regex='prior_ensemble_member').to_numpy().copy()
     std_dev = np.sqrt(df['obs_err_var']).to_numpy()
@@ -72,24 +73,24 @@ def plot_profile(df, levels):
     the vertical profile in the atmosphere correctly.
 
     Parameters:
-    - df (pd.DataFrame): The input DataFrame containing at least the 'vertical' column for pressure levels,
-      and other columns required by the `rmse_bias` function for calculating RMSE and Bias.
-    - levels (array-like): The bin edges for categorizing the 'vertical' column values into pressure levels.
+        df (pd.DataFrame): The input DataFrame containing at least the 'vertical' column for pressure levels,
+        and other columns required by the `rmse_bias` function for calculating RMSE and Bias.
+        levels (array-like): The bin edges for categorizing the 'vertical' column values into pressure levels.
 
     Returns:
-    - tuple: A tuple containing the DataFrame with RMSE and Bias calculations, the RMSE plot figure, and the
-      Bias plot figure. The DataFrame includes a 'plevels' column representing the categorized pressure levels
-      and 'hPa' column representing the midpoint of each pressure level bin.
+        tuple: A tuple containing the DataFrame with RMSE and Bias calculations, the RMSE plot figure, and the
+        Bias plot figure. The DataFrame includes a 'plevels' column representing the categorized pressure levels
+        and 'hPa' column representing the midpoint of each pressure level bin.
 
     Raises:
-    - ValueError: If there are missing values in the 'vertical' column of the input DataFrame.
+        ValueError: If there are missing values in the 'vertical' column of the input DataFrame.
 
     Note:
-    - The function modifies the input DataFrame by adding 'plevels' and 'hPa' columns.
-    - The 'hPa' values are calculated as half the midpoint of each pressure level bin, which may need
-      adjustment based on the specific requirements for pressure level representation.
-    - The plots are generated using Plotly Express and are displayed inline. The y-axis of the plots is
-      reversed to align with standard atmospheric pressure level representation.
+        - The function modifies the input DataFrame by adding 'plevels' and 'hPa' columns.
+        - The 'hPa' values are calculated as half the midpoint of each pressure level bin, which may need
+          adjustment based on the specific requirements for pressure level representation.
+        - The plots are generated using Plotly Express and are displayed inline. The y-axis of the plots is
+          reversed to align with standard atmospheric pressure level representation.
     """
 
     pd.options.mode.copy_on_write = True
@@ -116,14 +117,14 @@ def mean_then_sqrt(x):
     Calculates the mean of an array-like object and then takes the square root of the result.
 
     Parameters:
-    arr (array-like): An array-like object (such as a list or a pandas Series). 
-                      The elements should be numeric.
+        arr (array-like): An array-like object (such as a list or a pandas Series). 
+                          The elements should be numeric.
 
     Returns:
-    float: The square root of the mean of the input array.
+        float: The square root of the mean of the input array.
 
     Raises:
-    TypeError: If the input is not an array-like object containing numeric values.
+        TypeError: If the input is not an array-like object containing numeric values.
     """
     return np.sqrt(np.mean(x))
 
@@ -139,14 +140,14 @@ def rmse_bias_by_obs_type(df, obs_type):
     Calculate the RMSE and bias for a given observation type.
 
     Parameters:
-    df (DataFrame): A pandas DataFrame.
-    obs_type (str): The observation type for which to calculate the RMSE and bias.
+        df (DataFrame): A pandas DataFrame.
+        obs_type (str): The observation type for which to calculate the RMSE and bias.
 
     Returns:
-    DataFrame: A DataFrame containing the RMSE and bias for the given observation type.
+        DataFrame: A DataFrame containing the RMSE and bias for the given observation type.
 
     Raises:
-    ValueError: If the observation type is not present in the DataFrame.
+        ValueError: If the observation type is not present in the DataFrame.
     """
     if obs_type not in df['type'].unique():
         raise ValueError(f"Observation type '{obs_type}' not found in DataFrame.")

@@ -5,37 +5,38 @@ import os
 import yaml
 
 class obs_sequence:
-    """Create an obs_sequence object from an ascii observation
-       sequence file.
+    """Create an obs_sequence object from an ascii observation sequence file.
 
-       Attributes:
-       
-           df : pandas Dataframe containing all the observations
-           all_obs : list of all observations, each observation is a list
-           header : header from the ascii file
-           vert : dictionary of dart vertical units
-           types : dictionary of types in the observation sequence file
-           copie_names : names of copies in the observation sequence file.
-                         Spelled copie to avoid conflict with python built-in copy function.
-                         Spaces are replaced with underscores in copie_names.
-           file : the input observation sequence ascii file
-       
-       usage: 
-         Read the observation sequence from file:
-              obs_seq = obs_sequence('/home/data/obs_seq.final.ascii.small')
-         Access the resulting pandas dataFrame:
-              obs_seq.df   
+    Attributes:
+        df (pandas.DataFrame): DataFrame containing all the observations.
+        all_obs (list): List of all observations, each observation is a list.
+        header (str): Header from the ascii file.
+        vert (dict): Dictionary of dart vertical units.
+        types (dict): Dictionary of types in the observation sequence file.
+        copie_names (list): Names of copies in the observation sequence file.
+            Spelled 'copie' to avoid conflict with the Python built-in copy function.
+            Spaces are replaced with underscores in copie_names.
+   
+    Parameters:
+        file : the input observation sequence ascii file
 
-       For 3D sphere models: latitude and longitude are in degrees in the DataFrame
-       sq_err = (mean-obs)**2
-       bias = (mean-obs)
+    Example: 
+        Read the observation sequence from file:
+            ``obs_seq = obs_sequence('/home/data/obs_seq.final.ascii.small')``
+        Access the resulting pandas DataFrame:
+            ``obs_seq.df``
 
-       rmse = sqrt( sum((mean-obs)**2)/n )
-       bias = sum((mean-obs)/n)
-       spread = sum(sd)
-       totalspread = sqrt(sum(sd+obs_err_var)) 
+    For 3D sphere models: latitude and longitude are in degrees in the DataFrame
 
-       
+    Calculations:
+          
+        - sq_err = (mean-obs)**2  
+        - bias = (mean-obs)  
+        - rmse = sqrt( sum((mean-obs)**2)/n )
+        - bias = sum((mean-obs)/n)
+        - spread = sum(sd)
+        - totalspread = sqrt(sum(sd+obs_err_var)) 
+        
     """
     ## static variables
     # vertrical coordinate:
@@ -101,6 +102,7 @@ class obs_sequence:
 
     def obs_to_list(self, obs):
         """put single observation into a list
+
            discards obs_def
         """
         data = []
@@ -170,7 +172,7 @@ class obs_sequence:
     def write_obs_seq(self, file, df=None):
         """
         Write the observation sequence to a file.
-
+        
         This function writes the observation sequence to disk. 
         If no DataFrame is provided, it writes the obs_sequence object to a file using the
         header and all observations stored in the object.
@@ -178,19 +180,17 @@ class obs_sequence:
         then writes the DataFrame obs to an obs_sequence file. Note the DataFrame is assumed
         to have been created from obs_sequence object.
         
-
+        
         Parameters:
-        file (str): The path to the file where the observation sequence will be written.
-        df (pandas.DataFrame, optional): A DataFrame containing the observation data. 
-                                        If not provided, the function uses self.header 
-                                        and self.all_obs.
-
+            file (str): The path to the file where the observation sequence will be written.
+            df (pandas.DataFrame, optional): A DataFrame containing the observation data. If not provided, the function uses self.header and self.all_obs.
+        
         Returns:
-        None
-
-        Usage:
-        obs_seq.write_obs_seq('/path/to/output/file')
-        obs_seq.write_obs_seq('/path/to/output/file', df=obs_seq.df)
+            None
+        
+        Examples:
+            ``obs_seq.write_obs_seq('/path/to/output/file')``
+            ``obs_seq.write_obs_seq('/path/to/output/file', df=obs_seq.df)``
         """
         with open(file, 'w') as f:
             
@@ -281,14 +281,13 @@ class obs_sequence:
         """
         Extracts the names of the copies from the header of an obs_seq file.
 
-
         Parameters:
-        header (list): A list of strings representing the lines in the header of the obs_seq file.
+            header (list): A list of strings representing the lines in the header of the obs_seq file.
 
         Returns:
-        tuple: A tuple containing two elements:
-            - copie_names (list): A list of strings representing the copy names with _ for spaces.
-            - len(copie_names) (int): The number of copy names.
+            tuple: A tuple containing two elements: 
+             - copie_names (list): A list of strings representing the copy names with underscores for spaces. 
+             - len(copie_names) (int): The number of copy names.
         """
         for i, line in enumerate(header):
             if "num_obs:" in line and "max_num_obs:" in line:
@@ -348,15 +347,13 @@ class obs_sequence:
         components and adds them to the DataFrame.
 
         Parameters:
-        composite_types (str, optional): The YAML configuration for composite types.
-                                        If 'use_default', the default configuration is used.
-                                        Otherwise, a custom YAML configuration can be provided.
+            composite_types (str, optional): The YAML configuration for composite types. If 'use_default', the default configuration is used. Otherwise, a custom YAML configuration can be provided.
 
         Returns:
-        pd.DataFrame: The updated DataFrame with the new composite rows added.
+            pd.DataFrame: The updated DataFrame with the new composite rows added.
 
         Raises:
-        Exception: If there are repeat values in the components.
+            Exception: If there are repeat values in the components.
         """
 
         if composite_types == 'use_default':
@@ -386,10 +383,10 @@ def load_yaml_to_dict(file_path):
     Load a YAML file and convert it to a dictionary.
 
     Parameters:
-    - file_path (str): The path to the YAML file.
+        file_path (str): The path to the YAML file.
 
     Returns:
-    - dict: The YAML file content as a dictionary.
+        dict: The YAML file content as a dictionary.
     """
     try:
         with open(file_path, 'r') as file:
@@ -402,8 +399,9 @@ def load_yaml_to_dict(file_path):
 def convert_dart_time(seconds, days):
     """covert from seconds, days after 1601 to datetime object
 
-    base year for Gregorian calendar is 1601
-    dart time is seconds, days since 1601
+    Note:
+        - base year for Gregorian calendar is 1601
+        - dart time is seconds, days since 1601
     """
     time = dt.datetime(1601,1,1) + dt.timedelta(days=days, seconds=seconds)
     return time
@@ -413,14 +411,14 @@ def select_by_dart_qc(df, dart_qc):
     Selects rows from a DataFrame based on the DART quality control flag.
 
     Parameters:
-    df (DataFrame): A pandas DataFrame.
-    dart_qc (int): The DART quality control flag to select.
+        df (DataFrame): A pandas DataFrame.
+        dart_qc (int): The DART quality control flag to select.
 
     Returns:
-    DataFrame: A DataFrame containing only the rows with the specified DART quality control flag.
+        DataFrame: A DataFrame containing only the rows with the specified DART quality control flag.
 
     Raises:
-    ValueError: If the DART quality control flag is not present in the DataFrame.
+        ValueError: If the DART quality control flag is not present in the DataFrame.
     """
     if dart_qc not in df['DART_quality_control'].unique():
         raise ValueError(f"DART quality control flag '{dart_qc}' not found in DataFrame.")
@@ -432,10 +430,10 @@ def select_failed_qcs(df):
     Selects rows from a DataFrame where the DART quality control flag is greater than 0.
 
     Parameters:
-    df (DataFrame): A pandas DataFrame.
+        df (DataFrame): A pandas DataFrame.
 
     Returns:
-    DataFrame: A DataFrame containing only the rows with a DART quality control flag greater than 0.
+        DataFrame: A DataFrame containing only the rows with a DART quality control flag greater than 0.
     """
     return df[df['DART_quality_control'] > 0]
 
@@ -450,14 +448,14 @@ def possible_vs_used(df):
     used observations.
 
     Parameters:
-    - df (pd.DataFrame): A DataFrame with at least two columns: 'type' for the observation type and 'observation'
-      for the observation data. It may also contain other columns required by the `select_failed_qcs` function
-      to determine failed quality control checks.
+        df (pd.DataFrame): A DataFrame with at least two columns: 'type' for the observation type and 'observation'
+        for the observation data. It may also contain other columns required by the `select_failed_qcs` function
+        to determine failed quality control checks.
 
     Returns:
-    - pd.DataFrame: A DataFrame with three columns: 'type', 'possible', and 'used'. 'type' is the observation type,
-      'possible' is the count of all observations of that type, and 'used' is the count of observations of that type
-      that passed quality control checks.
+        pd.DataFrame: A DataFrame with three columns: 'type', 'possible', and 'used'. 'type' is the observation type,
+        'possible' is the count of all observations of that type, and 'used' is the count of observations of that type
+        that passed quality control checks.
 
     """
     possible = df.groupby('type')['observation'].count()
@@ -476,12 +474,12 @@ def construct_composit(df_comp, composite, components):
     specified columns using the square root of the sum of squares method.
 
     Parameters:
-    df_comp (pd.DataFrame): The DataFrame containing the component rows to be combined.
-    composite (str): The type name for the new composite rows.
-    components (list of str): A list containing the type names of the two components to be combined.
+        df_comp (pd.DataFrame): The DataFrame containing the component rows to be combined.
+        composite (str): The type name for the new composite rows.
+        components (list of str): A list containing the type names of the two components to be combined.
 
     Returns:
-    merged_df (pd.DataFrame): The updated DataFrame with the new composite rows added.
+        merged_df (pd.DataFrame): The updated DataFrame with the new composite rows added.
     """
     selected_rows = df_comp[df_comp['type'] == components[0].upper()]
     selected_rows_v = df_comp[df_comp['type'] == components[1].upper()]
