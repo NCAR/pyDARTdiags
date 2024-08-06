@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "pydartdiags"
-version = "0.0.3b"
+version = "0.0.4"
 authors = [
   { name="Helen Kershaw", email="hkershaw@ucar.edu" },
 ]
@@ -25,6 +25,7 @@ dependencies = [
 [project.urls]
 Homepage = "https://github.com/NCAR/pyDARTdiags.git"
 Issues = "https://github.com/NCAR/pyDARTdiags/issues"
+Documentation = "https://ncar.github.io/pyDARTdiags"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/pydartdiags"]

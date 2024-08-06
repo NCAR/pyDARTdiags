@@ -28,7 +28,7 @@ pyDARTdiags is a python library for obsevation space diagnostics for the Data As
 Contributing
 ============
 
-Contributions are welcome! If you have a feature request, bug report, or a suggestion, please open an issue on our GitHub repository.
+Contributions are welcome! If you have a feature request, bug report, or a suggestion, please open an issue on our `GitHub repository <https://github.com/NCAR/pyDARTdiags>`_.
 
 License
 =======
