@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>module: obs_sequence &#8212; pydartdiags 0.0.3b documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=ba112473" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <script src="_static/documentation_options.js?v=72edb4f6"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="module: plots" href="plots.html" />
+    <link rel="prev" title="Quickstart" href="quickstart.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">pydartdiags</a></h1>
+
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=NCAR&repo=pyDARTdiags&type=star&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">pyDARTdiags</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">module: obs_sequence</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#obs_sequence.obs_sequence"><code class="docutils literal notranslate"><span class="pre">obs_sequence</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#obs_sequence.obs_sequence.df"><code class="docutils literal notranslate"><span class="pre">obs_sequence.df</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#obs_sequence.obs_sequence.all_obs"><code class="docutils literal notranslate"><span class="pre">obs_sequence.all_obs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#obs_sequence.obs_sequence.header"><code class="docutils literal notranslate"><span class="pre">obs_sequence.header</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#obs_sequence.obs_sequence.vert"><code class="docutils literal notranslate"><span class="pre">obs_sequence.vert</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#obs_sequence.obs_sequence.types"><code class="docutils literal notranslate"><span class="pre">obs_sequence.types</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#obs_sequence.obs_sequence.copie_names"><code class="docutils literal notranslate"><span class="pre">obs_sequence.copie_names</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#obs_sequence.obs_sequence.create_all_obs"><code class="docutils literal notranslate"><span class="pre">obs_sequence.create_all_obs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#obs_sequence.obs_sequence.obs_to_list"><code class="docutils literal notranslate"><span class="pre">obs_sequence.obs_to_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#obs_sequence.obs_sequence.generate_linked_list_pattern"><code class="docutils literal notranslate"><span class="pre">obs_sequence.generate_linked_list_pattern()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#obs_sequence.obs_sequence.write_obs_seq"><code class="docutils literal notranslate"><span class="pre">obs_sequence.write_obs_seq()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#obs_sequence.obs_sequence.column_headers"><code class="docutils literal notranslate"><span class="pre">obs_sequence.column_headers()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#obs_sequence.obs_sequence.read_header"><code class="docutils literal notranslate"><span class="pre">obs_sequence.read_header()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#obs_sequence.obs_sequence.collect_obs_types"><code class="docutils literal notranslate"><span class="pre">obs_sequence.collect_obs_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#obs_sequence.obs_sequence.collect_copie_names"><code class="docutils literal notranslate"><span class="pre">obs_sequence.collect_copie_names()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#obs_sequence.obs_sequence.obs_reader"><code class="docutils literal notranslate"><span class="pre">obs_sequence.obs_reader()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#obs_sequence.obs_sequence.composite_types"><code class="docutils literal notranslate"><span class="pre">obs_sequence.composite_types()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#obs_sequence.load_yaml_to_dict"><code class="docutils literal notranslate"><span class="pre">load_yaml_to_dict()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#obs_sequence.convert_dart_time"><code class="docutils literal notranslate"><span class="pre">convert_dart_time()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#obs_sequence.select_by_dart_qc"><code class="docutils literal notranslate"><span class="pre">select_by_dart_qc()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#obs_sequence.select_failed_qcs"><code class="docutils literal notranslate"><span class="pre">select_failed_qcs()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#obs_sequence.possible_vs_used"><code class="docutils literal notranslate"><span class="pre">possible_vs_used()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#obs_sequence.construct_composit"><code class="docutils literal notranslate"><span class="pre">construct_composit()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="plots.html">module: plots</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="quickstart.html" title="previous chapter">Quickstart</a></li>
+      <li>Next: <a href="plots.html" title="next chapter">module: plots</a></li>
+  </ul></li>
+</ul>
+</div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-obs_sequence">
+<span id="module-obs-sequence"></span><h1>module: obs_sequence<a class="headerlink" href="#module-obs_sequence" title="Link to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="obs_sequence.obs_sequence">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">obs_sequence.</span></span><span class="sig-name descname"><span class="pre">obs_sequence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.obs_sequence" title="Link to this definition">¶</a></dt>
+<dd><p>Create an obs_sequence object from an ascii observation sequence file.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="obs_sequence.obs_sequence.df">
+<span class="sig-name descname"><span class="pre">df</span></span><a class="headerlink" href="#obs_sequence.obs_sequence.df" title="Link to this definition">¶</a></dt>
+<dd><p>DataFrame containing all the observations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="obs_sequence.obs_sequence.all_obs">
+<span class="sig-name descname"><span class="pre">all_obs</span></span><a class="headerlink" href="#obs_sequence.obs_sequence.all_obs" title="Link to this definition">¶</a></dt>
+<dd><p>List of all observations, each observation is a list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="obs_sequence.obs_sequence.header">
+<span class="sig-name descname"><span class="pre">header</span></span><a class="headerlink" href="#obs_sequence.obs_sequence.header" title="Link to this definition">¶</a></dt>
+<dd><p>Header from the ascii file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="obs_sequence.obs_sequence.vert">
+<span class="sig-name descname"><span class="pre">vert</span></span><a class="headerlink" href="#obs_sequence.obs_sequence.vert" title="Link to this definition">¶</a></dt>
+<dd><p>Dictionary of dart vertical units.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="obs_sequence.obs_sequence.types">
+<span class="sig-name descname"><span class="pre">types</span></span><a class="headerlink" href="#obs_sequence.obs_sequence.types" title="Link to this definition">¶</a></dt>
+<dd><p>Dictionary of types in the observation sequence file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="obs_sequence.obs_sequence.copie_names">
+<span class="sig-name descname"><span class="pre">copie_names</span></span><a class="headerlink" href="#obs_sequence.obs_sequence.copie_names" title="Link to this definition">¶</a></dt>
+<dd><p>Names of copies in the observation sequence file.
+Spelled ‘copie’ to avoid conflict with the Python built-in copy function.
+Spaces are replaced with underscores in copie_names.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file</strong> – the input observation sequence ascii file</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<dl class="simple">
+<dt>Read the observation sequence from file:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">obs_seq</span> <span class="pre">=</span> <span class="pre">obs_sequence('/home/data/obs_seq.final.ascii.small')</span></code></p>
+</dd>
+<dt>Access the resulting pandas DataFrame:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">obs_seq.df</span></code></p>
+</dd>
+</dl>
+<p>For 3D sphere models: latitude and longitude are in degrees in the DataFrame</p>
+<p>Calculations:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>sq_err = (mean-obs)**2</p></li>
+<li><p>bias = (mean-obs)</p></li>
+<li><p>rmse = sqrt( sum((mean-obs)**2)/n )</p></li>
+<li><p>bias = sum((mean-obs)/n)</p></li>
+<li><p>spread = sum(sd)</p></li>
+<li><p>totalspread = sqrt(sum(sd+obs_err_var))</p></li>
+</ul>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="obs_sequence.obs_sequence.create_all_obs">
+<span class="sig-name descname"><span class="pre">create_all_obs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.obs_sequence.create_all_obs" title="Link to this definition">¶</a></dt>
+<dd><p>steps through the generator to create a
+list of all observations in the sequence</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="obs_sequence.obs_sequence.obs_to_list">
+<span class="sig-name descname"><span class="pre">obs_to_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.obs_sequence.obs_to_list" title="Link to this definition">¶</a></dt>
+<dd><p>put single observation into a list</p>
+<p>discards obs_def</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="obs_sequence.obs_sequence.generate_linked_list_pattern">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">generate_linked_list_pattern</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.obs_sequence.generate_linked_list_pattern" title="Link to this definition">¶</a></dt>
+<dd><p>Create a list of strings with the linked list pattern for n lines.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="obs_sequence.obs_sequence.write_obs_seq">
+<span class="sig-name descname"><span class="pre">write_obs_seq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.obs_sequence.write_obs_seq" title="Link to this definition">¶</a></dt>
+<dd><p>Write the observation sequence to a file.</p>
+<p>This function writes the observation sequence to disk.
+If no DataFrame is provided, it writes the obs_sequence object to a file using the
+header and all observations stored in the object.
+If a DataFrame is provided,it creates a header and linked list from the DataFrame,
+then writes the DataFrame obs to an obs_sequence file. Note the DataFrame is assumed
+to have been created from obs_sequence object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file</strong> (<em>str</em>) – The path to the file where the observation sequence will be written.</p></li>
+<li><p><strong>df</strong> (<em>pandas.DataFrame</em><em>, </em><em>optional</em>) – A DataFrame containing the observation data. If not provided, the function uses self.header and self.all_obs.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p><code class="docutils literal notranslate"><span class="pre">obs_seq.write_obs_seq('/path/to/output/file')</span></code>
+<code class="docutils literal notranslate"><span class="pre">obs_seq.write_obs_seq('/path/to/output/file',</span> <span class="pre">df=obs_seq.df)</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="obs_sequence.obs_sequence.column_headers">
+<span class="sig-name descname"><span class="pre">column_headers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.obs_sequence.column_headers" title="Link to this definition">¶</a></dt>
+<dd><p>define the columns for the dataframe</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="obs_sequence.obs_sequence.read_header">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">read_header</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.obs_sequence.read_header" title="Link to this definition">¶</a></dt>
+<dd><p>Read the header and number of lines in the header of an obs_seq file</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="obs_sequence.obs_sequence.collect_obs_types">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">collect_obs_types</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">header</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.obs_sequence.collect_obs_types" title="Link to this definition">¶</a></dt>
+<dd><p>Create a dictionary for the observation types in the obs_seq header</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="obs_sequence.obs_sequence.collect_copie_names">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">collect_copie_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">header</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.obs_sequence.collect_copie_names" title="Link to this definition">¶</a></dt>
+<dd><p>Extracts the names of the copies from the header of an obs_seq file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>header</strong> (<em>list</em>) – A list of strings representing the lines in the header of the obs_seq file.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>A tuple containing two elements:</dt><dd><ul class="simple">
+<li><p>copie_names (list): A list of strings representing the copy names with underscores for spaces.</p></li>
+<li><p>len(copie_names) (int): The number of copy names.</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="obs_sequence.obs_sequence.obs_reader">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">obs_reader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.obs_sequence.obs_reader" title="Link to this definition">¶</a></dt>
+<dd><p>Reads the obs sequence file and returns a generator of the obs</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="obs_sequence.obs_sequence.composite_types">
+<span class="sig-name descname"><span class="pre">composite_types</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">composite_types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'use_default'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.obs_sequence.composite_types" title="Link to this definition">¶</a></dt>
+<dd><p>Set up and construct composite types for the DataFrame.</p>
+<p>This function sets up composite types based on a provided YAML configuration or
+a default configuration. It constructs new composite rows by combining specified
+components and adds them to the DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>composite_types</strong> (<em>str</em><em>, </em><em>optional</em>) – The YAML configuration for composite types. If ‘use_default’, the default configuration is used. Otherwise, a custom YAML configuration can be provided.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The updated DataFrame with the new composite rows added.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Exception</strong> – If there are repeat values in the components.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="obs_sequence.load_yaml_to_dict">
+<span class="sig-prename descclassname"><span class="pre">obs_sequence.</span></span><span class="sig-name descname"><span class="pre">load_yaml_to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.load_yaml_to_dict" title="Link to this definition">¶</a></dt>
+<dd><p>Load a YAML file and convert it to a dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_path</strong> (<em>str</em>) – The path to the YAML file.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The YAML file content as a dictionary.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="obs_sequence.convert_dart_time">
+<span class="sig-prename descclassname"><span class="pre">obs_sequence.</span></span><span class="sig-name descname"><span class="pre">convert_dart_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seconds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">days</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.convert_dart_time" title="Link to this definition">¶</a></dt>
+<dd><p>covert from seconds, days after 1601 to datetime object</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>base year for Gregorian calendar is 1601</p></li>
+<li><p>dart time is seconds, days since 1601</p></li>
+</ul>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="obs_sequence.select_by_dart_qc">
+<span class="sig-prename descclassname"><span class="pre">obs_sequence.</span></span><span class="sig-name descname"><span class="pre">select_by_dart_qc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dart_qc</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.select_by_dart_qc" title="Link to this definition">¶</a></dt>
+<dd><p>Selects rows from a DataFrame based on the DART quality control flag.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>DataFrame</em>) – A pandas DataFrame.</p></li>
+<li><p><strong>dart_qc</strong> (<em>int</em>) – The DART quality control flag to select.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A DataFrame containing only the rows with the specified DART quality control flag.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the DART quality control flag is not present in the DataFrame.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="obs_sequence.select_failed_qcs">
+<span class="sig-prename descclassname"><span class="pre">obs_sequence.</span></span><span class="sig-name descname"><span class="pre">select_failed_qcs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.select_failed_qcs" title="Link to this definition">¶</a></dt>
+<dd><p>Selects rows from a DataFrame where the DART quality control flag is greater than 0.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>DataFrame</em>) – A pandas DataFrame.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A DataFrame containing only the rows with a DART quality control flag greater than 0.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="obs_sequence.possible_vs_used">
+<span class="sig-prename descclassname"><span class="pre">obs_sequence.</span></span><span class="sig-name descname"><span class="pre">possible_vs_used</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.possible_vs_used" title="Link to this definition">¶</a></dt>
+<dd><p>Calculates the count of possible vs. used observations by type.</p>
+<p>This function takes a DataFrame containing observation data, including a ‘type’ column for the observation
+type and an ‘observation’ column. The number of used observations (‘used’), is the total number
+minus the observations that failed quality control checks (as determined by the <cite>select_failed_qcs</cite> function).
+The result is a DataFrame with each observation type, the count of possible observations, and the count of
+used observations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – A DataFrame with at least two columns: ‘type’ for the observation type and ‘observation’</p></li>
+<li><p><strong>function</strong> (<em>for the observation data. It may also contain other columns required by the select_failed_qcs</em>)</p></li>
+<li><p><strong>checks.</strong> (<em>to determine failed quality control</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A DataFrame with three columns: ‘type’, ‘possible’, and ‘used’. ‘type’ is the observation type,
+‘possible’ is the count of all observations of that type, and ‘used’ is the count of observations of that type
+that passed quality control checks.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="obs_sequence.construct_composit">
+<span class="sig-prename descclassname"><span class="pre">obs_sequence.</span></span><span class="sig-name descname"><span class="pre">construct_composit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df_comp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">composite</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">components</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.construct_composit" title="Link to this definition">¶</a></dt>
+<dd><p>Construct a composite DataFrame by combining rows from two components.</p>
+<p>This function takes two DataFrames and combines rows from them based on matching
+location and time. It creates a new row with a composite type by combining
+specified columns using the square root of the sum of squares method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df_comp</strong> (<em>pd.DataFrame</em>) – The DataFrame containing the component rows to be combined.</p></li>
+<li><p><strong>composite</strong> (<em>str</em>) – The type name for the new composite rows.</p></li>
+<li><p><strong>components</strong> (<em>list</em><em> of </em><em>str</em>) – A list containing the type names of the two components to be combined.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The updated DataFrame with the new composite rows added.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>merged_df (pd.DataFrame)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2024, University Corporation for Atmospheric Research.
+      
+      |
+      <a href="_sources/obs_sequence.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
