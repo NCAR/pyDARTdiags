@@ -47,6 +47,7 @@ html_theme_options = {
     'sidebar_width': '325px',
     'page_width': '1200px',
     'show_powered_by' : 'false',
+    'description': 'A Python library for obsevation space diagnostics for the Data Assimilation Research Testbed (DART).',
 }
 
 

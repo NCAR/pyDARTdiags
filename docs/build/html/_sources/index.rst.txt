@@ -15,7 +15,7 @@ pyDARTdiags
     obs_sequence
     plots
 
-pyDARTdiags is a python library for obsevation space diagnostics for the Data Assimilation Research Testbed (`DART <https://github.com/NCAR/DART>`_).
+pyDARTdiags is a Python library for obsevation space diagnostics for the Data Assimilation Research Testbed (`DART <https://github.com/NCAR/DART>`_).
 
 
 .. note::
