@@ -14,6 +14,13 @@ pyDARTdiags can be installed through pip.  We recommend installing pydartdiags i
     pip install pydartdiags
 
 
+Import the obs_sequence and plots module
+
+.. code-block :: python
+
+    from pydartdiags.obs_sequence import obs_sequence as obs_seq
+    from pydartdiags.plots import plots
+
 
 Read an obs_sequence file
 -------------------------
