@@ -29,7 +29,7 @@ def calculate_rank(df):
 
     Parameters:
         df (pd.DataFrame): A DataFrame with columns for mean, standard deviation, observed values,
-        ensemble size, and observation type. The DataFrame should have one row per observation.
+                           ensemble size, and observation type. The DataFrame should have one row per observation.
 
     Returns:
         tuple: A tuple containing the rank array, ensemble size, and a result DataFrame. The result
@@ -125,7 +125,9 @@ def mean_then_sqrt(x):
 
     Raises:
         TypeError: If the input is not an array-like object containing numeric values.
+         ValueError: If the input array is empty.
     """
+        
     return np.sqrt(np.mean(x))
 
 def rmse_bias(df):

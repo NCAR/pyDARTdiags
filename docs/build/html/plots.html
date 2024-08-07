@@ -117,11 +117,8 @@ observed value is larger than the largest ensemble member, its rank is set to th
 size plus one.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – A DataFrame with columns for mean, standard deviation, observed values,</p></li>
-<li><p><strong>size</strong> (<em>ensemble</em>)</p></li>
-<li><p><strong>observation.</strong> (<em>and observation type. The DataFrame should have one row per</em>)</p></li>
-</ul>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – A DataFrame with columns for mean, standard deviation, observed values,
+ensemble size, and observation type. The DataFrame should have one row per observation.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A tuple containing the rank array, ensemble size, and a result DataFrame. The result
@@ -190,7 +187,8 @@ The elements should be numeric.</p>
 <dd class="field-odd"><p>float</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>TypeError</strong> – If the input is not an array-like object containing numeric values.</p>
+<dd class="field-even"><p><strong>TypeError</strong> – If the input is not an array-like object containing numeric values.
+    ValueError: If the input array is empty.</p>
 </dd>
 </dl>
 </dd></dl>
