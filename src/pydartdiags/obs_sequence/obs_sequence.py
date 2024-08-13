@@ -462,6 +462,7 @@ def possible_vs_used(df):
     possible.rename('possible', inplace=True)
     used = df.groupby('type')['observation'].count() - select_failed_qcs(df).groupby('type')['observation'].count()
     used.rename('used', inplace=True)
+    print("KJSHDFKGJHSDKJGHKSJDHGKJHSDKGJHKSDJHGKSJDHG")
     return pd.concat([possible, used], axis=1).reset_index()
 
 
