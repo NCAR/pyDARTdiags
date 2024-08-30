@@ -21,14 +21,14 @@ pip install pydartdiags
 ## Example importing the obs\_sequence and plots modules
 
 ```python
-from pydartdiags.obs_sequence import obs_sequence as obs_seq
+from pydartdiags.obs_sequence import obs_sequence as obsq
 from pydartdiags.plots import plots
 ```
 
 ## Examining the dataframe
 
 ```python
-obs_seq = obs_seq.obs_sequence('obs_seq.final.ascii')
+obs_seq = obsq.obs_sequence('obs_seq.final.ascii')
 obs_seq.df.head()
 ```
 
@@ -189,7 +189,7 @@ obs_seq.df.head()
 Find the numeber of assimilated (used) observations vs. possible observations by type
 
 ```python
-obs_seq.possible_vs_used(obs_seq.df)
+obsq.possible_vs_used(obs_seq.df)
 ```
 
 <table border="1" class="dataframe">
@@ -346,7 +346,7 @@ obs_seq.possible_vs_used(obs_seq.df)
 * plot the rank histogram
 
 ```python
-df_qc0 = obs_seq.select_by_dart_qc(obs_seq.df, 0) 
+df_qc0 = obsq.select_by_dart_qc(obs_seq.df, 0) 
 plots.plot_rank_histogram(df_qc0)
 ```
 ![Rank Histogram](docs/images/rankhist.png)
@@ -362,7 +362,7 @@ plots.plot_rank_histogram(df_qc0)
 hPalevels = [0.0, 100.0,  150.0, 200.0, 250.0, 300.0, 400.0, 500.0, 700, 850, 925, 1000]# float("inf")] # Pa?
 plevels = [i * 100 for i in hPalevels]
 
-df_qc0 = obs_seq.select_by_dart_qc(obs_seq.df, 0)  # only qc 0
+df_qc0 = obsq.select_by_dart_qc(obs_seq.df, 0)  # only qc 0
 df_profile, figrmse, figbias = plots.plot_profile(df_qc0, plevels)
 ```
 
