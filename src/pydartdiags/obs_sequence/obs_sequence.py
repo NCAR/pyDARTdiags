@@ -60,7 +60,8 @@ class obs_sequence:
                         'AIRS observation', 
                         'GTSPP observation', 
                         'SST observation',
-                        'observations']
+                        'observations',
+                        'WOD observation']
     
     def __init__(self, file):
         self.loc_mod = 'None'
