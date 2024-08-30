@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="pydartdiags",
-    version="0.0.4",
+    version="0.0.41",
     packages=find_packages(where="src"),
     package_dir={"": "src"},
     author="Helen Kershaw",
