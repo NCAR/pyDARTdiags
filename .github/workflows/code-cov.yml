@@ -22,12 +22,9 @@ jobs:
 
       - name: Set up Python
         uses: actions/setup-python@v4
-
-      - name: Install dependencies
-        run: pip install pytest pytest-cov pandas>=2.2.0 numpy>=1.26 plotly>=5.22.0 pyyaml>=6.0.2
-
+        
       - name: Install pydartdiags
-        run: pip install .
+        run: python -m pip install .
 
       - name: Set PYTHONPATH
         run: echo "PYTHONPATH=$PYTHONPATH:$(pwd)" >> $GITHUB_ENV
