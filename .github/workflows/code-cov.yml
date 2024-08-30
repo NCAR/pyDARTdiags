@@ -1,0 +1,35 @@
+name: Run tests and upload coverage
+
+on:
+  push:
+    branches:
+      - main
+      - code-cov
+      - feature/*
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Run tests and collect coverage
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+
+      - name: Install dependencies
+        run: pip install pytest pytest-cov pandas>=2.2.0 numpy>=1.26 plotly>=5.22.0 pyyaml>=6.0.2
+
+      - name: Run tests
+        run: pytest --cov
+
+      - name: Upload results to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
