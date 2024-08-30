@@ -30,7 +30,7 @@ jobs:
         run: python -m pip install .
 
       - name: Run tests
-        run: pytest --cov
+        run: pytest --cov=pydartdiags tests/ 
 
       - name: Upload results to Codecov
         uses: codecov/codecov-action@v4
