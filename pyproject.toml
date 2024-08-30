@@ -28,5 +28,3 @@ Homepage = "https://github.com/NCAR/pyDARTdiags.git"
 Issues = "https://github.com/NCAR/pyDARTdiags/issues"
 Documentation = "https://ncar.github.io/pyDARTdiags"
 
-[tool.hatch.build.targets.wheel]
-packages = ["src/pydartdiags"]
