@@ -18,7 +18,7 @@ Import the obs_sequence and plots module
 
 .. code-block :: python
 
-    from pydartdiags.obs_sequence import obs_sequence as obs_seq
+    from pydartdiags.obs_sequence import obs_sequence as obsq
     from pydartdiags.plots import plots
 
 
@@ -29,7 +29,7 @@ Read an observation sequence file into a DataFrama
 
 .. code-block :: python
 
-    obs_seq = obs_seq.obs_sequence('obs_seq.final.ascii')
+    obs_seq = obsq.obs_sequence('obs_seq.final.ascii')
     
 
 Examine the DataFrame
@@ -199,7 +199,7 @@ Find the numeber of assimilated (used) observations vs. possible observations by
 
 .. code-block :: python
 
-    obs_seq.possible_vs_used(obs_seq.df)
+    obsq.possible_vs_used(obs_seq.df)
 
 .. raw :: html
 
@@ -358,7 +358,7 @@ plot a rank histogram
 
 .. code-block :: python
 
-    df_qc0 = obs_seq.select_by_dart_qc(obs_seq.df, 0) 
+    df_qc0 = obsq.select_by_dart_qc(obs_seq.df, 0) 
     plots.plot_rank_histogram(df_qc0)
 
 .. image:: images/rankhist.png
@@ -376,7 +376,7 @@ plot profiles of RMSE and Bias
     hPalevels = [0.0, 100.0,  150.0, 200.0, 250.0, 300.0, 400.0, 500.0, 700, 850, 925, 1000]  # Pa?
     plevels = [i * 100 for i in hPalevels]
 
-    df_qc0 = obs_seq.select_by_dart_qc(obs_seq.df, 0)  # only qc 0
+    df_qc0 = obsq.select_by_dart_qc(obs_seq.df, 0)  # only qc 0
     df_profile, figrmse, figbias = plots.plot_profile(df_qc0, plevels)
 
 .. image:: images/rmse.png
