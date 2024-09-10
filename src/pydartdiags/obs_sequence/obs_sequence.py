@@ -128,7 +128,11 @@ class obs_sequence:
                 raise ValueError("Neither 'loc3d' nor 'loc1d' could be found in the observation sequence.")
         typeI = obs.index('kind') # type of observation
         type_value = obs[typeI + 1]
-        data.append(self.types[type_value]) # observation type
+        if not self.types:
+            data.append('Identity')
+        else:
+            data.append(self.types[type_value]) # observation type
+            
         # any observation specific obs def info is between here and the end of the list
         time = obs[-2].split()
         data.append(int(time[0])) # seconds
