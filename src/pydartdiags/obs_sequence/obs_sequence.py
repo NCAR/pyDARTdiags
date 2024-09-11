@@ -55,17 +55,21 @@ class obs_sequence:
 
     reversed_vert = {value: key for key, value in vert.items()}
 
-    # synonyms for observation
-    synonyms_for_obs = ['NCEP BUFR observation',
-                        'AIRS observation', 
-                        'GTSPP observation', 
-                        'SST observation',
-                        'observations',
-                        'WOD observation']
     
-    def __init__(self, file):
+    def __init__(self, file, synonyms=None):
         self.loc_mod = 'None'
         self.file = file
+        self.synonyms_for_obs = ['NCEP BUFR observation',
+                                 'AIRS observation', 
+                                 'GTSPP observation', 
+                                 'SST observation',
+                                 'observations',
+                                 'WOD observation']
+        if synonyms:
+            if isinstance(synonyms, list):
+                self.synonyms_for_obs.extend(synonyms)
+            else:
+                self.synonyms_for_obs.append(synonyms)
         self.header = self.read_header(file)
         self.types = self.collect_obs_types(self.header)
         self.reverse_types = {v: k for k, v in self.types.items()}
