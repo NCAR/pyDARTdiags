@@ -22,6 +22,11 @@ def test_convert_dart_time_case4():
     expected = dt.datetime(2015, 1, 31, 0, 36, 4)
     assert result == expected
 
+def test_synonyms_missing_key():
+    filename = "obs_seq.final.ascii.syn"
+    with pytest.raises(KeyError, match="'observation'"):
+        obj3 = obsq.obs_sequence(filename)
+
 def test_synonyms_single():
     filename = "obs_seq.final.ascii.syn"
     obj1 = obsq.obs_sequence(filename, synonyms="observationx")
@@ -33,10 +38,11 @@ def test_synonyms_list():
     assert "synonym1" in obj2.synonyms_for_obs
     assert "synonym2" in obj2.synonyms_for_obs
 
-def test_synonyms_missing_key():
+def test_synonyms_missing_key_per_instance():
     filename = "obs_seq.final.ascii.syn"
     with pytest.raises(KeyError, match="'observation'"):
         obj3 = obsq.obs_sequence(filename)
+
 
 if __name__ == '__main__':
     pytest.main()
