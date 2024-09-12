@@ -1,3 +1,4 @@
+import os
 import pytest
 import datetime as dt
 from pydartdiags.obs_sequence import obs_sequence as obsq
@@ -22,27 +23,28 @@ def test_convert_dart_time_case4():
     expected = dt.datetime(2015, 1, 31, 0, 36, 4)
     assert result == expected
 
-def test_synonyms_missing_key():
-    filename = "obs_seq.final.ascii.syn"
-    with pytest.raises(KeyError, match="'observation'"):
-        obj3 = obsq.obs_sequence(filename)
+# synonym tests
+@pytest.fixture
+def synonym_file_path():
+    test_dir = os.path.dirname(__file__)
+    return os.path.join(test_dir, 'data', 'obs_seq.final.ascii.syn')
 
-def test_synonyms_single():
-    filename = "obs_seq.final.ascii.syn"
-    obj1 = obsq.obs_sequence(filename, synonyms="observationx")
+def test_synonyms_missing_key(synonym_file_path):
+    with pytest.raises(KeyError, match="'observation'"):
+        obj3 = obsq.obs_sequence(synonym_file_path)
+
+def test_synonyms_single(synonym_file_path):
+    obj1 = obsq.obs_sequence(synonym_file_path, synonyms="observationx")
     assert "observationx" in obj1.synonyms_for_obs
 
-def test_synonyms_list():
-    filename = "obs_seq.final.ascii.syn"
-    obj2 = obsq.obs_sequence(filename, synonyms=["synonym1", "synonym2", "observationx"])
+def test_synonyms_list(synonym_file_path):
+    obj2 = obsq.obs_sequence(synonym_file_path, synonyms=["synonym1", "synonym2", "observationx"])
     assert "synonym1" in obj2.synonyms_for_obs
     assert "synonym2" in obj2.synonyms_for_obs
 
-def test_synonyms_missing_key_per_instance():
-    filename = "obs_seq.final.ascii.syn"
+def test_synonyms_missing_key_per_instance(synonym_file_path):
     with pytest.raises(KeyError, match="'observation'"):
-        obj3 = obsq.obs_sequence(filename)
-
+        obj3 = obsq.obs_sequence(synonym_file_path)
 
 if __name__ == '__main__':
     pytest.main()
