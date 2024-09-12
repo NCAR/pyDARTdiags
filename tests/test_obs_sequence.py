@@ -24,6 +24,31 @@ class TestConvertDartTime:
         expected = dt.datetime(2015, 1, 31, 0, 36, 4)
         assert result == expected
 
+class TestSanitizeInput:
+    @pytest.fixture
+    def bad_loc_file_path(self):
+        test_dir = os.path.dirname(__file__)
+        return os.path.join(test_dir, 'data', 'obs_seq.invalid_loc')
+
+    def test_catch_bad_loc(self, bad_loc_file_path):
+        with pytest.raises(ValueError, match="Neither 'loc3d' nor 'loc1d' could be found in the observation sequence."):
+            obj = obsq.obs_sequence(bad_loc_file_path)
+
+class TestOneDimensional:
+    @pytest.fixture
+    def obs_seq_file_path(self):
+        test_dir = os.path.dirname(__file__)
+        return os.path.join(test_dir, 'data', 'obs_seq.1d.final')
+      
+    def test_read1d(self, obs_seq_file_path):
+        obj = obsq.obs_sequence(obs_seq_file_path)
+        assert obj.loc_mod == 'loc1d'
+        assert len(obj.df) == 40  # 40 obs in the file
+        assert obj.df.columns.str.contains('posterior').sum() == 22 
+        assert obj.df.columns.str.contains('prior').sum() == 22
+ 
+
+
 class TestSynonyms:
     @pytest.fixture
     def synonym_file_path(self):
