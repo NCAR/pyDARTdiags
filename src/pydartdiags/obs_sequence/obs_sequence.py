@@ -3,6 +3,7 @@ import datetime as dt
 import numpy as np
 import os
 import yaml
+import struct
 
 class obs_sequence:
     """Create an obs_sequence object from an ascii observation sequence file.
@@ -70,30 +71,37 @@ class obs_sequence:
                 self.synonyms_for_obs.extend(synonyms)
             else:
                 self.synonyms_for_obs.append(synonyms)
-        self.header = self.read_header(file)
-        self.types = self.collect_obs_types(self.header)
-        self.reverse_types = {v: k for k, v in self.types.items()}
-        self.copie_names, self.n_copies = self.collect_copie_names(self.header)
-        self.seq = self.obs_reader(file, self.n_copies)
-        self.all_obs = self.create_all_obs() # uses up the generator
-        # at this point you know if the seq is loc3d or loc1d
-        if self.loc_mod == 'None':
-            raise ValueError("Neither 'loc3d' nor 'loc1d' could be found in the observation sequence.")
-        self.columns = self.column_headers()
-        self.df = pd.DataFrame(self.all_obs, columns = self.columns)
-        if self.loc_mod == 'loc3d':
-            self.df['longitude'] = np.rad2deg(self.df['longitude'])
-            self.df['latitude'] = np.rad2deg(self.df['latitude'])
-        # rename 'X observation' to observation
-        self.synonyms_for_obs = [synonym.replace(' ', '_') for synonym in self.synonyms_for_obs]
-        rename_dict = {old: 'observation' for old in self.synonyms_for_obs  if old in self.df.columns}
-        self.df = self.df.rename(columns=rename_dict)
-        # calculate bias and sq_err is the obs_seq is an obs_seq.final
-        if 'prior_ensemble_mean'.casefold() in map(str.casefold, self.columns):
-            self.df['bias'] = (self.df['prior_ensemble_mean'] - self.df['observation'])
-            self.df['sq_err'] = self.df['bias']**2  # squared error
+
         module_dir = os.path.dirname(__file__)
         self.default_composite_types = os.path.join(module_dir,"composite_types.yaml")
+
+        if self.is_binary(file):
+            self.header = self.read_binary_header(file)
+        else:
+
+            self.header = self.read_header(file)
+            self.types = self.collect_obs_types(self.header)
+            self.reverse_types = {v: k for k, v in self.types.items()}
+            self.copie_names, self.n_copies = self.collect_copie_names(self.header)
+            self.seq = self.obs_reader(file, self.n_copies)
+            self.all_obs = self.create_all_obs() # uses up the generator
+            # at this point you know if the seq is loc3d or loc1d
+            if self.loc_mod == 'None':
+                raise ValueError("Neither 'loc3d' nor 'loc1d' could be found in the observation sequence.")
+            self.columns = self.column_headers()
+            self.df = pd.DataFrame(self.all_obs, columns = self.columns)
+            if self.loc_mod == 'loc3d':
+                self.df['longitude'] = np.rad2deg(self.df['longitude'])
+                self.df['latitude'] = np.rad2deg(self.df['latitude'])
+            # rename 'X observation' to observation
+            self.synonyms_for_obs = [synonym.replace(' ', '_') for synonym in self.synonyms_for_obs]
+            rename_dict = {old: 'observation' for old in self.synonyms_for_obs  if old in self.df.columns}
+            self.df = self.df.rename(columns=rename_dict)
+            # calculate bias and sq_err is the obs_seq is an obs_seq.final
+            if 'prior_ensemble_mean'.casefold() in map(str.casefold, self.columns):
+                self.df['bias'] = (self.df['prior_ensemble_mean'] - self.df['observation'])
+                self.df['sq_err'] = self.df['bias']**2  # squared error
+            
 
     def create_all_obs(self):
         """ steps through the generator to create a
@@ -266,8 +274,18 @@ class obs_sequence:
         return heading
 
     @staticmethod
+    def is_binary(file):
+        """Check if a file is binary file."""
+        with open(file, 'rb') as f:
+            chunk = f.read(1024)
+            if b'\0' in chunk:
+                return True
+        return False
+
+
+    @staticmethod
     def read_header(file):
-        """Read the header and number of lines in the header of an obs_seq file"""
+        """Read the header and number of lines in the header of an ascii obs_seq file"""
         header = []
         with open(file, 'r') as f:
             for line in f:
@@ -276,6 +294,133 @@ class obs_sequence:
                     break
                 else:
                     header.append(line.strip())
+        return header
+
+    @staticmethod
+    def read_binary_header(file):
+        """Read the header and number of lines in the header of a binary obs_seq file from Fortran output"""
+        header = []
+        linecount = 0
+        obs_types_definitions = -1000
+        num_obs = 0
+        max_num_obs = 0 
+        # need to get:
+        #   number of obs_type_definitions
+        #   number of copies
+        #   number of qcs
+        with open(file, 'rb') as f:
+            while True:
+                # Read the record length (Fortran uses 4-byte record markers)
+                record_length_bytes = f.read(4)
+                if not record_length_bytes:
+                    break 
+                record_length = struct.unpack('i', record_length_bytes)[0]
+
+                # Read the actual record
+                record = f.read(record_length)
+
+                if not record: # end of file
+                    break
+
+                # Read the trailing record length (should match the leading one)
+                trailing_record_length_bytes = f.read(4)
+                trailing_record_length = struct.unpack('i', trailing_record_length_bytes)[0]
+                if record_length != trailing_record_length:
+                    raise ValueError("Record length mismatch in Fortran binary file")
+
+                linecount += 1
+
+                if linecount == 3: 
+                    obs_types_definitions = struct.unpack('i', record)[0]
+                    continue               
+
+                if linecount == 4+obs_types_definitions:
+                    #print(len(record))
+                    num_copies, num_qcs, num_obs, max_num_obs = struct.unpack('iiii', record)[:16]
+                    break
+            
+            # Go back to the beginning of the file
+            f.seek(0)
+            
+            for _ in range(2):
+                # Read the record length (Fortran uses 4-byte record markers)
+                record_length_bytes = f.read(4)
+                if not record_length_bytes:
+                    break
+                record_length = struct.unpack('i', record_length_bytes)[0]
+
+                # Read the actual record
+                record = f.read(record_length)
+                if not record:  # end of file
+                    break
+
+                # Read the trailing record length (should match the leading one)
+                trailing_record_length_bytes = f.read(4)
+                trailing_record_length = struct.unpack('i', trailing_record_length_bytes)[0]
+                if record_length != trailing_record_length:
+                    raise ValueError("Record length mismatch in Fortran binary file")
+
+                header.append(record.decode('utf-8').strip())
+
+            header.append(str(obs_types_definitions))
+
+            # obs_types_definitions
+            for _ in range(3,4+obs_types_definitions):
+                 # Read the record length (Fortran uses 4-byte record markers)
+                record_length_bytes = f.read(4)
+                if not record_length_bytes:
+                    break
+                record_length = struct.unpack('i', record_length_bytes)[0]
+
+                # Read the actual record
+                record = f.read(record_length)
+                if not record:  # end of file
+                    break
+
+                # Read the trailing record length (should match the leading one)
+                trailing_record_length_bytes = f.read(4)
+                trailing_record_length = struct.unpack('i', trailing_record_length_bytes)[0]
+                if record_length != trailing_record_length:
+                    raise ValueError("Record length mismatch in Fortran binary file")
+
+                if _ == 3:
+                    continue # num obs_types_definitions
+                # Read an integer and a string from the record
+                integer_value = struct.unpack('i', record[:4])[0]
+                string_value = record[4:].decode('utf-8').strip()
+                header.append(f"{integer_value} {string_value}")
+
+            header.append(f"num_copies:   {num_copies}  num_qc:   {num_qcs}")
+            header.append(f"num_obs: {num_obs}  max_num_obs: {max_num_obs}")
+           
+            #copie names
+            for _ in range(5+obs_types_definitions, 5+obs_types_definitions+num_copies+num_qcs+1):
+                 # Read the record length (Fortran uses 4-byte record markers)
+                record_length_bytes = f.read(4)
+                if not record_length_bytes:
+                    break
+                record_length = struct.unpack('i', record_length_bytes)[0]
+
+                # Read the actual record
+                record = f.read(record_length)
+                if not record:
+                    break
+
+                # Read the trailing record length (should match the leading one)
+                trailing_record_length_bytes = f.read(4)
+                trailing_record_length = struct.unpack('i', trailing_record_length_bytes)[0]
+                if record_length != trailing_record_length:
+                    raise ValueError("Record length mismatch in Fortran binary file")
+
+                if _ == 5+obs_types_definitions:
+                    continue
+
+                # Read the whole record as a string
+                string_value = record.decode('utf-8').strip()
+                header.append(string_value)
+
+        print(f"obs_types_definitions: {obs_types_definitions}, num_copies: {num_copies}, num_qcs: {num_qcs}")
+
         return header
 
     @staticmethod

@@ -71,6 +71,17 @@ class TestSynonyms:
     def test_missing_key_per_instance(self, synonym_file_path):
         with pytest.raises(KeyError, match="'observation'"):
             obj3 = obsq.obs_sequence(synonym_file_path)
+            
+class TestBinaryObsSequence:
+    @pytest.fixture
+    def binary_obs_seq_file_path(self):
+        test_dir = os.path.dirname(__file__)
+        return os.path.join(test_dir, 'data', 'obs_seq.final.binary.small')
+
+    def test_read_binary(self, binary_obs_seq_file_path):
+        obj = obsq.obs_sequence(binary_obs_seq_file_path)
+        assert len(obj.df) > 0  # Ensure the DataFrame is not empty
+
 
 if __name__ == '__main__':
     pytest.main()
