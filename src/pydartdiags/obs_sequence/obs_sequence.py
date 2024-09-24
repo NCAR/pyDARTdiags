@@ -85,29 +85,28 @@ class obs_sequence:
         self.copie_names, self.n_copies = self.collect_copie_names(self.header)
 
         if self.is_binary(file):
-            print("binary - can not read yet")
             self.seq = self.obs_binary_reader(file, self.n_copies)
-            self.loc_mod = 'loc3d'  # only loc3d supported for binary
-            self.all_obs = self.create_all_obs() # uses up the generator
+            self.loc_mod = 'loc3d'  # only loc3d supported for binary, & no way to check
         else:
             self.seq = self.obs_reader(file, self.n_copies)
-            self.all_obs = self.create_all_obs() # uses up the generator
-            # at this point you know if the seq is loc3d or loc1d
-            if self.loc_mod == 'None':
-                raise ValueError("Neither 'loc3d' nor 'loc1d' could be found in the observation sequence.")
-            self.columns = self.column_headers()
-            self.df = pd.DataFrame(self.all_obs, columns = self.columns)
-            if self.loc_mod == 'loc3d':
-                self.df['longitude'] = np.rad2deg(self.df['longitude'])
-                self.df['latitude'] = np.rad2deg(self.df['latitude'])
-            # rename 'X observation' to observation
-            self.synonyms_for_obs = [synonym.replace(' ', '_') for synonym in self.synonyms_for_obs]
-            rename_dict = {old: 'observation' for old in self.synonyms_for_obs  if old in self.df.columns}
-            self.df = self.df.rename(columns=rename_dict)
-            # calculate bias and sq_err is the obs_seq is an obs_seq.final
-            if 'prior_ensemble_mean'.casefold() in map(str.casefold, self.columns):
-                self.df['bias'] = (self.df['prior_ensemble_mean'] - self.df['observation'])
-                self.df['sq_err'] = self.df['bias']**2  # squared error
+
+        self.all_obs = self.create_all_obs() # uses up the generator
+        # at this point you know if the seq is loc3d or loc1d
+        if self.loc_mod == 'None':
+            raise ValueError("Neither 'loc3d' nor 'loc1d' could be found in the observation sequence.")
+        self.columns = self.column_headers()
+        self.df = pd.DataFrame(self.all_obs, columns = self.columns)
+        if self.loc_mod == 'loc3d':
+            self.df['longitude'] = np.rad2deg(self.df['longitude'])
+            self.df['latitude'] = np.rad2deg(self.df['latitude'])
+        # rename 'X observation' to observation
+        self.synonyms_for_obs = [synonym.replace(' ', '_') for synonym in self.synonyms_for_obs]
+        rename_dict = {old: 'observation' for old in self.synonyms_for_obs  if old in self.df.columns}
+        self.df = self.df.rename(columns=rename_dict)
+        # calculate bias and sq_err is the obs_seq is an obs_seq.final
+        if 'prior_ensemble_mean'.casefold() in map(str.casefold, self.columns):
+            self.df['bias'] = (self.df['prior_ensemble_mean'] - self.df['observation'])
+            self.df['sq_err'] = self.df['bias']**2  # squared error
 	
 
     def create_all_obs(self):
@@ -533,8 +532,11 @@ class obs_sequence:
                 # Skip the trailing record length
                 f.seek(4, 1)
 
+            obs_num = 0
             while True:
                 obs = []
+                obs_num += 1
+                obs.append(f"OBS        {obs_num}")              
                 for _ in range(n): # number of copies
                     # Read the record length (Fortran uses 4-byte record markers)
                     record_length_bytes = f.read(4)
@@ -553,12 +555,14 @@ class obs_sequence:
             
                 # linked list info
                 record_length_bytes = f.read(4)
+                if not record_length_bytes:
+                        break
                 record_length = struct.unpack('i', record_length_bytes)[0]
 
                 record = f.read(record_length)
                 int1, int2, int3 = struct.unpack('iii', record[:12])
-                print("linked list", int1, int2, int3)
-                obs.extend([int1, int2, int3])
+                linked_list_string = f"{int1:<12} {int2:<10} {int3:<12}"
+                obs.append(linked_list_string)
 
                 trailing_record_length_bytes = f.read(4)
                 trailing_record_length = struct.unpack('i', trailing_record_length_bytes)[0]
@@ -566,13 +570,14 @@ class obs_sequence:
                     raise ValueError("Record length mismatch in Fortran binary file")
 
                 # location (note no location header "loc3d" or "loc1d" for binary files)
+                obs.append('loc3d')
                 record_length_bytes = f.read(4)
                 record_length = struct.unpack('i', record_length_bytes)[0]
 
                 record = f.read(record_length)
                 x,y,z,vert = struct.unpack('dddi', record[:28])
-                print(x, y, x, vert) 
-                obs.extend([x, y, z, vert])
+                location_string = f"{x} {y} {z} {vert}" 
+                obs.append(location_string)            
 
                 trailing_record_length_bytes = f.read(4)
                 trailing_record_length = struct.unpack('i', trailing_record_length_bytes)[0]
@@ -580,10 +585,12 @@ class obs_sequence:
                     raise ValueError("Record length mismatch in Fortran binary file")
                 
                 #   kind (type of observation) value
+                obs.append('kind')
                 record_length_bytes = f.read(4)
                 record_length = struct.unpack('i', record_length_bytes)[0]
                 record = f.read(record_length)
-                obs.append(struct.unpack('i', record)[0])
+                kind = f"{struct.unpack('i', record)[0]}"
+                obs.append(kind)
  
                 trailing_record_length_bytes = f.read(4)
                 trailing_record_length = struct.unpack('i', trailing_record_length_bytes)[0]
@@ -596,7 +603,8 @@ class obs_sequence:
 
                 record = f.read(record_length)
                 seconds, days = struct.unpack('ii', record)[:8]
-                obs.extend([seconds, days])
+                time_string = f"{seconds} {days}"
+                obs.append(time_string)
 
                 trailing_record_length_bytes = f.read(4)
                 trailing_record_length = struct.unpack('i', trailing_record_length_bytes)[0]
@@ -614,8 +622,6 @@ class obs_sequence:
                 trailing_record_length = struct.unpack('i', trailing_record_length_bytes)[0]
                 if record_length != trailing_record_length:
                     raise ValueError("Record length mismatch in Fortran binary file")
-
-                print("obs", obs)
 
                 yield obs
  
