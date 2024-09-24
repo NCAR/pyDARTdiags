@@ -316,7 +316,7 @@ class obs_sequence:
         #   number of qcs
         with open(file, 'rb') as f:
             while True:
-                # Read the record length (Fortran uses 4-byte record markers)
+                # Read the record length
                 record_length = obs_sequence.read_record_length(f)
                 if record_length is None:
                     break
@@ -356,7 +356,7 @@ class obs_sequence:
 
             # obs_types_definitions
             for _ in range(3,4+obs_types_definitions):
-                 # Read the record length (Fortran uses 4-byte record markers)
+                 # Read the record length
                 record_length = obs_sequence.read_record_length(f)
                 if record_length is None:
                     break
@@ -380,7 +380,7 @@ class obs_sequence:
            
             #copie names
             for _ in range(5+obs_types_definitions, 5+obs_types_definitions+num_copies+num_qcs+1):
-                 # Read the record length (Fortran uses 4-byte record markers)
+                 # Read the record length
                 record_length = obs_sequence.read_record_length(f)
                 if record_length is None:
                     break
@@ -400,7 +400,7 @@ class obs_sequence:
                 header.append(string_value)
 
             # first and last obs
-            # Read the record length (Fortran uses 4-byte record markers)
+            # Read the record length 
             record_length = obs_sequence.read_record_length(f)
 
             # Read the actual record
@@ -486,6 +486,12 @@ class obs_sequence:
     @staticmethod
     def check_trailing_record_length(file, expected_length):
             """Reads and checks the trailing record length from the binary file written by Fortran.
+
+            Parameters: 
+                file (file): The file object.
+                expected_length (int): The expected length of the trailing record.
+
+               Assuming 4 bytes:
                | Record Length (4 bytes) | Data (N bytes) | Trailing Record Length (4 bytes) |
             """
             trailing_record_length_bytes = file.read(4)
@@ -508,7 +514,7 @@ class obs_sequence:
         with open(file, 'rb') as f:
             # Skip the first len(obs_seq.header) lines
             for _ in range(header_length-1):
-                # Read the record length (Fortran uses 4-byte record markers)
+                # Read the record length
                 record_length = obs_sequence.read_record_length(f)
                 if record_length is None: # End of file
                     break
@@ -525,7 +531,7 @@ class obs_sequence:
                 obs_num += 1
                 obs.append(f"OBS        {obs_num}")              
                 for _ in range(n): # number of copies
-                    # Read the record length (Fortran uses 4-byte record markers)
+                    # Read the record length
                     record_length = obs_sequence.read_record_length(f)
                     if record_length is None:
                         break
