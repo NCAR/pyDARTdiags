@@ -78,11 +78,18 @@ class obs_sequence:
         if self.is_binary(file):
             self.header = self.read_binary_header(file)
         else:
-
             self.header = self.read_header(file)
-            self.types = self.collect_obs_types(self.header)
-            self.reverse_types = {v: k for k, v in self.types.items()}
-            self.copie_names, self.n_copies = self.collect_copie_names(self.header)
+
+        self.types = self.collect_obs_types(self.header)
+        self.reverse_types = {v: k for k, v in self.types.items()}
+        self.copie_names, self.n_copies = self.collect_copie_names(self.header)
+
+        if self.is_binary(file):
+            print("binary - can not read yet")
+            self.seq = self.obs_binary_reader(file, self.n_copies)
+            self.loc_mod = 'loc3d'  # only loc3d supported for binary
+            self.all_obs = self.create_all_obs() # uses up the generator
+        else:
             self.seq = self.obs_reader(file, self.n_copies)
             self.all_obs = self.create_all_obs() # uses up the generator
             # at this point you know if the seq is loc3d or loc1d
@@ -101,7 +108,7 @@ class obs_sequence:
             if 'prior_ensemble_mean'.casefold() in map(str.casefold, self.columns):
                 self.df['bias'] = (self.df['prior_ensemble_mean'] - self.df['observation'])
                 self.df['sq_err'] = self.df['bias']**2  # squared error
-            
+	
 
     def create_all_obs(self):
         """ steps through the generator to create a
@@ -419,7 +426,23 @@ class obs_sequence:
                 string_value = record.decode('utf-8').strip()
                 header.append(string_value)
 
-        print(f"obs_types_definitions: {obs_types_definitions}, num_copies: {num_copies}, num_qcs: {num_qcs}")
+            # first and last obs
+            # Read the record length (Fortran uses 4-byte record markers)
+            record_length_bytes = f.read(4)
+            record_length = struct.unpack('i', record_length_bytes)[0]
+
+            # Read the actual record
+            record = f.read(record_length)
+ 
+            # Read the trailing record length (should match the leading one)
+            trailing_record_length_bytes = f.read(4)
+            trailing_record_length = struct.unpack('i', trailing_record_length_bytes)[0]
+            if record_length != trailing_record_length:
+                raise ValueError("Record length mismatch in Fortran binary file")
+
+            # Read the whole record as a two integers
+            first, last = struct.unpack('ii', record)[:8]
+            header.append(f"first: {first} last: {last}")
 
         return header
 
@@ -452,7 +475,7 @@ class obs_sequence:
 
     @staticmethod
     def obs_reader(file, n):
-        """Reads the obs sequence file and returns a generator of the obs"""
+        """Reads the ascii obs sequence file and returns a generator of the obs"""
         previous_line = ''
         with open(file, 'r') as f:     
             for line in f:
@@ -492,6 +515,110 @@ class obs_sequence:
                                 previous_line = next_line
                         yield obs
 
+    def obs_binary_reader(self, file, n):
+        """Reads the obs sequence binary file and returns a generator of the obs"""
+        header_length = len(self.header)
+        with open(file, 'rb') as f:
+            # Skip the first len(obs_seq.header) lines
+            for _ in range(header_length-1):
+                # Read the record length (Fortran uses 4-byte record markers)
+                record_length_bytes = f.read(4)
+                if not record_length_bytes:
+                    break
+                record_length = struct.unpack('i', record_length_bytes)[0]
+
+                # Skip the actual record
+                f.seek(record_length, 1)
+
+                # Skip the trailing record length
+                f.seek(4, 1)
+
+            while True:
+                obs = []
+                for _ in range(n): # number of copies
+                    # Read the record length (Fortran uses 4-byte record markers)
+                    record_length_bytes = f.read(4)
+                    if not record_length_bytes:
+                        break
+                    record_length = struct.unpack('i', record_length_bytes)[0]
+                    # Read the actual record (copie)
+                    record = f.read(record_length)
+                    obs.append(struct.unpack('d', record)[0])
+
+                    # Read the trailing record length (should match the leading one)
+                    trailing_record_length_bytes = f.read(4)
+                    trailing_record_length = struct.unpack('i', trailing_record_length_bytes)[0]
+                    if record_length != trailing_record_length:
+                        raise ValueError("Record length mismatch in Fortran binary file")
+            
+                # linked list info
+                record_length_bytes = f.read(4)
+                record_length = struct.unpack('i', record_length_bytes)[0]
+
+                record = f.read(record_length)
+                int1, int2, int3 = struct.unpack('iii', record[:12])
+                print("linked list", int1, int2, int3)
+                obs.extend([int1, int2, int3])
+
+                trailing_record_length_bytes = f.read(4)
+                trailing_record_length = struct.unpack('i', trailing_record_length_bytes)[0]
+                if record_length != trailing_record_length:
+                    raise ValueError("Record length mismatch in Fortran binary file")
+
+                # location (note no location header "loc3d" or "loc1d" for binary files)
+                record_length_bytes = f.read(4)
+                record_length = struct.unpack('i', record_length_bytes)[0]
+
+                record = f.read(record_length)
+                x,y,z,vert = struct.unpack('dddi', record[:28])
+                print(x, y, x, vert) 
+                obs.extend([x, y, z, vert])
+
+                trailing_record_length_bytes = f.read(4)
+                trailing_record_length = struct.unpack('i', trailing_record_length_bytes)[0]
+                if record_length != trailing_record_length:
+                    raise ValueError("Record length mismatch in Fortran binary file")
+                
+                #   kind (type of observation) value
+                record_length_bytes = f.read(4)
+                record_length = struct.unpack('i', record_length_bytes)[0]
+                record = f.read(record_length)
+                obs.append(struct.unpack('i', record)[0])
+ 
+                trailing_record_length_bytes = f.read(4)
+                trailing_record_length = struct.unpack('i', trailing_record_length_bytes)[0]
+                if record_length != trailing_record_length:
+                    raise ValueError("Record length mismatch in Fortran binary file")
+
+                # time (seconds, days)
+                record_length_bytes = f.read(4)
+                record_length = struct.unpack('i', record_length_bytes)[0]
+
+                record = f.read(record_length)
+                seconds, days = struct.unpack('ii', record)[:8]
+                obs.extend([seconds, days])
+
+                trailing_record_length_bytes = f.read(4)
+                trailing_record_length = struct.unpack('i', trailing_record_length_bytes)[0]
+                if record_length != trailing_record_length:
+                    raise ValueError("Record length mismatch in Fortran binary file")
+                
+                # obs error variance
+                record_length_bytes = f.read(4)
+                record_length = struct.unpack('i', record_length_bytes)[0]
+
+                record = f.read(record_length)
+                obs.append(struct.unpack('d', record)[0])
+ 
+                trailing_record_length_bytes = f.read(4)
+                trailing_record_length = struct.unpack('i', trailing_record_length_bytes)[0]
+                if record_length != trailing_record_length:
+                    raise ValueError("Record length mismatch in Fortran binary file")
+
+                print("obs", obs)
+
+                yield obs
+ 
     def composite_types(self, composite_types='use_default'):
         """
         Set up and construct composite types for the DataFrame.
