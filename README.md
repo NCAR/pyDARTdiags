@@ -1,3 +1,8 @@
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![codecov](https://codecov.io/gh/NCAR/pyDARTdiags/graph/badge.svg?token=VK55SQZSVD)](https://codecov.io/gh/NCAR/pyDARTdiags)
+[![PyPI version](https://badge.fury.io/py/pydartdiags.svg)](https://pypi.org/project/pydartdiags/)
+
+
 # pyDARTdiags
 
 pyDARTdiags is a Python library for obsevation space diagnostics for the Data Assimilation Research Testbed ([DART](https://github.com/NCAR/DART)).
@@ -349,7 +354,7 @@ obsq.possible_vs_used(obs_seq.df)
 df_qc0 = obsq.select_by_dart_qc(obs_seq.df, 0) 
 plots.plot_rank_histogram(df_qc0)
 ```
-![Rank Histogram](docs/images/rankhist.png)
+![Rank Histogram](https://raw.githubusercontent.com/NCAR/pydartdiags/main/docs/images/rankhist.png)
 
 
 ### plot profile of RMSE and Bias 
@@ -366,9 +371,9 @@ df_qc0 = obsq.select_by_dart_qc(obs_seq.df, 0)  # only qc 0
 df_profile, figrmse, figbias = plots.plot_profile(df_qc0, plevels)
 ```
 
-![RMSE Plot](docs/images/rmse.png)
+![RMSE Plot](https://raw.githubusercontent.com/NCAR/pydartdiags/main/docs/images/rmse.png)
 
-![Bias Plot](docs/images/bias.png)
+![Bias Plot](https://raw.githubusercontent.com/NCAR/pydartdiags/main/docs/images/bias.png)
 
 ## Contributing
 Contributions are welcome! If you have a feature request, bug report, or a suggestion, please open an issue on our GitHub repository.
