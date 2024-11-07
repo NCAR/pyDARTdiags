@@ -23,6 +23,13 @@ source dartdiags/bin/activate
 pip install pydartdiags
 ```
 
+For developers of pyDARTdiags, we recommend installing pyDARTdiags as a local project in “editable” mode in your virtual environment:
+
+```
+git clone https://github.com/NCAR/pyDARTdiags
+python -m pip install -e pyDARTdiags
+```
+
 ## Example importing the obs\_sequence and plots modules
 
 ```python
