@@ -33,7 +33,7 @@ Contributions are welcome! If you have a feature request, bug report, or a sugge
 License
 =======
 
-DartLabPlot is released under the Apache License 2.0. For more details, see the LICENSE file in the root directory of this source 
+pyDARTdiags is released under the Apache License 2.0. For more details, see the LICENSE file in the root directory of this source 
 tree or visit `Apache License 2.0 <https://www.apache.org/licenses/LICENSE-2.0>`_.
 
 

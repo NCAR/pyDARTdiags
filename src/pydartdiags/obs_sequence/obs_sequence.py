@@ -3,6 +3,7 @@ import datetime as dt
 import numpy as np
 import os
 import yaml
+import struct
 
 class obs_sequence:
     """Create an obs_sequence object from an ascii observation sequence file.
@@ -55,21 +56,40 @@ class obs_sequence:
 
     reversed_vert = {value: key for key, value in vert.items()}
 
-    # synonyms for observation
-    synonyms_for_obs = ['NCEP BUFR observation',
-                        'AIRS observation', 
-                        'GTSPP observation', 
-                        'SST observation',
-                        'observations']
     
-    def __init__(self, file):
+    def __init__(self, file, synonyms=None):
         self.loc_mod = 'None'
         self.file = file
-        self.header = self.read_header(file)
+        self.synonyms_for_obs = ['NCEP BUFR observation',
+                                 'AIRS observation', 
+                                 'GTSPP observation', 
+                                 'SST observation',
+                                 'observations',
+                                 'WOD observation']
+        if synonyms:
+            if isinstance(synonyms, list):
+                self.synonyms_for_obs.extend(synonyms)
+            else:
+                self.synonyms_for_obs.append(synonyms)
+
+        module_dir = os.path.dirname(__file__)
+        self.default_composite_types = os.path.join(module_dir,"composite_types.yaml")
+
+        if self.is_binary(file):
+            self.header = self.read_binary_header(file)
+        else:
+            self.header = self.read_header(file)
+
         self.types = self.collect_obs_types(self.header)
         self.reverse_types = {v: k for k, v in self.types.items()}
         self.copie_names, self.n_copies = self.collect_copie_names(self.header)
-        self.seq = self.obs_reader(file, self.n_copies)
+
+        if self.is_binary(file):
+            self.seq = self.obs_binary_reader(file, self.n_copies)
+            self.loc_mod = 'loc3d'  # only loc3d supported for binary, & no way to check
+        else:
+            self.seq = self.obs_reader(file, self.n_copies)
+
         self.all_obs = self.create_all_obs() # uses up the generator
         # at this point you know if the seq is loc3d or loc1d
         if self.loc_mod == 'None':
@@ -87,8 +107,7 @@ class obs_sequence:
         if 'prior_ensemble_mean'.casefold() in map(str.casefold, self.columns):
             self.df['bias'] = (self.df['prior_ensemble_mean'] - self.df['observation'])
             self.df['sq_err'] = self.df['bias']**2  # squared error
-        module_dir = os.path.dirname(__file__)
-        self.default_composite_types = os.path.join(module_dir,"composite_types.yaml")
+	
 
     def create_all_obs(self):
         """ steps through the generator to create a
@@ -127,7 +146,11 @@ class obs_sequence:
                 raise ValueError("Neither 'loc3d' nor 'loc1d' could be found in the observation sequence.")
         typeI = obs.index('kind') # type of observation
         type_value = obs[typeI + 1]
-        data.append(self.types[type_value]) # observation type
+        if not self.types:
+            data.append('Identity')
+        else:
+            data.append(self.types[type_value]) # observation type
+            
         # any observation specific obs def info is between here and the end of the list
         time = obs[-2].split()
         data.append(int(time[0])) # seconds
@@ -257,8 +280,18 @@ class obs_sequence:
         return heading
 
     @staticmethod
+    def is_binary(file):
+        """Check if a file is binary file."""
+        with open(file, 'rb') as f:
+            chunk = f.read(1024)
+            if b'\0' in chunk:
+                return True
+        return False
+
+
+    @staticmethod
     def read_header(file):
-        """Read the header and number of lines in the header of an obs_seq file"""
+        """Read the header and number of lines in the header of an ascii obs_seq file"""
         header = []
         with open(file, 'r') as f:
             for line in f:
@@ -267,6 +300,118 @@ class obs_sequence:
                     break
                 else:
                     header.append(line.strip())
+        return header
+
+    @staticmethod
+    def read_binary_header(file):
+        """Read the header and number of lines in the header of a binary obs_seq file from Fortran output"""
+        header = []
+        linecount = 0
+        obs_types_definitions = -1000
+        num_obs = 0
+        max_num_obs = 0 
+        # need to get:
+        #   number of obs_type_definitions
+        #   number of copies
+        #   number of qcs
+        with open(file, 'rb') as f:
+            while True:
+                # Read the record length
+                record_length = obs_sequence.read_record_length(f)
+                if record_length is None:
+                    break
+                record = f.read(record_length)
+                if not record: # end of file
+                    break
+
+                # Read the trailing record length (should match the leading one)
+                obs_sequence.check_trailing_record_length(f, record_length)
+
+                linecount += 1
+
+                if linecount == 3: 
+                    obs_types_definitions = struct.unpack('i', record)[0]
+                    continue               
+
+                if linecount == 4+obs_types_definitions:
+                    num_copies, num_qcs, num_obs, max_num_obs = struct.unpack('iiii', record)[:16]
+                    break
+            
+            # Go back to the beginning of the file
+            f.seek(0)
+            
+            for _ in range(2):
+                record_length = obs_sequence.read_record_length(f)
+                if record_length is None:
+                    break
+
+                record = f.read(record_length)
+                if not record:  # end of file
+                    break
+
+                obs_sequence.check_trailing_record_length(f, record_length)  
+                header.append(record.decode('utf-8').strip())                          
+
+            header.append(str(obs_types_definitions))
+
+            # obs_types_definitions
+            for _ in range(3,4+obs_types_definitions):
+                 # Read the record length
+                record_length = obs_sequence.read_record_length(f)
+                if record_length is None:
+                    break
+
+                # Read the actual record
+                record = f.read(record_length)
+                if not record:  # end of file
+                    break
+
+                obs_sequence.check_trailing_record_length(f, record_length) 
+
+                if _ == 3:
+                    continue # num obs_types_definitions
+                # Read an integer and a string from the record
+                integer_value = struct.unpack('i', record[:4])[0]
+                string_value = record[4:].decode('utf-8').strip()
+                header.append(f"{integer_value} {string_value}")
+
+            header.append(f"num_copies:   {num_copies}  num_qc:   {num_qcs}")
+            header.append(f"num_obs: {num_obs}  max_num_obs: {max_num_obs}")
+           
+            #copie names
+            for _ in range(5+obs_types_definitions, 5+obs_types_definitions+num_copies+num_qcs+1):
+                 # Read the record length
+                record_length = obs_sequence.read_record_length(f)
+                if record_length is None:
+                    break
+
+                # Read the actual record
+                record = f.read(record_length)
+                if not record:
+                    break
+
+                obs_sequence.check_trailing_record_length(f, record_length) 
+
+                if _ == 5+obs_types_definitions:
+                    continue
+
+                # Read the whole record as a string
+                string_value = record.decode('utf-8').strip()
+                header.append(string_value)
+
+            # first and last obs
+            # Read the record length 
+            record_length = obs_sequence.read_record_length(f)
+
+            # Read the actual record
+            record = f.read(record_length)
+ 
+            obs_sequence.check_trailing_record_length(f, record_length) 
+
+            # Read the whole record as a two integers
+            first, last = struct.unpack('ii', record)[:8]
+            header.append(f"first: {first} last: {last}")
+
         return header
 
     @staticmethod
@@ -298,7 +443,7 @@ class obs_sequence:
 
     @staticmethod
     def obs_reader(file, n):
-        """Reads the obs sequence file and returns a generator of the obs"""
+        """Reads the ascii obs sequence file and returns a generator of the obs"""
         previous_line = ''
         with open(file, 'r') as f:     
             for line in f:
@@ -337,6 +482,115 @@ class obs_sequence:
                                 obs.append(next_line.strip())
                                 previous_line = next_line
                         yield obs
+
+    @staticmethod
+    def check_trailing_record_length(file, expected_length):
+            """Reads and checks the trailing record length from the binary file written by Fortran.
+
+            Parameters: 
+                file (file): The file object.
+                expected_length (int): The expected length of the trailing record.
+
+               Assuming 4 bytes:
+               | Record Length (4 bytes) | Data (N bytes) | Trailing Record Length (4 bytes) |
+            """
+            trailing_record_length_bytes = file.read(4)
+            trailing_record_length = struct.unpack('i', trailing_record_length_bytes)[0]
+            if expected_length != trailing_record_length:
+                raise ValueError("Record length mismatch in Fortran binary file")
+
+    @staticmethod
+    def read_record_length(file):
+        """Reads and unpacks the record length from the file."""
+        record_length_bytes = file.read(4)
+        if not record_length_bytes:
+            return None  # End of file
+        return struct.unpack('i', record_length_bytes)[0]
+
+
+    def obs_binary_reader(self, file, n):
+        """Reads the obs sequence binary file and returns a generator of the obs"""
+        header_length = len(self.header)
+        with open(file, 'rb') as f:
+            # Skip the first len(obs_seq.header) lines
+            for _ in range(header_length-1):
+                # Read the record length
+                record_length = obs_sequence.read_record_length(f)
+                if record_length is None: # End of file
+                    break
+
+                # Skip the actual record
+                f.seek(record_length, 1)
+
+                # Skip the trailing record length
+                f.seek(4, 1)
+
+            obs_num = 0
+            while True:
+                obs = []
+                obs_num += 1
+                obs.append(f"OBS        {obs_num}")              
+                for _ in range(n): # number of copies
+                    # Read the record length
+                    record_length = obs_sequence.read_record_length(f)
+                    if record_length is None:
+                        break
+                    # Read the actual record (copie)
+                    record = f.read(record_length)
+                    obs.append(struct.unpack('d', record)[0])
+
+                    # Read the trailing record length (should match the leading one)
+                    obs_sequence.check_trailing_record_length(f, record_length)
+            
+                # linked list info
+                record_length = obs_sequence.read_record_length(f)
+                if record_length is None:
+                    break
+
+                record = f.read(record_length)
+                int1, int2, int3 = struct.unpack('iii', record[:12])
+                linked_list_string = f"{int1:<12} {int2:<10} {int3:<12}"
+                obs.append(linked_list_string)
+
+                obs_sequence.check_trailing_record_length(f, record_length)
+
+                # location (note no location header "loc3d" or "loc1d" for binary files)
+                obs.append('loc3d')
+                record_length = obs_sequence.read_record_length(f)
+                record = f.read(record_length)
+                x,y,z,vert = struct.unpack('dddi', record[:28])
+                location_string = f"{x} {y} {z} {vert}" 
+                obs.append(location_string)            
+
+                obs_sequence.check_trailing_record_length(f, record_length)
+                
+                #   kind (type of observation) value
+                obs.append('kind')
+                record_length_bytes = f.read(4)
+                record_length = struct.unpack('i', record_length_bytes)[0]
+                record = f.read(record_length)
+                kind = f"{struct.unpack('i', record)[0]}"
+                obs.append(kind)
+ 
+                obs_sequence.check_trailing_record_length(f, record_length)
+
+                # time (seconds, days)
+                record_length = obs_sequence.read_record_length(f)
+                record = f.read(record_length)
+                seconds, days = struct.unpack('ii', record)[:8]
+                time_string = f"{seconds} {days}"
+                obs.append(time_string)
+
+                obs_sequence.check_trailing_record_length(f, record_length)
+                
+                # obs error variance
+                record_length = obs_sequence.read_record_length(f)
+                record = f.read(record_length)
+                obs.append(struct.unpack('d', record)[0])
+ 
+                obs_sequence.check_trailing_record_length(f, record_length)
+
+                yield obs
 
     def composite_types(self, composite_types='use_default'):
         """
@@ -504,3 +758,5 @@ def construct_composit(df_comp, composite, components):
     merged_df = merged_df.drop(columns=[col for col in merged_df.columns if col.endswith('_v')])
 
     return merged_df
+
+
