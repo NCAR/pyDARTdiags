@@ -1,3 +1,8 @@
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![codecov](https://codecov.io/gh/NCAR/pyDARTdiags/graph/badge.svg?token=VK55SQZSVD)](https://codecov.io/gh/NCAR/pyDARTdiags)
+[![PyPI version](https://badge.fury.io/py/pydartdiags.svg)](https://pypi.org/project/pydartdiags/)
+
+
 # pyDARTdiags
 
 pyDARTdiags is a Python library for obsevation space diagnostics for the Data Assimilation Research Testbed ([DART](https://github.com/NCAR/DART)).
@@ -18,17 +23,24 @@ source dartdiags/bin/activate
 pip install pydartdiags
 ```
 
+For developers of pyDARTdiags, we recommend installing pyDARTdiags as a local project in “editable” mode in your virtual environment:
+
+```
+git clone https://github.com/NCAR/pyDARTdiags
+python -m pip install -e pyDARTdiags
+```
+
 ## Example importing the obs\_sequence and plots modules
 
 ```python
-from pydartdiags.obs_sequence import obs_sequence as obs_seq
+from pydartdiags.obs_sequence import obs_sequence as obsq
 from pydartdiags.plots import plots
 ```
 
 ## Examining the dataframe
 
 ```python
-obs_seq = obs_seq.obs_sequence('obs_seq.final.ascii')
+obs_seq = obsq.obs_sequence('obs_seq.final.ascii')
 obs_seq.df.head()
 ```
 
@@ -189,7 +201,7 @@ obs_seq.df.head()
 Find the numeber of assimilated (used) observations vs. possible observations by type
 
 ```python
-obs_seq.possible_vs_used(obs_seq.df)
+obsq.possible_vs_used(obs_seq.df)
 ```
 
 <table border="1" class="dataframe">
@@ -346,10 +358,10 @@ obs_seq.possible_vs_used(obs_seq.df)
 * plot the rank histogram
 
 ```python
-df_qc0 = obs_seq.select_by_dart_qc(obs_seq.df, 0) 
+df_qc0 = obsq.select_by_dart_qc(obs_seq.df, 0) 
 plots.plot_rank_histogram(df_qc0)
 ```
-![Rank Histogram](docs/images/rankhist.png)
+![Rank Histogram](https://raw.githubusercontent.com/NCAR/pydartdiags/main/docs/images/rankhist.png)
 
 
 ### plot profile of RMSE and Bias 
@@ -362,17 +374,17 @@ plots.plot_rank_histogram(df_qc0)
 hPalevels = [0.0, 100.0,  150.0, 200.0, 250.0, 300.0, 400.0, 500.0, 700, 850, 925, 1000]# float("inf")] # Pa?
 plevels = [i * 100 for i in hPalevels]
 
-df_qc0 = obs_seq.select_by_dart_qc(obs_seq.df, 0)  # only qc 0
+df_qc0 = obsq.select_by_dart_qc(obs_seq.df, 0)  # only qc 0
 df_profile, figrmse, figbias = plots.plot_profile(df_qc0, plevels)
 ```
 
-![RMSE Plot](docs/images/rmse.png)
+![RMSE Plot](https://raw.githubusercontent.com/NCAR/pydartdiags/main/docs/images/rmse.png)
 
-![Bias Plot](docs/images/bias.png)
+![Bias Plot](https://raw.githubusercontent.com/NCAR/pydartdiags/main/docs/images/bias.png)
 
 ## Contributing
 Contributions are welcome! If you have a feature request, bug report, or a suggestion, please open an issue on our GitHub repository.
 
 ## License
 
-DartLabPlot is released under the Apache License 2.0. For more details, see the LICENSE file in the root directory of this source tree or visit [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).
+pyDARTdiags is released under the Apache License 2.0. For more details, see the LICENSE file in the root directory of this source tree or visit [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).

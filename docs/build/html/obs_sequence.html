@@ -5,11 +5,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>module: obs_sequence &#8212; pydartdiags 0.0.3b documentation</title>
+    <title>module: obs_sequence &#8212; pydartdiags  documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d1102ebc" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=ba112473" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <script src="_static/documentation_options.js?v=72edb4f6"></script>
+    <script src="_static/documentation_options.js?v=5929fcd5"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -65,10 +65,15 @@
 <li class="toctree-l3"><a class="reference internal" href="#obs_sequence.obs_sequence.generate_linked_list_pattern"><code class="docutils literal notranslate"><span class="pre">obs_sequence.generate_linked_list_pattern()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#obs_sequence.obs_sequence.write_obs_seq"><code class="docutils literal notranslate"><span class="pre">obs_sequence.write_obs_seq()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#obs_sequence.obs_sequence.column_headers"><code class="docutils literal notranslate"><span class="pre">obs_sequence.column_headers()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#obs_sequence.obs_sequence.is_binary"><code class="docutils literal notranslate"><span class="pre">obs_sequence.is_binary()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#obs_sequence.obs_sequence.read_header"><code class="docutils literal notranslate"><span class="pre">obs_sequence.read_header()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#obs_sequence.obs_sequence.read_binary_header"><code class="docutils literal notranslate"><span class="pre">obs_sequence.read_binary_header()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#obs_sequence.obs_sequence.collect_obs_types"><code class="docutils literal notranslate"><span class="pre">obs_sequence.collect_obs_types()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#obs_sequence.obs_sequence.collect_copie_names"><code class="docutils literal notranslate"><span class="pre">obs_sequence.collect_copie_names()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#obs_sequence.obs_sequence.obs_reader"><code class="docutils literal notranslate"><span class="pre">obs_sequence.obs_reader()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#obs_sequence.obs_sequence.check_trailing_record_length"><code class="docutils literal notranslate"><span class="pre">obs_sequence.check_trailing_record_length()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#obs_sequence.obs_sequence.read_record_length"><code class="docutils literal notranslate"><span class="pre">obs_sequence.read_record_length()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#obs_sequence.obs_sequence.obs_binary_reader"><code class="docutils literal notranslate"><span class="pre">obs_sequence.obs_binary_reader()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#obs_sequence.obs_sequence.composite_types"><code class="docutils literal notranslate"><span class="pre">obs_sequence.composite_types()</span></code></a></li>
 </ul>
 </li>
@@ -122,7 +127,7 @@
 <span id="module-obs-sequence"></span><h1>module: obs_sequence<a class="headerlink" href="#module-obs_sequence" title="Link to this heading">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="obs_sequence.obs_sequence">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">obs_sequence.</span></span><span class="sig-name descname"><span class="pre">obs_sequence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.obs_sequence" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">obs_sequence.</span></span><span class="sig-name descname"><span class="pre">obs_sequence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">synonyms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.obs_sequence" title="Link to this definition">¶</a></dt>
 <dd><p>Create an obs_sequence object from an ascii observation sequence file.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="obs_sequence.obs_sequence.df">
@@ -269,9 +274,21 @@ to have been created from obs_sequence object.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="obs_sequence.obs_sequence.is_binary">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_binary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.obs_sequence.is_binary" title="Link to this definition">¶</a></dt>
+<dd><p>Check if a file is binary file.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="obs_sequence.obs_sequence.read_header">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">read_header</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.obs_sequence.read_header" title="Link to this definition">¶</a></dt>
-<dd><p>Read the header and number of lines in the header of an obs_seq file</p>
+<dd><p>Read the header and number of lines in the header of an ascii obs_seq file</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="obs_sequence.obs_sequence.read_binary_header">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">read_binary_header</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.obs_sequence.read_binary_header" title="Link to this definition">¶</a></dt>
+<dd><p>Read the header and number of lines in the header of a binary obs_seq file from Fortran output</p>
 </dd></dl>
 
 <dl class="py method">
@@ -307,7 +324,33 @@ to have been created from obs_sequence object.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="obs_sequence.obs_sequence.obs_reader">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">obs_reader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.obs_sequence.obs_reader" title="Link to this definition">¶</a></dt>
-<dd><p>Reads the obs sequence file and returns a generator of the obs</p>
+<dd><p>Reads the ascii obs sequence file and returns a generator of the obs</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="obs_sequence.obs_sequence.check_trailing_record_length">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">check_trailing_record_length</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expected_length</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.obs_sequence.check_trailing_record_length" title="Link to this definition">¶</a></dt>
+<dd><p>Reads and checks the trailing record length from the binary file written by Fortran.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file</strong> (<em>file</em>) – The file object.</p></li>
+<li><p><strong>expected_length</strong> – The expected length of the trailing record.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="obs_sequence.obs_sequence.read_record_length">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">read_record_length</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.obs_sequence.read_record_length" title="Link to this definition">¶</a></dt>
+<dd><p>Reads and unpacks the record length from the file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="obs_sequence.obs_sequence.obs_binary_reader">
+<span class="sig-name descname"><span class="pre">obs_binary_reader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.obs_sequence.obs_binary_reader" title="Link to this definition">¶</a></dt>
+<dd><p>Reads the obs sequence binary file and returns a generator of the obs</p>
 </dd></dl>
 
 <dl class="py method">

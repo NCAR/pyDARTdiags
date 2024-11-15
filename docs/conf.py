@@ -20,7 +20,7 @@ for root, dirs, files in os.walk(src_path):
 project = 'pydartdiags'
 copyright = '2024, University Corporation for Atmospheric Research'
 author = 'Helen Kershaw'
-release = '0.0.3b'
+#release = '0.0.42'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
