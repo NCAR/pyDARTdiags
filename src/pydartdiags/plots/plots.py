@@ -112,25 +112,32 @@ def plot_profile(df, levels, verticalUnit = "pressure (Pa)"):
         else:
             df.loc[:,'midpoint'] = df['vlevels'].apply(lambda x: x.mid)
 
-    
+    # Calculations
     df_profile = rmse_bias_totalspread(df)
+
+    # RMSE plot
     fig_rmse = px.line(df_profile, y='midpoint', x='rmse', title='RMSE by Level', markers=True, color='type', width=800, height=800,
                       labels={"midpoint": verticalUnit})
     if verticalUnit == "pressure (Pa)":
         fig_rmse.update_yaxes(autorange="reversed")
     fig_rmse.show()
 
+    # totalspread plot
+    fig_ts = px.line(df_profile, y='midpoint', x='totalspread', title='Totalspread by Level', markers=True, color='type', width=800, height=800,
+                      labels={"midpoint": verticalUnit})
+    if verticalUnit == "pressure (Pa)":
+        fig_ts.update_yaxes(autorange="reversed")
+    fig_ts.show()
+
+    # bias plot
     fig_bias = px.line(df_profile, y='midpoint', x='bias', title='Bias by Level', markers=True, color='type', width=800, height=800,
                       labels={"midpoint": verticalUnit})
     if verticalUnit == "pressure (Pa)":
         fig_bias.update_yaxes(autorange="reversed")
     fig_bias.show()
-
-    print("DONE")
-
     
 
-    return df_profile, fig_rmse, fig_bias
+    return df_profile, fig_rmse, fig_ts, fig_bias
     
     
 def mean_then_sqrt(x):
