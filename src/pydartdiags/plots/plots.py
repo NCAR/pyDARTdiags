@@ -113,7 +113,7 @@ def plot_profile(df, levels, verticalUnit = "pressure (Pa)"):
             df.loc[:,'midpoint'] = df['vlevels'].apply(lambda x: x.mid)
 
     
-    df_profile = rmse_bias(df)
+    df_profile = rmse_bias_totalspread(df)
     fig_rmse = px.line(df_profile, y='midpoint', x='rmse', title='RMSE by Level', markers=True, color='type', width=800, height=800,
                       labels={"midpoint": verticalUnit})
     if verticalUnit == "pressure (Pa)":
@@ -125,6 +125,8 @@ def plot_profile(df, levels, verticalUnit = "pressure (Pa)"):
     if verticalUnit == "pressure (Pa)":
         fig_bias.update_yaxes(autorange="reversed")
     fig_bias.show()
+
+    print("DONE")
 
     
 
@@ -149,12 +151,17 @@ def mean_then_sqrt(x):
         
     return np.sqrt(np.mean(x))
 
-def rmse_bias(df):
-    rmse_bias_df = df.groupby(['midpoint', 'type'], observed=False).agg({'sq_err':mean_then_sqrt, 'bias':'mean'}).reset_index()
-    rmse_bias_df.rename(columns={'sq_err':'rmse'}, inplace=True)
-    
-    return rmse_bias_df
+def rmse_bias_totalspread(df): 
+    rmse_bias_ts_df = df.groupby(['midpoint', 'type'], observed=False)
+    rmse_bias_ts_df = rmse_bias_ts_df.agg({'sq_err':mean_then_sqrt, 'bias':'mean', 'posterior_ensemble_spread':mean_then_sqrt, 'obs_err_var':mean_then_sqrt}).reset_index()
 
+    # Add column for totalspread
+    rmse_bias_ts_df['totalspread'] = np.sqrt(rmse_bias_ts_df['posterior_ensemble_spread']+rmse_bias_ts_df['obs_err_var'])
+
+    # Rename square error to root mean square error
+    rmse_bias_ts_df.rename(columns={'sq_err':'rmse'}, inplace=True)
+    
+    return rmse_bias_ts_df
 
 def rmse_bias_by_obs_type(df, obs_type):
     """
