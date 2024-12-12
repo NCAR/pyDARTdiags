@@ -64,11 +64,11 @@ def calculate_rank(df):
 
 def plot_profile(df, levels, verticalUnit = "pressure (Pa)"):
     """
-    Plots RMSE and Bias profiles for different observation types across specified vertical levels.
+    Plots RMSE, bias, and total spread profiles for different observation types across specified vertical levels.
 
     This function takes a DataFrame containing observational data and model predictions, categorizes
-    the data into specified vertical levels, and calculates the RMSE and Bias for each level and
-    observation type. It then plots two line charts: one for RMSE and another for Bias, both as functions
+    the data into specified vertical levels, and calculates the RMSE, bias and total spread for each level and
+    observation type. It then plots three line charts: one for RMSE, one for bias, one for total spread,  as functions
     of vertical level. The vertical levels are plotted on the y-axis in reversed order to represent
     the vertical profile in the atmosphere correctly if the vertical units are pressure.
 
@@ -82,9 +82,9 @@ def plot_profile(df, levels, verticalUnit = "pressure (Pa)"):
         string in the vert_unit column will be plotted. Defaults to 'pressure (Pa)'.
 
     Returns:
-        tuple: A tuple containing the DataFrame with RMSE and Bias calculations, the RMSE plot figure, and the
-        Bias plot figure. The DataFrame includes a 'vlevels' column representing the categorized vertical levels
-        and 'midpoint' column representing the midpoint of each vertical level bin.
+        tuple: A tuple containing the DataFrame with RMSE, bias and total spread calculations,
+        The DataFrame includes a 'vlevels' column representing the categorized vertical levels
+        and 'midpoint' column representing the midpoint of each vertical level bin. And the three figures.
 
     Raises:
         ValueError: If there are missing values in the 'vertical' column of the input DataFrame.
