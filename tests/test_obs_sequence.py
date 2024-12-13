@@ -140,6 +140,10 @@ class TestWriteAscii:
             lines2 = f2.readlines()
             assert len(lines1) == len(lines2), "Files have different number of lines"
 
+    @pytest.mark.parametrize("ascii_obs_seq_file_path", [
+        os.path.join(os.path.dirname(__file__), 'data', 'obs_seq.final.ascii.small'),
+        os.path.join(os.path.dirname(__file__), 'data', 'obs_seq.final.post.small')
+    ])
     def test_write_ascii(self, ascii_obs_seq_file_path, temp_dir):
         # Create a temporary file path for the output
         temp_output_file_path = os.path.join(temp_dir, 'obs_seq.final.ascii.write')
@@ -153,10 +157,6 @@ class TestWriteAscii:
 
         # Compare the written file with the reference file, line by line
         self.compare_files_line_by_line(temp_output_file_path, ascii_obs_seq_file_path)
-
-        # Check if the file is not empty
-        with open(temp_output_file_path, 'r') as f:
-            assert f.read(1)  # Read the first character
 
         # Clean up is handled by the temporary directory context manager
 
