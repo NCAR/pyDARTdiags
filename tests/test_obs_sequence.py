@@ -1,5 +1,7 @@
 import os
 import pytest
+import tempfile
+import filecmp
 import datetime as dt
 from pydartdiags.obs_sequence import obs_sequence as obsq
 
@@ -82,6 +84,81 @@ class TestBinaryObsSequence:
         obj = obsq.obs_sequence(binary_obs_seq_file_path)
         assert len(obj.df) > 0  # Ensure the DataFrame is not empty
 
+class TestWriteAscii:
+    @pytest.fixture
+    def ascii_obs_seq_file_path(self):
+        test_dir = os.path.dirname(__file__)
+        return os.path.join(test_dir, 'data', 'obs_seq.final.ascii.small')
+
+    @pytest.fixture
+    def temp_dir(self):
+        with tempfile.TemporaryDirectory() as tmpdirname:
+            yield tmpdirname
+
+    def normalize_whitespace(self, line):
+        return ''.join(line.split())
+
+    def compare_files_line_by_line(self, file1, file2):
+        """
+        Compare two files line by line, ensuring that they have the same content.
+
+        This function reads two files line by line, splits each line into components,
+        and compares each component. If the components can be converted to floats,
+        they are compared as floats. If the conversion fails, the components are
+        compared as strings after normalizing whitespace. The function also ensures
+        that both files have the same number of lines.
+
+        Args:
+            file1 (str): Path to the first file to compare.
+            file2 (str): Path to the second file to compare.
+
+        Raises:
+            AssertionError: If the files have different numbers of components on any line,
+                            if any corresponding components differ, or if the files have
+                            different numbers of lines.
+        """
+        with open(file1, 'r') as f1, open(file2, 'r') as f2:
+            for line1, line2 in zip(f1, f2):
+                components1 = line1.split()
+                components2 = line2.split()
+                
+                assert len(components1) == len(components2), f"Different number of components:\n{line1}\n{line2}"
+                
+                for comp1, comp2 in zip(components1, components2):
+                    try:
+                        # Attempt to convert to float and compare
+                        assert float(comp1) == float(comp2), f"Difference found:\n{line1}\n{line2}"
+                    except ValueError:
+                        # If conversion fails, normalize whitespace and compare as strings
+                        normalized_comp1 = self.normalize_whitespace(comp1)
+                        normalized_comp2 = self.normalize_whitespace(comp2)
+                        assert normalized_comp1 == normalized_comp2, f"Difference found:\n{line1}\n{line2}"
+
+        # Ensure both files have the same number of lines
+        with open(file1, 'r') as f1, open(file2, 'r') as f2:
+            lines1 = f1.readlines()
+            lines2 = f2.readlines()
+            assert len(lines1) == len(lines2), "Files have different number of lines"
+
+    def test_write_ascii(self, ascii_obs_seq_file_path, temp_dir):
+        # Create a temporary file path for the output
+        temp_output_file_path = os.path.join(temp_dir, 'obs_seq.final.ascii.write')
+
+        # Create an instance of the obs_sequence class and write the output file
+        obj = obsq.obs_sequence(ascii_obs_seq_file_path)
+        obj.write_obs_seq(temp_output_file_path)
+
+        # Ensure the output file exists
+        assert os.path.exists(temp_output_file_path)
+
+        # Compare the written file with the reference file, line by line
+        self.compare_files_line_by_line(temp_output_file_path, ascii_obs_seq_file_path)
+
+        # Check if the file is not empty
+        with open(temp_output_file_path, 'r') as f:
+            assert f.read(1)  # Read the first character
+
+        # Clean up is handled by the temporary directory context manager
 
 if __name__ == '__main__':
     pytest.main()
