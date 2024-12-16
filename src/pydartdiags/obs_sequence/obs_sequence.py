@@ -152,12 +152,14 @@ class obs_sequence:
             data.append(self.types[type_value]) # observation type
             
         # any observation specific obs def info is between here and the end of the list
+        data.append(obs[typeI+2:-2]) # metadata
+
         time = obs[-2].split()
         data.append(int(time[0])) # seconds
         data.append(int(time[1])) # days
         data.append(convert_dart_time(int(time[0]), int(time[1]))) # datetime   # HK todo what is approprate for 1d models?
         data.append(float(obs[-1])) # obs error variance ?convert to sd?
-        
+
         return data
 
     def list_to_obs(self, data):
@@ -171,10 +173,16 @@ class obs_sequence:
             obs.append('   '.join(map(str, data[self.n_copies+2:self.n_copies+5])) + '   ' + str(self.reversed_vert[data[self.n_copies+5]]) )  # location x, y, z, vert
             obs.append('kind') # this is type of observation
             obs.append(self.reverse_types[data[self.n_copies + 6]])  # observation type
+            # Convert metadata to a string and append
+            obs.extend(data[self.n_copies + 7])  # metadata
         elif self.loc_mod == 'loc1d':
             obs.append(data[self.n_copies+2])  # 1d location
             obs.append('kind') # this is type of observation
             obs.append(self.reverse_types[data[self.n_copies + 3]])  # observation type
+            # Convert metadata to a string and append
+            metadata = ' '.join(map(str, data[self.n_copies + 4:-4]))
+            if metadata:
+                obs.append(metadata)  # metadata
         obs.append(' '.join(map(str, data[-4:-2])))  # seconds, days
         obs.append(data[-1])  # obs error variance
 
@@ -273,6 +281,7 @@ class obs_sequence:
         elif self.loc_mod == 'loc1d':
             heading.append('location')
         heading.append('type')
+        heading.append('metadata')
         heading.append('seconds')
         heading.append('days')
         heading.append('time')
