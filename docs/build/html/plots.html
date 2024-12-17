@@ -132,41 +132,50 @@ DataFrame contains columns for ‘rank’ and ‘obstype’.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="plots.plot_profile">
-<span class="sig-prename descclassname"><span class="pre">plots.</span></span><span class="sig-name descname"><span class="pre">plot_profile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">levels</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plots.plot_profile" title="Link to this definition">¶</a></dt>
-<dd><p>Plots RMSE and Bias profiles for different observation types across specified pressure levels.</p>
+<span class="sig-prename descclassname"><span class="pre">plots.</span></span><span class="sig-name descname"><span class="pre">plot_profile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">levels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verticalUnit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pressure</span> <span class="pre">(Pa)'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plots.plot_profile" title="Link to this definition">¶</a></dt>
+<dd><p>Plots RMSE, bias, and total spread profiles for different observation types across specified vertical levels.</p>
 <p>This function takes a DataFrame containing observational data and model predictions, categorizes
-the data into specified pressure levels, and calculates the RMSE and Bias for each level and
-observation type. It then plots two line charts: one for RMSE and another for Bias, both as functions
-of pressure level. The pressure levels are plotted on the y-axis in reversed order to represent
-the vertical profile in the atmosphere correctly.</p>
+the data into specified vertical levels, and calculates the RMSE, bias and total spread for each level and
+observation type. It then plots three line charts: one for RMSE, one for bias, one for total spread,  as functions
+of vertical level. The vertical levels are plotted on the y-axis in reversed order to represent
+the vertical profile in the atmosphere correctly if the vertical units are pressure.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – The input DataFrame containing at least the ‘vertical’ column for pressure levels,</p></li>
-<li><p><strong>Bias.</strong> (<em>and other columns required by the rmse_bias function for calculating RMSE and</em>)</p></li>
-<li><p><strong>levels</strong> (<em>array-like</em>) – The bin edges for categorizing the ‘vertical’ column values into pressure levels.</p></li>
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – The input DataFrame containing at least the ‘vertical’ column for vertical levels,</p></li>
+<li><p><strong>column</strong> (<em>the vert_unit</em>)</p></li>
+<li><p><strong>and</strong> (<em>and other columns required by the rmse_bias function for calculating RMSE</em>)</p></li>
+<li><p><strong>Bias.</strong></p></li>
+<li><p><strong>levels</strong> (<em>array-like</em>) – The bin edges for categorizing the ‘vertical’ column values into the desired</p></li>
+<li><p><strong>levels.</strong> (<em>vertical</em>)</p></li>
+<li><p><strong>verticalUnit</strong> (<em>string</em><em>) </em><em>(</em><em>optional</em>) – The vertical unit to be used. Only observations in df which have this</p></li>
+<li><p><strong>'pressure</strong> (<em>string in the vert_unit column will be plotted. Defaults to</em>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A tuple containing the DataFrame with RMSE and Bias calculations, the RMSE plot figure, and the
-Bias plot figure. The DataFrame includes a ‘plevels’ column representing the categorized pressure levels
-and ‘hPa’ column representing the midpoint of each pressure level bin.</p>
+<dd class="field-even"><p>A tuple containing the DataFrame with RMSE, bias and total spread calculations,
+The DataFrame includes a ‘vlevels’ column representing the categorized vertical levels
+and ‘midpoint’ column representing the midpoint of each vertical level bin. And the three figures.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>tuple</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValueError</strong> – If there are missing values in the ‘vertical’ column of the input DataFrame.</p>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If there are missing values in the ‘vertical’ column of the input DataFrame.</p></li>
+<li><p><strong>ValueError</strong> – If none of the input obs have ‘verticalUnit’ in the ‘vert_unit’ column of the input DataFrame.</p></li>
+</ul>
 </dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul class="simple">
-<li><p>The function modifies the input DataFrame by adding ‘plevels’ and ‘hPa’ columns.</p></li>
-<li><p>The ‘hPa’ values are calculated as half the midpoint of each pressure level bin, which may need
-adjustment based on the specific requirements for pressure level representation.</p></li>
+<li><p>The function modifies the input DataFrame by adding ‘vlevels’ and ‘midpoint’ columns.</p></li>
+<li><p>The ‘midpoint’ values are calculated as half the midpoint of each vertical level bin, which may need
+adjustment based on the specific requirements for vertical level representation.</p></li>
 <li><p>The plots are generated using Plotly Express and are displayed inline. The y-axis of the plots is
-reversed to align with standard atmospheric pressure level representation.</p></li>
+reversed to align with standard atmospheric pressure level representation if the vertical units
+are atmospheric pressure.</p></li>
 </ul>
 </div>
 </dd></dl>

@@ -62,6 +62,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#obs_sequence.obs_sequence.copie_names"><code class="docutils literal notranslate"><span class="pre">obs_sequence.copie_names</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#obs_sequence.obs_sequence.create_all_obs"><code class="docutils literal notranslate"><span class="pre">obs_sequence.create_all_obs()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#obs_sequence.obs_sequence.obs_to_list"><code class="docutils literal notranslate"><span class="pre">obs_sequence.obs_to_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#obs_sequence.obs_sequence.split_metadata"><code class="docutils literal notranslate"><span class="pre">obs_sequence.split_metadata()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#obs_sequence.obs_sequence.generate_linked_list_pattern"><code class="docutils literal notranslate"><span class="pre">obs_sequence.generate_linked_list_pattern()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#obs_sequence.obs_sequence.write_obs_seq"><code class="docutils literal notranslate"><span class="pre">obs_sequence.write_obs_seq()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#obs_sequence.obs_sequence.column_headers"><code class="docutils literal notranslate"><span class="pre">obs_sequence.column_headers()</span></code></a></li>
@@ -233,6 +234,28 @@ list of all observations in the sequence</p>
 <span class="sig-name descname"><span class="pre">obs_to_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.obs_sequence.obs_to_list" title="Link to this definition">¶</a></dt>
 <dd><p>put single observation into a list</p>
 <p>discards obs_def</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="obs_sequence.obs_sequence.split_metadata">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">split_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metadata</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.obs_sequence.split_metadata" title="Link to this definition">¶</a></dt>
+<dd><p>Split the metadata list at the first occurrence of an element starting with ‘externalF0’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>metadata</strong> (<em>list</em><em> of </em><em>str</em>) – The metadata list to be split.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Two sublists, the first containing elements before ‘externalF0’, and the second</dt><dd><p>containing ‘externalF0’ and all elements after it. If ‘externalF0’ is not found,
+the first sublist contains the entire metadata list, and the second is empty.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">

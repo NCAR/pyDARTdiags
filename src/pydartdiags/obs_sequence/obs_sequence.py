@@ -152,7 +152,11 @@ class obs_sequence:
             data.append(self.types[type_value]) # observation type
             
         # any observation specific obs def info is between here and the end of the list
-        data.append(obs[typeI+2:-2]) # metadata
+        # can be obs_def & external forward operator
+        metadata = obs[typeI+2:-2]
+        obs_def_metadata, external_metadata = self.split_metadata(metadata)
+        data.append(obs_def_metadata)
+        data.append(external_metadata)
 
         time = obs[-2].split()
         data.append(int(time[0])) # seconds
@@ -161,6 +165,25 @@ class obs_sequence:
         data.append(float(obs[-1])) # obs error variance ?convert to sd?
 
         return data
+
+    @staticmethod
+    def split_metadata(metadata):
+        """
+        Split the metadata list at the first occurrence of an element starting with 'externalF0'.
+
+        Args:
+            metadata (list of str): The metadata list to be split.
+
+        Returns:
+            tuple: Two sublists, the first containing elements before 'externalF0', and the second
+                containing 'externalF0' and all elements after it. If 'externalF0' is not found,
+                the first sublist contains the entire metadata list, and the second is empty.
+        """
+        for i, item in enumerate(metadata):
+            if item.startswith('external_FO'):
+                return metadata[:i], metadata[i:]
+        return metadata, []
+
 
     def list_to_obs(self, data):
         obs = []
@@ -282,6 +305,7 @@ class obs_sequence:
             heading.append('location')
         heading.append('type')
         heading.append('metadata')
+        heading.append('external_FO')
         heading.append('seconds')
         heading.append('days')
         heading.append('time')
