@@ -5,6 +5,23 @@ import os
 import yaml
 import struct
 
+def requires_assimilation_info(func):
+    def wrapper(self, *args, **kwargs):
+        if self.has_assimilation_info:
+            return func(self, *args, **kwargs)
+        else:
+            raise ValueError("Assimilation information is required to call this function.")
+    return wrapper
+
+def requires_posterior_info(func):
+    def wrapper(self, *args, **kwargs):
+        if self.has_posterior_info:
+            return func(self, *args, **kwargs)
+        else:
+            raise ValueError("Posterior information is required to call this function.")
+    return wrapper
+
+
 class obs_sequence:
     """Create an obs_sequence object from an ascii observation sequence file.
 
@@ -59,6 +76,8 @@ class obs_sequence:
     
     def __init__(self, file, synonyms=None):
         self.loc_mod = 'None'
+        self.has_assimilation_info = False
+        self.has_posterior = False
         self.file = file
         self.synonyms_for_obs = ['NCEP BUFR observation',
                                  'AIRS observation', 
@@ -103,11 +122,16 @@ class obs_sequence:
         self.synonyms_for_obs = [synonym.replace(' ', '_') for synonym in self.synonyms_for_obs]
         rename_dict = {old: 'observation' for old in self.synonyms_for_obs  if old in self.df.columns}
         self.df = self.df.rename(columns=rename_dict)
+
         # calculate bias and sq_err is the obs_seq is an obs_seq.final
         if 'prior_ensemble_mean'.casefold() in map(str.casefold, self.columns):
+            self.has_assimilation_info = True
             self.df['bias'] = (self.df['prior_ensemble_mean'] - self.df['observation'])
             self.df['sq_err'] = self.df['bias']**2  # squared error
-	
+        if 'posterior_ensemble_mean'.casefold() in map(str.casefold, self.columns):
+            self.has_posterior_info = True
+            self.df['posterior_bias'] = (self.df['posterior_ensemble_mean'] - self.df['observation'])
+            self.df['posterior_sq_err'] = self.df['posterior_bias']**2
 
     def create_all_obs(self):
         """ steps through the generator to create a
@@ -183,7 +207,6 @@ class obs_sequence:
             if item.startswith('external_FO'):
                 return metadata[:i], metadata[i:]
         return metadata, []
-
 
     def list_to_obs(self, data):
         obs = []
@@ -311,6 +334,68 @@ class obs_sequence:
         heading.append('time')
         heading.append('obs_err_var')
         return heading
+
+    @requires_assimilation_info    
+    def select_by_dart_qc(df, dart_qc):
+        """
+        Selects rows from a DataFrame based on the DART quality control flag.
+
+        Parameters:
+            df (DataFrame): A pandas DataFrame.
+            dart_qc (int): The DART quality control flag to select.
+
+        Returns:
+            DataFrame: A DataFrame containing only the rows with the specified DART quality control flag.
+
+        Raises:
+            ValueError: If the DART quality control flag is not present in the DataFrame.
+        """
+        if dart_qc not in df['DART_quality_control'].unique():
+            raise ValueError(f"DART quality control flag '{dart_qc}' not found in DataFrame.")
+        else:
+            return df[df['DART_quality_control'] == dart_qc]
+
+    @requires_assimilation_info
+    def select_failed_qcs(df):
+        """
+        Selects rows from a DataFrame where the DART quality control flag is greater than 0.
+
+        Parameters:
+            df (DataFrame): A pandas DataFrame.
+
+        Returns:
+            DataFrame: A DataFrame containing only the rows with a DART quality control flag greater than 0.
+        """
+        return df[df['DART_quality_control'] > 0]
+
+    @requires_assimilation_info
+    def possible_vs_used(df):
+        """
+        Calculates the count of possible vs. used observations by type.
+
+        This function takes a DataFrame containing observation data, including a 'type' column for the observation
+        type and an 'observation' column. The number of used observations ('used'), is the total number
+        minus the observations that failed quality control checks (as determined by the `select_failed_qcs` function).
+        The result is a DataFrame with each observation type, the count of possible observations, and the count of
+        used observations.
+
+        Parameters:
+            df (pd.DataFrame): A DataFrame with at least two columns: 'type' for the observation type and 'observation'
+            for the observation data. It may also contain other columns required by the `select_failed_qcs` function
+            to determine failed quality control checks.
+
+        Returns:
+            pd.DataFrame: A DataFrame with three columns: 'type', 'possible', and 'used'. 'type' is the observation type,
+            'possible' is the count of all observations of that type, and 'used' is the count of observations of that type
+            that passed quality control checks.
+
+        """
+        possible = df.groupby('type')['observation'].count()
+        possible.rename('possible', inplace=True)
+        used = df.groupby('type')['observation'].count() - select_failed_qcs(df).groupby('type')['observation'].count()
+        used.rename('used', inplace=True)
+        return pd.concat([possible, used], axis=1).reset_index()
+
 
     @staticmethod
     def is_binary(file):
@@ -692,65 +777,6 @@ def convert_dart_time(seconds, days):
     """
     time = dt.datetime(1601,1,1) + dt.timedelta(days=days, seconds=seconds)
     return time
-    
-def select_by_dart_qc(df, dart_qc):
-    """
-    Selects rows from a DataFrame based on the DART quality control flag.
-
-    Parameters:
-        df (DataFrame): A pandas DataFrame.
-        dart_qc (int): The DART quality control flag to select.
-
-    Returns:
-        DataFrame: A DataFrame containing only the rows with the specified DART quality control flag.
-
-    Raises:
-        ValueError: If the DART quality control flag is not present in the DataFrame.
-    """
-    if dart_qc not in df['DART_quality_control'].unique():
-        raise ValueError(f"DART quality control flag '{dart_qc}' not found in DataFrame.")
-    else:
-        return df[df['DART_quality_control'] == dart_qc]
-
-def select_failed_qcs(df):
-    """
-    Selects rows from a DataFrame where the DART quality control flag is greater than 0.
-
-    Parameters:
-        df (DataFrame): A pandas DataFrame.
-
-    Returns:
-        DataFrame: A DataFrame containing only the rows with a DART quality control flag greater than 0.
-    """
-    return df[df['DART_quality_control'] > 0]
-
-def possible_vs_used(df):
-    """
-    Calculates the count of possible vs. used observations by type.
-
-    This function takes a DataFrame containing observation data, including a 'type' column for the observation
-    type and an 'observation' column. The number of used observations ('used'), is the total number
-    minus the observations that failed quality control checks (as determined by the `select_failed_qcs` function).
-    The result is a DataFrame with each observation type, the count of possible observations, and the count of
-    used observations.
-
-    Parameters:
-        df (pd.DataFrame): A DataFrame with at least two columns: 'type' for the observation type and 'observation'
-        for the observation data. It may also contain other columns required by the `select_failed_qcs` function
-        to determine failed quality control checks.
-
-    Returns:
-        pd.DataFrame: A DataFrame with three columns: 'type', 'possible', and 'used'. 'type' is the observation type,
-        'possible' is the count of all observations of that type, and 'used' is the count of observations of that type
-        that passed quality control checks.
-
-    """
-    possible = df.groupby('type')['observation'].count()
-    possible.rename('possible', inplace=True)
-    used = df.groupby('type')['observation'].count() - select_failed_qcs(df).groupby('type')['observation'].count()
-    used.rename('used', inplace=True)
-    return pd.concat([possible, used], axis=1).reset_index()
-
 
 def construct_composit(df_comp, composite, components):
     """
