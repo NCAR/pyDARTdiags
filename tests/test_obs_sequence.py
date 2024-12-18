@@ -46,7 +46,7 @@ class TestOneDimensional:
         obj = obsq.obs_sequence(obs_seq_file_path)
         assert obj.loc_mod == 'loc1d'
         assert len(obj.df) == 40  # 40 obs in the file
-        assert obj.df.columns.str.contains('posterior').sum() == 22 
+        assert obj.df.columns.str.contains('posterior').sum() == 22 + 2  # members + sq_err + bias
         assert obj.df.columns.str.contains('prior').sum() == 22
  
 
