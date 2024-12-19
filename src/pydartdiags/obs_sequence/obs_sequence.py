@@ -336,7 +336,7 @@ class obs_sequence:
         return heading
 
     @requires_assimilation_info    
-    def select_by_dart_qc(df, dart_qc):
+    def select_by_dart_qc(self, dart_qc):
         """
         Selects rows from a DataFrame based on the DART quality control flag.
 
@@ -350,26 +350,23 @@ class obs_sequence:
         Raises:
             ValueError: If the DART quality control flag is not present in the DataFrame.
         """
-        if dart_qc not in df['DART_quality_control'].unique():
+        if dart_qc not in self.df['DART_quality_control'].unique():
             raise ValueError(f"DART quality control flag '{dart_qc}' not found in DataFrame.")
         else:
             return df[df['DART_quality_control'] == dart_qc]
 
     @requires_assimilation_info
-    def select_failed_qcs(df):
+    def select_failed_qcs(self):
         """
-        Selects rows from a DataFrame where the DART quality control flag is greater than 0.
-
-        Parameters:
-            df (DataFrame): A pandas DataFrame.
+        Select rows from the DataFrame where the DART quality control flag is greater than 0.
 
         Returns:
-            DataFrame: A DataFrame containing only the rows with a DART quality control flag greater than 0.
+            pandas.DataFrame: A DataFrame containing only the rows with a DART quality control flag greater than 0.
         """
-        return df[df['DART_quality_control'] > 0]
+        return self.df[self.df['DART_quality_control'] > 0]
 
     @requires_assimilation_info
-    def possible_vs_used(df):
+    def possible_vs_used(self):
         """
         Calculates the count of possible vs. used observations by type.
 
@@ -379,21 +376,18 @@ class obs_sequence:
         The result is a DataFrame with each observation type, the count of possible observations, and the count of
         used observations.
 
-        Parameters:
-            df (pd.DataFrame): A DataFrame with at least two columns: 'type' for the observation type and 'observation'
-            for the observation data. It may also contain other columns required by the `select_failed_qcs` function
-            to determine failed quality control checks.
-
         Returns:
             pd.DataFrame: A DataFrame with three columns: 'type', 'possible', and 'used'. 'type' is the observation type,
             'possible' is the count of all observations of that type, and 'used' is the count of observations of that type
             that passed quality control checks.
-
         """
-        possible = df.groupby('type')['observation'].count()
+        possible = self.df.groupby('type')['observation'].count()
         possible.rename('possible', inplace=True)
-        used = df.groupby('type')['observation'].count() - select_failed_qcs(df).groupby('type')['observation'].count()
+        
+        failed_qcs = self.select_failed_qcs().groupby('type')['observation'].count()
+        used = possible - failed_qcs.reindex(possible.index, fill_value=0)
         used.rename('used', inplace=True)
+        
         return pd.concat([possible, used], axis=1).reset_index()
 
 
