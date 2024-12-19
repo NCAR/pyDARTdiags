@@ -201,7 +201,7 @@ obs_seq.df.head()
 Find the numeber of assimilated (used) observations vs. possible observations by type
 
 ```python
-obsq.possible_vs_used(obs_seq.df)
+obs_seq.possible_vs_used()
 ```
 
 <table border="1" class="dataframe">
@@ -358,7 +358,7 @@ obsq.possible_vs_used(obs_seq.df)
 * plot the rank histogram
 
 ```python
-df_qc0 = obsq.select_by_dart_qc(obs_seq.df, 0) 
+df_qc0 = obs_seq.select_by_dart_qc(0) 
 plots.plot_rank_histogram(df_qc0)
 ```
 ![Rank Histogram](https://raw.githubusercontent.com/NCAR/pydartdiags/main/docs/images/rankhist.png)
@@ -374,7 +374,7 @@ plots.plot_rank_histogram(df_qc0)
 hPalevels = [0.0, 100.0,  150.0, 200.0, 250.0, 300.0, 400.0, 500.0, 700, 850, 925, 1000]# float("inf")] # Pa?
 plevels = [i * 100 for i in hPalevels]
 
-df_qc0 = obsq.select_by_dart_qc(obs_seq.df, 0)  # only qc 0
+df_qc0 = obs_seq.select_by_dart_qc(0)  # only qc 0
 df_profile, figrmse, figbias = plots.plot_profile(df_qc0, plevels)
 ```
 
