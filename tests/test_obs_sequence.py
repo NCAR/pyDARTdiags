@@ -3,6 +3,7 @@ import pytest
 import tempfile
 import filecmp
 import datetime as dt
+import pandas as pd
 from pydartdiags.obs_sequence import obs_sequence as obsq
 
 class TestConvertDartTime:
@@ -159,6 +160,66 @@ class TestWriteAscii:
         self.compare_files_line_by_line(temp_output_file_path, ascii_obs_seq_file_path)
 
         # Clean up is handled by the temporary directory context manager
+
+class TestObsDataframe:
+    @pytest.fixture
+    def obs_seq(self):
+        # Create a sample DataFrame to simulate the observation sequence
+        data = {
+            'DART_quality_control': [0, 1, 2, 0, 3, 0],
+            'type': ['type1', 'type2', 'type1', 'type3', 'type2', 'type1'],
+            'observation': [1.0, 2.0, 3.0, 4.0, 5.0, 5.2]
+        }
+        df = pd.DataFrame(data)
+        
+        # Create an instance of ObsSequence with the sample DataFrame
+        obs_seq = obsq.obs_sequence(file=None)
+        obs_seq.df = df
+        obs_seq.has_assimilation_info = True  # Set to True for testing purposes
+        return obs_seq
+
+    def test_select_by_dart_qc(self, obs_seq):
+        dart_qc_value = 2
+        result = obs_seq.select_by_dart_qc(dart_qc_value).reset_index(drop=True)
+        
+        # Expected DataFrame
+        expected_data = {
+            'DART_quality_control': [2],
+            'type': ['type1'],
+            'observation': [3.0]
+        }
+        expected_df = pd.DataFrame(expected_data)
+        
+        # Assert that the result matches the expected DataFrame, ignoring the index
+        pd.testing.assert_frame_equal(result, expected_df)
+
+    def test_select_failed_qcs(self, obs_seq):
+        result = obs_seq.select_failed_qcs().reset_index(drop=True)
+        
+        # Expected DataFrame
+        expected_data = {
+            'DART_quality_control': [1, 2, 3],
+            'type': ['type2', 'type1', 'type2'],
+            'observation': [2.0, 3.0, 5.0]
+        }
+        expected_df = pd.DataFrame(expected_data)
+        
+        # Assert that the result matches the expected DataFrame, ignoring the index
+        pd.testing.assert_frame_equal(result, expected_df)
+
+    def test_possible_vs_used(self, obs_seq):
+        result = obs_seq.possible_vs_used()
+        
+        # Expected DataFrame
+        expected_data = {
+            'type': ['type1', 'type2', 'type3'],
+            'possible': [3, 2, 1],
+            'used': [2, 0, 1]
+        }
+        expected_df = pd.DataFrame(expected_data)
+        
+        # Assert that the result matches the expected DataFrame, ignoring the index
+        pd.testing.assert_frame_equal(result, expected_df)
 
 if __name__ == '__main__':
     pytest.main()

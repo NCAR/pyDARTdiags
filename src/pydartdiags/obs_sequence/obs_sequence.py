@@ -91,6 +91,17 @@ class obs_sequence:
             else:
                 self.synonyms_for_obs.append(synonyms)
 
+        if file is None:
+            # Early exit for testing purposes
+            self.df = pd.DataFrame()
+            self.types = {}
+            self.reverse_types = {}
+            self.copie_names = []
+            self.n_copies = 0
+            self.seq = []
+            self.all_obs = []
+            return
+
         module_dir = os.path.dirname(__file__)
         self.default_composite_types = os.path.join(module_dir,"composite_types.yaml")
 
@@ -353,7 +364,7 @@ class obs_sequence:
         if dart_qc not in self.df['DART_quality_control'].unique():
             raise ValueError(f"DART quality control flag '{dart_qc}' not found in DataFrame.")
         else:
-            return df[df['DART_quality_control'] == dart_qc]
+            return self.df[self.df['DART_quality_control'] == dart_qc]
 
     @requires_assimilation_info
     def select_failed_qcs(self):
