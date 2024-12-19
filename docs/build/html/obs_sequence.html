@@ -80,9 +80,6 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#obs_sequence.load_yaml_to_dict"><code class="docutils literal notranslate"><span class="pre">load_yaml_to_dict()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#obs_sequence.convert_dart_time"><code class="docutils literal notranslate"><span class="pre">convert_dart_time()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#obs_sequence.select_by_dart_qc"><code class="docutils literal notranslate"><span class="pre">select_by_dart_qc()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#obs_sequence.select_failed_qcs"><code class="docutils literal notranslate"><span class="pre">select_failed_qcs()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#obs_sequence.possible_vs_used"><code class="docutils literal notranslate"><span class="pre">possible_vs_used()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#obs_sequence.construct_composit"><code class="docutils literal notranslate"><span class="pre">construct_composit()</span></code></a></li>
 </ul>
 </li>
@@ -429,74 +426,6 @@ components and adds them to the DataFrame.</p>
 <li><p>dart time is seconds, days since 1601</p></li>
 </ul>
 </div>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="obs_sequence.select_by_dart_qc">
-<span class="sig-prename descclassname"><span class="pre">obs_sequence.</span></span><span class="sig-name descname"><span class="pre">select_by_dart_qc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dart_qc</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.select_by_dart_qc" title="Link to this definition">¶</a></dt>
-<dd><p>Selects rows from a DataFrame based on the DART quality control flag.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>df</strong> (<em>DataFrame</em>) – A pandas DataFrame.</p></li>
-<li><p><strong>dart_qc</strong> (<em>int</em>) – The DART quality control flag to select.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A DataFrame containing only the rows with the specified DART quality control flag.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>DataFrame</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValueError</strong> – If the DART quality control flag is not present in the DataFrame.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="obs_sequence.select_failed_qcs">
-<span class="sig-prename descclassname"><span class="pre">obs_sequence.</span></span><span class="sig-name descname"><span class="pre">select_failed_qcs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.select_failed_qcs" title="Link to this definition">¶</a></dt>
-<dd><p>Selects rows from a DataFrame where the DART quality control flag is greater than 0.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>df</strong> (<em>DataFrame</em>) – A pandas DataFrame.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A DataFrame containing only the rows with a DART quality control flag greater than 0.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>DataFrame</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="obs_sequence.possible_vs_used">
-<span class="sig-prename descclassname"><span class="pre">obs_sequence.</span></span><span class="sig-name descname"><span class="pre">possible_vs_used</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.possible_vs_used" title="Link to this definition">¶</a></dt>
-<dd><p>Calculates the count of possible vs. used observations by type.</p>
-<p>This function takes a DataFrame containing observation data, including a ‘type’ column for the observation
-type and an ‘observation’ column. The number of used observations (‘used’), is the total number
-minus the observations that failed quality control checks (as determined by the <cite>select_failed_qcs</cite> function).
-The result is a DataFrame with each observation type, the count of possible observations, and the count of
-used observations.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – A DataFrame with at least two columns: ‘type’ for the observation type and ‘observation’</p></li>
-<li><p><strong>function</strong> (<em>for the observation data. It may also contain other columns required by the select_failed_qcs</em>)</p></li>
-<li><p><strong>checks.</strong> (<em>to determine failed quality control</em>)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A DataFrame with three columns: ‘type’, ‘possible’, and ‘used’. ‘type’ is the observation type,
-‘possible’ is the count of all observations of that type, and ‘used’ is the count of observations of that type
-that passed quality control checks.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>pd.DataFrame</p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py function">
