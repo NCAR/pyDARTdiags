@@ -17,7 +17,7 @@ for root, dirs, files in os.walk(src_path):
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'pydartdiags'
+project = 'pyDARTdiags'
 copyright = '2024, University Corporation for Atmospheric Research'
 author = 'Helen Kershaw'
 #release = '0.0.42'
@@ -35,27 +35,34 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = 'alabaster'
-html_static_path = ['_static']
+html_theme = "pydata_sphinx_theme"
 html_theme_options = {
-    'github_user': 'NCAR',
-    'github_repo': 'pyDARTdiags',
-    'github_button': 'true',
-    'github_type': 'star',
-    'fixed_sidebar': 'true',
-    'sidebar_collapse': 'true',
-    'sidebar_width': '325px',
-    'page_width': '1200px',
-    'show_powered_by' : 'false',
-    'description': 'A Python library for obsevation space diagnostics for the Data Assimilation Research Testbed (DART).',
+    'external_links': [
+        {'name': 'Release Notes', 'url': 'https://github.com/NCAR/pyDARTdiags/releases'},
+    ],
+    'icon_links': [
+        {
+            'name': 'GitHub',
+            'url': 'https://github.com/NCAR/pyDARTdiags',
+            'icon': 'fa-brands fa-github',
+            'type': 'fontawesome',
+        },
+    ],
+    'navbar_align': 'left',
+    'use_edit_page_button': False,
+    'navbar_start': ['navbar-logo'],
+    'navbar_center': ['navbar-nav'],
+    'header_links_before_dropdown': 6,
+    'navbar_end': ['navbar-icon-links', 'theme-switcher'],
+ 
 }
-
-
+html_title = project
 
 extensions = [
     'sphinx_copybutton',
     'sphinx.ext.autodoc',
     'sphinx.ext.napoleon',
     'sphinx.ext.todo',
+    'myst_parser',
 ]
 

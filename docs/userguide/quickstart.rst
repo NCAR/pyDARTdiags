@@ -1,3 +1,4 @@
+==========
 Quickstart
 ==========
 
@@ -361,7 +362,7 @@ plot a rank histogram
     df_qc0 = obsq.select_by_dart_qc(obs_seq.df, 0) 
     plots.plot_rank_histogram(df_qc0)
 
-.. image:: images/rankhist.png
+.. image:: ../images/rankhist.png
    :alt: Rank Histogram
 
 plot profiles of RMSE and Bias
@@ -379,9 +380,9 @@ plot profiles of RMSE and Bias
     df_qc0 = obsq.select_by_dart_qc(obs_seq.df, 0)  # only qc 0
     df_profile, figrmse, figbias = plots.plot_profile(df_qc0, plevels)
 
-.. image:: images/rmse.png
+.. image:: ../images/rmse.png
    :alt: RMSE Plot
 
-.. image:: images/bias.png
+.. image:: ../images/bias.png
    :alt: Bias Plot
 
