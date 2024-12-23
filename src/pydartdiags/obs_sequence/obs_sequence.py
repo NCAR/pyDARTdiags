@@ -137,8 +137,8 @@ class obs_sequence:
         # calculate bias and sq_err is the obs_seq is an obs_seq.final
         if 'prior_ensemble_mean'.casefold() in map(str.casefold, self.columns):
             self.has_assimilation_info = True
-            self.df['bias'] = (self.df['prior_ensemble_mean'] - self.df['observation'])
-            self.df['sq_err'] = self.df['bias']**2  # squared error
+            self.df['prior_bias'] = (self.df['prior_ensemble_mean'] - self.df['observation'])
+            self.df['prior_sq_err'] = self.df['prior_bias']**2  # squared error
         if 'posterior_ensemble_mean'.casefold() in map(str.casefold, self.columns):
             self.has_posterior_info = True
             self.df['posterior_bias'] = (self.df['posterior_ensemble_mean'] - self.df['observation'])
