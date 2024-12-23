@@ -198,6 +198,9 @@ def plot_profile_prior_post(df_profile, stat, verticalUnit):
             template="plotly_white"
         )
 
+    if verticalUnit == "pressure (Pa)":
+        fig_stat.update_yaxes(autorange="reversed")
+
     return fig_stat
 
 
@@ -257,6 +260,9 @@ def plot_profile_prior(df_profile, stat, verticalUnit):
         template="plotly_white"
     )
 
+    if verticalUnit == "pressure (Pa)":
+        fig_stat.update_yaxes(autorange="reversed")
+        
     return fig_stat
 
     
