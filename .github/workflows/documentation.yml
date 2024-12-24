@@ -25,7 +25,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install sphinx pydata_sphinx_theme sphinx_copybutton sphinx.ext.autodoc sphinx.ext.napoleon sphinx.ext.todo myst_parser sphinx_design
+          pip install sphinx pydata_sphinx_theme sphinx_copybutton myst_parser sphinx_design
 
       - name: Build documentation
         run: |
