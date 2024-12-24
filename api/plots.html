@@ -224,6 +224,10 @@
   
 
   
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
 </div>
 
     </header>
@@ -390,8 +394,177 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="module-plots">
-<h1>module: plots<a class="headerlink" href="#module-plots" title="Link to this heading">#</a></h1>
+  <section id="module-0">
+<span id="module-plots"></span><h1>module: plots<a class="headerlink" href="#module-0" title="Link to this heading">#</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="plots.plot_rank_histogram">
+<span class="sig-prename descclassname"><span class="pre">plots.</span></span><span class="sig-name descname"><span class="pre">plot_rank_histogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plots.plot_rank_histogram" title="Link to this definition">#</a></dt>
+<dd><p>Plots a rank histogram colored by observation type.</p>
+<p>All histogram bars are initalized to be hidden and can be toggled visible in the plot’s legend</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="plots.calculate_rank">
+<span class="sig-prename descclassname"><span class="pre">plots.</span></span><span class="sig-name descname"><span class="pre">calculate_rank</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plots.calculate_rank" title="Link to this definition">#</a></dt>
+<dd><p>Calculate the rank of observations within an ensemble.</p>
+<p>This function takes a DataFrame containing ensemble predictions and observed values,
+adds sampling noise to the ensemble predictions, and calculates the rank of the observed
+value within the perturbed ensemble for each observation. The rank indicates the position
+of the observed value within the sorted ensemble values, with 1 being the lowest. If the
+observed value is larger than the largest ensemble member, its rank is set to the ensemble
+size plus one.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – A DataFrame with columns for mean, standard deviation, observed values,
+ensemble size, and observation type. The DataFrame should have one row per observation.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing the rank array, ensemble size, and a result DataFrame. The result
+DataFrame contains columns for ‘rank’ and ‘obstype’.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="plots.plot_profile">
+<span class="sig-prename descclassname"><span class="pre">plots.</span></span><span class="sig-name descname"><span class="pre">plot_profile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">levels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verticalUnit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pressure</span> <span class="pre">(Pa)'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plots.plot_profile" title="Link to this definition">#</a></dt>
+<dd><p>Plots RMSE, bias, and total spread profiles for different observation types across specified vertical levels.</p>
+<p>This function takes a DataFrame containing observational data and model predictions, categorizes
+the data into specified vertical levels, and calculates the RMSE, bias and total spread for each level and
+observation type. It then plots three line charts: one for RMSE, one for bias, one for total spread, as functions
+of vertical level. The vertical levels are plotted on the y-axis in reversed order to represent
+the vertical profile in the atmosphere correctly if the vertical units are pressure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – The input DataFrame containing at least the ‘vertical’ column for vertical levels,</p></li>
+<li><p><strong>column</strong> (<em>the vert_unit</em>)</p></li>
+<li><p><strong>and</strong> (<em>and other columns required by the rmse_bias function for calculating RMSE</em>)</p></li>
+<li><p><strong>Bias.</strong></p></li>
+<li><p><strong>levels</strong> (<em>array-like</em>) – The bin edges for categorizing the ‘vertical’ column values into the desired</p></li>
+<li><p><strong>levels.</strong> (<em>vertical</em>)</p></li>
+<li><p><strong>verticalUnit</strong> (<em>string</em><em>) </em><em>(</em><em>optional</em>) – The vertical unit to be used. Only observations in df which have this</p></li>
+<li><p><strong>'pressure</strong> (<em>string in the vert_unit column will be plotted. Defaults to</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing the DataFrame with RMSE, bias and total spread calculations,
+The DataFrame includes a ‘vlevels’ column representing the categorized vertical levels
+and ‘midpoint’ column representing the midpoint of each vertical level bin. And the three figures.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If there are missing values in the ‘vertical’ column of the input DataFrame.</p></li>
+<li><p><strong>ValueError</strong> – If none of the input obs have ‘verticalUnit’ in the ‘vert_unit’ column of the input DataFrame.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>The function modifies the input DataFrame by adding ‘vlevels’ and ‘midpoint’ columns.</p></li>
+<li><p>The ‘midpoint’ values are calculated as half the midpoint of each vertical level bin, which may need
+adjustment based on the specific requirements for vertical level representation.</p></li>
+<li><p>The plots are generated using Plotly Express and are displayed inline. The y-axis of the plots is
+reversed to align with standard atmospheric pressure level representation if the vertical units
+are atmospheric pressure.</p></li>
+</ul>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="plots.plot_profile_prior_post">
+<span class="sig-prename descclassname"><span class="pre">plots.</span></span><span class="sig-name descname"><span class="pre">plot_profile_prior_post</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df_profile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verticalUnit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plots.plot_profile_prior_post" title="Link to this definition">#</a></dt>
+<dd><p>Plots prior and posterior statistics by vertical level for different observation types.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df_profile</strong> (<em>pd.DataFrame</em>) – DataFrame containing the prior and posterior statistics.</p></li>
+<li><p><strong>stat</strong> (<em>str</em>) – The statistic to plot (e.g., ‘rmse’, ‘bias’, ‘totalspread’).</p></li>
+<li><p><strong>verticalUnit</strong> (<em>str</em>) – The unit of the vertical axis (e.g., ‘pressure (Pa)’).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The generated Plotly figure.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>plotly.graph_objects.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="plots.plot_profile_prior">
+<span class="sig-prename descclassname"><span class="pre">plots.</span></span><span class="sig-name descname"><span class="pre">plot_profile_prior</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df_profile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verticalUnit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plots.plot_profile_prior" title="Link to this definition">#</a></dt>
+<dd><p>Plots prior statistics by vertical level for different observation types.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df_profile</strong> (<em>pd.DataFrame</em>) – DataFrame containing the prior statistics.</p></li>
+<li><p><strong>stat</strong> (<em>str</em>) – The statistic to plot (e.g., ‘rmse’, ‘bias’, ‘totalspread’).</p></li>
+<li><p><strong>verticalUnit</strong> (<em>str</em>) – The unit of the vertical axis (e.g., ‘pressure (Pa)’).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The generated Plotly figure.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>plotly.graph_objects.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="plots.mean_then_sqrt">
+<span class="sig-prename descclassname"><span class="pre">plots.</span></span><span class="sig-name descname"><span class="pre">mean_then_sqrt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plots.mean_then_sqrt" title="Link to this definition">#</a></dt>
+<dd><p>Calculates the mean of an array-like object and then takes the square root of the result.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>arr</strong> (<em>array-like</em>) – An array-like object (such as a list or a pandas Series).
+The elements should be numeric.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The square root of the mean of the input array.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If the input is not an array-like object containing numeric values.
+    ValueError: If the input array is empty.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="plots.rmse_bias_by_obs_type">
+<span class="sig-prename descclassname"><span class="pre">plots.</span></span><span class="sig-name descname"><span class="pre">rmse_bias_by_obs_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obs_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plots.rmse_bias_by_obs_type" title="Link to this definition">#</a></dt>
+<dd><p>Calculate the RMSE and bias for a given observation type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>DataFrame</em>) – A pandas DataFrame.</p></li>
+<li><p><strong>obs_type</strong> (<em>str</em>) – The observation type for which to calculate the RMSE and bias.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A DataFrame containing the RMSE and bias for the given observation type.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the observation type is not present in the DataFrame.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
 
@@ -419,6 +592,30 @@
             </div>
             
             
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plots.plot_rank_histogram"><code class="docutils literal notranslate"><span class="pre">plot_rank_histogram()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plots.calculate_rank"><code class="docutils literal notranslate"><span class="pre">calculate_rank()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plots.plot_profile"><code class="docutils literal notranslate"><span class="pre">plot_profile()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plots.plot_profile_prior_post"><code class="docutils literal notranslate"><span class="pre">plot_profile_prior_post()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plots.plot_profile_prior"><code class="docutils literal notranslate"><span class="pre">plot_profile_prior()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plots.mean_then_sqrt"><code class="docutils literal notranslate"><span class="pre">mean_then_sqrt()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plots.rmse_bias_by_obs_type"><code class="docutils literal notranslate"><span class="pre">rmse_bias_by_obs_type()</span></code></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
