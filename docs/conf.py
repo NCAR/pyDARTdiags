@@ -48,14 +48,15 @@ html_theme_options = {
             'type': 'fontawesome',
         },
     ],
-    'navbar_align': 'left',
+#    'navbar_align': 'left0',
     'use_edit_page_button': False,
     'navbar_start': ['navbar-logo'],
     'navbar_center': ['navbar-nav'],
     'header_links_before_dropdown': 6,
     'navbar_end': ['navbar-icon-links', 'theme-switcher'],
- 
+    "announcement": "WARNING: pyDARTdiags is currently in alpha stage of development - expect bugs and changes", 
 }
+html_show_sourcelink = False
 html_title = project
 
 extensions = [
@@ -64,5 +65,6 @@ extensions = [
     'sphinx.ext.napoleon',
     'sphinx.ext.todo',
     'myst_parser',
+    'sphinx_design',
 ]
 
