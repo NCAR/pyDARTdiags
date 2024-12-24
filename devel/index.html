@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Developer’s Guide &#8212; pyDARTdiags</title>
+    <title>Developer Guide &#8212; pyDARTdiags</title>
   
   
   
@@ -141,7 +141,7 @@
 
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="#">
-    Developer’s Guide
+    Developer Guide
   </a>
 </li>
 
@@ -225,6 +225,10 @@
   
 
   
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
 </div>
 
     </header>
@@ -260,7 +264,7 @@
 
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="#">
-    Developer’s Guide
+    Developer Guide
   </a>
 </li>
 
@@ -370,7 +374,7 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Developer’s Guide</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Developer Guide</span></li>
   </ul>
 </nav>
 </div>
@@ -387,14 +391,59 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="developer-s-guide">
-<span id="devel"></span><h1>Developer’s Guide<a class="headerlink" href="#developer-s-guide" title="Link to this heading">#</a></h1>
-<p>Hello this page discusses contributing to pyDARTdiags.</p>
+  <section id="developer-guide">
+<span id="devel"></span><h1>Developer Guide<a class="headerlink" href="#developer-guide" title="Link to this heading">#</a></h1>
+<p>Contributions to pyDARTdiags are welcome! We encourage you to contribute to pyDARTdiags by
+reporting issues, suggesting new features, and submitting pull requests.  This page provides
+information for developers of pyDARTdiags, including how to set up your development
+environment and how to build the documentation locally. We also encourage you to read the
+<a class="reference internal" href="CONTRIBUTING.html"><span class="doc">contributors guide</span></a>.</p>
 <div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contributors Guide</a></li>
-</ul>
 </div>
+<section id="editable-installation">
+<h2>Editable Installation<a class="headerlink" href="#editable-installation" title="Link to this heading">#</a></h2>
+<p>For developers of pyDARTdiags, we recommend installing pyDARTdiags as a
+local project in “editable” mode in your virtual environment. This allows you to
+make changes to the code and see the changes reflected in your environment without
+having to reinstall the package.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/NCAR/pyDARTdiags
+python -m pip install -e pyDARTdiags
+</pre></div>
+</div>
+</section>
+<section id="building-the-documentation-locally">
+<h2>Building the Documentation Locally<a class="headerlink" href="#building-the-documentation-locally" title="Link to this heading">#</a></h2>
+<p>To build the documentation locally, you will need to install the dependencies.
+The dependencies are listed in the <code class="docutils literal notranslate"><span class="pre">docs/requirements.txt</span></code> file. You can install
+the dependencies with the following command:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>python -m pip install -r docs/requirements.txt
+</pre></div>
+</div>
+<p>Then you can build the documentation with the following commands:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>cd docs
+make html
+</pre></div>
+</div>
+<p>The built documentation will be in the <code class="docutils literal notranslate"><span class="pre">build/html</span></code> directory. Open the <code class="docutils literal notranslate"><span class="pre">index.html</span></code>
+file in your browser to view the documentation.</p>
+</section>
+<section id="writing-tests">
+<h2>Writing Tests<a class="headerlink" href="#writing-tests" title="Link to this heading">#</a></h2>
+<p>We use <a class="reference external" href="https://docs.pytest.org/en/stable/">pytest</a> for testing. Tests are in the test directory.
+The test/data directory is used to store small files used for testing. It is not for storing large
+files.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pyDARTdiags/
+            ├── docs/
+            ├── src/
+            ├── test/
+                     ├── data/
+</pre></div>
+</div>
+<p>To run the tests, you can use the following command:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pytest tests
+</pre></div>
+</div>
+</section>
 </section>
 
 
@@ -431,6 +480,26 @@
             </div>
             
             
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#editable-installation">Editable Installation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-the-documentation-locally">Building the Documentation Locally</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#writing-tests">Writing Tests</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
