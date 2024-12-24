@@ -746,11 +746,12 @@ pip install pydartdiags
 <span class="n">plevels</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">100</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">hPalevels</span><span class="p">]</span>
 
 <span class="n">df_qc0</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">select_by_dart_qc</span><span class="p">(</span><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># only qc 0</span>
-<span class="n">df_profile</span><span class="p">,</span> <span class="n">figrmse</span><span class="p">,</span> <span class="n">figbias</span> <span class="o">=</span> <span class="n">plots</span><span class="o">.</span><span class="n">plot_profile</span><span class="p">(</span><span class="n">df_qc0</span><span class="p">,</span> <span class="n">plevels</span><span class="p">)</span>
+<span class="n">df_profile</span><span class="p">,</span> <span class="n">figrmse</span><span class="p">,</span> <span class="n">figbias</span><span class="p">,</span> <span class="n">figts</span>  <span class="o">=</span> <span class="n">plots</span><span class="o">.</span><span class="n">plot_profile</span><span class="p">(</span><span class="n">df_qc0</span><span class="p">,</span> <span class="n">plevels</span><span class="p">,</span> <span class="s2">&quot;pressure (Pa)&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="RMSE Plot" src="../_images/rmse.png" />
 <img alt="Bias Plot" src="../_images/bias.png" />
+<img alt="Bias Plot" src="../_images/totalspread.png" />
 </section>
 </section>
 </section>

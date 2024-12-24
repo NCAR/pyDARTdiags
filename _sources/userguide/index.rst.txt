@@ -391,11 +391,14 @@ plot profiles of RMSE and Bias
     plevels = [i * 100 for i in hPalevels]
 
     df_qc0 = obsq.select_by_dart_qc(obs_seq.df, 0)  # only qc 0
-    df_profile, figrmse, figbias = plots.plot_profile(df_qc0, plevels)
+    df_profile, figrmse, figbias, figts  = plots.plot_profile(df_qc0, plevels, "pressure (Pa)")
 
 .. image:: ../images/rmse.png
    :alt: RMSE Plot
 
 .. image:: ../images/bias.png
+   :alt: Bias Plot
+
+.. image:: ../images/totalspread.png
    :alt: Bias Plot
 
