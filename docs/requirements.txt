@@ -1,0 +1,7 @@
+sphinx
+pydata_sphinx_theme
+sphinx-copybutton
+myst-parser
+sphinx-design
+numpy
+pandas
