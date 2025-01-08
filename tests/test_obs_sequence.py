@@ -221,5 +221,27 @@ class TestObsDataframe:
         # Assert that the result matches the expected DataFrame, ignoring the index
         pd.testing.assert_frame_equal(result, expected_df)
 
+class TestJoin:
+    @pytest.fixture
+    def obs_seq1d_file_path(self):
+        test_dir = os.path.dirname(__file__)
+        return os.path.join(test_dir, 'data', 'obs_seq.1d.final')
+   
+    @pytest.fixture
+    def binary_obs_seq_file_path(self):
+        test_dir = os.path.dirname(__file__)
+        return os.path.join(test_dir, 'data', 'obs_seq.final.binary.small')
+
+    def test_join_diff_locs(self, obs_seq1d_file_path, binary_obs_seq_file_path):
+        obj1 = obsq.obs_sequence(obs_seq1d_file_path)
+        obj2 = obsq.obs_sequence(binary_obs_seq_file_path)
+        with pytest.raises(ValueError, match="All observation sequences must have the same loc_mod."):
+            obsq.obs_sequence.join([obj1, obj2])
+
+
+
+
+
+
 if __name__ == '__main__':
     pytest.main()

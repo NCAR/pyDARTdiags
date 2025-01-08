@@ -15,7 +15,7 @@ def requires_assimilation_info(func):
 
 def requires_posterior_info(func):
     def wrapper(self, *args, **kwargs):
-        if self.has_posterior_info:
+        if self.has_posterior:
             return func(self, *args, **kwargs)
         else:
             raise ValueError("Posterior information is required to call this function.")
@@ -92,7 +92,7 @@ class obs_sequence:
                 self.synonyms_for_obs.append(synonyms)
 
         if file is None:
-            # Early exit for testing purposes
+            # Early exit - for testing purposes or creating obs_seq objects from scratch
             self.df = pd.DataFrame()
             self.types = {}
             self.reverse_types = {}
@@ -140,7 +140,7 @@ class obs_sequence:
             self.df['prior_bias'] = (self.df['prior_ensemble_mean'] - self.df['observation'])
             self.df['prior_sq_err'] = self.df['prior_bias']**2  # squared error
         if 'posterior_ensemble_mean'.casefold() in map(str.casefold, self.columns):
-            self.has_posterior_info = True
+            self.has_posterior = True
             self.df['posterior_bias'] = (self.df['posterior_ensemble_mean'] - self.df['observation'])
             self.df['posterior_sq_err'] = self.df['posterior_bias']**2
 
@@ -754,7 +754,87 @@ class obs_sequence:
             df_no_comp = pd.concat([df_no_comp, df_new], axis=0)
 
         return df_no_comp
+
+    @classmethod
+    def join(cls, obs_sequences):
+        """
+        Join a list of observation sequences together.
+
+        This method combines the headers and observations from a list of obs_sequence objects
+        into a single obs_sequence object.
+
+        Parameters:
+            obs_sequences (list of obs_sequences): The list of observation sequences objects to join.
+
+        Returns:
+            combo: A new obs_sequence object containing the combined data.
+        """
+        if not obs_sequences:
+            raise ValueError("The list of observation sequences is empty.")
+
+        # Check if all obs_sequences have compatible attributes
+        first_loc_mod = obs_sequences[0].loc_mod
+        first_has_assimilation_info = obs_sequences[0].has_assimilation_info
+        first_has_posterior = obs_sequences[0].has_posterior
+        for obs_seq in obs_sequences:
+            if obs_seq.loc_mod != first_loc_mod:
+                raise ValueError("All observation sequences must have the same loc_mod.")
+            if obs_seq.has_assimilation_info != first_has_assimilation_info:
+                raise ValueError("All observation sequences must have assimilation info.")
+            if obs_seq.has_posterior != first_has_posterior:
+                raise ValueError("All observation sequences must have the posterior info.")
+                # HK @todo prior only
+
+        # HK @todo check the copies are compatible (list of copies to combine?)
+
+
+        # todo HK @todo combine synonyms for obs
+
+        # Initialize combined data
+        combined_types = []
+        combined_all_obs = []
+        combined_df = pd.DataFrame()
+
+        # Iterate over the list of observation sequences and combine their data
+        for obs_seq in obs_sequences:
+            combined_all_obs.extend(obs_seq.all_obs)
+            combined_df = pd.concat([combined_df, obs_seq.df], ignore_index=True)
+            combined_types.extend(list(obs_seq.reverse_types.keys()))
         
+        # Create a new ObsSequence object with the combined data
+        combo = cls(file=None)
+        print(type(combo))
+
+        # dictionary of types
+        keys = set(combined_types)
+        combo.types = {item: i+1 for i, item in enumerate(keys)}
+        combo.reverse_types = {v: k for k, v in combo.types.items()}
+
+        combo.all_obs = combined_all_obs #HK @tood do you need this?
+        combo.df = combined_df.sort_values(by='time').reset_index(drop=True)
+        combo.df['linked_list'] = obs_sequence.generate_linked_list_pattern(len(combo.df))
+        combo.df['obs_num'] = combined_df.index + 1
+        combo.create_header(len(combo.df))
+
+        return combo
+
+    def create_header(self, n):
+        """Create a header for the obs_seq file from the obs_sequence object."""
+        self.header = []
+        self.header.append(f"obs_sequence")
+        self.header.append("obs_type_definitions")
+        self.header.append("{len(self.types)}")
+        for key, value in self.types.items():
+            self.header.append(f"{value} {key}")
+        self.header.append(f"num_copies: {self.n_copies}  num_qc: X")
+        self.header.append(f"num_obs: {n}  max_num_obs: {n}")
+        for copie in self.copie_names:
+            self.header.append(copie)
+        self.header.append(f"first: 1 last: {n}")
+
+
+
+
 def load_yaml_to_dict(file_path):
     """
     Load a YAML file and convert it to a dictionary.
