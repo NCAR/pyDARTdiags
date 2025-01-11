@@ -97,7 +97,11 @@ class obs_sequence:
             self.types = {}
             self.reverse_types = {}
             self.copie_names = []
-            self.n_copies = 0
+            self.non_qc_copie_names = []
+            self.qc_copie_names = []
+            self.n_copies = 0  # copies includind qc
+            self.n_non_qc = 0  # copies not including qc
+            self.n_qc = 0      # number of qc copies
             self.seq = []
             self.all_obs = []
             return
@@ -113,6 +117,9 @@ class obs_sequence:
         self.types = self.collect_obs_types(self.header)
         self.reverse_types = {v: k for k, v in self.types.items()}
         self.copie_names, self.n_copies = self.collect_copie_names(self.header)
+        self.n_non_qc, self.n_qc = self.num_qc_non_qc(self.header)
+        self.non_qc_copie_names = self.copie_names[:self.n_non_qc]
+        self.qc_copie_names = self.copie_names[self.n_non_qc:]
 
         if self.is_binary(file):
             self.seq = self.obs_binary_reader(file, self.n_copies)
@@ -157,7 +164,6 @@ class obs_sequence:
     def obs_to_list(self, obs):
         """put single observation into a list
 
-           discards obs_def
         """
         data = []
         data.append(obs[0].split()[1]) # obs_num
@@ -220,6 +226,11 @@ class obs_sequence:
         return metadata, []
 
     def list_to_obs(self, data):
+        """convert a list of data to an observation
+        
+            Assuming the order of the list is obs_seq.copie_names
+
+        """
         obs = []
         obs.append('OBS        ' + str(data[0]))  # obs_num lots of space
         obs.extend(data[1:self.n_copies+1])  # all the copies
@@ -264,6 +275,7 @@ class obs_sequence:
         This function writes the observation sequence to disk. 
         If no DataFrame is provided, it writes the obs_sequence object to a file using the
         header and all observations stored in the object.
+        If the self.all_obs is invalid, the file will be created from the data frame
         If a DataFrame is provided,it creates a header and linked list from the DataFrame, 
         then writes the DataFrame obs to an obs_sequence file. Note the DataFrame is assumed
         to have been created from obs_sequence object.
@@ -316,12 +328,22 @@ class obs_sequence:
   
             else:
                 # If no DataFrame is provided, use self.header and self.all_obs
+                #   if self.all_obs is invalid, use the self.df
                 for line in self.header:
                     f.write(str(line) + '\n')
-                for obs in self.all_obs:
-                    ob_write = self.list_to_obs(obs)
-                    for line in ob_write:
-                        f.write(str(line) + '\n')
+                if self.all_obs is not None:
+                    for obs in self.all_obs:
+                        ob_write = self.list_to_obs(obs)
+                        for line in ob_write:
+                            f.write(str(line) + '\n')
+                else:
+                    def write_row(row):   # HK @todo is iterrows, itertuples faster?
+                        ob_write = self.list_to_obs(row.tolist())
+                        for line in ob_write:
+                            f.write(str(line) + '\n')
+                    
+                    self.df.apply(write_row, axis=1)
+        
 
 
     def column_headers(self):
@@ -565,6 +587,16 @@ class obs_sequence:
         return copie_names, len(copie_names)
 
     @staticmethod
+    def num_qc_non_qc(header):
+        """Find the number of qc and non-qc copies in the header"""
+        for line in (header):
+            if "num_copies:" in line and "num_qc:" in line:
+                num_non_qc = int(line.split()[1])
+                num_qc = int(line.split()[3])
+                return num_non_qc, num_qc
+
+
+    @staticmethod
     def obs_reader(file, n):
         """Reads the ascii obs sequence file and returns a generator of the obs"""
         previous_line = ''
@@ -756,7 +788,7 @@ class obs_sequence:
         return df_no_comp
 
     @classmethod
-    def join(cls, obs_sequences):
+    def join(cls, obs_sequences, copies=None):
         """
         Join a list of observation sequences together.
 
@@ -765,6 +797,8 @@ class obs_sequence:
 
         Parameters:
             obs_sequences (list of obs_sequences): The list of observation sequences objects to join.
+            copies (list of str, optional): A list of copy names to include in the combined data.
+                    If not provided, all copies are included.
 
         Returns:
             combo: A new obs_sequence object containing the combined data.
@@ -772,6 +806,9 @@ class obs_sequence:
         if not obs_sequences:
             raise ValueError("The list of observation sequences is empty.")
 
+        # Create a new obs_sequnece object with the combined data
+        combo = cls(file=None)
+ 
         # Check if all obs_sequences have compatible attributes
         first_loc_mod = obs_sequences[0].loc_mod
         first_has_assimilation_info = obs_sequences[0].has_assimilation_info
@@ -784,33 +821,65 @@ class obs_sequence:
             if obs_seq.has_posterior != first_has_posterior:
                 raise ValueError("All observation sequences must have the posterior info.")
                 # HK @todo prior only
+        combo.loc_mod = first_loc_mod
 
-        # HK @todo check the copies are compatible (list of copies to combine?)
+        # check the copies are compatible (list of copies to combine?)
+        # subset of copies if needed        
+        if copies:
+            start_required_columns = ['obs_num', 'observation']
+            end_required_columns = ['linked_list', 'longitude', 'latitude', 'vertical', 'vert_unit', \
+                                    'type', 'metadata', 'external_FO', 'seconds', 'days', 'time', 'obs_err_var']
+            required_columns = start_required_columns + end_required_columns
 
+            requested_columns = start_required_columns + \
+                                [item for item in copies if item not in required_columns] + \
+                                end_required_columns
 
-        # todo HK @todo combine synonyms for obs
+            for obs_seq in obs_sequences:
+                if not set(requested_columns).issubset(obs_seq.df.columns):
+                    raise ValueError("All observation sequences must have the selected copies.")
+
+            # go through columns and create header
+            remove_list = ['obs_num', 'linked_list', 'latitude', 'longitude', 'vertical', 'vert_unit', \
+                           'type', 'metadata', 'external_FO', 'time', 'seconds', 'days', 'obs_err_var']
+            combo.copie_names = [ item for item in requested_columns if item not in remove_list]  
+            combo.non_qc_copie_names = [ item for item in combo.copie_names if item in obs_sequences[0].non_qc_copie_names]              
+            combo.qc_copie_names = [ item for item in combo.copie_names if item in obs_sequences[0].qc_copie_names]
+
+            combo.n_copies = len(combo.copie_names)
+            combo.n_num_qc = len(combo.qc_copie_names)
+            combo.n_non_qc = len(combo.non_qc_copie_names)
+            
+ 
+        else:
+            for obs_seq in obs_sequences:
+                if not obs_sequences[0].df.columns.isin(obs_seq.df.columns).all():
+                    raise ValueError("All observation sequences must have the same copies.")
+            combo.n_copies = obs_sequences[0].n_copies
+            combo.n_num_qc = obs_sequences[0].n_qc
+            combo.n_non_qc = obs_sequences[0].n_non_qc
+            combo.copie_names = obs_sequences[0].copie_names
+ 
+        # todo HK @todo combine synonyms for obs?
 
         # Initialize combined data
         combined_types = []
-        combined_all_obs = []
         combined_df = pd.DataFrame()
+        combo.all_obs = None  # set to none to force writing from the dataframe if write_obs_seq is calle
 
         # Iterate over the list of observation sequences and combine their data
         for obs_seq in obs_sequences:
-            combined_all_obs.extend(obs_seq.all_obs)
-            combined_df = pd.concat([combined_df, obs_seq.df], ignore_index=True)
+            if copies:
+                combined_df = pd.concat([combined_df, obs_seq.df[requested_columns]], ignore_index=True)
+            else:
+                combined_df = pd.concat([combined_df, obs_seq.df], ignore_index=True)
             combined_types.extend(list(obs_seq.reverse_types.keys()))
         
-        # Create a new ObsSequence object with the combined data
-        combo = cls(file=None)
-        print(type(combo))
-
         # dictionary of types
         keys = set(combined_types)
-        combo.types = {item: i+1 for i, item in enumerate(keys)}
-        combo.reverse_types = {v: k for k, v in combo.types.items()}
+        combo.reverse_types = {item: i+1 for i, item in enumerate(keys)}
+        combo.types = {v: k for k, v in combo.reverse_types.items()}
 
-        combo.all_obs = combined_all_obs #HK @tood do you need this?
         combo.df = combined_df.sort_values(by='time').reset_index(drop=True)
         combo.df['linked_list'] = obs_sequence.generate_linked_list_pattern(len(combo.df))
         combo.df['obs_num'] = combined_df.index + 1
@@ -823,16 +892,14 @@ class obs_sequence:
         self.header = []
         self.header.append(f"obs_sequence")
         self.header.append("obs_type_definitions")
-        self.header.append("{len(self.types)}")
+        self.header.append(f"{len(self.types)}")
         for key, value in self.types.items():
             self.header.append(f"{value} {key}")
-        self.header.append(f"num_copies: {self.n_copies}  num_qc: X")
+        self.header.append(f"num_copies: {self.n_non_qc}  num_qc: {self.n_qc}")
         self.header.append(f"num_obs: {n}  max_num_obs: {n}")
         for copie in self.copie_names:
             self.header.append(copie)
         self.header.append(f"first: 1 last: {n}")
-
-
 
 
 def load_yaml_to_dict(file_path):
