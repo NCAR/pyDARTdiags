@@ -894,7 +894,7 @@ class obs_sequence:
         self.header.append("obs_type_definitions")
         self.header.append(f"{len(self.types)}")
         for key, value in self.types.items():
-            self.header.append(f"{value} {key}")
+            self.header.append(f"{key} {value}")
         self.header.append(f"num_copies: {self.n_non_qc}  num_qc: {self.n_qc}")
         self.header.append(f"num_obs: {n}  max_num_obs: {n}")
         for copie in self.copie_names:
