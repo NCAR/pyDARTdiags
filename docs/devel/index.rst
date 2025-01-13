@@ -54,6 +54,12 @@ Then you can build the documentation with the following commands:
 The built documentation will be in the ``build/html`` directory. Open the ``index.html`` 
 file in your browser to view the documentation.
 
+You can check all the links in the documenation by running the following command:
+
+.. code-block :: text
+
+   make linkcheck
+
 
 Writing Tests
 -------------
@@ -75,3 +81,18 @@ To run the tests, you can use the following command:
 .. code-block :: text
 
    pytest tests
+
+Code coverage for the test can be calculated using the pytest-cov package. 
+To install pytest-cov, run the following command: 
+
+.. code-block :: text
+
+   pip install pytest-cov 
+
+To create the coverage report, run the following command in the root directory:
+
+.. code-block :: text
+
+   pytest --cov=src tests
+
+The coverage report will be displayed in the terminal.
