@@ -50,8 +50,6 @@ class TestOneDimensional:
         assert obj.df.columns.str.contains('posterior').sum() == 24  # 20 members + mean + spread + sq_err + bias
         assert obj.df.columns.str.contains('prior').sum() == 24
  
-
-
 class TestSynonyms:
     @pytest.fixture
     def synonym_file_path(self):
@@ -238,8 +236,48 @@ class TestJoin:
         with pytest.raises(ValueError, match="All observation sequences must have the same loc_mod."):
             obsq.obs_sequence.join([obj1, obj2])
 
+class TestSplitMetadata:
+    def test_split_metadata_with_external_FO(self):
+        metadata = ['meta1', 'meta2', 'external_FO1', 'meta3', 'meta4']
+        before_external_FO, after_external_FO = obsq.obs_sequence.split_metadata(metadata)
+        assert before_external_FO == ['meta1', 'meta2']
+        assert after_external_FO == ['external_FO1', 'meta3', 'meta4']
 
+    def test_split_metadata_without_external_FO(self):
+        metadata = ['meta1', 'meta2', 'meta3', 'meta4']
+        before_external_FO, after_external_FO = obsq.obs_sequence.split_metadata(metadata)
+        assert before_external_FO == ['meta1', 'meta2', 'meta3', 'meta4']
+        assert after_external_FO == []
 
+    def test_split_metadata_multiple_external_FO(self):
+        metadata = ['meta1', 'external_FO1', 'meta2', 'external_FO2', 'meta3']
+        before_external_FO, after_external_FO = obsq.obs_sequence.split_metadata(metadata)
+        assert before_external_FO == ['meta1']
+        assert after_external_FO == ['external_FO1', 'meta2', 'external_FO2', 'meta3']
+
+    def test_split_metadata_empty_list(self):
+        metadata = []
+        before_external_FO, after_external_FO = obsq.obs_sequence.split_metadata(metadata)
+        assert before_external_FO == []
+        assert after_external_FO == []
+
+    def test_split_metadata_no_external_FO(self):
+        metadata = ['meta1', 'meta2', 'meta3']
+        before_external_FO, after_external_FO = obsq.obs_sequence.split_metadata(metadata)
+        assert before_external_FO == ['meta1', 'meta2', 'meta3']
+        assert after_external_FO == []
+
+    def test_split_metadata_external_FO_at_start(self):
+        metadata = ['external_FO1', 'meta1', 'meta2']
+        before_external_FO, after_external_FO = obsq.obs_sequence.split_metadata(metadata)
+        assert before_external_FO == []
+        assert after_external_FO == ['external_FO1', 'meta1', 'meta2']
+
+    def test_split_metadata_external_FO_at_end(self):
+        metadata = ['meta1', 'meta2', 'external_FO1']
+        before_external_FO, after_external_FO = obsq.obs_sequence.split_metadata(metadata)
+        assert before_external_FO == ['meta1', 'meta2']
+        assert after_external_FO == ['external_FO1']
 
 
 
