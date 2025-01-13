@@ -504,7 +504,6 @@ list of all observations in the sequence</p>
 <dt class="sig sig-object py" id="obs_sequence.obs_sequence.obs_to_list">
 <span class="sig-name descname"><span class="pre">obs_to_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.obs_sequence.obs_to_list" title="Link to this definition">#</a></dt>
 <dd><p>put single observation into a list</p>
-<p>discards obs_def</p>
 </dd></dl>
 
 <dl class="py method">
@@ -530,6 +529,13 @@ the first sublist contains the entire metadata list, and the second is empty.</p
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="obs_sequence.obs_sequence.list_to_obs">
+<span class="sig-name descname"><span class="pre">list_to_obs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.obs_sequence.list_to_obs" title="Link to this definition">#</a></dt>
+<dd><p>convert a list of data to an observation</p>
+<p>Assuming the order of the list is obs_seq.copie_names</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="obs_sequence.obs_sequence.generate_linked_list_pattern">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">generate_linked_list_pattern</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.obs_sequence.generate_linked_list_pattern" title="Link to this definition">#</a></dt>
 <dd><p>Create a list of strings with the linked list pattern for n lines.</p>
@@ -542,6 +548,7 @@ the first sublist contains the entire metadata list, and the second is empty.</p
 <p>This function writes the observation sequence to disk.
 If no DataFrame is provided, it writes the obs_sequence object to a file using the
 header and all observations stored in the object.
+If the self.all_obs is invalid, the file will be created from the data frame
 If a DataFrame is provided,it creates a header and linked list from the DataFrame,
 then writes the DataFrame obs to an obs_sequence file. Note the DataFrame is assumed
 to have been created from obs_sequence object.</p>
@@ -616,6 +623,12 @@ to have been created from obs_sequence object.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="obs_sequence.obs_sequence.num_qc_non_qc">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_qc_non_qc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">header</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.obs_sequence.num_qc_non_qc" title="Link to this definition">#</a></dt>
+<dd><p>Find the number of qc and non-qc copies in the header</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="obs_sequence.obs_sequence.obs_reader">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">obs_reader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.obs_sequence.obs_reader" title="Link to this definition">#</a></dt>
 <dd><p>Reads the ascii obs sequence file and returns a generator of the obs</p>
@@ -668,6 +681,35 @@ components and adds them to the DataFrame.</p>
 <dd class="field-even"><p><strong>Exception</strong> – If there are repeat values in the components.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="obs_sequence.obs_sequence.join">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">join</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obs_sequences</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copies</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.obs_sequence.join" title="Link to this definition">#</a></dt>
+<dd><p>Join a list of observation sequences together.</p>
+<p>This method combines the headers and observations from a list of obs_sequence objects
+into a single obs_sequence object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obs_sequences</strong> (<em>list</em><em> of </em><em>obs_sequences</em>) – The list of observation sequences objects to join.</p></li>
+<li><p><strong>copies</strong> (<em>list</em><em> of </em><em>str</em><em>, </em><em>optional</em>) – A list of copy names to include in the combined data.
+If not provided, all copies are included.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A new obs_sequence object containing the combined data.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>combo</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="obs_sequence.obs_sequence.create_header">
+<span class="sig-name descname"><span class="pre">create_header</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.obs_sequence.create_header" title="Link to this definition">#</a></dt>
+<dd><p>Create a header for the obs_seq file from the obs_sequence object.</p>
 </dd></dl>
 
 </dd></dl>
@@ -785,6 +827,7 @@ specified columns using the square root of the sum of squares method.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#obs_sequence.obs_sequence.create_all_obs"><code class="docutils literal notranslate"><span class="pre">obs_sequence.create_all_obs()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#obs_sequence.obs_sequence.obs_to_list"><code class="docutils literal notranslate"><span class="pre">obs_sequence.obs_to_list()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#obs_sequence.obs_sequence.split_metadata"><code class="docutils literal notranslate"><span class="pre">obs_sequence.split_metadata()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#obs_sequence.obs_sequence.list_to_obs"><code class="docutils literal notranslate"><span class="pre">obs_sequence.list_to_obs()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#obs_sequence.obs_sequence.generate_linked_list_pattern"><code class="docutils literal notranslate"><span class="pre">obs_sequence.generate_linked_list_pattern()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#obs_sequence.obs_sequence.write_obs_seq"><code class="docutils literal notranslate"><span class="pre">obs_sequence.write_obs_seq()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#obs_sequence.obs_sequence.column_headers"><code class="docutils literal notranslate"><span class="pre">obs_sequence.column_headers()</span></code></a></li>
@@ -793,11 +836,14 @@ specified columns using the square root of the sum of squares method.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#obs_sequence.obs_sequence.read_binary_header"><code class="docutils literal notranslate"><span class="pre">obs_sequence.read_binary_header()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#obs_sequence.obs_sequence.collect_obs_types"><code class="docutils literal notranslate"><span class="pre">obs_sequence.collect_obs_types()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#obs_sequence.obs_sequence.collect_copie_names"><code class="docutils literal notranslate"><span class="pre">obs_sequence.collect_copie_names()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#obs_sequence.obs_sequence.num_qc_non_qc"><code class="docutils literal notranslate"><span class="pre">obs_sequence.num_qc_non_qc()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#obs_sequence.obs_sequence.obs_reader"><code class="docutils literal notranslate"><span class="pre">obs_sequence.obs_reader()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#obs_sequence.obs_sequence.check_trailing_record_length"><code class="docutils literal notranslate"><span class="pre">obs_sequence.check_trailing_record_length()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#obs_sequence.obs_sequence.read_record_length"><code class="docutils literal notranslate"><span class="pre">obs_sequence.read_record_length()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#obs_sequence.obs_sequence.obs_binary_reader"><code class="docutils literal notranslate"><span class="pre">obs_sequence.obs_binary_reader()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#obs_sequence.obs_sequence.composite_types"><code class="docutils literal notranslate"><span class="pre">obs_sequence.composite_types()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#obs_sequence.obs_sequence.join"><code class="docutils literal notranslate"><span class="pre">obs_sequence.join()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#obs_sequence.obs_sequence.create_header"><code class="docutils literal notranslate"><span class="pre">obs_sequence.create_header()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#obs_sequence.load_yaml_to_dict"><code class="docutils literal notranslate"><span class="pre">load_yaml_to_dict()</span></code></a></li>
