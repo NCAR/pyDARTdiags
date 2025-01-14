@@ -846,7 +846,7 @@ class obs_sequence:
             combo.qc_copie_names = [ item for item in combo.copie_names if item in obs_sequences[0].qc_copie_names]
 
             combo.n_copies = len(combo.copie_names)
-            combo.n_num_qc = len(combo.qc_copie_names)
+            combo.n_qc = len(combo.qc_copie_names)
             combo.n_non_qc = len(combo.non_qc_copie_names)
             
  
@@ -855,7 +855,7 @@ class obs_sequence:
                 if not obs_sequences[0].df.columns.isin(obs_seq.df.columns).all():
                     raise ValueError("All observation sequences must have the same copies.")
             combo.n_copies = obs_sequences[0].n_copies
-            combo.n_num_qc = obs_sequences[0].n_qc
+            combo.n_qc = obs_sequences[0].n_qc
             combo.n_non_qc = obs_sequences[0].n_non_qc
             combo.copie_names = obs_sequences[0].copie_names
  
