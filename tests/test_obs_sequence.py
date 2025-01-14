@@ -282,7 +282,33 @@ class TestSplitMetadata:
         assert before_external_FO == ['meta1', 'meta2']
         assert after_external_FO == ['external_FO1']
 
+class TestGenerateLinkedListPattern:
+    def test_generate_linked_list_pattern(self):
+        n = 1
+        expected_pattern = ["0           -1         -1"]
+        result = obsq.obs_sequence.generate_linked_list_pattern(n)
+        assert result == expected_pattern
 
+        n = 3
+        expected_pattern = [
+            "-1          2          -1",
+            "1           3          -1",
+            "2           -1         -1"
+        ]
+        result = obsq.obs_sequence.generate_linked_list_pattern(n)
+        assert result == expected_pattern
+
+        n = 6
+        expected_pattern = [
+            "-1          2          -1",
+            "1           3          -1",
+            "2           4          -1",
+            "3           5          -1",
+            "4           6          -1",
+            "5           -1         -1"
+        ]
+        result = obsq.obs_sequence.generate_linked_list_pattern(n)
+        assert result == expected_pattern
 
 if __name__ == '__main__':
     pytest.main()
