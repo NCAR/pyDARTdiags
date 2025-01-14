@@ -143,7 +143,8 @@ class TestWriteAscii:
         os.path.join(os.path.dirname(__file__), 'data', 'obs_seq.final.ascii.small'), 
         os.path.join(os.path.dirname(__file__), 'data', 'obs_seq.final.post.small'),
         os.path.join(os.path.dirname(__file__), 'data', 'obs_seq.final.ascii.test_meta'),
-        os.path.join(os.path.dirname(__file__), 'data', 'obs_seq.1d.final')
+        os.path.join(os.path.dirname(__file__), 'data', 'obs_seq.1d.final'),
+        os.path.join(os.path.dirname(__file__), 'data', 'obs_seq.out.GSI.small')
     ])
     def test_write_ascii(self, ascii_obs_seq_file_path, temp_dir):
         # Create a temporary file path for the output

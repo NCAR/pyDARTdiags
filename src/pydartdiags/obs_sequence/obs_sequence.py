@@ -243,11 +243,13 @@ class obs_sequence:
             obs.append(self.reverse_types[data[self.n_copies + 6]])  # observation type
             # Convert metadata to a string and append !HK @todo you are not converting to string
             obs.extend(data[self.n_copies + 7])  # metadata
+            obs.extend(data[self.n_copies + 8])  # external forward operator
         elif self.loc_mod == 'loc1d':
             obs.append(data[self.n_copies+2])  # 1d location
             obs.append('kind') # this is type of observation
             obs.append(self.reverse_types[data[self.n_copies + 3]])  # observation type
             obs.extend(data[self.n_copies + 4])  # metadata
+            obs.extend(data[self.n_copies + 5])  # external forward operator
         obs.append(' '.join(map(str, data[-4:-2])))  # seconds, days
         obs.append(data[-1])  # obs error variance
 
