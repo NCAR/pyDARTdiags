@@ -96,3 +96,9 @@ To create the coverage report, run the following command in the root directory:
    pytest --cov=src tests
 
 The coverage report will be displayed in the terminal.
+
+To create a coverage report in HTML format, run the following command:
+
+.. code-block :: text
+
+   pytest --cov=src --cov-report=html
