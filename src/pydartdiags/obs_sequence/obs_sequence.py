@@ -888,6 +888,8 @@ class obs_sequence:
 
     def create_header(self, n):
         """Create a header for the obs_seq file from the obs_sequence object."""
+        assert self.n_copies == self.n_non_qc + self.n_qc, "n_copies must be equal to n_non_qc + n_qc"
+
         self.header = []
         self.header.append(f"obs_sequence")
         self.header.append("obs_type_definitions")

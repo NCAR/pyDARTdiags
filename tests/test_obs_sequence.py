@@ -239,6 +239,35 @@ class TestJoin:
         with pytest.raises(ValueError, match="All observation sequences must have the same loc_mod."):
             obsq.obs_sequence.join([obj1, obj2])
 
+class TestCreateHeader:
+    def test_create_header(self):
+        obj = obsq.obs_sequence(file=None)
+        
+        obj.types = {1: 'ACARS_BELLYBUTTON', 2: 'NCEP_TOES'}
+        obj.n_non_qc = 2
+        obj.n_qc = 1
+        obj.n_copies = obj.n_non_qc + obj.n_qc
+        obj.copie_names = ['observation', 'mean', 'qc']
+        
+        n = 5 # max_num_obs, size of dataframe
+        obj.create_header(n)
+        
+        # Define the expected header
+        expected_header = [
+            "obs_sequence",
+            "obs_type_definitions",
+            "2",
+            "1 ACARS_BELLYBUTTON",
+            "2 NCEP_TOES",
+            "num_copies: 2  num_qc: 1",
+            "num_obs: 5  max_num_obs: 5",
+            "observation",
+            "mean",
+            "qc",
+            "first: 1 last: 5"
+        ]     
+        assert obj.header == expected_header
+
 class TestSplitMetadata:
     def test_split_metadata_with_external_FO(self):
         metadata = ['meta1', 'meta2', 'external_FO1', 'meta3', 'meta4']
