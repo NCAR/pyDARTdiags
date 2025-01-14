@@ -235,22 +235,19 @@ class obs_sequence:
         obs.append('OBS        ' + str(data[0]))  # obs_num lots of space
         obs.extend(data[1:self.n_copies+1])  # all the copies
         obs.append(data[self.n_copies+1])  # linked list info
-        obs.append('obdef')  # TODO HK: metadata obs_def 
+        obs.append('obdef')  # TODO HK: extended_FO obs_def 
         obs.append(self.loc_mod)
         if self.loc_mod == 'loc3d':
             obs.append('   '.join(map(str, data[self.n_copies+2:self.n_copies+5])) + '   ' + str(self.reversed_vert[data[self.n_copies+5]]) )  # location x, y, z, vert
             obs.append('kind') # this is type of observation
             obs.append(self.reverse_types[data[self.n_copies + 6]])  # observation type
-            # Convert metadata to a string and append
+            # Convert metadata to a string and append !HK @todo you are not converting to string
             obs.extend(data[self.n_copies + 7])  # metadata
         elif self.loc_mod == 'loc1d':
             obs.append(data[self.n_copies+2])  # 1d location
             obs.append('kind') # this is type of observation
             obs.append(self.reverse_types[data[self.n_copies + 3]])  # observation type
-            # Convert metadata to a string and append
-            metadata = ' '.join(map(str, data[self.n_copies + 4:-4]))
-            if metadata:
-                obs.append(metadata)  # metadata
+            obs.extend(data[self.n_copies + 4])  # metadata
         obs.append(' '.join(map(str, data[-4:-2])))  # seconds, days
         obs.append(data[-1])  # obs error variance
 

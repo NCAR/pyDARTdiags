@@ -140,8 +140,10 @@ class TestWriteAscii:
             assert len(lines1) == len(lines2), "Files have different number of lines"
 
     @pytest.mark.parametrize("ascii_obs_seq_file_path", [
-        os.path.join(os.path.dirname(__file__), 'data', 'obs_seq.final.ascii.small'),
-        os.path.join(os.path.dirname(__file__), 'data', 'obs_seq.final.post.small')
+        os.path.join(os.path.dirname(__file__), 'data', 'obs_seq.final.ascii.small'), 
+        os.path.join(os.path.dirname(__file__), 'data', 'obs_seq.final.post.small'),
+        os.path.join(os.path.dirname(__file__), 'data', 'obs_seq.final.ascii.test_meta'),
+        os.path.join(os.path.dirname(__file__), 'data', 'obs_seq.1d.final')
     ])
     def test_write_ascii(self, ascii_obs_seq_file_path, temp_dir):
         # Create a temporary file path for the output
