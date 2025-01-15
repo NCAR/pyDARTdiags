@@ -2,8 +2,20 @@
 Working with obs_sequence objects
 ==================================
 
-.. automethod:: obs_sequence::obs_sequence.__init__  
-.. automethod:: obs_sequence::obs_sequence.join
-   :noindex:
+PyDARTdiags enables you to interact with DART observation sequence files
+using python and pandas. The obs_sequence class provides a simple interface to read,
+examine, join, and write obs_sequence files. 
 
-For details on the join method :meth:`obs_sequence.obs_sequence.join`
+
+Read an observsation sequence file
+----------------------------------
+
+Examine the data
+----------------
+
+Join multiple obs_sequences
+---------------------------
+
+Write data to an observation sequence file
+------------------------------------------
+

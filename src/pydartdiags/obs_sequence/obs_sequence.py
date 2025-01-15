@@ -111,6 +111,12 @@ class obs_sequence:
         Returns: 
             an obs_sequence object
 
+        Examples:
+
+            .. code-block:: python
+
+                obs_seq = obs_sequence(file='obs_seq.final')
+
         """
 
         self.loc_mod = 'None'
@@ -838,7 +844,15 @@ class obs_sequence:
                     If not provided, all copies are included.
 
         Returns:
-            combo: A new obs_sequence object containing the combined data.
+            A new obs_sequence object containing the combined data.
+
+        Example:
+            .. code-block:: python
+
+                obs_seq1 = obs_sequence(file='obs_seq1.final')
+                obs_seq2 = obs_sequence(file='obs_seq2.final')
+                obs_seq3 = obs_sequence(file='obs_seq3.final')
+                combined = obs_sequence.join([obs_seq1, obs_seq2, obs_seq3])
         """
         if not obs_sequences:
             raise ValueError("The list of observation sequences is empty.")
