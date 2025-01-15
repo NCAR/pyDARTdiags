@@ -1,3 +1,5 @@
+.. _obs_sequence:
+
 ====================
 module: obs_sequence
 ====================

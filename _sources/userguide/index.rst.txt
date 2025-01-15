@@ -7,6 +7,7 @@ User Guide
    :hidden:
 
    installguide
+   working-with-obsq
 
 
 Welcome to the pyDARTdiags User Guide!
