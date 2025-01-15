@@ -841,6 +841,7 @@ class obs_sequence:
             # go through columns and create header
             remove_list = ['obs_num', 'linked_list', 'latitude', 'longitude', 'vertical', 'vert_unit', \
                            'type', 'metadata', 'external_FO', 'time', 'seconds', 'days', 'obs_err_var']
+            # using lists to retain copy order, non_qcs followed by qcs
             combo.copie_names = [ item for item in requested_columns if item not in remove_list]  
             combo.non_qc_copie_names = [ item for item in combo.copie_names if item in obs_sequences[0].non_qc_copie_names]              
             combo.qc_copie_names = [ item for item in combo.copie_names if item in obs_sequences[0].qc_copie_names]

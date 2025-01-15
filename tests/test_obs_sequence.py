@@ -233,11 +233,119 @@ class TestJoin:
         test_dir = os.path.dirname(__file__)
         return os.path.join(test_dir, 'data', 'obs_seq.final.binary.small')
 
+    @pytest.fixture
+    # 10 obs
+    def ascii_obs_seq_file_path1(self):
+        test_dir = os.path.dirname(__file__)
+        return os.path.join(test_dir, 'data', 'obs_seq.final.ascii.small')
+
+    @pytest.fixture
+    # 3 obs
+    def ascii_obs_seq_file_path2(self):
+        test_dir = os.path.dirname(__file__)
+        return os.path.join(test_dir, 'data', 'obs_seq.final.ascii.small.more-types')
+
+    @pytest.fixture
+    # 3 obs
+    def ascii_obs_seq_file_path3(self):
+        test_dir = os.path.dirname(__file__)
+        return os.path.join(test_dir, 'data', 'obs_seq.final.ascii.small.not-so-many-types')
+    
+    @pytest.fixture
+    def ascii_obs_seq_file_path4(self):
+        test_dir = os.path.dirname(__file__)
+        return os.path.join(test_dir, 'data', 'obs_seq.final.ascii.small.not-so-many-copies')
+
+    def is_reverse_dict(self, dict1, dict2):
+        return {v: k for k, v in dict1.items()} == dict2
+
+    def test_empty_list(self):
+        with pytest.raises(ValueError, match="The list of observation sequences is empty."):
+            obsq.obs_sequence.join([])
+
     def test_join_diff_locs(self, obs_seq1d_file_path, binary_obs_seq_file_path):
         obj1 = obsq.obs_sequence(obs_seq1d_file_path)
         obj2 = obsq.obs_sequence(binary_obs_seq_file_path)
         with pytest.raises(ValueError, match="All observation sequences must have the same loc_mod."):
             obsq.obs_sequence.join([obj1, obj2])
+
+    def test_join_three_obs_seqs(self, ascii_obs_seq_file_path1, 
+                                       ascii_obs_seq_file_path2, 
+                                       ascii_obs_seq_file_path3):
+        obj1 = obsq.obs_sequence(ascii_obs_seq_file_path1)
+        obj2 = obsq.obs_sequence(ascii_obs_seq_file_path2)
+        obj3 = obsq.obs_sequence(ascii_obs_seq_file_path3)
+        obs_seq_mega = obsq.obs_sequence.join([obj1, obj2, obj3])
+
+        assert len(obs_seq_mega.df) == 16 # obs in the dataframe
+        assert obs_seq_mega.loc_mod == 'loc3d'
+        #assert obs_seq_mega.has_assimilation_info == True
+        assert list(obs_seq_mega.types.keys()) == list(range(1,26)) # 25 obs types
+        obs_types =   ['AIRCRAFT_TEMPERATURE',
+                    'BLUE_LAND_SFC_ALTIMETER',
+                    'MARINE_SFC_SPECIFIC_HUMIDITY',
+                    'SAT_V_WIND_COMPONENT',
+                    'RADIOSONDE_SPECIFIC_HUMIDITY',
+                    'MARINE_SFC_TEMPERATURE',
+                    'RADIOSONDE_U_WIND_COMPONENT',
+                    'MARINE_SFC_ALTIMETER',
+                    'AIRCRAFT_V_WIND_COMPONENT',
+                    'RADIOSONDE_SURFACE_ALTIMETER',
+                    'ACARS_TEMPERATURE',
+                    'LAND_SFC_ALTIMETER',
+                    'MARINE_SFC_V_WIND_COMPONENT',
+                    'AIRS_TEMPERATURE',
+                    'GPSRO_REFRACTIVITY',
+                    'MARINE_SFC_U_WIND_COMPONENT',
+                    'ACARS_U_WIND_COMPONENT',
+                    'RADIOSONDE_V_WIND_COMPONENT',
+                    'SAT_U_WIND_COMPONENT',
+                    'GREEN_LAND_SFC_ALTIMETER',
+                    'ACARS_V_WIND_COMPONENT',
+                    'RADIOSONDE_TEMPERATURE',
+                    'AIRCRAFT_U_WIND_COMPONENT',
+                    'AIRS_SPECIFIC_HUMIDITY',
+                    'PINK_LAND_SFC_ALTIMETER']
+        all_obs_present = all(value in obs_seq_mega.types.values() for value in obs_types)
+        assert all_obs_present
+        assert self.is_reverse_dict(obs_seq_mega.types, obs_seq_mega.reverse_types)
+
+    def test_join_list_sub_copies(self, ascii_obs_seq_file_path1, 
+                                    ascii_obs_seq_file_path3):
+        obj1 = obsq.obs_sequence(ascii_obs_seq_file_path1)
+        obj3 = obsq.obs_sequence(ascii_obs_seq_file_path3)
+        obs_seq_mega = obsq.obs_sequence.join([obj1, obj3],['prior_ensemble_mean', 'observation', 'Data_QC'])
+
+        assert obs_seq_mega.n_non_qc == 2
+        assert obs_seq_mega.n_qc == 1
+        assert obs_seq_mega.n_copies == 3
+        assert obs_seq_mega.copie_names == ['observation', 'prior_ensemble_mean', 'Data_QC'] # order is important
+
+    def test_join_list_sub_copies_no_qc(self, ascii_obs_seq_file_path1, 
+                                    ascii_obs_seq_file_path3):
+        obj1 = obsq.obs_sequence(ascii_obs_seq_file_path1)
+        obj3 = obsq.obs_sequence(ascii_obs_seq_file_path3)
+        obs_seq_mega = obsq.obs_sequence.join([obj1, obj3],['observation', 'prior_ensemble_spread'])
+
+        assert obs_seq_mega.n_non_qc == 2
+        assert obs_seq_mega.n_qc == 0
+        assert obs_seq_mega.n_copies == 2
+        assert obs_seq_mega.copie_names == ['observation', 'prior_ensemble_spread']
+
+    def test_join_copies_not_in_all(self, ascii_obs_seq_file_path1, 
+                                    ascii_obs_seq_file_path4):
+        obj1 = obsq.obs_sequence(ascii_obs_seq_file_path1)
+        obj4 = obsq.obs_sequence(ascii_obs_seq_file_path4)
+        with pytest.raises(ValueError, match="All observation sequences must have the same copies."):
+            obsq.obs_sequence.join([obj1, obj4])
+
+    def test_join_copies_not_all_have_subset(self, ascii_obs_seq_file_path1, 
+                                    ascii_obs_seq_file_path4):
+        obj1 = obsq.obs_sequence(ascii_obs_seq_file_path1)
+        obj4 = obsq.obs_sequence(ascii_obs_seq_file_path4)
+        with pytest.raises(ValueError, match="All observation sequences must have the selected copies."):
+            obsq.obs_sequence.join([obj1, obj4], ['prior_ensemble_member_41'])
+
 
 class TestCreateHeader:
     def test_create_header(self):

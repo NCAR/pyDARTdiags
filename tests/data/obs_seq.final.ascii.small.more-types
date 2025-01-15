@@ -1,0 +1,398 @@
+ obs_sequence
+obs_type_definitions
+          25
+           4 GPSRO_REFRACTIVITY             
+          51 RADIOSONDE_U_WIND_COMPONENT    
+          52 RADIOSONDE_V_WIND_COMPONENT    
+          55 RADIOSONDE_TEMPERATURE         
+          56 RADIOSONDE_SPECIFIC_HUMIDITY   
+          62 AIRCRAFT_U_WIND_COMPONENT      
+          63 AIRCRAFT_V_WIND_COMPONENT      
+          64 AIRCRAFT_TEMPERATURE           
+          66 ACARS_U_WIND_COMPONENT         
+          67 ACARS_V_WIND_COMPONENT         
+          68 ACARS_TEMPERATURE              
+          70 MARINE_SFC_U_WIND_COMPONENT    
+          71 MARINE_SFC_V_WIND_COMPONENT    
+          72 MARINE_SFC_TEMPERATURE         
+          73 MARINE_SFC_SPECIFIC_HUMIDITY   
+          80 SAT_U_WIND_COMPONENT           
+          81 SAT_V_WIND_COMPONENT           
+          83 AIRS_TEMPERATURE               
+          84 AIRS_SPECIFIC_HUMIDITY         
+          90 RADIOSONDE_SURFACE_ALTIMETER   
+          92 MARINE_SFC_ALTIMETER           
+          93 LAND_SFC_ALTIMETER             
+          98 PINK_LAND_SFC_ALTIMETER             
+         101 BLUE_LAND_SFC_ALTIMETER             
+         112 GREEN_LAND_SFC_ALTIMETER             
+  num_copies:           83  num_qc:            2
+  num_obs:      3  max_num_obs:      3
+observation                                                     
+prior ensemble mean                                             
+prior ensemble spread                                           
+prior ensemble member      1                                    
+prior ensemble member      2                                    
+prior ensemble member      3                                    
+prior ensemble member      4                                    
+prior ensemble member      5                                    
+prior ensemble member      6                                    
+prior ensemble member      7                                    
+prior ensemble member      8                                    
+prior ensemble member      9                                    
+prior ensemble member     10                                    
+prior ensemble member     11                                    
+prior ensemble member     12                                    
+prior ensemble member     13                                    
+prior ensemble member     14                                    
+prior ensemble member     15                                    
+prior ensemble member     16                                    
+prior ensemble member     17                                    
+prior ensemble member     18                                    
+prior ensemble member     19                                    
+prior ensemble member     20                                    
+prior ensemble member     21                                    
+prior ensemble member     22                                    
+prior ensemble member     23                                    
+prior ensemble member     24                                    
+prior ensemble member     25                                    
+prior ensemble member     26                                    
+prior ensemble member     27                                    
+prior ensemble member     28                                    
+prior ensemble member     29                                    
+prior ensemble member     30                                    
+prior ensemble member     31                                    
+prior ensemble member     32                                    
+prior ensemble member     33                                    
+prior ensemble member     34                                    
+prior ensemble member     35                                    
+prior ensemble member     36                                    
+prior ensemble member     37                                    
+prior ensemble member     38                                    
+prior ensemble member     39                                    
+prior ensemble member     40                                    
+prior ensemble member     41                                    
+prior ensemble member     42                                    
+prior ensemble member     43                                    
+prior ensemble member     44                                    
+prior ensemble member     45                                    
+prior ensemble member     46                                    
+prior ensemble member     47                                    
+prior ensemble member     48                                    
+prior ensemble member     49                                    
+prior ensemble member     50                                    
+prior ensemble member     51                                    
+prior ensemble member     52                                    
+prior ensemble member     53                                    
+prior ensemble member     54                                    
+prior ensemble member     55                                    
+prior ensemble member     56                                    
+prior ensemble member     57                                    
+prior ensemble member     58                                    
+prior ensemble member     59                                    
+prior ensemble member     60                                    
+prior ensemble member     61                                    
+prior ensemble member     62                                    
+prior ensemble member     63                                    
+prior ensemble member     64                                    
+prior ensemble member     65                                    
+prior ensemble member     66                                    
+prior ensemble member     67                                    
+prior ensemble member     68                                    
+prior ensemble member     69                                    
+prior ensemble member     70                                    
+prior ensemble member     71                                    
+prior ensemble member     72                                    
+prior ensemble member     73                                    
+prior ensemble member     74                                    
+prior ensemble member     75                                    
+prior ensemble member     76                                    
+prior ensemble member     77                                    
+prior ensemble member     78                                    
+prior ensemble member     79                                    
+prior ensemble member     80                                    
+Data QC                                                         
+DART quality control                                            
+  first:            1  last:      3
+ OBS            1
+   232.760000000000     
+   233.702353264681     
+  0.157863794308269     
+   233.715747670116     
+   233.656209837991     
+   233.567439118345     
+   233.700030135897     
+   233.760167070338     
+   233.596338868713     
+   233.927429579385     
+   233.672015474936     
+   233.455881207426     
+   233.644948149308     
+   233.822610014915     
+   233.670263367141     
+   233.706282397349     
+   233.638398359594     
+   233.743822402638     
+   233.866383556908     
+   233.796558688717     
+   233.533074102048     
+   233.651235155933     
+   233.800476412438     
+   233.583835953134     
+   233.639786039650     
+   233.456646442169     
+   233.658738691146     
+   233.868475489550     
+   233.717493171778     
+   234.055045427688     
+   233.586296288824     
+   233.782357814607     
+   233.759842133176     
+   233.589850623688     
+   233.734308176086     
+   233.645047128573     
+   233.556716318201     
+   233.542102096181     
+   233.621497682323     
+   233.742056149910     
+   233.728754514923     
+   233.901815474480     
+   233.853648081396     
+   233.979863400391     
+   233.888036298696     
+   233.434151461681     
+   233.435987719751     
+   233.655666615977     
+   233.381722428357     
+   233.684380652344     
+   233.676704819962     
+   233.652574060084     
+   233.533483493055     
+   233.554123478057     
+   233.826388549704     
+   233.940112784391     
+   233.682003038680     
+   233.777671466435     
+   233.147769070071     
+   233.631239045855     
+   233.650807607143     
+   233.835879046893     
+   233.810171210201     
+   233.867889850620     
+   233.712561677139     
+   233.573831527225     
+   234.028315184150     
+   233.900446616896     
+   233.799351211918     
+   233.903610988015     
+   233.841381563904     
+   233.786814319086     
+   233.645521428865     
+   233.931498438365     
+   233.776363060524     
+   233.802633059606     
+   233.708702286985     
+   233.653427867539     
+   233.517752236986     
+   233.603343588875     
+   233.403365761092     
+   233.817187526451     
+   233.785901464855     
+   1.00000000000000     
+  0.000000000000000E+000
+           6           8          -1
+obdef
+loc3d
+    0.1622580245701568        0.8922995800821010         38410.00000000000      2
+kind
+          98
+ 75603     153005
+   1.00000000000000     
+ OBS            2
+   16.7000000000000     
+   15.8940915761250     
+  0.663451762476123     
+   15.2624221752410     
+   15.4878790192107     
+   15.7993293182360     
+   15.7054518268699     
+   17.1189309934608     
+   16.4831855240966     
+   16.0083645112201     
+   15.3958940305850     
+   16.2452016154817     
+   16.4869691903991     
+   14.8158284485836     
+   14.9193688492104     
+   15.8315029354058     
+   15.2062111005583     
+   15.2236826576603     
+   15.0030317269656     
+   15.7365113899818     
+   14.9796132074602     
+   15.7606568559334     
+   15.9734275821810     
+   15.5864665721038     
+   16.5187660270606     
+   16.4850633672987     
+   15.8139419329661     
+   14.7921535505997     
+   16.8025718390906     
+   16.5140927439865     
+   16.6105941683974     
+   16.0346540751187     
+   15.6789072161103     
+   14.5450405795191     
+   16.3483084700876     
+   15.4851458941670     
+   15.2100734884618     
+   16.6070793155282     
+   15.2785842724487     
+   15.9562282153461     
+   15.2784465785659     
+   16.2673467467853     
+   15.7126067928905     
+   14.5259788955187     
+   16.3855318455692     
+   15.7327520503954     
+   16.1275007110799     
+   17.9137247971670     
+   15.7959293878710     
+   16.1278431347050     
+   15.1538372848667     
+   15.5189522833133     
+   15.7290305673857     
+   16.0930242611277     
+   16.0382751832736     
+   16.4101814975283     
+   14.6804192201454     
+   17.2059807705667     
+   16.3408365472027     
+   16.1994676544428     
+   15.6045023364402     
+   15.2982405316663     
+   16.1384906400146     
+   15.7768425532264     
+   17.5952319213462     
+   16.5515750521217     
+   15.2640085689703     
+   16.3895461689553     
+   16.8704013357747     
+   15.6093173566000     
+   16.3170347038489     
+   15.9969900082668     
+   16.6817303983679     
+   15.1725123876133     
+   15.6808767876411     
+   16.1505591518038     
+   15.9168114309071     
+   15.6882483313949     
+   15.4742945856209     
+   16.0419805311919     
+   16.2896507621822     
+   16.6069552938806     
+   15.4627243547322     
+   1.00000000000000     
+  0.000000000000000E+000
+           7           9          -1
+obdef
+loc3d
+    0.1622580245701568        0.8922995800821010         38410.00000000000      2
+kind
+          62
+ 75603     153005
+   9.00000000000000     
+ OBS            3
+   3.20000000000000     
+   1.83633338207086     
+  0.869386951665828     
+   2.34182400143348     
+   3.31404064340345     
+   1.72286170438019     
+  0.768779880742339     
+   1.54567360700095     
+   1.93994760023525     
+   1.52789759167622     
+   2.33288361343590     
+   2.51167742093523     
+  0.299054111122874     
+  0.959965480729400     
+   2.39328107182582     
+   1.66511193073162     
+   1.28350972718883     
+   2.58514999997784     
+   1.26281044236962     
+   2.68975481224563     
+  0.603922833253954     
+   1.43340045005001     
+   2.26008971954633     
+   1.50123041983098     
+   1.23385681601040     
+   2.88960361314478     
+   3.23865837484769     
+  0.262128162184608     
+   2.14767535176638     
+   1.41056310532597     
+   3.08171716124548     
+   2.79225455987654     
+  0.532117365152129     
+   1.06305804472646     
+   1.40444928845311     
+   1.06027027936057     
+   1.93229521666891     
+   1.72339345824688     
+   3.04051000828646     
+   3.67650484061343     
+   2.99582391201841     
+   1.76708798899280     
+   1.87146842763467     
+  0.212749888639904     
+   1.01533570577204     
+   2.11924520838008     
+   1.77565831882085     
+   1.22139696439925     
+   1.54707879783448     
+   1.97263032353533     
+  0.900265676780788     
+   2.44357893726025     
+  0.624726274328369     
+  0.718859222432591     
+   1.64611491433846     
+   2.79016981465812     
+  0.502362926710037     
+  0.902516291321477     
+   1.73403669918439     
+   1.35619789151320     
+   1.76228799585748     
+   2.77239426905348     
+   2.45017654841471     
+   1.88906288804244     
+   3.05214727814116     
+   2.71786880555388     
+  0.558619900716463     
+   2.14909312032991     
+   2.25975984182111     
+  0.158603799265276     
+   3.09107537899336     
+   1.77694312970018     
+  0.883278756934952     
+   2.36818923246847     
+   3.41982400242294     
+   3.85427695243504     
+   2.08240334051620     
+   1.64111974173738     
+   2.27164968097170     
+   1.67682597308354     
+   2.09088820448067     
+   2.05515122894628     
+   1.37580360320092     
+   1.00000000000000     
+  0.000000000000000E+000
+           8          10          -1
+obdef
+loc3d
+    0.1622580245701568        0.8922995800821010         38410.00000000000      2
+kind
+          63
+ 75603     153005
+   9.00000000000000     
