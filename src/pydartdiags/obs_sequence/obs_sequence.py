@@ -23,47 +23,71 @@ def requires_posterior_info(func):
 
 
 class obs_sequence:
-    """Create an obs_sequence object from an ascii observation sequence file.
+    """
+    Initialize an obs_sequence object from an ASCII or binary observation sequence file,
+    or create an empty obs_sequence object from scratch.
+
+    Args:
+        file (str): The input observation sequence ASCII or binary file.
+                If None, an empty obs_sequence object is created from scratch.
+
+    Returns:
+        An obs_sequence object
 
     Attributes:
-        df (pandas.DataFrame): DataFrame containing all the observations.
-        all_obs (list): List of all observations, each observation is a list.
-        header (str): Header from the ascii file.
-        vert (dict): Dictionary of dart vertical units.
-        types (dict): Dictionary of types in the observation sequence file.
-        copie_names (list): Names of copies in the observation sequence file.
-            Spelled 'copie' to avoid conflict with the Python built-in copy function.
+        df (pandas.DataFrame): The DataFrame containing the observation sequence data.
+        header (list): The header of the observation sequence.
+        copie_names (list): The names of the copies in the observation sequence. 
+            Spelled 'copie' to avoid conflict with the Python built-in 'copy'.
             Spaces are replaced with underscores in copie_names.
-   
-    Parameters:
-        file : the input observation sequence ascii file
+        non_qc_copie_names (list): The names of the copies not including quality control,
+            e.g. observation, mean, ensemble_members
+        qc_copie_names (list): The names of the quality control copies, e.g. DART_QC
+        n_copies(int): The total number of copies in the observation sequence.
+        n_non_qc(int): The number of copies not including quality control.
+        n_qc(int): The number of quality control copies.
+        vert (dict): A dictionary mapping DART vertical coordinate types to their 
+            corresponding integer values.
 
-    Example: 
-        Read the observation sequence from file:
-            ``obs_seq = obs_sequence('/home/data/obs_seq.final.ascii.small')``
-        Access the resulting pandas DataFrame:
-            ``obs_seq.df``
+            - undefined: 'VERTISUNDEF'
+            - surface: 'VERTISSURFACE' (value is surface elevation in meters)
+            - model level: 'VERTISLEVEL'
+            - pressure: 'VERTISPRESSURE' (in Pascals)
+            - height: 'VERTISHEIGHT' (in meters)
+            - scale height: 'VERTISSCALEHEIGHT' (unitless)
+        loc_mod (str): The location model, either 'loc3d' or 'loc1d'.
+            For 3D sphere models: latitude and longitude are in degrees in the DataFrame.
+        types (dict): Dictionary of types of observations the observation sequence,
+            e.g. {23: 'ACARS_TEMPERATURE'}, 
+        reverse_types (dict): Dictionary of types with keys and values reversed, e.g
+            {'ACARS_TEMPERATURE': 23}
+        synonyms_for_obs (list): List of synonyms for the observation column in the DataFrame. 
+            The defualt list is 
 
-    For 3D sphere models: latitude and longitude are in degrees in the DataFrame
+            .. code-block:: python
 
-    Calculations:
-          
-        - sq_err = (mean-obs)**2  
-        - bias = (mean-obs)  
-        - rmse = sqrt( sum((mean-obs)**2)/n )
-        - bias = sum((mean-obs)/n)
-        - spread = sum(sd)
-        - totalspread = sqrt(sum(sd+obs_err_var)) 
-        
+                [ 'NCEP BUFR observation',
+                'AIRS observation', 
+                'GTSPP observation', 
+                'SST observation',
+                'observations',
+                'WOD observation']
+
+            You can add more synonyms by providing a list of strings when
+            creating the obs_sequence object. 
+            
+            .. code-block:: python
+            
+                obs_sequence(file, synonyms=['synonym1', 'synonym2']).df
+
+        has_assimilation_info (bool): Indicates if assimilation information is present.   
+        has_posterior (bool): Indicates if posterior information is present.
+        seq (generator): Generator of observations from the observation sequence file.
+        all_obs (list): List of all observations, each observation is a list.
+            Valid when the obs_sequence is created from a file. 
+            Set to None when the obs_sequence is created from scratch or multiple 
+            obs_sequences are joined.
     """
-    ## static variables
-    # vertrical coordinate:
-    #   undefined 'VERTISUNDEF'
-    #   surface 'VERTISSURFACE' (value is surface elevation in m)
-    #   model level 'VERTISLEVEL'
-    #   pressure 'VERTISPRESSURE' (in pascals)
-    #   height 'VERTISHEIGHT' (in meters)
-    #   scale height 'VERTISSCALEHEIGHT' (unitless)
     vert = {-2: 'undefined',              
             -1: 'surface (m)', 
              1: 'model level',
@@ -73,8 +97,22 @@ class obs_sequence:
 
     reversed_vert = {value: key for key, value in vert.items()}
 
-    
+  
     def __init__(self, file, synonyms=None):
+        """
+        Create an obs_sequence object from an ASCII or binary observation sequence file,
+        or create an empty obs_sequence object from scratch.
+
+        Args:
+            file (str): The input observation sequence ASCII or binary file.
+                    If None, an empty obs_sequence object is created from scratch.
+            synonyms (list, optional): List of synonyms for the observation column in the DataFrame.
+
+        Returns: 
+            an obs_sequence object
+
+        """
+
         self.loc_mod = 'None'
         self.has_assimilation_info = False
         self.has_posterior = False
@@ -257,7 +295,7 @@ class obs_sequence:
 
     @staticmethod
     def generate_linked_list_pattern(n):
-        """Create a list of strings with the linked list pattern for n lines."""
+        """Create a list of strings with the linked list pattern for n observations."""
         result = []
         for i in range(n-1):
             col1 = i if i > 0 else -1
@@ -280,7 +318,7 @@ class obs_sequence:
         to have been created from obs_sequence object.
         
         
-        Parameters:
+        Args:
             file (str): The path to the file where the observation sequence will be written.
             df (pandas.DataFrame, optional): A DataFrame containing the observation data. If not provided, the function uses self.header and self.all_obs.
         
@@ -372,7 +410,7 @@ class obs_sequence:
         """
         Selects rows from a DataFrame based on the DART quality control flag.
 
-        Parameters:
+        Args:
             df (DataFrame): A pandas DataFrame.
             dart_qc (int): The DART quality control flag to select.
 
@@ -570,7 +608,7 @@ class obs_sequence:
         """
         Extracts the names of the copies from the header of an obs_seq file.
 
-        Parameters:
+        Args:
             header (list): A list of strings representing the lines in the header of the obs_seq file.
 
         Returns:
@@ -641,7 +679,7 @@ class obs_sequence:
     def check_trailing_record_length(file, expected_length):
             """Reads and checks the trailing record length from the binary file written by Fortran.
 
-            Parameters: 
+            Args: 
                 file (file): The file object.
                 expected_length (int): The expected length of the trailing record.
 
@@ -754,7 +792,7 @@ class obs_sequence:
         a default configuration. It constructs new composite rows by combining specified 
         components and adds them to the DataFrame.
 
-        Parameters:
+        Args:
             composite_types (str, optional): The YAML configuration for composite types. If 'use_default', the default configuration is used. Otherwise, a custom YAML configuration can be provided.
 
         Returns:
@@ -794,7 +832,7 @@ class obs_sequence:
         This method combines the headers and observations from a list of obs_sequence objects
         into a single obs_sequence object.
 
-        Parameters:
+        Args:
             obs_sequences (list of obs_sequences): The list of observation sequences objects to join.
             copies (list of str, optional): A list of copy names to include in the combined data.
                     If not provided, all copies are included.
@@ -914,7 +952,7 @@ def load_yaml_to_dict(file_path):
     """
     Load a YAML file and convert it to a dictionary.
 
-    Parameters:
+    Args:
         file_path (str): The path to the YAML file.
 
     Returns:
@@ -946,7 +984,7 @@ def construct_composit(df_comp, composite, components):
     location and time. It creates a new row with a composite type by combining 
     specified columns using the square root of the sum of squares method.
 
-    Parameters:
+    Args:
         df_comp (pd.DataFrame): The DataFrame containing the component rows to be combined.
         composite (str): The type name for the new composite rows.
         components (list of str): A list containing the type names of the two components to be combined.

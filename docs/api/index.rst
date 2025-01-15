@@ -3,7 +3,7 @@ API Guide
 =========
 
 .. toctree::
-    :maxdepth: 1
+    :maxdepth: 3
     
     obs_sequence
     plots
