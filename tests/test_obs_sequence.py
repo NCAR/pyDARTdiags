@@ -277,9 +277,11 @@ class TestJoin:
         obj3 = obsq.obs_sequence(ascii_obs_seq_file_path3)
         obs_seq_mega = obsq.obs_sequence.join([obj1, obj2, obj3])
 
+        assert obs_seq_mega.all_obs == None
         assert len(obs_seq_mega.df) == 16 # obs in the dataframe
         assert obs_seq_mega.loc_mod == 'loc3d'
-        #assert obs_seq_mega.has_assimilation_info == True
+        assert obs_seq_mega.has_assimilation_info == True
+        assert obs_seq_mega.has_posterior == False
         assert list(obs_seq_mega.types.keys()) == list(range(1,26)) # 25 obs types
         obs_types =   ['AIRCRAFT_TEMPERATURE',
                     'BLUE_LAND_SFC_ALTIMETER',
@@ -331,7 +333,7 @@ class TestJoin:
         assert obs_seq_mega.n_qc == 0
         assert obs_seq_mega.n_copies == 2
         assert obs_seq_mega.copie_names == ['observation', 'prior_ensemble_spread']
-
+ 
     def test_join_copies_not_in_all(self, ascii_obs_seq_file_path1, 
                                     ascii_obs_seq_file_path4):
         obj1 = obsq.obs_sequence(ascii_obs_seq_file_path1)
@@ -346,6 +348,13 @@ class TestJoin:
         with pytest.raises(ValueError, match="All observation sequences must have the selected copies."):
             obsq.obs_sequence.join([obj1, obj4], ['prior_ensemble_member_41'])
 
+    def test_join_list_sub_copies(self, ascii_obs_seq_file_path1, 
+                                    ascii_obs_seq_file_path3):
+        obj1 = obsq.obs_sequence(ascii_obs_seq_file_path1)
+        obj3 = obsq.obs_sequence(ascii_obs_seq_file_path3)
+        obs_seq_mega = obsq.obs_sequence.join([obj1, obj3],['prior_ensemble_mean', 'observation', 'Data_QC'])
+        assert obs_seq_mega.has_assimilation_info == False
+        assert obs_seq_mega.has_posterior == False
 
 class TestCreateHeader:
     def test_create_header(self):

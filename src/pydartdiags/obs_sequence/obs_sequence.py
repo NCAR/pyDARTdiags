@@ -848,8 +848,7 @@ class obs_sequence:
 
             combo.n_copies = len(combo.copie_names)
             combo.n_qc = len(combo.qc_copie_names)
-            combo.n_non_qc = len(combo.non_qc_copie_names)
-            
+            combo.n_non_qc = len(combo.non_qc_copie_names)            
  
         else:
             for obs_seq in obs_sequences:
@@ -875,16 +874,23 @@ class obs_sequence:
                 combined_df = pd.concat([combined_df, obs_seq.df], ignore_index=True)
             combined_types.extend(list(obs_seq.reverse_types.keys()))
         
-        # dictionary of types
+        # create dictionary of types  
         keys = set(combined_types)
         combo.reverse_types = {item: i+1 for i, item in enumerate(keys)}
         combo.types = {v: k for k, v in combo.reverse_types.items()}
 
+        # create linked list for obs
         combo.df = combined_df.sort_values(by='time').reset_index(drop=True)
         combo.df['linked_list'] = obs_sequence.generate_linked_list_pattern(len(combo.df))
         combo.df['obs_num'] = combined_df.index + 1
         combo.create_header(len(combo.df))
 
+        # set assimilation info (mean and spread) (prior and posterior)
+        combo.has_assimilation_info = 'prior_ensemble_mean'.casefold() in map(str.casefold, combo.df.columns)
+        combo.has_assimilation_info = 'prior_ensemble_spread'.casefold() in map(str.casefold, combo.df.columns)
+        combo.has_posterior = 'posterior_ensemble_mean'.casefold() in map(str.casefold, combo.df.columns) 
+        combo.has_posterior = 'posterior_ensemble_spread'.casefold() in map(str.casefold, combo.df.columns)
+ 
         return combo
 
     def create_header(self, n):
