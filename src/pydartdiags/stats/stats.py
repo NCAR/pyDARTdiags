@@ -1,0 +1,160 @@
+import pandas as pd
+import numpy as np
+#from pydartdiags.obs_sequence import obs_sequence as obsq
+
+def apply_to_phases(func):
+    """
+    Decorator to apply a function to both 'prior' and 'posterior' phases
+    and modify the DataFrame in place.
+
+    The decorated function should accept 'phase' as its first argument.
+    """
+    def wrapper(df, *args, **kwargs):
+        for phase in ['prior', 'posterior']:
+            if f"{phase}_ensemble_spread" in df.columns:
+                func(df, phase, *args, **kwargs)
+        return df
+    return wrapper
+
+def apply_to_phases_return_df(func):
+    """
+    Decorator to apply a function to both 'prior' and 'posterior' phases and return a new DataFrame.
+
+    The decorated function should accept 'phase' as its first argument and return a DataFrame.
+    """
+    def wrapper(df, *args, **kwargs):
+        results = []
+        for phase in ['prior', 'posterior']:
+            if f"{phase}_ensemble_spread" in df.columns:
+                result = func(df, phase, *args, **kwargs)
+                #result['phase'] = phase  # Add a column to indicate the phase
+                results.append(result)
+        return pd.concat(results, ignore_index=True)
+    return wrapper
+
+@apply_to_phases
+def calculate_rank(df, phase):
+    """
+    Calculate the rank of observations within an ensemble.
+
+    This function takes a DataFrame containing ensemble predictions and observed values,
+    adds sampling noise to the ensemble predictions, and calculates the rank of the observed
+    value within the perturbed ensemble for each observation. The rank indicates the position
+    of the observed value within the sorted ensemble values, with 1 being the lowest. If the
+    observed value is larger than the largest ensemble member, its rank is set to the ensemble
+    size plus one.
+
+    Parameters:
+        df (pd.DataFrame): A DataFrame with columns for mean, standard deviation, observed values,
+                           ensemble size, and observation type. The DataFrame should have one row per observation.
+
+    Returns:
+        tuple: A tuple containing the rank array, ensemble size, and a result DataFrame. The result
+        DataFrame contains columns for 'rank' and 'obstype'.
+    """
+    column = f"{phase}_ensemble_member"
+    ensemble_values = df.filter(regex=column).to_numpy().copy()
+    std_dev = np.sqrt(df['obs_err_var']).to_numpy()
+    obsvalue = df['observation'].to_numpy()
+    obstype = df['type'].to_numpy()
+    ens_size = ensemble_values.shape[1]
+    mean = 0.0 # mean of the sampling noise
+    rank = np.zeros(obsvalue.shape[0], dtype=int)
+    
+    for obs in range(ensemble_values.shape[0]):
+        sampling_noise = np.random.normal(mean, std_dev[obs], ens_size)
+        ensemble_values[obs] += sampling_noise
+        ensemble_values[obs].sort()
+        for i, ens in enumerate(ensemble_values[obs]):
+            if obsvalue[obs] <= ens:
+                rank[obs] = i + 1
+                break
+
+        if rank[obs] == 0: # observation is larger than largest ensemble member
+            rank[obs] = ens_size + 1
+
+    result_df = pd.DataFrame({
+        'rank': rank,
+        'obstype': obstype
+    })
+
+    return (rank, ens_size, result_df)
+
+def mean_then_sqrt(x):
+    """
+    Calculates the mean of an array-like object and then takes the square root of the result.
+
+    Parameters:
+        arr (array-like): An array-like object (such as a list or a pandas Series). 
+                          The elements should be numeric.
+
+    Returns:
+        float: The square root of the mean of the input array.
+
+    Raises:
+        TypeError: If the input is not an array-like object containing numeric values.
+         ValueError: If the input array is empty.
+    """
+        
+    return np.sqrt(np.mean(x))
+
+@apply_to_phases  
+def diag_stats(df, phase): 
+    """
+    Calculate diagnostic statistics for a given phase and add them to the DataFrame.
+ 
+    Args:
+        df (pandas.DataFrame): The input DataFrame containing observation data and ensemble statistics. 
+                               The DataFrame must include the following columns:
+                               - 'observation': The actual observation values.
+                               - 'obs_err_var': The variance of the observation error.
+                               - 'prior_ensemble_mean' and/or 'posterior_ensemble_mean': The mean of the ensemble.
+                               - 'prior_ensemble_spread' and/or 'posterior_ensemble_spread': The spread of the ensemble.
+   
+        phase (str): The phase for which to calculate the statistics ('prior' or 'posterior').
+                               
+    Returns:
+        None: The function modifies the DataFrame in place by adding the following columns:
+            - 'prior_sq_err' and/or 'posterior_sq_err': The square error for the 'prior' and 'posterior' phases.
+            - 'prior_bias' and/or 'posterior_bias': The bias for the 'prior' and 'posterior' phases.
+            - 'prior_totalvar' and/or 'posterior_totalvar': The total variance for the 'prior' and 'posterior' phases.
+
+    Notes:
+        - Spread is the standard deviation of the ensemble.
+        - The function modifies the input DataFrame by adding new columns for the calculated statistics.
+    """
+    pd.options.mode.copy_on_write = True
+    #if f"{phase}_ensemble_spread" in df.columns:
+ 
+    # input from the observation sequence
+    spread_column = f"{phase}_ensemble_spread"
+    mean_column = f"{phase}_ensemble_mean"
+
+    # Calulated from the observation sequence
+    sq_err_column = f"{phase}_sq_err"
+    bias_column = f"{phase}_bias"
+    totalvar_column = f"{phase}_totalvar"
+
+    df[sq_err_column] = (df[mean_column] - df['observation'])**2
+    df[bias_column] = df[mean_column] - df['observation']
+    df[totalvar_column] = df['obs_err_var'] + df[spread_column]**2
+
+def level():
+    """ bin by level"""
+    pass
+
+@apply_to_phases_return_df
+def grand_statistics(df, phase):
+ 
+    print("grand stats", phase)
+    # assiming diag_stats has been called 
+    grand = df.groupby(['type'], observed=False).agg({
+        f"{phase}_sq_err": mean_then_sqrt,
+        f"{phase}_bias": 'mean',
+        f"{phase}_totalvar": mean_then_sqrt     
+    }).reset_index()
+
+    grand.rename(columns={f"{phase}_sq_err": f"{phase}_rmse"}, inplace=True)
+    grand.rename(columns={f"{phase}_totalvar": f"{phase}_totalspread"}, inplace=True)  
+
+    return grand
