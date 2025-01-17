@@ -139,9 +139,38 @@ def diag_stats(df, phase):
     df[bias_column] = df[mean_column] - df['observation']
     df[totalvar_column] = df['obs_err_var'] + df[spread_column]**2
 
-def level():
-    """ bin by level"""
-    pass
+def bin_by_layer(df, levels, verticalUnit="pressure (Pa)"):
+    """
+    Bin observations by vertical layers and add 'vlevels' and 'midpoint' columns to the DataFrame.
+
+    This function bins the observations in the DataFrame based on the specified vertical levels and adds two new columns:
+    'vlevels', which represents the categorized vertical levels, and 'midpoint', which represents the midpoint of each
+    vertical level bin. Only observations (row) with the specified vertical unit are binned.
+
+    Args:
+        df (pandas.DataFrame): The input DataFrame containing observation data. The DataFrame must include the following columns:
+                               - 'vertical': The vertical coordinate values of the observations.
+                               - 'vert_unit': The unit of the vertical coordinate values.
+        levels (list): A list of bin edges for the vertical levels.
+        verticalUnit (str, optional): The unit of the vertical axis (e.g., 'pressure (Pa)'). Default is 'pressure (Pa)'.
+
+    Returns:
+        pandas.DataFrame: The input DataFrame with additional columns for the binned vertical levels and their midpoints:
+                          - 'vlevels': The categorized vertical levels.
+                          - 'midpoint': The midpoint of each vertical level bin.
+
+    Notes:
+        - The function modifies the input DataFrame by adding 'vlevels' and 'midpoint' columns.
+        - The 'midpoint' values are calculated as half the midpoint of each vertical level bin.
+        - Pressure units (Pa) are converted to hPa for the 'midpoint' values.
+    """
+    pd.options.mode.copy_on_write = True
+    df.loc[df['vert_unit'] == verticalUnit, 'vlevels'] = pd.cut(df.loc[df['vert_unit'] == verticalUnit, 'vertical'], levels)
+    if verticalUnit == "pressure (Pa)":
+        df.loc[:,'midpoint'] = df['vlevels'].apply(lambda x: x.mid / 100.) # HK todo units HPa - change now or in plotting?
+    else:
+        df.loc[:,'midpoint'] = df['vlevels'].apply(lambda x: x.mid)
+    
 
 @apply_to_phases_return_df
 def grand_statistics(df, phase):
