@@ -3,7 +3,7 @@ import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 import pandas as pd
-import pydartdiags.stats as stats
+from pydartdiags.stats import stats
 
 def plot_rank_histogram(df):  
     """
@@ -11,87 +11,31 @@ def plot_rank_histogram(df):
 
     All histogram bars are initalized to be hidden and can be toggled visible in the plot's legend
     """
-    _, _, df_hist = calculate_rank(df)
-    fig = px.histogram(df_hist, x='rank', color='obstype', title='Histogram Colored by obstype')
+    fig = px.histogram(df, x='rank', color='obstype', title='Histogram Colored by obstype')
     for trace in fig.data:
         trace.visible = 'legendonly'
     fig.show()
 
-def plot_profile(df, levels, verticalUnit = "pressure (Pa)"):
-    """
-    Plots RMSE, bias, and total spread profiles for different observation types across specified vertical levels.
-
-    This function takes a DataFrame containing observational data and model predictions, categorizes
-    the data into specified vertical levels, and calculates the RMSE, bias and total spread for each level and
-    observation type. It then plots three line charts: one for RMSE, one for bias, one for total spread, as functions
-    of vertical level. The vertical levels are plotted on the y-axis in reversed order to represent
-    the vertical profile in the atmosphere correctly if the vertical units are pressure.
-
-    Parameters:
-        df (pd.DataFrame): The input DataFrame containing at least the 'vertical' column for vertical levels,
-        the vert_unit column, and other columns required by the `rmse_bias` function for calculating RMSE and 
-        Bias.
-        levels (array-like): The bin edges for categorizing the 'vertical' column values into the desired 
-        vertical levels.
-        verticalUnit (string) (optional): The vertical unit to be used. Only observations in df which have this
-        string in the vert_unit column will be plotted. Defaults to 'pressure (Pa)'.
-
-    Returns:
-        tuple: A tuple containing the DataFrame with RMSE, bias and total spread calculations,
-        The DataFrame includes a 'vlevels' column representing the categorized vertical levels
-        and 'midpoint' column representing the midpoint of each vertical level bin. And the three figures.
-
-    Raises:
-        ValueError: If there are missing values in the 'vertical' column of the input DataFrame.
-        ValueError: If none of the input obs have 'verticalUnit' in the 'vert_unit' column of the input DataFrame.
-
-    Note:
-        - The function modifies the input DataFrame by adding 'vlevels' and 'midpoint' columns.
-        - The 'midpoint' values are calculated as half the midpoint of each vertical level bin, which may need
-          adjustment based on the specific requirements for vertical level representation.
-        - The plots are generated using Plotly Express and are displayed inline. The y-axis of the plots is
-          reversed to align with standard atmospheric pressure level representation if the vertical units
-          are atmospheric pressure.
-    """
-
-    pd.options.mode.copy_on_write = True
-    if df['vertical'].isnull().values.any(): # what about horizontal observations?
-        raise ValueError("Missing values in 'vertical' column.")
-    elif verticalUnit not in df['vert_unit'].values:
-        raise ValueError("No obs with expected vertical unit '"+verticalUnit+"'.")
-    else:
-        df = df[df["vert_unit"].isin({verticalUnit})] # Subset to only rows with the correct vertical unit
-        df.loc[:,'vlevels'] = pd.cut(df['vertical'], levels)
-        if verticalUnit == "pressure (Pa)":
-            df.loc[:,'midpoint'] = df['vlevels'].apply(lambda x: x.mid / 100.) # HK todo units
-        else:
-            df.loc[:,'midpoint'] = df['vlevels'].apply(lambda x: x.mid)
-
-    # Calculations
-    df_profile_prior = stats.diag_stats(df, phase='prior')
-    df_profile_posterior = None
+def plot_profile(df_in, verticalUnit):
+    """ Assumes diag_stats has been run on the dataframe and the resulting dataframe is passed in """
+ 
+    df = stats.layer_statistics(df_in)
     if 'posterior_ensemble_mean' in df.columns:
-        df_profile_posterior = stats.diag_stats(df, phase='posterior')
-
-    # Merge prior and posterior dataframes
-    if df_profile_posterior is not None:
-        df_profile = pd.merge(df_profile_prior, df_profile_posterior, on=['midpoint', 'type'], suffixes=('_prior', '_posterior'))
-        fig_rmse = plot_profile_prior_post(df_profile, 'rmse', verticalUnit)
+        fig_rmse = plot_profile_prior_post(df, 'rmse', verticalUnit)
         fig_rmse.show()
-        fig_bias = plot_profile_prior_post(df_profile, 'bias', verticalUnit)
+        fig_bias = plot_profile_prior_post(df, 'bias', verticalUnit)
         fig_bias.show()
-        fig_ts = plot_profile_prior_post(df_profile, 'totalspread', verticalUnit)
+        fig_ts = plot_profile_prior_post(df, 'totalspread', verticalUnit)
         fig_ts.show()
     else:
-        df_profile = df_profile_prior
-        fig_rmse = plot_profile_prior(df_profile, 'rmse', verticalUnit)
+        fig_rmse = plot_profile_prior(df, 'rmse', verticalUnit)
         fig_rmse.show()
-        fig_bias = plot_profile_prior(df_profile, 'bias', verticalUnit)
+        fig_bias = plot_profile_prior(df, 'bias', verticalUnit)
         fig_bias.show()
-        fig_ts = plot_profile_prior(df_profile, 'totalspread', verticalUnit)
+        fig_ts = plot_profile_prior(df, 'totalspread', verticalUnit)
         fig_ts.show()   
 
-    return df_profile, fig_rmse, fig_ts, fig_bias
+    return fig_rmse, fig_ts, fig_bias
     
 def plot_profile_prior_post(df_profile, stat, verticalUnit):
     """
@@ -105,6 +49,9 @@ def plot_profile_prior_post(df_profile, stat, verticalUnit):
     Returns:
         plotly.graph_objects.Figure: The generated Plotly figure.
     """
+    # Filter the DataFrame to include only rows with the required verticalUnit
+    df_filtered = df_profile[df_profile['vert_unit'] == verticalUnit]
+    
     # Reshape DataFrame to long format for easier plotting
     df_long = pd.melt(
         df_profile,

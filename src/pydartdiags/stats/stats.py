@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 #from pydartdiags.obs_sequence import obs_sequence as obsq
 
-def apply_to_phases(func):
+def apply_to_phases_in_place(func):
     """
     Decorator to apply a function to both 'prior' and 'posterior' phases
     and modify the DataFrame in place.
@@ -32,7 +32,7 @@ def apply_to_phases_return_df(func):
         return pd.concat(results, ignore_index=True)
     return wrapper
 
-@apply_to_phases
+@apply_to_phases_return_df
 def calculate_rank(df, phase):
     """
     Calculate the rank of observations within an ensemble.
@@ -49,8 +49,7 @@ def calculate_rank(df, phase):
                            ensemble size, and observation type. The DataFrame should have one row per observation.
 
     Returns:
-        tuple: A tuple containing the rank array, ensemble size, and a result DataFrame. The result
-        DataFrame contains columns for 'rank' and 'obstype'.
+        DataFrame containing columns for 'rank' and 'obstype'.
     """
     column = f"{phase}_ensemble_member"
     ensemble_values = df.filter(regex=column).to_numpy().copy()
@@ -78,7 +77,7 @@ def calculate_rank(df, phase):
         'obstype': obstype
     })
 
-    return (rank, ens_size, result_df)
+    return result_df
 
 def mean_then_sqrt(x):
     """
@@ -98,7 +97,7 @@ def mean_then_sqrt(x):
         
     return np.sqrt(np.mean(x))
 
-@apply_to_phases  
+@apply_to_phases_in_place  
 def diag_stats(df, phase): 
     """
     Calculate diagnostic statistics for a given phase and add them to the DataFrame.
@@ -169,13 +168,11 @@ def bin_by_layer(df, levels, verticalUnit="pressure (Pa)"):
     if verticalUnit == "pressure (Pa)":
         df.loc[:,'midpoint'] = df['vlevels'].apply(lambda x: x.mid / 100.) # HK todo units HPa - change now or in plotting?
     else:
-        df.loc[:,'midpoint'] = df['vlevels'].apply(lambda x: x.mid)
-    
+        df.loc[:,'midpoint'] = df['vlevels'].apply(lambda x: x.mid)    
 
 @apply_to_phases_return_df
 def grand_statistics(df, phase):
  
-    print("grand stats", phase)
     # assiming diag_stats has been called 
     grand = df.groupby(['type'], observed=False).agg({
         f"{phase}_sq_err": mean_then_sqrt,
@@ -187,3 +184,19 @@ def grand_statistics(df, phase):
     grand.rename(columns={f"{phase}_totalvar": f"{phase}_totalspread"}, inplace=True)  
 
     return grand
+
+
+@apply_to_phases_return_df
+def layer_statistics(df, phase):
+ 
+    # assiming diag_stats has been called 
+    layer_stats = df.groupby(['midpoint','type'], observed=False).agg({
+        f"{phase}_sq_err": mean_then_sqrt,
+        f"{phase}_bias": 'mean',
+        f"{phase}_totalvar": mean_then_sqrt     
+    }).reset_index()
+
+    layer_stats.rename(columns={f"{phase}_sq_err": f"{phase}_rmse"}, inplace=True)
+    layer_stats.rename(columns={f"{phase}_totalvar": f"{phase}_totalspread"}, inplace=True)  
+
+    return layer_stats
