@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from functools import wraps
 #from pydartdiags.obs_sequence import obs_sequence as obsq
 
 def apply_to_phases_in_place(func):
@@ -9,6 +10,7 @@ def apply_to_phases_in_place(func):
 
     The decorated function should accept 'phase' as its first argument.
     """
+    @wraps(func)
     def wrapper(df, *args, **kwargs):
         for phase in ['prior', 'posterior']:
             if f"{phase}_ensemble_spread" in df.columns:
@@ -16,23 +18,42 @@ def apply_to_phases_in_place(func):
         return df
     return wrapper
 
-def apply_to_phases_return_df(func):
+def apply_to_phases_by_type_return_df(func):
     """
     Decorator to apply a function to both 'prior' and 'posterior' phases and return a new DataFrame.
 
     The decorated function should accept 'phase' as its first argument and return a DataFrame.
     """
+    @wraps(func)
     def wrapper(df, *args, **kwargs):
         results = []
         for phase in ['prior', 'posterior']:
-            if f"{phase}_ensemble_spread" in df.columns:
+            if f"{phase}_ensemble_mean" in df.columns:
                 result = func(df, phase, *args, **kwargs)
-                #result['phase'] = phase  # Add a column to indicate the phase
                 results.append(result)
-        return pd.concat(results, ignore_index=True)
+
+        return pd.merge(results[0],results[1], on='type')
     return wrapper
 
-@apply_to_phases_return_df
+def apply_to_phases_by_obs(func):
+    """
+    Decorator to apply a function to both 'prior' and 'posterior' phases and return a new DataFrame.
+
+    The decorated function should accept 'phase' as its first argument and return a DataFrame.
+    """
+    @wraps(func)
+    def wrapper(df, *args, **kwargs):
+        
+        res_df = func(df, 'prior', *args, **kwargs)
+        if 'posterior_ensemble_mean' in df.columns:
+            posterior_df = func(df, 'posterior', *args, **kwargs)
+            res_df['posterior_rank'] = posterior_df['posterior_rank']
+
+        return res_df
+
+    return wrapper
+
+@apply_to_phases_by_obs
 def calculate_rank(df, phase):
     """
     Calculate the rank of observations within an ensemble.
@@ -45,9 +66,8 @@ def calculate_rank(df, phase):
     size plus one.
 
     Parameters:
-        df (pd.DataFrame): A DataFrame with columns for mean, standard deviation, observed values,
-                           ensemble size, and observation type. The DataFrame should have one row per observation.
-
+        df (pd.DataFrame): A DataFrame with columns for rank, and observation type. 
+        
     Returns:
         DataFrame containing columns for 'rank' and 'obstype'.
     """
@@ -72,9 +92,9 @@ def calculate_rank(df, phase):
         if rank[obs] == 0: # observation is larger than largest ensemble member
             rank[obs] = ens_size + 1
 
-    result_df = pd.DataFrame({
-        'rank': rank,
-        'obstype': obstype
+    result_df = pd.DataFrame({    
+        'type': obstype,  
+        f"{phase}_rank": rank 
     })
 
     return result_df
@@ -158,7 +178,7 @@ def bin_by_layer(df, levels, verticalUnit="pressure (Pa)"):
                           - 'vlevels': The categorized vertical levels.
                           - 'midpoint': The midpoint of each vertical level bin.
 
-    Notes:
+    Notes: 
         - The function modifies the input DataFrame by adding 'vlevels' and 'midpoint' columns.
         - The 'midpoint' values are calculated as half the midpoint of each vertical level bin.
         - Pressure units (Pa) are converted to hPa for the 'midpoint' values.
@@ -170,7 +190,7 @@ def bin_by_layer(df, levels, verticalUnit="pressure (Pa)"):
     else:
         df.loc[:,'midpoint'] = df['vlevels'].apply(lambda x: x.mid)    
 
-@apply_to_phases_return_df
+@apply_to_phases_by_type_return_df
 def grand_statistics(df, phase):
  
     # assiming diag_stats has been called 
@@ -186,9 +206,10 @@ def grand_statistics(df, phase):
     return grand
 
 
-@apply_to_phases_return_df
 def layer_statistics(df, phase):
  
+    #HK @todo getting two midpoints here
+
     # assiming diag_stats has been called 
     layer_stats = df.groupby(['midpoint','type'], observed=False).agg({
         f"{phase}_sq_err": mean_then_sqrt,

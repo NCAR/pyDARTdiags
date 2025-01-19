@@ -5,13 +5,13 @@ import plotly.graph_objects as go
 import pandas as pd
 from pydartdiags.stats import stats
 
-def plot_rank_histogram(df):  
+def plot_rank_histogram(df, phase):  
     """
     Plots a rank histogram colored by observation type.
 
     All histogram bars are initalized to be hidden and can be toggled visible in the plot's legend
     """
-    fig = px.histogram(df, x='rank', color='obstype', title='Histogram Colored by obstype')
+    fig = px.histogram(df, x=f"{phase}_rank", color='type', title='Histogram Colored by obstype')
     for trace in fig.data:
         trace.visible = 'legendonly'
     fig.show()
