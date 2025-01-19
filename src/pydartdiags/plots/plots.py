@@ -21,7 +21,7 @@ def plot_profile(df_in, verticalUnit):
     """ Assumes diag_stats has been run on the dataframe and the resulting dataframe is passed in """
  
     df = stats.layer_statistics(df_in)
-    if 'posterior_ensemble_mean' in df.columns:
+    if 'posterior_rmse' in df.columns:
         fig_rmse = plot_profile_prior_post(df, 'rmse', verticalUnit)
         fig_rmse.show()
         fig_bias = plot_profile_prior_post(df, 'bias', verticalUnit)

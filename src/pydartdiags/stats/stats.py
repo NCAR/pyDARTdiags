@@ -32,7 +32,10 @@ def apply_to_phases_by_type_return_df(func):
                 result = func(df, phase, *args, **kwargs)
                 results.append(result)
 
-        return pd.merge(results[0],results[1], on='type')
+        if 'midpoint' in df.columns:
+            return pd.merge(results[0],results[1], on=['midpoint','type', 'vert_unit'])
+        else:
+            return pd.merge(results[0],results[1], on='type')
     return wrapper
 
 def apply_to_phases_by_obs(func):
@@ -205,7 +208,7 @@ def grand_statistics(df, phase):
 
     return grand
 
-
+@apply_to_phases_by_type_return_df
 def layer_statistics(df, phase):
  
     #HK @todo getting two midpoints here
@@ -214,7 +217,8 @@ def layer_statistics(df, phase):
     layer_stats = df.groupby(['midpoint','type'], observed=False).agg({
         f"{phase}_sq_err": mean_then_sqrt,
         f"{phase}_bias": 'mean',
-        f"{phase}_totalvar": mean_then_sqrt     
+        f"{phase}_totalvar": mean_then_sqrt,
+        'vert_unit': 'first' 
     }).reset_index()
 
     layer_stats.rename(columns={f"{phase}_sq_err": f"{phase}_rmse"}, inplace=True)
