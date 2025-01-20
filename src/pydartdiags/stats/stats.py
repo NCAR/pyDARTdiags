@@ -33,9 +33,16 @@ def apply_to_phases_by_type_return_df(func):
                 results.append(result)
 
         if 'midpoint' in df.columns:
-            return pd.merge(results[0],results[1], on=['midpoint','type', 'vert_unit'])
+            if len(results) == 2:
+                return pd.merge(results[0],results[1], 
+                             on=['midpoint', 'vlevels', 'type', 'vert_unit'])
+            else:
+                return results[0]
         else:
-            return pd.merge(results[0],results[1], on='type')
+            if (len(results) == 2):
+                return pd.merge(results[0],results[1], on='type')
+            else:
+                return results[0]
     return wrapper
 
 def apply_to_phases_by_obs(func):
@@ -189,7 +196,8 @@ def bin_by_layer(df, levels, verticalUnit="pressure (Pa)"):
     pd.options.mode.copy_on_write = True
     df.loc[df['vert_unit'] == verticalUnit, 'vlevels'] = pd.cut(df.loc[df['vert_unit'] == verticalUnit, 'vertical'], levels)
     if verticalUnit == "pressure (Pa)":
-        df.loc[:,'midpoint'] = df['vlevels'].apply(lambda x: x.mid / 100.) # HK todo units HPa - change now or in plotting?
+        df.loc[:,'midpoint'] = df['vlevels'].apply(lambda x: x.mid ) # HK todo units HPa - change now or in plotting?
+        df.loc[:,'vlevels'] = df['vlevels'].apply(lambda x: x ) # HK todo units HPa - change now or in plotting?
     else:
         df.loc[:,'midpoint'] = df['vlevels'].apply(lambda x: x.mid)    
 
@@ -210,18 +218,63 @@ def grand_statistics(df, phase):
 
 @apply_to_phases_by_type_return_df
 def layer_statistics(df, phase):
- 
-    #HK @todo getting two midpoints here
 
     # assiming diag_stats has been called 
     layer_stats = df.groupby(['midpoint','type'], observed=False).agg({
         f"{phase}_sq_err": mean_then_sqrt,
         f"{phase}_bias": 'mean',
         f"{phase}_totalvar": mean_then_sqrt,
-        'vert_unit': 'first' 
+        'vert_unit': 'first' ,
+        'vlevels': 'first',
     }).reset_index()
 
     layer_stats.rename(columns={f"{phase}_sq_err": f"{phase}_rmse"}, inplace=True)
     layer_stats.rename(columns={f"{phase}_totalvar": f"{phase}_totalspread"}, inplace=True)  
 
     return layer_stats
+
+def possible_vs_used(df):
+    """
+    Calculates the count of possible vs. used observations by type.
+
+    This function takes a DataFrame containing observation data, including a 'type' column for the observation
+    type and an 'observation' column. The number of used observations ('used'), is the total number
+    minus the observations that failed quality control checks (as determined by the `select_failed_qcs` function).
+    The result is a DataFrame with each observation type, the count of possible observations, and the count of
+    used observations.
+
+    Returns:
+        pd.DataFrame: A DataFrame with three columns: 'type', 'possible', and 'used'. 'type' is the observation type,
+        'possible' is the count of all observations of that type, and 'used' is the count of observations of that type
+        that passed quality control checks.
+    """
+    possible = df.groupby('type')['observation'].count()
+    possible.rename('possible', inplace=True)
+    
+    failed_qcs = select_failed_qcs(df).groupby('type')['observation'].count()
+    used = possible - failed_qcs.reindex(possible.index, fill_value=0)
+    used.rename('used', inplace=True)
+    
+    return pd.concat([possible, used], axis=1).reset_index()
+
+def possible_vs_used_by_layer(df):
+    """
+    Calculates the count of possible vs. used observations by type and vertical level.
+    """
+    possible = df.groupby(['type', 'midpoint'], observed=False)['type'].count()
+    possible.rename('possible', inplace=True)
+    
+    failed_qcs = select_failed_qcs(df).groupby(['type', 'midpoint'], observed=False)['type'].count()
+    used = possible - failed_qcs.reindex(possible.index, fill_value=0)
+    used.rename('used', inplace=True)
+    
+    return pd.concat([possible, used], axis=1).reset_index()
+
+def select_failed_qcs(df):
+        """
+        Select rows from the DataFrame where the DART quality control flag is greater than 0.
+
+        Returns:
+            pandas.DataFrame: A DataFrame containing only the rows with a DART quality control flag greater than 0.
+        """
+        return df[df['DART_quality_control'] > 0]
