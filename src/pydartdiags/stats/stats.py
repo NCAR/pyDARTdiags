@@ -32,7 +32,7 @@ def apply_to_phases_by_type_return_df(func):
                 result = func(df, phase, *args, **kwargs)
                 results.append(result)
 
-        if 'midpoint' in df.columns:
+        if 'midpoint' in result.columns:
             if len(results) == 2:
                 return pd.merge(results[0],results[1], 
                              on=['midpoint', 'vlevels', 'type', 'vert_unit'])
