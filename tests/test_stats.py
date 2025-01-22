@@ -6,7 +6,6 @@ from pydartdiags.stats import stats as stats
 class TestRankCalculation:
 
      def test_calculate_rank(self):
-        # Example DataFrame setup
         data = {
             'observation': [2.5, 3.0, 4.5],  # Actual observation values
             'obs_err_var': [0.1, 0.2, 0.3],  # Variance of the observation error
@@ -18,12 +17,34 @@ class TestRankCalculation:
         df = pd.DataFrame(data)
 
         # Call the function
-        rank, ens_size, df_hist = stats.calculate_rank(df)
+        df_hist = stats.calculate_rank(df)
 
-        # Assertions to check if the function works as expected
-        assert ens_size == 3  # 3 ensemble members
-        assert 'rank' in df_hist.columns
-        assert 'obstype' in df_hist.columns
+        # HK @todo need a random number test to check the rank calculation
+        assert 'prior_rank' in df_hist.columns
+        assert 'type' in df_hist.columns
+
+     def test_calculate_rank_posterior(self):
+         data = {
+            'observation': [2.5, 3.0, 4.5],  # Actual observation values
+            'obs_err_var': [0.1, 0.2, 0.3],  # Variance of the observation error
+            'prior_ensemble_member1': [2.3, 3.1, 4.6],
+            'prior_ensemble_member2': [2.4, 2.9, 4.4],
+            'prior_ensemble_member3': [2.5, 3.2, 4.5],
+            'posterior_ensemble_member1': [2.4, 3.2, 4.7],
+            'posterior_ensemble_member2': [2.5, 3.1, 4.6],
+            'posterior_ensemble_member3': [2.6, 3.3, 4.8],
+            'type': ['A', 'B', 'A']  # Observation type
+         }
+         df = pd.DataFrame(data)
+
+         # Call the function
+         df_hist = stats.calculate_rank(df)
+         print(df_hist.columns)
+
+         # HK @todo need a random number test to check the rank calculation
+         assert 'prior_rank' in df_hist.columns
+         assert 'posterior_rank' in df_hist.columns
+         assert 'type' in df_hist.columns
 
 class TestMeanRoot:
     #HK do we need this?
