@@ -6,4 +6,5 @@ API Guide
     :maxdepth: 3
     
     obs_sequence
+    stats
     plots

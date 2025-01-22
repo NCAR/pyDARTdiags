@@ -185,15 +185,11 @@ class obs_sequence:
         rename_dict = {old: 'observation' for old in self.synonyms_for_obs  if old in self.df.columns}
         self.df = self.df.rename(columns=rename_dict)
 
-        # calculate bias and sq_err is the obs_seq is an obs_seq.final
+        # check if the assimilation info is present
         if 'prior_ensemble_mean'.casefold() in map(str.casefold, self.columns):
             self.has_assimilation_info = True
-            self.df['prior_bias'] = (self.df['prior_ensemble_mean'] - self.df['observation'])
-            self.df['prior_sq_err'] = self.df['prior_bias']**2  # squared error
         if 'posterior_ensemble_mean'.casefold() in map(str.casefold, self.columns):
             self.has_posterior = True
-            self.df['posterior_bias'] = (self.df['posterior_ensemble_mean'] - self.df['observation'])
-            self.df['posterior_sq_err'] = self.df['posterior_bias']**2
 
     def create_all_obs(self):
         """ steps through the generator to create a

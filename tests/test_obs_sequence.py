@@ -47,18 +47,14 @@ class TestOneDimensional:
         obj = obsq.obs_sequence(obs_seq_file_path)
         assert obj.loc_mod == 'loc1d'
         assert len(obj.df) == 40  # 40 obs in the file
-        assert obj.df.columns.str.contains('posterior').sum() == 24  # 20 members + mean + spread + sq_err + bias
-        assert obj.df.columns.str.contains('prior').sum() == 24
+        assert obj.df.columns.str.contains('posterior').sum() == 22  # 20 members + mean + spread
+        assert obj.df.columns.str.contains('prior').sum() == 22
  
 class TestSynonyms:
     @pytest.fixture
     def synonym_file_path(self):
         test_dir = os.path.dirname(__file__)
         return os.path.join(test_dir, 'data', 'obs_seq.final.ascii.syn')
-
-    def test_missing_key(self, synonym_file_path):
-        with pytest.raises(KeyError, match="'observation'"):
-            obj3 = obsq.obs_sequence(synonym_file_path)
 
     def test_single(self, synonym_file_path):
         obj1 = obsq.obs_sequence(synonym_file_path, synonyms="observationx")
@@ -68,10 +64,6 @@ class TestSynonyms:
         obj2 = obsq.obs_sequence(synonym_file_path, synonyms=["synonym1", "synonym2", "observationx"])
         assert "synonym1" in obj2.synonyms_for_obs
         assert "synonym2" in obj2.synonyms_for_obs
-
-    def test_missing_key_per_instance(self, synonym_file_path):
-        with pytest.raises(KeyError, match="'observation'"):
-            obj3 = obsq.obs_sequence(synonym_file_path)
             
 class TestBinaryObsSequence:
     @pytest.fixture
