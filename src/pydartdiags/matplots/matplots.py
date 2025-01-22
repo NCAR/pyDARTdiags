@@ -1,10 +1,7 @@
-from pydartdiags.obs_sequence import obs_sequence as obsq
 from pydartdiags.stats import stats
 import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
 
-
+# HK @todo color scheme class
 dacolors = ['green', 'magenta', 'orange', 'red']
 
 def plot_profile(obs_seq, levels, type, bias=True, rmse=True, totalspread=True):
@@ -20,7 +17,7 @@ def plot_profile(obs_seq, levels, type, bias=True, rmse=True, totalspread=True):
     Example:
 
         type = 'RADIOSONDE_U_WIND_COMPONENT'
-        hPalevels = [0.0, 100.0,  150.0, 200.0, 250.0, 300.0, 400.0, 500.0, 700, 850, 925, 1000]  # Pa?
+        hPalevels = [0.0, 100.0,  150.0, 200.0, 250.0, 300.0, 400.0, 500.0, 700, 850, 925, 1000]
         levels = [i * 100 for i in hPalevels]
 
         plot_profile(obs_seq, levels, type, bias=True, rmse=True, totalspread=True)
@@ -35,6 +32,9 @@ def plot_profile(obs_seq, levels, type, bias=True, rmse=True, totalspread=True):
     qc0 = qc0[qc0['type'] == type] 
     all_df = obs_seq.df[obs_seq.df['type'] == type]
 
+    # grand statistcs
+    grand = stats.grand_statistics(qc0)
+
     # add level bins to the dataframe
     #hPalevels = [0.0, 100.0,  150.0, 200.0, 250.0, 300.0, 400.0, 500.0, 700, 850, 925, 1000]  # Pa?
     #levels = [i * 100 for i in hPalevels]
@@ -47,7 +47,7 @@ def plot_profile(obs_seq, levels, type, bias=True, rmse=True, totalspread=True):
 
     fig, ax1 = plt.subplots()
 
-    # convert to hPa
+    # convert to hPa HK @todo only for Pressue (Pa)
     df['midpoint'] = df['midpoint'].astype(float)
     df['midpoint'] = df['midpoint'] / 100.
 
@@ -64,17 +64,21 @@ def plot_profile(obs_seq, levels, type, bias=True, rmse=True, totalspread=True):
     # Plot the 'bias' data on the first y-axis
     if bias:
         ax1.plot(df['prior_bias'], df['midpoint'], color=dacolors[0], marker='.', linestyle = '-', label='prior bias')
+        bias_prior = grand.loc[0, 'prior_bias']
         if 'posterior_bias' in df.columns:
             ax1.plot(df['posterior_bias'], df['midpoint'], color=dacolors[0], marker='.', linestyle = '--', label='posterior bias')
-    
+            bias_posterior = grand.loc[0, 'posterior_bias']
     if rmse:
         ax1.plot(df['prior_rmse'], df['midpoint'], color=dacolors[1], marker='.', linestyle = '-', label='prior RMSE')
+        rmse_prior = grand.loc[0, 'prior_rmse']
         if 'posterior_rmse' in df.columns:
-         ax1.plot(df['posterior_rmse'], df['midpoint'], color=dacolors[1], marker='.', linestyle = '--', label='posterior RMSE')
-    
+            ax1.plot(df['posterior_rmse'], df['midpoint'], color=dacolors[1], marker='.', linestyle = '--', label='posterior RMSE')
+            rmse_posterior  = grand.loc[0, 'posterior_rmse']
     if totalspread:
         ax1.plot(df['prior_totalspread'], df['midpoint'], color=dacolors[2], marker='.', linestyle = '-', label='prior totalspread')
-        if 'totalspread' in df.columns:
+        totalspread_prior = grand.loc[0, 'prior_totalspread']
+        if 'posterior_totalspread' in df.columns:
+            totalspread_posterior = grand.loc[0, 'posterior_totalspread']
             ax1.plot(df['posterior_totalspread'], df['midpoint'], color=dacolors[2], marker='.', linestyle = '--', label='posterior totalspread')
 
 
@@ -85,6 +89,7 @@ def plot_profile(obs_seq, levels, type, bias=True, rmse=True, totalspread=True):
 
     ax3 = ax1.twiny()
     ax3.set_xlabel('# obs (o=possible; +=assimilated)', color=dacolors[-1])
+    ax3.tick_params(axis='x', colors=dacolors[-1])
     ax3.plot(df_pvu['possible'], df_pvu['midpoint'], color=dacolors[-1], marker='o', linestyle='', markerfacecolor='none', label='possible')
     ax3.plot(df_pvu['used'], df_pvu['midpoint'], color=dacolors[-1], marker='+', linestyle='', label='possible')
     ax3.set_xlim(left=0)
@@ -100,7 +105,26 @@ def plot_profile(obs_seq, levels, type, bias=True, rmse=True, totalspread=True):
 
     ax1.text(0.5, -0.15, obs_seq.file, ha='center', va='center', transform=ax1.transAxes)
 
-    # Show the plot
+    # Add a text box with information below the legend
+    textstr = "Grand statistics:\n"
+    if bias:
+        textstr += f'- prior_bias: {bias_prior:.7f}\n'
+    if rmse:
+        textstr += f'- rmse_prior: {rmse_prior:.7f}\n'
+    if totalspread:
+        textstr += f'- totalspread_prior: {totalspread_prior:.7f}\n'
+    if 'posterior_bias' in df.columns:
+        if bias:
+            textstr += f'- posterior_bias: {bias_posterior:.7f}\n'
+        if rmse:
+            textstr += f'- rmse_posterior: {rmse_posterior:.7f}\n'
+        if totalspread:
+            textstr += f'- totalspread_posterior: {totalspread_posterior:.7f}\n'
+
+    props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
+    ax1.text(1.05, 0.5, textstr, transform=ax1.transAxes, fontsize=10,
+             verticalalignment='top', bbox=props)
+
     plt.show()
 
     return fig
