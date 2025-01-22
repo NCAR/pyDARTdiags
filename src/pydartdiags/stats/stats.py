@@ -77,6 +77,8 @@ def calculate_rank(df, phase):
 
     Parameters:
         df (pd.DataFrame): A DataFrame with columns for rank, and observation type. 
+
+        phase (str): The phase for which to calculate the statistics ('prior' or 'posterior')
         
     Returns:
         DataFrame containing columns for 'rank' and 'obstype'.
@@ -140,7 +142,7 @@ def diag_stats(df, phase):
                                - 'prior_ensemble_mean' and/or 'posterior_ensemble_mean': The mean of the ensemble.
                                - 'prior_ensemble_spread' and/or 'posterior_ensemble_spread': The spread of the ensemble.
    
-        phase (str): The phase for which to calculate the statistics ('prior' or 'posterior').
+        phase (str): The phase for which to calculate the statistics ('prior' or 'posterior')
                                
     Returns:
         None: The function modifies the DataFrame in place by adding the following columns:
@@ -153,7 +155,6 @@ def diag_stats(df, phase):
         - The function modifies the input DataFrame by adding new columns for the calculated statistics.
     """
     pd.options.mode.copy_on_write = True
-    #if f"{phase}_ensemble_spread" in df.columns:
  
     # input from the observation sequence
     spread_column = f"{phase}_ensemble_spread"
@@ -191,7 +192,6 @@ def bin_by_layer(df, levels, verticalUnit="pressure (Pa)"):
     Notes: 
         - The function modifies the input DataFrame by adding 'vlevels' and 'midpoint' columns.
         - The 'midpoint' values are calculated as half the midpoint of each vertical level bin.
-        - Pressure units (Pa) are converted to hPa for the 'midpoint' values.
     """
     pd.options.mode.copy_on_write = True
     df.loc[df['vert_unit'] == verticalUnit, 'vlevels'] = pd.cut(df.loc[df['vert_unit'] == verticalUnit, 'vertical'], levels)

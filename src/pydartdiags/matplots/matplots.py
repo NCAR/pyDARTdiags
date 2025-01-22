@@ -6,13 +6,13 @@ dacolors = ['green', 'magenta', 'orange', 'red']
 
 def plot_profile(obs_seq, levels, type, bias=True, rmse=True, totalspread=True):
     """
-    plot: (prior, posterior)
+    plot_profile on the levels for prior and  posterior if present
        - bias
        - rmse
        - totalspread
 
     Args:
-        obs_seq, levels, type, bias, rmse, totalspread 
+        obs_seq, levels, type, bias=True, rmse=True, totalspread=True
 
     Example:
 
@@ -36,8 +36,6 @@ def plot_profile(obs_seq, levels, type, bias=True, rmse=True, totalspread=True):
     grand = stats.grand_statistics(qc0)
 
     # add level bins to the dataframe
-    #hPalevels = [0.0, 100.0,  150.0, 200.0, 250.0, 300.0, 400.0, 500.0, 700, 850, 925, 1000]  # Pa?
-    #levels = [i * 100 for i in hPalevels]
     stats.bin_by_layer(all_df, levels) # have to count used vs possible
     stats.bin_by_layer(qc0, levels)
 
