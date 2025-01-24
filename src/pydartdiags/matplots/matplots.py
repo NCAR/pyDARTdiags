@@ -126,3 +126,46 @@ def plot_profile(obs_seq, levels, type, bias=True, rmse=True, totalspread=True):
     plt.show()
 
     return fig
+
+
+def plot_rank_histogram(obs_seq, levels, type, ens_size):
+
+    qc0 = obs_seq.select_by_dart_qc(0) # filter only qc=0
+    qc0 = qc0[qc0['type'] == type] # filter by type
+    stats.bin_by_layer(qc0, levels)  # bin by level
+    
+    midpoints = qc0['midpoint'].unique()
+
+    for level in sorted(midpoints):
+
+        df = qc0[qc0['midpoint'] == level]
+
+        df = stats.calculate_rank(qc0)
+    
+        if 'posterior_rank' in df.columns:
+            fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 6))
+        else:
+            fig, ax1 = plt.subplots()
+
+        # Plot the prior rank histogram
+        bins = list(range(1, ens_size + 2))
+        ax1.hist(df['prior_rank'], bins=bins, color='blue', alpha=0.5, label='prior rank')
+        ax1.set_title('Prior Rank Histogram')
+        ax1.set_xlabel('Observation Rank (among ensemble members)')
+        ax1.set_ylabel('Count')
+        
+        # Plot the posterior rank histogram if it exists
+        if 'posterior_rank' in df.columns:
+            ax2.hist(df['posterior_rank'], bins=bins, color='green', alpha=0.5, label='posterior rank')
+            ax2.set_title('Posterior Rank Histogram')
+            ax2.set_xlabel('Observation Rank (among ensemble members)')
+            ax2.set_ylabel('Count')
+        
+        fig.suptitle(f'{type} at Level {level}', fontsize=14)
+
+        plt.tight_layout(rect=[0, 0.03, 1, 0.95])
+        plt.show()
+
+    return fig
+
+
