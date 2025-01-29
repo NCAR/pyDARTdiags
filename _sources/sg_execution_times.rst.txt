@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:00.315** total execution time for 1 file **from all galleries**:
+**00:00.259** total execution time for 1 file **from all galleries**:
 
 .. container::
 
@@ -33,5 +33,5 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_examples_plot_qc_poss_vs_used.py` (``../examples/plot_qc_poss_vs_used.py``)
-     - 00:00.315
+     - 00:00.259
      - 0.0

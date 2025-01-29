@@ -33,7 +33,7 @@ Here are some examples of how to use the library.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">Possibled vs. Used Observations</div>
+      <div class="sphx-glr-thumbnail-title">Possible vs. Used Observations</div>
     </div>
 
 

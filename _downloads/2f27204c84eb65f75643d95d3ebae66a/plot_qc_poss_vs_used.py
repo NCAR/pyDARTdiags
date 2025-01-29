@@ -1,5 +1,5 @@
 """
-Possibled vs. Used Observations
+Possible vs. Used Observations
 ===============================
 
 This example demonstrates how to read and observation sequence
