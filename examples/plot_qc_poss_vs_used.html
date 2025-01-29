@@ -1,0 +1,1132 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Possibled vs. Used Observations &#8212; pyDARTdiags</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/plot_qc_poss_vs_used';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="API Guide" href="../api/index.html" />
+    <link rel="prev" title="Examples" href="index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+<aside class="bd-header-announcement" aria-label="Announcement">
+  <div class="bd-header-announcement__content">WARNING: pyDARTdiags is currently in alpha stage of development - expect bugs and changes</div>
+</aside>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pyDARTdiags</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../userguide/index.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../devel/index.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://github.com/NCAR/pyDARTdiags/releases">
+    Release Notes
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/NCAR/pyDARTdiags" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../userguide/index.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../devel/index.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://github.com/NCAR/pyDARTdiags/releases">
+    Release Notes
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/NCAR/pyDARTdiags" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Possibled vs. Used Observations</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Examples</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Possibled vs. Used Observations</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-examples-plot-qc-poss-vs-used-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code.</p>
+</div>
+<section class="sphx-glr-example-title" id="possibled-vs-used-observations">
+<span id="sphx-glr-examples-plot-qc-poss-vs-used-py"></span><h1>Possibled vs. Used Observations<a class="headerlink" href="#possibled-vs-used-observations" title="Link to this heading">#</a></h1>
+<p>This example demonstrates how to read and observation sequence
+file, and view the number of used versus possible observations
+by type.</p>
+<p>Import the obs_sequence module</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pydartdiags.obs_sequence.obs_sequence</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">obsq</span>
+</pre></div>
+</div>
+<p>Chose an obs_seq file to read.
+This is a small obs_seq file “obs_seq.final.ascii.small”
+that comes with the pyDARTdiags package
+in the data directory, so we <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">os</span></code> to get the path to the file</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="n">data_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="s2">&quot;..&quot;</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">)</span>
+<span class="n">data_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="s2">&quot;obs_seq.final.ascii.small&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>read the obs_seq file into an obs_seq object</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">obs_sequence</span><span class="p">(</span><span class="n">data_file</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Examine the dataframe</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="output_subarea output_html rendered_html output_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>obs_num</th>
+      <th>observation</th>
+      <th>prior_ensemble_mean</th>
+      <th>prior_ensemble_spread</th>
+      <th>prior_ensemble_member_1</th>
+      <th>prior_ensemble_member_2</th>
+      <th>prior_ensemble_member_3</th>
+      <th>prior_ensemble_member_4</th>
+      <th>prior_ensemble_member_5</th>
+      <th>prior_ensemble_member_6</th>
+      <th>prior_ensemble_member_7</th>
+      <th>prior_ensemble_member_8</th>
+      <th>prior_ensemble_member_9</th>
+      <th>prior_ensemble_member_10</th>
+      <th>prior_ensemble_member_11</th>
+      <th>prior_ensemble_member_12</th>
+      <th>prior_ensemble_member_13</th>
+      <th>prior_ensemble_member_14</th>
+      <th>prior_ensemble_member_15</th>
+      <th>prior_ensemble_member_16</th>
+      <th>prior_ensemble_member_17</th>
+      <th>prior_ensemble_member_18</th>
+      <th>prior_ensemble_member_19</th>
+      <th>prior_ensemble_member_20</th>
+      <th>prior_ensemble_member_21</th>
+      <th>prior_ensemble_member_22</th>
+      <th>prior_ensemble_member_23</th>
+      <th>prior_ensemble_member_24</th>
+      <th>prior_ensemble_member_25</th>
+      <th>prior_ensemble_member_26</th>
+      <th>prior_ensemble_member_27</th>
+      <th>prior_ensemble_member_28</th>
+      <th>prior_ensemble_member_29</th>
+      <th>prior_ensemble_member_30</th>
+      <th>prior_ensemble_member_31</th>
+      <th>prior_ensemble_member_32</th>
+      <th>prior_ensemble_member_33</th>
+      <th>prior_ensemble_member_34</th>
+      <th>prior_ensemble_member_35</th>
+      <th>prior_ensemble_member_36</th>
+      <th>...</th>
+      <th>prior_ensemble_member_55</th>
+      <th>prior_ensemble_member_56</th>
+      <th>prior_ensemble_member_57</th>
+      <th>prior_ensemble_member_58</th>
+      <th>prior_ensemble_member_59</th>
+      <th>prior_ensemble_member_60</th>
+      <th>prior_ensemble_member_61</th>
+      <th>prior_ensemble_member_62</th>
+      <th>prior_ensemble_member_63</th>
+      <th>prior_ensemble_member_64</th>
+      <th>prior_ensemble_member_65</th>
+      <th>prior_ensemble_member_66</th>
+      <th>prior_ensemble_member_67</th>
+      <th>prior_ensemble_member_68</th>
+      <th>prior_ensemble_member_69</th>
+      <th>prior_ensemble_member_70</th>
+      <th>prior_ensemble_member_71</th>
+      <th>prior_ensemble_member_72</th>
+      <th>prior_ensemble_member_73</th>
+      <th>prior_ensemble_member_74</th>
+      <th>prior_ensemble_member_75</th>
+      <th>prior_ensemble_member_76</th>
+      <th>prior_ensemble_member_77</th>
+      <th>prior_ensemble_member_78</th>
+      <th>prior_ensemble_member_79</th>
+      <th>prior_ensemble_member_80</th>
+      <th>Data_QC</th>
+      <th>DART_quality_control</th>
+      <th>linked_list</th>
+      <th>longitude</th>
+      <th>latitude</th>
+      <th>vertical</th>
+      <th>vert_unit</th>
+      <th>type</th>
+      <th>metadata</th>
+      <th>external_FO</th>
+      <th>seconds</th>
+      <th>days</th>
+      <th>time</th>
+      <th>obs_err_var</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>230.16</td>
+      <td>231.310652</td>
+      <td>0.405191</td>
+      <td>231.304725</td>
+      <td>231.562874</td>
+      <td>231.333915</td>
+      <td>231.297690</td>
+      <td>232.081416</td>
+      <td>231.051063</td>
+      <td>230.972638</td>
+      <td>231.027194</td>
+      <td>232.130965</td>
+      <td>231.360344</td>
+      <td>231.053641</td>
+      <td>231.435224</td>
+      <td>231.699212</td>
+      <td>231.377938</td>
+      <td>230.941798</td>
+      <td>230.582642</td>
+      <td>231.110502</td>
+      <td>231.896842</td>
+      <td>231.186579</td>
+      <td>230.509482</td>
+      <td>231.048492</td>
+      <td>231.204990</td>
+      <td>231.591243</td>
+      <td>231.365841</td>
+      <td>231.399177</td>
+      <td>231.255679</td>
+      <td>231.481019</td>
+      <td>231.409253</td>
+      <td>231.514708</td>
+      <td>231.446422</td>
+      <td>230.389279</td>
+      <td>231.337093</td>
+      <td>231.101248</td>
+      <td>231.303085</td>
+      <td>230.959715</td>
+      <td>230.910665</td>
+      <td>...</td>
+      <td>231.264020</td>
+      <td>231.250437</td>
+      <td>231.464351</td>
+      <td>230.930660</td>
+      <td>231.857375</td>
+      <td>231.622277</td>
+      <td>231.782818</td>
+      <td>230.955721</td>
+      <td>231.990693</td>
+      <td>230.706116</td>
+      <td>231.349281</td>
+      <td>231.494425</td>
+      <td>230.700074</td>
+      <td>231.609108</td>
+      <td>230.548519</td>
+      <td>231.321679</td>
+      <td>231.396247</td>
+      <td>231.850075</td>
+      <td>231.632897</td>
+      <td>231.521874</td>
+      <td>231.518307</td>
+      <td>231.433581</td>
+      <td>231.507273</td>
+      <td>230.523739</td>
+      <td>231.631744</td>
+      <td>231.405045</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>-1           2          -1</td>
+      <td>274.460</td>
+      <td>40.010</td>
+      <td>23950.0</td>
+      <td>pressure (Pa)</td>
+      <td>ACARS_TEMPERATURE</td>
+      <td>[]</td>
+      <td>[]</td>
+      <td>75603</td>
+      <td>153005</td>
+      <td>2019-12-01 21:00:03</td>
+      <td>1.00</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>18.40</td>
+      <td>15.720527</td>
+      <td>0.630827</td>
+      <td>14.217207</td>
+      <td>15.558196</td>
+      <td>15.805599</td>
+      <td>16.594644</td>
+      <td>14.877743</td>
+      <td>16.334438</td>
+      <td>16.194266</td>
+      <td>16.019533</td>
+      <td>15.277846</td>
+      <td>15.373408</td>
+      <td>14.594145</td>
+      <td>16.803848</td>
+      <td>15.444847</td>
+      <td>15.704984</td>
+      <td>15.629746</td>
+      <td>16.565236</td>
+      <td>15.107416</td>
+      <td>15.546187</td>
+      <td>15.123756</td>
+      <td>15.073689</td>
+      <td>15.531795</td>
+      <td>16.281052</td>
+      <td>16.160298</td>
+      <td>14.627017</td>
+      <td>15.297628</td>
+      <td>15.845782</td>
+      <td>15.321642</td>
+      <td>16.374810</td>
+      <td>15.886537</td>
+      <td>15.699854</td>
+      <td>15.734169</td>
+      <td>15.728008</td>
+      <td>15.241341</td>
+      <td>15.990183</td>
+      <td>16.049381</td>
+      <td>15.238145</td>
+      <td>...</td>
+      <td>16.789844</td>
+      <td>16.188690</td>
+      <td>15.061255</td>
+      <td>14.611386</td>
+      <td>14.714651</td>
+      <td>15.942698</td>
+      <td>14.992799</td>
+      <td>15.177780</td>
+      <td>15.364643</td>
+      <td>15.136918</td>
+      <td>15.143889</td>
+      <td>16.209363</td>
+      <td>17.056931</td>
+      <td>15.556262</td>
+      <td>15.026830</td>
+      <td>15.847185</td>
+      <td>15.604588</td>
+      <td>16.421213</td>
+      <td>16.124153</td>
+      <td>16.685584</td>
+      <td>15.734904</td>
+      <td>15.757099</td>
+      <td>15.477638</td>
+      <td>15.207487</td>
+      <td>15.698581</td>
+      <td>15.587689</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>1           3          -1</td>
+      <td>274.460</td>
+      <td>40.010</td>
+      <td>23950.0</td>
+      <td>pressure (Pa)</td>
+      <td>ACARS_U_WIND_COMPONENT</td>
+      <td>[]</td>
+      <td>[]</td>
+      <td>75603</td>
+      <td>153005</td>
+      <td>2019-12-01 21:00:03</td>
+      <td>6.25</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>1.60</td>
+      <td>-4.932073</td>
+      <td>0.825899</td>
+      <td>-5.270562</td>
+      <td>-5.955998</td>
+      <td>-4.209766</td>
+      <td>-5.105016</td>
+      <td>-4.669405</td>
+      <td>-4.365305</td>
+      <td>-4.488440</td>
+      <td>-4.359430</td>
+      <td>-4.784306</td>
+      <td>-4.726351</td>
+      <td>-3.267393</td>
+      <td>-4.463462</td>
+      <td>-2.894223</td>
+      <td>-5.692221</td>
+      <td>-4.134282</td>
+      <td>-6.064812</td>
+      <td>-6.414516</td>
+      <td>-6.440465</td>
+      <td>-5.200572</td>
+      <td>-5.236082</td>
+      <td>-5.369967</td>
+      <td>-7.115516</td>
+      <td>-4.953035</td>
+      <td>-5.120461</td>
+      <td>-4.721911</td>
+      <td>-5.939821</td>
+      <td>-6.075857</td>
+      <td>-4.667864</td>
+      <td>-6.316152</td>
+      <td>-4.438065</td>
+      <td>-5.852839</td>
+      <td>-4.417175</td>
+      <td>-4.404990</td>
+      <td>-4.570971</td>
+      <td>-3.735192</td>
+      <td>-5.350288</td>
+      <td>...</td>
+      <td>-5.917664</td>
+      <td>-5.111100</td>
+      <td>-6.057586</td>
+      <td>-3.555137</td>
+      <td>-4.674986</td>
+      <td>-5.335997</td>
+      <td>-4.621651</td>
+      <td>-5.584179</td>
+      <td>-5.195837</td>
+      <td>-3.465590</td>
+      <td>-4.522163</td>
+      <td>-5.468159</td>
+      <td>-5.969632</td>
+      <td>-4.170915</td>
+      <td>-6.012171</td>
+      <td>-5.040896</td>
+      <td>-5.049011</td>
+      <td>-4.545161</td>
+      <td>-5.091350</td>
+      <td>-4.861851</td>
+      <td>-4.874598</td>
+      <td>-3.727132</td>
+      <td>-5.355879</td>
+      <td>-3.996374</td>
+      <td>-5.190794</td>
+      <td>-5.027215</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>2           4          -1</td>
+      <td>274.460</td>
+      <td>40.010</td>
+      <td>23950.0</td>
+      <td>pressure (Pa)</td>
+      <td>ACARS_V_WIND_COMPONENT</td>
+      <td>[]</td>
+      <td>[]</td>
+      <td>75603</td>
+      <td>153005</td>
+      <td>2019-12-01 21:00:03</td>
+      <td>6.25</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4</td>
+      <td>264.16</td>
+      <td>264.060532</td>
+      <td>0.035584</td>
+      <td>264.107192</td>
+      <td>264.097270</td>
+      <td>264.073212</td>
+      <td>264.047718</td>
+      <td>264.074140</td>
+      <td>264.019895</td>
+      <td>264.128792</td>
+      <td>264.007258</td>
+      <td>264.090781</td>
+      <td>264.066146</td>
+      <td>264.072458</td>
+      <td>264.016448</td>
+      <td>264.047761</td>
+      <td>264.047443</td>
+      <td>264.079061</td>
+      <td>264.019732</td>
+      <td>264.068371</td>
+      <td>264.045445</td>
+      <td>264.007536</td>
+      <td>264.053554</td>
+      <td>264.046485</td>
+      <td>264.030441</td>
+      <td>264.086369</td>
+      <td>264.124872</td>
+      <td>264.055288</td>
+      <td>264.015123</td>
+      <td>264.024744</td>
+      <td>264.038656</td>
+      <td>264.063976</td>
+      <td>264.020976</td>
+      <td>264.114508</td>
+      <td>264.105652</td>
+      <td>264.088124</td>
+      <td>264.045258</td>
+      <td>264.056010</td>
+      <td>264.029595</td>
+      <td>...</td>
+      <td>264.063943</td>
+      <td>264.063542</td>
+      <td>264.057365</td>
+      <td>264.052744</td>
+      <td>264.081657</td>
+      <td>264.021780</td>
+      <td>264.053569</td>
+      <td>264.040506</td>
+      <td>264.099816</td>
+      <td>264.084574</td>
+      <td>264.099814</td>
+      <td>263.996423</td>
+      <td>264.108304</td>
+      <td>264.031686</td>
+      <td>264.057295</td>
+      <td>264.093241</td>
+      <td>264.085667</td>
+      <td>264.123769</td>
+      <td>264.064173</td>
+      <td>264.035075</td>
+      <td>264.062793</td>
+      <td>264.020287</td>
+      <td>264.041890</td>
+      <td>263.997670</td>
+      <td>264.093310</td>
+      <td>263.995671</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>3           5          -1</td>
+      <td>242.628</td>
+      <td>34.105</td>
+      <td>56260.0</td>
+      <td>pressure (Pa)</td>
+      <td>ACARS_TEMPERATURE</td>
+      <td>[]</td>
+      <td>[]</td>
+      <td>75603</td>
+      <td>153005</td>
+      <td>2019-12-01 21:00:03</td>
+      <td>1.00</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5</td>
+      <td>11.60</td>
+      <td>10.134115</td>
+      <td>0.063183</td>
+      <td>10.067956</td>
+      <td>10.078798</td>
+      <td>10.120263</td>
+      <td>10.084885</td>
+      <td>10.135112</td>
+      <td>10.140610</td>
+      <td>10.123242</td>
+      <td>10.186508</td>
+      <td>10.148250</td>
+      <td>10.202592</td>
+      <td>10.080998</td>
+      <td>10.225761</td>
+      <td>10.202466</td>
+      <td>10.149097</td>
+      <td>10.144331</td>
+      <td>10.227488</td>
+      <td>10.097538</td>
+      <td>10.177305</td>
+      <td>10.227193</td>
+      <td>10.175335</td>
+      <td>10.127163</td>
+      <td>10.189796</td>
+      <td>10.105735</td>
+      <td>10.006187</td>
+      <td>10.157041</td>
+      <td>10.197396</td>
+      <td>10.202818</td>
+      <td>10.163028</td>
+      <td>10.184205</td>
+      <td>10.246155</td>
+      <td>10.089909</td>
+      <td>10.052000</td>
+      <td>10.065482</td>
+      <td>10.136479</td>
+      <td>10.019034</td>
+      <td>10.229759</td>
+      <td>...</td>
+      <td>10.091969</td>
+      <td>10.114748</td>
+      <td>10.090966</td>
+      <td>10.118479</td>
+      <td>10.183483</td>
+      <td>10.133319</td>
+      <td>10.131281</td>
+      <td>10.133985</td>
+      <td>10.065029</td>
+      <td>10.077334</td>
+      <td>10.128657</td>
+      <td>10.285550</td>
+      <td>10.113482</td>
+      <td>10.217276</td>
+      <td>10.059962</td>
+      <td>10.074082</td>
+      <td>10.183239</td>
+      <td>9.944888</td>
+      <td>10.168632</td>
+      <td>10.155279</td>
+      <td>10.143549</td>
+      <td>10.189449</td>
+      <td>10.103469</td>
+      <td>10.189495</td>
+      <td>10.056878</td>
+      <td>10.147228</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>4           6          -1</td>
+      <td>242.628</td>
+      <td>34.105</td>
+      <td>56260.0</td>
+      <td>pressure (Pa)</td>
+      <td>ACARS_U_WIND_COMPONENT</td>
+      <td>[]</td>
+      <td>[]</td>
+      <td>75603</td>
+      <td>153005</td>
+      <td>2019-12-01 21:00:03</td>
+      <td>6.25</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 98 columns</p>
+</div>
+</div>
+<br />
+<br /><p>Find number of used versus possible observations</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">possible_vs_used</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="output_subarea output_html rendered_html output_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>type</th>
+      <th>possible</th>
+      <th>used</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>ACARS_TEMPERATURE</td>
+      <td>3</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>ACARS_U_WIND_COMPONENT</td>
+      <td>2</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>ACARS_V_WIND_COMPONENT</td>
+      <td>2</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>AIRCRAFT_TEMPERATURE</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>AIRCRAFT_U_WIND_COMPONENT</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>AIRCRAFT_V_WIND_COMPONENT</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+<br />
+<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.205 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-plot-qc-poss-vs-used-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/1a52f3978f5128f0ca7927e38b19e65a/plot_qc_poss_vs_used.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_qc_poss_vs_used.ipynb</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/2f27204c84eb65f75643d95d3ebae66a/plot_qc_poss_vs_used.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_qc_poss_vs_used.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/2d7f672373150348772abc90eb9d9e2d/plot_qc_poss_vs_used.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">plot_qc_poss_vs_used.zip</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Examples</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../api/index.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">API Guide</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2024, University Corporation for Atmospheric Research.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
