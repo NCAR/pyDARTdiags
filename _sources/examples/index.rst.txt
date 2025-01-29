@@ -37,6 +37,23 @@ Here are some examples of how to use the library.
     </div>
 
 
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to read and observation sequence file, and plot the observations on a map, with the color indicating the QC value.">
+
+.. only:: html
+
+  .. image:: /examples/images/thumb/sphx_glr_plot_qc_hover_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_plot_qc_hover.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Geographinc Plot of Observaions to look at QC</div>
+    </div>
+
+
 .. thumbnail-parent-div-close
 
 .. raw:: html
@@ -48,6 +65,7 @@ Here are some examples of how to use the library.
    :hidden:
 
    /examples/plot_qc_poss_vs_used
+   /examples/plot_qc_hover
 
 
 .. only:: html
