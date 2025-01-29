@@ -6,3 +6,4 @@ sphinx-design
 numpy
 pandas
 plotly
+sphinx-gallery

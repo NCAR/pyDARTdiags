@@ -66,5 +66,11 @@ extensions = [
     'sphinx.ext.todo',
     'myst_parser',
     'sphinx_design',
+    'sphinx_gallery.gen_gallery'
 ]
 
+sphinx_gallery_conf = {
+     'examples_dirs': '../examples',   # path to your example scripts
+     'gallery_dirs': 'examples',  # path to where to save gallery generated output
+     'default_thumb_file': 'images/py-dart-logo-thumb.png',
+}

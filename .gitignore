@@ -5,4 +5,6 @@ __pycache__/
 *.egg-info/
 .coverage 
 build
+docs/examples
+sg_execution_times.rst
 
