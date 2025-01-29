@@ -5,7 +5,7 @@
 
 import os
 import sys
-from pathlib import Path
+import plotly.io as pio
 
 # Add the path to modules and all subdirectories recursively
 src_path = os.path.abspath('../src')
@@ -76,3 +76,5 @@ sphinx_gallery_conf = {
      'gallery_dirs': 'examples',  # path to where to save gallery generated output
      'default_thumb_file': default_thumb_file,
 }
+
+pio.renderers.default = 'sphinx_gallery' # for plottly output in examples
