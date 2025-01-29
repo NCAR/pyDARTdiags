@@ -5,6 +5,7 @@
 
 import os
 import sys
+from pathlib import Path
 
 # Add the path to modules and all subdirectories recursively
 src_path = os.path.abspath('../src')
@@ -72,5 +73,5 @@ extensions = [
 sphinx_gallery_conf = {
      'examples_dirs': '../examples',   # path to your example scripts
      'gallery_dirs': 'examples',  # path to where to save gallery generated output
-     'default_thumb_file': 'images/py-dart-logo-thumb.png',
+     'default_thumb_file': str(Path('_static') / 'py-dart-logo-thumb.png'),
 }
