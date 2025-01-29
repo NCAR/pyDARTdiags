@@ -73,5 +73,5 @@ extensions = [
 sphinx_gallery_conf = {
      'examples_dirs': '../examples',   # path to your example scripts
      'gallery_dirs': 'examples',  # path to where to save gallery generated output
-     'default_thumb_file': str(Path('_static') / 'py-dart-logo-thumb.png'),
+     'default_thumb_file': 'docs/_static/py-dart-logo-thumb.png',
 }
