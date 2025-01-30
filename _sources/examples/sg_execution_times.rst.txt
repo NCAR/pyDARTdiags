@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:00.574** total execution time for 2 files **from examples**:
+**00:00.440** total execution time for 2 files **from examples**:
 
 .. container::
 
@@ -32,9 +32,9 @@ Computation times
    * - Example
      - Time
      - Mem (MB)
-   * - :ref:`sphx_glr_examples_plot_qc_poss_vs_used.py` (``plot_qc_poss_vs_used.py``)
-     - 00:00.320
-     - 0.0
    * - :ref:`sphx_glr_examples_plot_qc_hover.py` (``plot_qc_hover.py``)
-     - 00:00.253
+     - 00:00.249
+     - 0.0
+   * - :ref:`sphx_glr_examples_plot_qc_poss_vs_used.py` (``plot_qc_poss_vs_used.py``)
+     - 00:00.190
      - 0.0
