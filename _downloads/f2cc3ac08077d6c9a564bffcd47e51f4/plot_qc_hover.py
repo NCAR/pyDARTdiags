@@ -6,6 +6,7 @@ This example demonstrates how to read and observation sequence
 file, and plot the observations on a map, with the color
 indicating the QC value.
 
+
 """
 
 
@@ -15,6 +16,8 @@ indicating the QC value.
 import os
 import plotly.express as px
 import pydartdiags.obs_sequence.obs_sequence as obsq
+
+# sphinx_gallery_thumbnail_path = '_static/geo_thumb.png'
 
 
 ###########################################
