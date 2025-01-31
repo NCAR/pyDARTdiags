@@ -22,11 +22,11 @@ import pydartdiags.obs_sequence.obs_sequence as obsq
 
 ###########################################
 # Read the obs_seq file into an obs_seq object.
-# In this example, we use a small obs_seq file "obs_seq.final.ascii.small"
+# In this example, we use a small obs_seq file "obs_seq.final.ascii.medium"
 # that comes with the pyDARTdiags package 
 # in the data directory, so we use ``os`` to get the path to the file
 data_dir = os.path.join(os.getcwd(), "..", "data")
-data_file = os.path.join(data_dir, "obs_seq.final.ascii.small")
+data_file = os.path.join(data_dir, "obs_seq.final.ascii.medium")
 
 obs_seq = obsq.obs_sequence(data_file)
 
