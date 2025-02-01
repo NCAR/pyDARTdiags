@@ -67,7 +67,7 @@ Here are some examples of how to use the library.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">Geographinc Plot of Observaions to look at QC</div>
+      <div class="sphx-glr-thumbnail-title">Geographic Plot of Observations to look at QC</div>
     </div>
 
 

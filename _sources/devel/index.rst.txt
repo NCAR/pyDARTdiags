@@ -54,7 +54,7 @@ Then you can build the documentation with the following commands:
 The built documentation will be in the ``build/html`` directory. Open the ``index.html`` 
 file in your browser to view the documentation.
 
-You can check all the links in the documenation by running the following command:
+You can check all the links in the documentation by running the following command:
 
 .. code-block :: text
 

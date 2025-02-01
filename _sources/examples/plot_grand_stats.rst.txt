@@ -116,7 +116,7 @@ The columns of the dataframe are the same as the original obs_seq dataframe
 
 .. GENERATED FROM PYTHON SOURCE LINES 39-40
 
-Now we caluculate the statistics required for DART diagnostics
+Now we calculate the statistics required for DART diagnostics
 
 .. GENERATED FROM PYTHON SOURCE LINES 40-43
 
@@ -528,7 +528,7 @@ including what statistics are calculated
 
 .. GENERATED FROM PYTHON SOURCE LINES 56-58
 
-Summerize the grand statistics, which are the statistics aggregated over all the observations
+Summarize the grand statistics, which are the statistics aggregated over all the observations
 for each type of observation.
 
 .. GENERATED FROM PYTHON SOURCE LINES 58-59
@@ -635,7 +635,7 @@ for each type of observation.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.086 seconds)
+   **Total running time of the script:** (0 minutes 0.273 seconds)
 
 
 .. _sphx_glr_download_examples_plot_grand_stats.py:

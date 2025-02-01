@@ -11,7 +11,7 @@ Requirements
 Installation
 ------------
 
-pyDARTdiags can be installed through pip.  We recommend installing pydartdiags in a virtual enviroment:
+pyDARTdiags can be installed through pip.  We recommend installing pydartdiags in a virtual environment:
 
 .. code-block :: text
 
