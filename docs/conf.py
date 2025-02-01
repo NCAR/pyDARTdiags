@@ -76,4 +76,4 @@ sphinx_gallery_conf = {
      'default_thumb_file': default_thumb_file,
 }
 
-pio.renderers.default = 'sphinx_gallery' # for plottly output in examples
+pio.renderers.default = 'sphinx_gallery' # for plotly output in examples

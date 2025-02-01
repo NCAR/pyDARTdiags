@@ -16,7 +16,7 @@ pyDARTdiags
     examples/index
     api/index
 
-pyDARTdiags is a Python library for obsevation space diagnostics for the Data Assimilation Research Testbed (`DART <https://github.com/NCAR/DART>`_).
+pyDARTdiags is a Python library for observation space diagnostics for the Data Assimilation Research Testbed (`DART <https://github.com/NCAR/DART>`_).
 
 
 .. caution::

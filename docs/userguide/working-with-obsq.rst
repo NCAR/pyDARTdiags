@@ -7,7 +7,7 @@ using python and pandas. The obs_sequence class provides a simple interface to r
 examine, join, and write obs_sequence files. 
 
 
-Read an observsation sequence file
+Read an observation sequence file
 ----------------------------------
 
 Examine the data

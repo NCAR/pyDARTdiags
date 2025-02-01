@@ -5,14 +5,14 @@
 
 # pyDARTdiags
 
-pyDARTdiags is a Python library for obsevation space diagnostics for the Data Assimilation Research Testbed ([DART](https://github.com/NCAR/DART)).
+pyDARTdiags is a Python library for observation space diagnostics for the Data Assimilation Research Testbed ([DART](https://github.com/NCAR/DART)).
 
 pyDARTdiags is under initial development, so please use caution.
 The MATLAB [observation space diagnostics](https://docs.dart.ucar.edu/en/latest/guide/matlab-observation-space.html) are available through [DART](https://github.com/NCAR/DART).
 
 
 pyDARTdiags can be installed through pip: https://pypi.org/project/pydartdiags/  
-Documenation : https://ncar.github.io/pyDARTdiags/
+Documentation : https://ncar.github.io/pyDARTdiags/
 
 ## Contributing
 Contributions are welcome! If you have a feature request, bug report, or a suggestion, please open an issue on our GitHub repository.

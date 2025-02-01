@@ -36,7 +36,7 @@ qc0 = obs_seq.select_by_dart_qc(0)
 qc0.columns
 
 ###########################################
-# Now we caluculate the statistics required for DART diagnostics
+# Now we calculate the statistics required for DART diagnostics
 
 stats.diag_stats(qc0)
 
@@ -53,6 +53,6 @@ help(stats.diag_stats)
 
 
 ###########################################
-# Summerize the grand statistics, which are the statistics aggregated over all the observations
+# Summarize the grand statistics, which are the statistics aggregated over all the observations
 # for each type of observation.
 stats.grand_statistics(qc0)

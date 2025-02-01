@@ -54,7 +54,7 @@ To set up your development environment, follow these steps:
     pip install -e .
     ```
 
-pyDARTdiags is now installed in your virtual enviroment in editable mode.
+pyDARTdiags is now installed in your virtual environment in editable mode.
 
 ## Pull Requests
 

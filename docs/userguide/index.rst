@@ -40,7 +40,7 @@ Import the obs_sequence and plots module
 Read an obs_sequence file
 -------------------------
 
-Read an observation sequence file into a DataFrama
+Read an observation sequence file into a DataFrame
 
 .. code-block :: python
 

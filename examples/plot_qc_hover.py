@@ -1,5 +1,5 @@
 """
-Geographinc Plot of Observaions to look at QC
+Geographic Plot of Observations to look at QC
 ==============================================
 
 This example demonstrates how to read and observation sequence

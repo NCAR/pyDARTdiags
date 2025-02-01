@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 import pandas as pd
 import datetime as dt
 import numpy as np
@@ -143,7 +144,7 @@ class obs_sequence:
             self.copie_names = []
             self.non_qc_copie_names = []
             self.qc_copie_names = []
-            self.n_copies = 0  # copies includind qc
+            self.n_copies = 0  # copies including qc
             self.n_non_qc = 0  # copies not including qc
             self.n_qc = 0      # number of qc copies
             self.seq = []
@@ -912,7 +913,7 @@ class obs_sequence:
         # Initialize combined data
         combined_types = []
         combined_df = pd.DataFrame()
-        combo.all_obs = None  # set to none to force writing from the dataframe if write_obs_seq is calle
+        combo.all_obs = None  # set to none to force writing from the dataframe if write_obs_seq is called
 
         # Iterate over the list of observation sequences and combine their data
         for obs_seq in obs_sequences:

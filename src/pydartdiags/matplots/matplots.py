@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 from pydartdiags.stats import stats
 import matplotlib.pyplot as plt
 
@@ -24,7 +25,7 @@ def plot_profile(obs_seq, levels, type, bias=True, rmse=True, totalspread=True):
 
     """
 
-    # calcualate stats and add to dataframe
+    # calculate stats and add to dataframe
     stats.diag_stats(obs_seq.df) 
     qc0 = obs_seq.select_by_dart_qc(0) # filter only qc=0
 
@@ -32,20 +33,20 @@ def plot_profile(obs_seq, levels, type, bias=True, rmse=True, totalspread=True):
     qc0 = qc0[qc0['type'] == type] 
     all_df = obs_seq.df[obs_seq.df['type'] == type]
 
-    # grand statistcs
+    # grand statistics
     grand = stats.grand_statistics(qc0)
 
     # add level bins to the dataframe
     stats.bin_by_layer(all_df, levels) # have to count used vs possible
     stats.bin_by_layer(qc0, levels)
 
-    # aggreate by layer
+    # aggregate by layer
     df_pvu = stats.possible_vs_used_by_layer(all_df) # possible vs used
     df = stats.layer_statistics(qc0) # bias, rmse, totalspread for plotting
 
     fig, ax1 = plt.subplots()
 
-    # convert to hPa HK @todo only for Pressue (Pa)
+    # convert to hPa HK @todo only for Pressure (Pa)
     df['midpoint'] = df['midpoint'].astype(float)
     df['midpoint'] = df['midpoint'] / 100.
 

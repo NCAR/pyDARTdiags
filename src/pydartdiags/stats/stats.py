@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 import pandas as pd
 import numpy as np
 from functools import wraps
@@ -81,7 +82,7 @@ def calculate_rank(df, phase):
         phase (str): The phase for which to calculate the statistics ('prior' or 'posterior')
         
     Returns:
-        DataFrame containing columns for 'rank' and 'obstype'.
+        DataFrame containing columns for 'rank' and observation 'type'.
     """
     column = f"{phase}_ensemble_member"
     ensemble_values = df.filter(regex=column).to_numpy().copy()
@@ -160,7 +161,7 @@ def diag_stats(df, phase):
     spread_column = f"{phase}_ensemble_spread"
     mean_column = f"{phase}_ensemble_mean"
 
-    # Calulated from the observation sequence
+    # Calculated from the observation sequence
     sq_err_column = f"{phase}_sq_err"
     bias_column = f"{phase}_bias"
     totalvar_column = f"{phase}_totalvar"

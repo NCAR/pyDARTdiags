@@ -1,7 +1,7 @@
+# SPDX-License-Identifier: Apache-2.0
 import os
 import pytest
 import tempfile
-import filecmp
 import datetime as dt
 import pandas as pd
 from pydartdiags.obs_sequence import obs_sequence as obsq
