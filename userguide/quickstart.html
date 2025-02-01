@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Install Guide &#8212; pyDARTdiags</title>
+    <title>Quickstart &#8212; pyDARTdiags</title>
   
   
   
@@ -50,11 +50,11 @@
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'userguide/installguide';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'userguide/quickstart';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Working with obs_sequence objects" href="working-with-obsq.html" />
-    <link rel="prev" title="Quickstart" href="quickstart.html" />
+    <link rel="next" title="Install Guide" href="installguide.html" />
+    <link rel="prev" title="User Guide" href="index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -337,8 +337,8 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Install Guide</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installguide.html">Install Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="working-with-obsq.html">Working with obs_sequence objects</a></li>
 </ul>
 </div>
@@ -383,7 +383,7 @@
     
     <li class="breadcrumb-item"><a href="index.html" class="nav-link">User Guide</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Install Guide</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Quickstart</span></li>
   </ul>
 </nav>
 </div>
@@ -400,11 +400,8 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="install-guide">
-<h1>Install Guide<a class="headerlink" href="#install-guide" title="Link to this heading">#</a></h1>
-<section id="requirements">
-<h2>Requirements<a class="headerlink" href="#requirements" title="Link to this heading">#</a></h2>
-</section>
+  <section id="quickstart">
+<span id="id1"></span><h1>Quickstart<a class="headerlink" href="#quickstart" title="Link to this heading">#</a></h1>
 <section id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h2>
 <p>pyDARTdiags can be installed through pip.  We recommend installing pydartdiags in a virtual environment:</p>
@@ -413,6 +410,352 @@ source dartdiags/bin/activate
 pip install pydartdiags
 </pre></div>
 </div>
+<p>Import the obs_sequence and plots module</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pydartdiags.obs_sequence</span><span class="w"> </span><span class="kn">import</span> <span class="n">obs_sequence</span> <span class="k">as</span> <span class="n">obsq</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydartdiags.plots</span><span class="w"> </span><span class="kn">import</span> <span class="n">plots</span>
+</pre></div>
+</div>
+</section>
+<section id="read-an-obs-sequence-file">
+<h2>Read an obs_sequence file<a class="headerlink" href="#read-an-obs-sequence-file" title="Link to this heading">#</a></h2>
+<p>Read an observation sequence file into a DataFrame</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">obs_sequence</span><span class="p">(</span><span class="s1">&#39;obs_seq.final.ascii&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="examine-the-dataframe">
+<h2>Examine the DataFrame<a class="headerlink" href="#examine-the-dataframe" title="Link to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+<table border="1" class="dataframe">
+<thead>
+    <tr style="text-align: right;">
+    <th></th>
+    <th>obs_num</th>
+    <th>observation</th>
+    <th>prior_ensemble_mean</th>
+    <th>prior_ensemble_spread</th>
+    <th>prior_ensemble_member_1</th>
+    <th>prior_ensemble_member_2</th>
+    <th>prior_ensemble_member_3</th>
+    <th>prior_ensemble_member_4</th>
+    <th>prior_ensemble_member_5</th>
+    <th>prior_ensemble_member_6</th>
+    <th>...</th>
+    <th>latitude</th>
+    <th>vertical</th>
+    <th>vert_unit</th>
+    <th>type</th>
+    <th>seconds</th>
+    <th>days</th>
+    <th>time</th>
+    <th>obs_err_var</th>
+    <th>bias</th>
+    <th>sq_err</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+    <th>0</th>
+    <td>1</td>
+    <td>230.16</td>
+    <td>231.310652</td>
+    <td>0.405191</td>
+    <td>231.304725</td>
+    <td>231.562874</td>
+    <td>231.333915</td>
+    <td>231.297690</td>
+    <td>232.081416</td>
+    <td>231.051063</td>
+    <td>...</td>
+    <td>0.012188</td>
+    <td>23950.0</td>
+    <td>pressure (Pa)</td>
+    <td>ACARS_TEMPERATURE</td>
+    <td>75603</td>
+    <td>153005</td>
+    <td>2019-12-01 21:00:03</td>
+    <td>1.00</td>
+    <td>1.150652</td>
+    <td>1.324001</td>
+    </tr>
+    <tr>
+    <th>1</th>
+    <td>2</td>
+    <td>18.40</td>
+    <td>15.720527</td>
+    <td>0.630827</td>
+    <td>14.217207</td>
+    <td>15.558196</td>
+    <td>15.805599</td>
+    <td>16.594644</td>
+    <td>14.877743</td>
+    <td>16.334438</td>
+    <td>...</td>
+    <td>0.012188</td>
+    <td>23950.0</td>
+    <td>pressure (Pa)</td>
+    <td>ACARS_U_WIND_COMPONENT</td>
+    <td>75603</td>
+    <td>153005</td>
+    <td>2019-12-01 21:00:03</td>
+    <td>6.25</td>
+    <td>-2.679473</td>
+    <td>7.179578</td>
+    </tr>
+    <tr>
+    <th>2</th>
+    <td>3</td>
+    <td>1.60</td>
+    <td>-4.932073</td>
+    <td>0.825899</td>
+    <td>-5.270562</td>
+    <td>-5.955998</td>
+    <td>-4.209766</td>
+    <td>-5.105016</td>
+    <td>-4.669405</td>
+    <td>-4.365305</td>
+    <td>...</td>
+    <td>0.012188</td>
+    <td>23950.0</td>
+    <td>pressure (Pa)</td>
+    <td>ACARS_V_WIND_COMPONENT</td>
+    <td>75603</td>
+    <td>153005</td>
+    <td>2019-12-01 21:00:03</td>
+    <td>6.25</td>
+    <td>-6.532073</td>
+    <td>42.667980</td>
+    </tr>
+    <tr>
+    <th>3</th>
+    <td>4</td>
+    <td>264.16</td>
+    <td>264.060532</td>
+    <td>0.035584</td>
+    <td>264.107192</td>
+    <td>264.097270</td>
+    <td>264.073212</td>
+    <td>264.047718</td>
+    <td>264.074140</td>
+    <td>264.019895</td>
+    <td>...</td>
+    <td>0.010389</td>
+    <td>56260.0</td>
+    <td>pressure (Pa)</td>
+    <td>ACARS_TEMPERATURE</td>
+    <td>75603</td>
+    <td>153005</td>
+    <td>2019-12-01 21:00:03</td>
+    <td>1.00</td>
+    <td>-0.099468</td>
+    <td>0.009894</td>
+    </tr>
+    <tr>
+    <th>4</th>
+    <td>5</td>
+    <td>11.60</td>
+    <td>10.134115</td>
+    <td>0.063183</td>
+    <td>10.067956</td>
+    <td>10.078798</td>
+    <td>10.120263</td>
+    <td>10.084885</td>
+    <td>10.135112</td>
+    <td>10.140610</td>
+    <td>...</td>
+    <td>0.010389</td>
+    <td>56260.0</td>
+    <td>pressure (Pa)</td>
+    <td>ACARS_U_WIND_COMPONENT</td>
+    <td>75603</td>
+    <td>153005</td>
+    <td>2019-12-01 21:00:03</td>
+    <td>6.25</td>
+    <td>-1.465885</td>
+    <td>2.148818</td>
+    </tr>
+</tbody>
+</table>
+<p>5 rows × 97 columns</p><p>Find the numeber of assimilated (used) observations vs. possible observations by type</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">obsq</span><span class="o">.</span><span class="n">possible_vs_used</span><span class="p">(</span><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="p">)</span>
+</pre></div>
+</div>
+<table border="1" class="dataframe">
+<thead>
+    <tr style="text-align: right;">
+    <th></th>
+    <th>type</th>
+    <th>possible</th>
+    <th>used</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+    <th>0</th>
+    <td>ACARS_TEMPERATURE</td>
+    <td>175429</td>
+    <td>128040</td>
+    </tr>
+    <tr>
+    <th>1</th>
+    <td>ACARS_U_WIND_COMPONENT</td>
+    <td>176120</td>
+    <td>126946</td>
+    </tr>
+    <tr>
+    <th>2</th>
+    <td>ACARS_V_WIND_COMPONENT</td>
+    <td>176120</td>
+    <td>127834</td>
+    </tr>
+    <tr>
+    <th>3</th>
+    <td>AIRCRAFT_TEMPERATURE</td>
+    <td>21335</td>
+    <td>13663</td>
+    </tr>
+    <tr>
+    <th>4</th>
+    <td>AIRCRAFT_U_WIND_COMPONENT</td>
+    <td>21044</td>
+    <td>13694</td>
+    </tr>
+    <tr>
+    <th>5</th>
+    <td>AIRCRAFT_V_WIND_COMPONENT</td>
+    <td>21044</td>
+    <td>13642</td>
+    </tr>
+    <tr>
+    <th>6</th>
+    <td>AIRS_SPECIFIC_HUMIDITY</td>
+    <td>6781</td>
+    <td>0</td>
+    </tr>
+    <tr>
+    <th>7</th>
+    <td>AIRS_TEMPERATURE</td>
+    <td>19583</td>
+    <td>7901</td>
+    </tr>
+    <tr>
+    <th>8</th>
+    <td>GPSRO_REFRACTIVITY</td>
+    <td>81404</td>
+    <td>54626</td>
+    </tr>
+    <tr>
+    <th>9</th>
+    <td>LAND_SFC_ALTIMETER</td>
+    <td>21922</td>
+    <td>0</td>
+    </tr>
+    <tr>
+    <th>10</th>
+    <td>MARINE_SFC_ALTIMETER</td>
+    <td>9987</td>
+    <td>0</td>
+    </tr>
+    <tr>
+    <th>11</th>
+    <td>MARINE_SFC_SPECIFIC_HUMIDITY</td>
+    <td>4196</td>
+    <td>0</td>
+    </tr>
+    <tr>
+    <th>12</th>
+    <td>MARINE_SFC_TEMPERATURE</td>
+    <td>8646</td>
+    <td>0</td>
+    </tr>
+    <tr>
+    <th>13</th>
+    <td>MARINE_SFC_U_WIND_COMPONENT</td>
+    <td>8207</td>
+    <td>0</td>
+    </tr>
+    <tr>
+    <th>14</th>
+    <td>MARINE_SFC_V_WIND_COMPONENT</td>
+    <td>8207</td>
+    <td>0</td>
+    </tr>
+    <tr>
+    <th>15</th>
+    <td>RADIOSONDE_SPECIFIC_HUMIDITY</td>
+    <td>14272</td>
+    <td>0</td>
+    </tr>
+    <tr>
+    <th>16</th>
+    <td>RADIOSONDE_SURFACE_ALTIMETER</td>
+    <td>601</td>
+    <td>0</td>
+    </tr>
+    <tr>
+    <th>17</th>
+    <td>RADIOSONDE_TEMPERATURE</td>
+    <td>29275</td>
+    <td>22228</td>
+    </tr>
+    <tr>
+    <th>18</th>
+    <td>RADIOSONDE_U_WIND_COMPONENT</td>
+    <td>36214</td>
+    <td>27832</td>
+    </tr>
+    <tr>
+    <th>19</th>
+    <td>RADIOSONDE_V_WIND_COMPONENT</td>
+    <td>36214</td>
+    <td>27975</td>
+    </tr>
+    <tr>
+    <th>20</th>
+    <td>SAT_U_WIND_COMPONENT</td>
+    <td>107212</td>
+    <td>82507</td>
+    </tr>
+    <tr>
+    <th>21</th>
+    <td>SAT_V_WIND_COMPONENT</td>
+    <td>107212</td>
+    <td>82647</td>
+    </tr>
+</tbody>
+</table>
+<p></section>
+<section id="plot-a-rank-histogram">
+<h2>plot a rank histogram<a class="headerlink" href="#plot-a-rank-histogram" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Select only observations that were assimilated (QC === 0).</p></li>
+<li><p>Plot the rank histogram</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df_qc0</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">select_by_dart_qc</span><span class="p">(</span><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">plots</span><span class="o">.</span><span class="n">plot_rank_histogram</span><span class="p">(</span><span class="n">df_qc0</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="Rank Histogram" src="../_images/rankhist.png" />
+</section>
+<section id="plot-profiles-of-rmse-and-bias">
+<h2>plot profiles of RMSE and Bias<a class="headerlink" href="#plot-profiles-of-rmse-and-bias" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Choose levels</p></li>
+<li><p>Select only observations that were assimilated (QC === 0).</p></li>
+<li><p>Plot the profiles</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">hPalevels</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">,</span>  <span class="mf">150.0</span><span class="p">,</span> <span class="mf">200.0</span><span class="p">,</span> <span class="mf">250.0</span><span class="p">,</span> <span class="mf">300.0</span><span class="p">,</span> <span class="mf">400.0</span><span class="p">,</span> <span class="mf">500.0</span><span class="p">,</span> <span class="mi">700</span><span class="p">,</span> <span class="mi">850</span><span class="p">,</span> <span class="mi">925</span><span class="p">,</span> <span class="mi">1000</span><span class="p">]</span>  <span class="c1"># Pa?</span>
+<span class="n">plevels</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">100</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">hPalevels</span><span class="p">]</span>
+
+<span class="n">df_qc0</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">select_by_dart_qc</span><span class="p">(</span><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># only qc 0</span>
+<span class="n">df_profile</span><span class="p">,</span> <span class="n">figrmse</span><span class="p">,</span> <span class="n">figbias</span><span class="p">,</span> <span class="n">figts</span>  <span class="o">=</span> <span class="n">plots</span><span class="o">.</span><span class="n">plot_profile</span><span class="p">(</span><span class="n">df_qc0</span><span class="p">,</span> <span class="n">plevels</span><span class="p">,</span> <span class="s2">&quot;pressure (Pa)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="RMSE Plot" src="../_images/rmse.png" />
+<img alt="Bias Plot" src="../_images/bias.png" />
+<img alt="Bias Plot" src="../_images/totalspread.png" />
 </section>
 </section>
 
@@ -427,20 +770,20 @@ pip install pydartdiags
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="quickstart.html"
+       href="index.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Quickstart</p>
+        <p class="prev-next-title">User Guide</p>
       </div>
     </a>
     <a class="right-next"
-       href="working-with-obsq.html"
+       href="installguide.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Working with obs_sequence objects</p>
+        <p class="prev-next-title">Install Guide</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -463,8 +806,11 @@ pip install pydartdiags
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#requirements">Requirements</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">Installation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#read-an-obs-sequence-file">Read an obs_sequence file</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examine-the-dataframe">Examine the DataFrame</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-a-rank-histogram">plot a rank histogram</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-profiles-of-rmse-and-bias">plot profiles of RMSE and Bias</a></li>
 </ul>
   </nav></div>
 
