@@ -308,84 +308,62 @@ class obs_sequence:
         result.append(f"{n-1:<12}{'-1':<11}{'-1'}")
         return result
 
-    def write_obs_seq(self, file, df=None):
+    def write_obs_seq(self, file):
         """
         Write the observation sequence to a file.
-        
-        This function writes the observation sequence to disk. 
-        If no DataFrame is provided, it writes the obs_sequence object to a file using the
-        header and all observations stored in the object.
-        If the self.all_obs is invalid, the file will be created from the data frame
-        If a DataFrame is provided,it creates a header and linked list from the DataFrame, 
-        then writes the DataFrame obs to an obs_sequence file. Note the DataFrame is assumed
-        to have been created from obs_sequence object.
-        
-        
+
+        This function writes the observation sequence stored in the obs_seq.DataFrame to a specified file.
+        It updates the header with the number of observations, converts coordinates back to radians
+        if necessary, drops unnecessary columns, sorts the DataFrame by time, and generates a linked
+        list pattern for reading by DART programs.
+
         Args:
             file (str): The path to the file where the observation sequence will be written.
-            df (pandas.DataFrame, optional): A DataFrame containing the observation data. If not provided, the function uses self.header and self.all_obs.
-        
-        Returns:
-            None
-        
-        Examples:
-            ``obs_seq.write_obs_seq('/path/to/output/file')``
-            ``obs_seq.write_obs_seq('/path/to/output/file', df=obs_seq.df)``
+
+        Notes:
+            - Longitude and latitude are converted back to radians if the location model is 'loc3d'.
+            - The 'bias' and 'sq_err' columns are dropped if they exist in the DataFrame.
+            - The DataFrame is sorted by the 'time' column.
+            - An 'obs_num' column is added to the DataFrame to number the observations in time order.
+            - A 'linked_list' column is generated to create a linked list pattern for the observations.
+
+        Example:
+            obsq.write_obs_seq('obs_seq.new')
+            
         """
         with open(file, 'w') as f:
             
-            if df is not None:
-                # If a DataFrame is provided, update the header with the number of observations
-                num_rows = len(df)
-                replacement_string = f'num_obs: {num_rows:>10} max_num_obs: {num_rows:>10}'
-                new_header = [replacement_string if 'num_obs' in element else element for element in self.header]
+            # If a DataFrame is provided, update the header with the number of observations
+            num_rows = len(self.df)
+            replacement_string = f'num_obs: {num_rows:>10} max_num_obs: {num_rows:>10}'
+            new_header = [replacement_string if 'num_obs' in element else element for element in self.header]
 
-                for line in new_header[:-1]:
+            for line in new_header[:-1]:
+                f.write(str(line) + '\n')
+            first = 1
+            f.write(f"first: {first:>12} last: {num_rows:>12}\n")
+
+            # TODO HK is there something better than copying the whole thing here?
+            df_copy =  self.df.copy()  # copy since you want to change for writing. 
+            # back to radians for obs_seq
+            if self.loc_mod == 'loc3d':
+                df_copy['longitude'] = np.deg2rad(self.df['longitude']).round(16)
+                df_copy['latitude'] = np.deg2rad(self.df['latitude']).round(16)
+            if 'bias' in df_copy.columns:
+                df_copy = df_copy.drop(columns=['bias', 'sq_err'])                
+            
+            # linked list for reading by dart programs
+            df_copy = df_copy.sort_values(by=['time'], kind='stable') # sort the DataFrame by time
+            df_copy['obs_num'] = self.df.index + 1 # obs_num in time order
+            df_copy['linked_list'] = obs_sequence.generate_linked_list_pattern(len(df_copy)) # linked list pattern
+
+            def write_row(row):
+                ob_write = self.list_to_obs(row.tolist())
+                for line in ob_write:
                     f.write(str(line) + '\n')
-                first = 1
-                f.write(f"first: {first:>12} last: {num_rows:>12}\n")
-
-                # TODO HK is there something better than copying the whole thing here?
-                df_copy = df.copy()  # copy since you want to change for writing. 
-                # back to radians for obs_seq
-                if self.loc_mod == 'loc3d':
-                    df_copy['longitude'] = np.deg2rad(self.df['longitude'])
-                    df_copy['latitude'] = np.deg2rad(self.df['latitude'])
-                if 'bias' in df_copy.columns:
-                    df_copy = df_copy.drop(columns=['bias', 'sq_err'])                
-                
-                # linked list for reading by dart programs
-                df_copy = df_copy.sort_values(by=['time']) # sort the DataFrame by time
-                df_copy['obs_num'] = df.index + 1 # obs_num in time order
-                df_copy['linked_list'] = obs_sequence.generate_linked_list_pattern(len(df_copy)) # linked list pattern
-
-                def write_row(row):
-                    ob_write = self.list_to_obs(row.tolist())
-                    for line in ob_write:
-                        f.write(str(line) + '\n')
-                
-                df_copy.apply(write_row, axis=1)
+            
+            df_copy.apply(write_row, axis=1)
   
-            else:
-                # If no DataFrame is provided, use self.header and self.all_obs
-                #   if self.all_obs is invalid, use the self.df
-                for line in self.header:
-                    f.write(str(line) + '\n')
-                if self.all_obs is not None:
-                    for obs in self.all_obs:
-                        ob_write = self.list_to_obs(obs)
-                        for line in ob_write:
-                            f.write(str(line) + '\n')
-                else:
-                    def write_row(row):   # HK @todo is iterrows, itertuples faster?
-                        ob_write = self.list_to_obs(row.tolist())
-                        for line in ob_write:
-                            f.write(str(line) + '\n')
-                    
-                    self.df.apply(write_row, axis=1)
-        
-
-
     def column_headers(self):
         """define the columns for the dataframe """
         heading = []
