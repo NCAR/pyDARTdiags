@@ -73,6 +73,23 @@ Here are some examples of how to use the library.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to remove observations from an observation sequence and write a new observation sequence file.">
+
+.. only:: html
+
+  .. image:: /examples/images/thumb/sphx_glr_plot_remove_obs_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_plot_remove_obs.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Remove Observations</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to read and observation sequence file, and plot the observations on a map, with the color indicating the QC value.">
 
 .. only:: html
@@ -101,6 +118,7 @@ Here are some examples of how to use the library.
    /examples/plot_qc_poss_vs_used
    /examples/plot_grand_stats
    /examples/plot_rank_histogram
+   /examples/plot_remove_obs
    /examples/plot_qc_hover
 
 
