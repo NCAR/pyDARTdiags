@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Computation times &#8212; pyDARTdiags</title>
+    <title>Rank Histogram &#8212; pyDARTdiags</title>
   
   
   
@@ -50,9 +50,11 @@
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/sg_execution_times';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/plot_rank_histogram';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Geographic Plot of Observations to look at QC" href="plot_qc_hover.html" />
+    <link rel="prev" title="Grand Statistics" href="plot_grand_stats.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -148,7 +150,7 @@
 </li>
 
 
-<li class="nav-item ">
+<li class="nav-item current active">
   <a class="nav-link nav-internal" href="index.html">
     Examples
   </a>
@@ -237,10 +239,8 @@
       
       
       
-        
-      
       <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -269,7 +269,7 @@
 </li>
 
 
-<li class="nav-item ">
+<li class="nav-item current active">
   <a class="nav-link nav-internal" href="index.html">
     Examples
   </a>
@@ -327,6 +327,21 @@
     
   </div>
   
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="plot_qc_poss_vs_used.html">Possible vs. Used Observations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot_grand_stats.html">Grand Statistics</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Rank Histogram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot_qc_hover.html">Geographic Plot of Observations to look at QC</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
       <div class="sidebar-primary-item">
@@ -362,7 +377,10 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Computation times</span></li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Examples</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Rank Histogram</span></li>
   </ul>
 </nav>
 </div>
@@ -379,49 +397,92 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="computation-times">
-<span id="sphx-glr-examples-sg-execution-times"></span><h1>Computation times<a class="headerlink" href="#computation-times" title="Link to this heading">#</a></h1>
-<p><strong>00:03.270</strong> total execution time for 4 files <strong>from examples</strong>:</p>
-<div class="docutils container">
-<style scoped>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
-<link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
-</style>
-<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-<script type="text/javascript" class="init">
-$(document).ready( function () {
-    $('table.sg-datatable').DataTable({order: [[1, 'desc']]});
-} );
-</script><div class="pst-scrollable-table-container"><table class="table table-striped sg-datatable">
-<thead>
-<tr class="row-odd"><th class="head"><p>Example</p></th>
-<th class="head"><p>Time</p></th>
-<th class="head"><p>Mem (MB)</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><a class="reference internal" href="plot_rank_histogram.html#sphx-glr-examples-plot-rank-histogram-py"><span class="std std-ref">Rank Histogram</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_rank_histogram.py</span></code>)</p></td>
-<td><p>00:02.505</p></td>
-<td><p>0.0</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="plot_qc_poss_vs_used.html#sphx-glr-examples-plot-qc-poss-vs-used-py"><span class="std std-ref">Possible vs. Used Observations</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_qc_poss_vs_used.py</span></code>)</p></td>
-<td><p>00:00.269</p></td>
-<td><p>0.0</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="plot_qc_hover.html#sphx-glr-examples-plot-qc-hover-py"><span class="std std-ref">Geographic Plot of Observations to look at QC</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_qc_hover.py</span></code>)</p></td>
-<td><p>00:00.263</p></td>
-<td><p>0.0</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="plot_grand_stats.html#sphx-glr-examples-plot-grand-stats-py"><span class="std std-ref">Grand Statistics</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_grand_stats.py</span></code>)</p></td>
-<td><p>00:00.233</p></td>
-<td><p>0.0</p></td>
-</tr>
-</tbody>
-</table>
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-examples-plot-rank-histogram-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code.</p>
+</div>
+<section class="sphx-glr-example-title" id="rank-histogram">
+<span id="sphx-glr-examples-plot-rank-histogram-py"></span><h1>Rank Histogram<a class="headerlink" href="#rank-histogram" title="Link to this heading">#</a></h1>
+<p>This example demonstrates how to plot a rank histogram.</p>
+<p>Import the obs_sequence module
+and the matplots module for plotting.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pydartdiags.obs_sequence.obs_sequence</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">obsq</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydartdiags.matplots</span><span class="w"> </span><span class="kn">import</span> <span class="n">matplots</span> <span class="k">as</span> <span class="n">mp</span>
+</pre></div>
+</div>
+<p>Chose an obs_seq file to read.
+In this example, we are using a small obs_seq file “obs_seq.final.1000”
+that comes with the pyDARTdiags package
+in the data directory, so we <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">os</span></code> to get the path to the file.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="n">data_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="s2">&quot;..&quot;</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">)</span>
+<span class="n">data_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="s2">&quot;obs_seq.final.1000&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Read the obs_seq file into an obs_seq object.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">obs_sequence</span><span class="p">(</span><span class="n">data_file</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Select observations with QC value of 0.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">qc0</span> <span class="o">=</span> <span class="n">obs_seq</span><span class="o">.</span><span class="n">select_by_dart_qc</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Chose an observation type.
+The observation types are stored in the ‘type’ column.
+To see which observation types are in the dataframe, use the unique method:</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">qc0</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>array([&#39;ACARS_TEMPERATURE&#39;, &#39;ACARS_U_WIND_COMPONENT&#39;,
+       &#39;ACARS_V_WIND_COMPONENT&#39;, &#39;AIRCRAFT_TEMPERATURE&#39;,
+       &#39;AIRCRAFT_U_WIND_COMPONENT&#39;, &#39;AIRCRAFT_V_WIND_COMPONENT&#39;],
+      dtype=object)
+</pre></div>
+</div>
+<p>For this example, we are going to look at the rank histogram for
+ACARS_TEMPERATURE observations.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_type</span> <span class="o">=</span> <span class="s1">&#39;ACARS_TEMPERATURE&#39;</span>
+</pre></div>
+</div>
+<p>Chose the levels to plot.
+The vertical coordinate of the observations are stored in the <code class="docutils literal notranslate"><span class="pre">vertical</span></code> column.
+The units for the vertical coordinate are stored in the <code class="docutils literal notranslate"><span class="pre">vert_unit</span></code> column
+In this case the vertical coordinate of the observations are in pressure (Pa).
+Typically in atmospheric science we use hPa as the unit for pressure.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">hPalevels</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">,</span>  <span class="mf">150.0</span><span class="p">,</span> <span class="mf">200.0</span><span class="p">,</span> <span class="mf">250.0</span><span class="p">,</span> <span class="mf">300.0</span><span class="p">,</span> <span class="mf">400.0</span><span class="p">,</span> <span class="mf">500.0</span><span class="p">,</span> <span class="mi">700</span><span class="p">,</span> <span class="mi">850</span><span class="p">,</span> <span class="mi">925</span><span class="p">,</span> <span class="mi">1000</span><span class="p">]</span>
+<span class="n">levels</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">100</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">hPalevels</span><span class="p">]</span> <span class="c1"># convert hPa to Pa</span>
+</pre></div>
+</div>
+<p>Plot the rank histogram.
+The dataframe has prior and posterior information so both the prior
+and posterior rank histograms are plotted.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">ens_size</span> <span class="o">=</span> <span class="mi">80</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">plot_rank_histogram</span><span class="p">(</span><span class="n">obs_seq</span><span class="p">,</span> <span class="n">levels</span><span class="p">,</span> <span class="n">obs_type</span><span class="p">,</span> <span class="n">ens_size</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="sphx-glr-horizontal">
+<li><img src="../_images/sphx_glr_plot_rank_histogram_001.png" srcset="../_images/sphx_glr_plot_rank_histogram_001.png" alt="ACARS_TEMPERATURE at Level 17500.0, Prior Rank Histogram, Posterior Rank Histogram" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_plot_rank_histogram_002.png" srcset="../_images/sphx_glr_plot_rank_histogram_002.png" alt="ACARS_TEMPERATURE at Level 22500.0, Prior Rank Histogram, Posterior Rank Histogram" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_plot_rank_histogram_003.png" srcset="../_images/sphx_glr_plot_rank_histogram_003.png" alt="ACARS_TEMPERATURE at Level 27500.0, Prior Rank Histogram, Posterior Rank Histogram" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_plot_rank_histogram_004.png" srcset="../_images/sphx_glr_plot_rank_histogram_004.png" alt="ACARS_TEMPERATURE at Level 35000.0, Prior Rank Histogram, Posterior Rank Histogram" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_plot_rank_histogram_005.png" srcset="../_images/sphx_glr_plot_rank_histogram_005.png" alt="ACARS_TEMPERATURE at Level 45000.0, Prior Rank Histogram, Posterior Rank Histogram" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_plot_rank_histogram_006.png" srcset="../_images/sphx_glr_plot_rank_histogram_006.png" alt="ACARS_TEMPERATURE at Level 60000.0, Prior Rank Histogram, Posterior Rank Histogram" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_plot_rank_histogram_007.png" srcset="../_images/sphx_glr_plot_rank_histogram_007.png" alt="ACARS_TEMPERATURE at Level 77500.0, Prior Rank Histogram, Posterior Rank Histogram" class = "sphx-glr-multi-img"/></li>
+</ul>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 2.505 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-plot-rank-histogram-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/7fcf325ca31646150a2639f43ad07a01/plot_rank_histogram.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_rank_histogram.ipynb</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/01aedcf5fb250e5136aa0af1605c2ce4/plot_rank_histogram.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_rank_histogram.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/1ab92aab810a222626daaadaa771fbcf/plot_rank_histogram.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">plot_rank_histogram.zip</span></code></a></p>
 </div>
 </div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
 </section>
 
 
@@ -434,6 +495,24 @@ $(document).ready( function () {
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="plot_grand_stats.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Grand Statistics</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="plot_qc_hover.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Geographic Plot of Observations to look at QC</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div>
                 </footer>
               
