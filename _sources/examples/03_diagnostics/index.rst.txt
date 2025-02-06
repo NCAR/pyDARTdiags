@@ -1,0 +1,87 @@
+
+
+.. _sphx_glr_examples_03_diagnostics:
+
+
+.. _diag-examples-index:
+
+Diagnostics 
+===========
+
+Examples of the diagnostic tools available in the library.
+
+
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to read and observation sequence file, and view the number of used versus possible observations by type.">
+
+.. only:: html
+
+  .. image:: /examples/03_diagnostics/images/thumb/sphx_glr_plot_qc_poss_vs_used_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_03_diagnostics_plot_qc_poss_vs_used.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Possible vs. Used Observations</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to compute grand statistics for an observation sequence.">
+
+.. only:: html
+
+  .. image:: /examples/03_diagnostics/images/thumb/sphx_glr_plot_grand_stats_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_03_diagnostics_plot_grand_stats.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Grand Statistics</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to plot a rank histogram.">
+
+.. only:: html
+
+  .. image:: /examples/03_diagnostics/images/thumb/sphx_glr_plot_rank_histogram_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_03_diagnostics_plot_rank_histogram.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Rank Histogram</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/03_diagnostics/plot_qc_poss_vs_used
+   /examples/03_diagnostics/plot_grand_stats
+   /examples/03_diagnostics/plot_rank_histogram
+

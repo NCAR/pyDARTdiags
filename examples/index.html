@@ -53,7 +53,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'examples/index';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Possible vs. Used Observations" href="plot_qc_poss_vs_used.html" />
+    <link rel="next" title="Manipulating Observation Sequences" href="01_manipulating/index.html" />
     <link rel="prev" title="Contributors Guide" href="../devel/CONTRIBUTING.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -229,6 +229,10 @@
   
 
   
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
 </div>
 
     </header>
@@ -333,12 +337,21 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="plot_qc_poss_vs_used.html">Possible vs. Used Observations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="plot_grand_stats.html">Grand Statistics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="plot_rank_histogram.html">Rank Histogram</a></li>
-<li class="toctree-l1"><a class="reference internal" href="plot_remove_obs.html">Remove Observations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="plot_qc_hover.html">Geographic Plot of Observations to look at QC</a></li>
-<li class="toctree-l1"><a class="reference internal" href="plot_duplicates.html">Finding Duplicates in a Observation Sequence</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="01_manipulating/index.html">Manipulating Observation Sequences</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="01_manipulating/plot_remove_obs.html">Remove Observations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_manipulating/plot_duplicates.html">Finding Duplicates in a Observation Sequence</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="02_visualizing/index.html">Visualizing Observation Sequences</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="02_visualizing/plot_qc_hover.html">Geographic Plot of Observations to look at QC</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="03_diagnostics/index.html">Diagnostics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="03_diagnostics/plot_qc_poss_vs_used.html">Possible vs. Used Observations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_diagnostics/plot_grand_stats.html">Grand Statistics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_diagnostics/plot_rank_histogram.html">Rank Histogram</a></li>
+</ul>
+</details></li>
 </ul>
 </div>
 </nav></div>
@@ -398,25 +411,37 @@
                   
   <section id="examples">
 <span id="examples-index"></span><h1>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h1>
-<p>Here are some examples of how to use the library.</p>
+<p>pyDARTdiags can be used to read, modify, and write observation sequences as well as
+to compute and visualize observation space diagnostics.</p>
+<div class="sphx-glr-thumbnails"></div><section id="manipulating-observation-sequences">
+<h2>Manipulating Observation Sequences<a class="headerlink" href="#manipulating-observation-sequences" title="Link to this heading">#</a></h2>
+<p>Here are some examples of how to use pyDARTdiags to read, modify, and write observation sequences</p>
+<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to remove observations from an observation sequence and write a new observation sequence file."><img alt="" src="../_images/sphx_glr_plot_remove_obs_thumb.png" />
+<p><a class="reference internal" href="01_manipulating/plot_remove_obs.html#sphx-glr-examples-01-manipulating-plot-remove-obs-py"><span class="std std-ref">Remove Observations</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Remove Observations</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example shows how to find duplicates in an observation sequence, and how to remove them."><img alt="" src="../_images/sphx_glr_plot_duplicates_thumb.png" />
+<p><a class="reference internal" href="01_manipulating/plot_duplicates.html#sphx-glr-examples-01-manipulating-plot-duplicates-py"><span class="std std-ref">Finding Duplicates in a Observation Sequence</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Finding Duplicates in a Observation Sequence</div>
+</div></div></section>
+<section id="visualizing-observation-sequences">
+<h2>Visualizing Observation Sequences<a class="headerlink" href="#visualizing-observation-sequences" title="Link to this heading">#</a></h2>
+<p>Examples of visualizing observation sequence data.</p>
+<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to read and observation sequence file, and plot the observations on a map, with the color indicating the QC value."><img alt="" src="../_images/sphx_glr_plot_qc_hover_thumb.png" />
+<p><a class="reference internal" href="02_visualizing/plot_qc_hover.html#sphx-glr-examples-02-visualizing-plot-qc-hover-py"><span class="std std-ref">Geographic Plot of Observations to look at QC</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Geographic Plot of Observations to look at QC</div>
+</div></div></section>
+<section id="diagnostics">
+<h2>Diagnostics<a class="headerlink" href="#diagnostics" title="Link to this heading">#</a></h2>
+<p>Examples of the diagnostic tools available in the library.</p>
 <div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to read and observation sequence file, and view the number of used versus possible observations by type."><img alt="" src="../_images/sphx_glr_plot_qc_poss_vs_used_thumb.png" />
-<p><a class="reference internal" href="plot_qc_poss_vs_used.html#sphx-glr-examples-plot-qc-poss-vs-used-py"><span class="std std-ref">Possible vs. Used Observations</span></a></p>
+<p><a class="reference internal" href="03_diagnostics/plot_qc_poss_vs_used.html#sphx-glr-examples-03-diagnostics-plot-qc-poss-vs-used-py"><span class="std std-ref">Possible vs. Used Observations</span></a></p>
   <div class="sphx-glr-thumbnail-title">Possible vs. Used Observations</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to compute grand statistics for an observation sequence."><img alt="" src="../_images/sphx_glr_plot_grand_stats_thumb.png" />
-<p><a class="reference internal" href="plot_grand_stats.html#sphx-glr-examples-plot-grand-stats-py"><span class="std std-ref">Grand Statistics</span></a></p>
+<p><a class="reference internal" href="03_diagnostics/plot_grand_stats.html#sphx-glr-examples-03-diagnostics-plot-grand-stats-py"><span class="std std-ref">Grand Statistics</span></a></p>
   <div class="sphx-glr-thumbnail-title">Grand Statistics</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to plot a rank histogram."><img alt="" src="../_images/sphx_glr_plot_rank_histogram_thumb.png" />
-<p><a class="reference internal" href="plot_rank_histogram.html#sphx-glr-examples-plot-rank-histogram-py"><span class="std std-ref">Rank Histogram</span></a></p>
+<p><a class="reference internal" href="03_diagnostics/plot_rank_histogram.html#sphx-glr-examples-03-diagnostics-plot-rank-histogram-py"><span class="std std-ref">Rank Histogram</span></a></p>
   <div class="sphx-glr-thumbnail-title">Rank Histogram</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to remove observations from an observation sequence and write a new observation sequence file."><img alt="" src="../_images/sphx_glr_plot_remove_obs_thumb.png" />
-<p><a class="reference internal" href="plot_remove_obs.html#sphx-glr-examples-plot-remove-obs-py"><span class="std std-ref">Remove Observations</span></a></p>
-  <div class="sphx-glr-thumbnail-title">Remove Observations</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to read and observation sequence file, and plot the observations on a map, with the color indicating the QC value."><img alt="" src="../_images/sphx_glr_plot_qc_hover_thumb.png" />
-<p><a class="reference internal" href="plot_qc_hover.html#sphx-glr-examples-plot-qc-hover-py"><span class="std std-ref">Geographic Plot of Observations to look at QC</span></a></p>
-  <div class="sphx-glr-thumbnail-title">Geographic Plot of Observations to look at QC</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example shows how to find duplicates in an observation sequence, and how to remove them."><img alt="" src="../_images/sphx_glr_plot_duplicates_thumb.png" />
-<p><a class="reference internal" href="plot_duplicates.html#sphx-glr-examples-plot-duplicates-py"><span class="std std-ref">Finding Duplicates in a Observation Sequence</span></a></p>
-  <div class="sphx-glr-thumbnail-title">Finding Duplicates in a Observation Sequence</div>
 </div></div><div class="toctree-wrapper compound">
 </div>
 <div class="sphx-glr-footer sphx-glr-footer-gallery docutils container">
@@ -428,6 +453,7 @@
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
 </section>
 
 
@@ -450,11 +476,11 @@
       </div>
     </a>
     <a class="right-next"
-       href="plot_qc_poss_vs_used.html"
+       href="01_manipulating/index.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Possible vs. Used Observations</p>
+        <p class="prev-next-title">Manipulating Observation Sequences</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -464,6 +490,26 @@
             </div>
             
             
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#manipulating-observation-sequences">Manipulating Observation Sequences</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizing-observation-sequences">Visualizing Observation Sequences</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#diagnostics">Diagnostics</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

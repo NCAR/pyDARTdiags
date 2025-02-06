@@ -7,8 +7,124 @@
 Examples
 ========
 
-Here are some examples of how to use the library.
+pyDARTdiags can be used to read, modify, and write observation sequences as well as
+to compute and visualize observation space diagnostics. 
 
+
+
+
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+
+Manipulating Observation Sequences
+==================================
+
+Here are some examples of how to use pyDARTdiags to read, modify, and write observation sequences
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to remove observations from an observation sequence and write a new observation sequence file.">
+
+.. only:: html
+
+  .. image:: /examples/01_manipulating/images/thumb/sphx_glr_plot_remove_obs_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_01_manipulating_plot_remove_obs.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Remove Observations</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to find duplicates in an observation sequence, and how to remove them.">
+
+.. only:: html
+
+  .. image:: /examples/01_manipulating/images/thumb/sphx_glr_plot_duplicates_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_01_manipulating_plot_duplicates.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Finding Duplicates in a Observation Sequence</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+Visualizing Observation Sequences
+=================================
+
+Examples of visualizing observation sequence data.
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to read and observation sequence file, and plot the observations on a map, with the color indicating the QC value.">
+
+.. only:: html
+
+  .. image:: /examples/02_visualizing/images/thumb/sphx_glr_plot_qc_hover_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_02_visualizing_plot_qc_hover.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Geographic Plot of Observations to look at QC</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+
+Diagnostics 
+===========
+
+Examples of the diagnostic tools available in the library.
 
 
 
@@ -26,10 +142,10 @@ Here are some examples of how to use the library.
 
 .. only:: html
 
-  .. image:: /examples/images/thumb/sphx_glr_plot_qc_poss_vs_used_thumb.png
+  .. image:: /examples/03_diagnostics/images/thumb/sphx_glr_plot_qc_poss_vs_used_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_plot_qc_poss_vs_used.py`
+  :ref:`sphx_glr_examples_03_diagnostics_plot_qc_poss_vs_used.py`
 
 .. raw:: html
 
@@ -43,10 +159,10 @@ Here are some examples of how to use the library.
 
 .. only:: html
 
-  .. image:: /examples/images/thumb/sphx_glr_plot_grand_stats_thumb.png
+  .. image:: /examples/03_diagnostics/images/thumb/sphx_glr_plot_grand_stats_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_plot_grand_stats.py`
+  :ref:`sphx_glr_examples_03_diagnostics_plot_grand_stats.py`
 
 .. raw:: html
 
@@ -60,65 +176,14 @@ Here are some examples of how to use the library.
 
 .. only:: html
 
-  .. image:: /examples/images/thumb/sphx_glr_plot_rank_histogram_thumb.png
+  .. image:: /examples/03_diagnostics/images/thumb/sphx_glr_plot_rank_histogram_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_plot_rank_histogram.py`
+  :ref:`sphx_glr_examples_03_diagnostics_plot_rank_histogram.py`
 
 .. raw:: html
 
       <div class="sphx-glr-thumbnail-title">Rank Histogram</div>
-    </div>
-
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to remove observations from an observation sequence and write a new observation sequence file.">
-
-.. only:: html
-
-  .. image:: /examples/images/thumb/sphx_glr_plot_remove_obs_thumb.png
-    :alt:
-
-  :ref:`sphx_glr_examples_plot_remove_obs.py`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">Remove Observations</div>
-    </div>
-
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to read and observation sequence file, and plot the observations on a map, with the color indicating the QC value.">
-
-.. only:: html
-
-  .. image:: /examples/images/thumb/sphx_glr_plot_qc_hover_thumb.png
-    :alt:
-
-  :ref:`sphx_glr_examples_plot_qc_hover.py`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">Geographic Plot of Observations to look at QC</div>
-    </div>
-
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to find duplicates in an observation sequence, and how to remove them.">
-
-.. only:: html
-
-  .. image:: /examples/images/thumb/sphx_glr_plot_duplicates_thumb.png
-    :alt:
-
-  :ref:`sphx_glr_examples_plot_duplicates.py`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">Finding Duplicates in a Observation Sequence</div>
     </div>
 
 
@@ -131,13 +196,12 @@ Here are some examples of how to use the library.
 
 .. toctree::
    :hidden:
+   :includehidden:
 
-   /examples/plot_qc_poss_vs_used
-   /examples/plot_grand_stats
-   /examples/plot_rank_histogram
-   /examples/plot_remove_obs
-   /examples/plot_qc_hover
-   /examples/plot_duplicates
+
+   /examples/01_manipulating/index.rst
+   /examples/02_visualizing/index.rst
+   /examples/03_diagnostics/index.rst
 
 
 .. only:: html
