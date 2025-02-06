@@ -105,6 +105,23 @@ Here are some examples of how to use the library.
     </div>
 
 
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to find duplicates in an observation sequence, and how to remove them.">
+
+.. only:: html
+
+  .. image:: /examples/images/thumb/sphx_glr_plot_duplicates_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_plot_duplicates.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Finding Duplicates in a Observation Sequence</div>
+    </div>
+
+
 .. thumbnail-parent-div-close
 
 .. raw:: html
@@ -120,6 +137,7 @@ Here are some examples of how to use the library.
    /examples/plot_rank_histogram
    /examples/plot_remove_obs
    /examples/plot_qc_hover
+   /examples/plot_duplicates
 
 
 .. only:: html
