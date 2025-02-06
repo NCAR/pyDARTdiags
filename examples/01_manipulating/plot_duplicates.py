@@ -16,7 +16,7 @@ import pydartdiags.obs_sequence.obs_sequence as obsq
 # Read in the observation sequence file. In this example we'll use a real obs_seq file,
 # the NCEP+ACARS.201303_6H.obs_seq2013030306 file that comes with the pyDARTdiags package.
 # This is 6 hours of observations from March 3, 2013.
-data_dir = os.path.join(os.getcwd(), "..", "data")
+data_dir = os.path.join(os.getcwd(), "../..", "data")
 data_file = os.path.join(data_dir, "NCEP+ACARS.201303_6H.obs_seq2013030306")
 
 obs_seq = obsq.obs_sequence(data_file)
