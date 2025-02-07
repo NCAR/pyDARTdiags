@@ -382,7 +382,7 @@ The new file will not have the 'GPSRO_REFRACTIVITY' observations.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.223 seconds)
+   **Total running time of the script:** (0 minutes 0.248 seconds)
 
 
 .. _sphx_glr_download_examples_01_manipulating_plot_remove_obs.py:
