@@ -225,7 +225,7 @@ def bin_by_layer(df, levels, verticalUnit="pressure (Pa)"):
 @apply_to_phases_by_type_return_df
 def grand_statistics(df, phase):
 
-    # assiming diag_stats has been called
+    # assuming diag_stats has been called
     grand = (
         df.groupby(["type"], observed=False)
         .agg(
@@ -247,7 +247,7 @@ def grand_statistics(df, phase):
 @apply_to_phases_by_type_return_df
 def layer_statistics(df, phase):
 
-    # assiming diag_stats has been called
+    # assuming diag_stats has been called
     layer_stats = (
         df.groupby(["midpoint", "type"], observed=False)
         .agg(

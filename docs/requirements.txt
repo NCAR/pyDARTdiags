@@ -8,3 +8,4 @@ pandas
 plotly
 sphinx-gallery
 matplotlib
+black

@@ -32,7 +32,6 @@ having to reinstall the package.
    python -m pip install -e pyDARTdiags
 
 
-
 Building the Documentation Locally
 ----------------------------------
 
@@ -60,6 +59,28 @@ You can check all the links in the documentation by running the following comman
 
    make linkcheck
 
+Creating Examples
+-----------------
+
+We use `Sphinx-Gallery <https://sphinx-gallery.github.io/stable/index.html>`_ to create 
+examples for the documentation. The examples are in the ``pyDARTdiags/examples`` directory.
+To create a new example, create a new Python file called ``plot_example_name.py`` 
+in the appropriate subdirectory. The example will be run when the documentation is built.
+For details on structuring your Sphinx-Gallery files take a look at the 
+`Sphinx-Gallery syntax <https://sphinx-gallery.github.io/stable/syntax.html>`_.
+
+Linting your code
+-----------------
+
+We use `black <https://black.readthedocs.io/en/stable/>`_ for code formatting.
+Black will change your code to conform to the black style guide. To run black on the
+pyDARTdiags code, run the following command at the root of the repository:
+
+.. code-block :: text
+
+   black src/pydartdiags
+
+Black is run on pull requests to ensure that the code is formatted correctly.
 
 Writing Tests
 -------------

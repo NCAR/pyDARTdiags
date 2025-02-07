@@ -9,4 +9,5 @@ API Guide
     
     obs_sequence
     stats
+    matplots
     plots
