@@ -7,15 +7,12 @@ using python and pandas. The obs_sequence class provides a simple interface to r
 examine, join, and write obs_sequence files. 
 
 
-Read an observation sequence file
-----------------------------------
+PyDARTdiags uses has an obs_sequence class to work with observation sequence PyDARTdiags.
 
-Examine the data
-----------------
+The obs_sequence class contains information about the observation sequence, and the 
+data from the observation sequence in a DataFrame. 
 
-Join multiple obs_sequences
----------------------------
+The observation sequence is loaded into pyDARTdiags using the obs_sequence class.
 
-Write data to an observation sequence file
-------------------------------------------
+The obs_sequence class has the following attributes:
 
