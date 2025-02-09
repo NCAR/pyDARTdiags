@@ -12,8 +12,8 @@ environment and how to build the documentation locally. We also encourage you to
 
 
 .. toctree::
-   :maxdepth: 1
    :hidden:
+   :caption: Developer Guide
 
    CONTRIBUTING
 

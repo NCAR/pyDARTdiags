@@ -2,11 +2,6 @@
 Install Guide
 =============
 
-
-------------
-Requirements
-------------
-
 ------------
 Installation
 ------------
