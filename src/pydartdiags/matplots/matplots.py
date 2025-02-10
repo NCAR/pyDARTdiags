@@ -201,7 +201,7 @@ def plot_profile(obs_seq, levels, type, bias=True, rmse=True, totalspread=True):
         bbox=props,
     )
 
-    plt.tight_layout()  
+    plt.tight_layout()
     plt.show()
 
     return fig

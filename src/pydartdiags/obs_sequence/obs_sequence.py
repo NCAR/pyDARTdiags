@@ -199,7 +199,7 @@ class obs_sequence:
             if old in self.df.columns
         }
         self.df = self.df.rename(columns=rename_dict)
- 
+
     def create_all_obs(self):
         """steps through the generator to create a
         list of all observations in the sequence
@@ -1014,10 +1014,9 @@ class obs_sequence:
         Returns:
             bool: True if both 'prior_ensemble_mean' and 'prior_ensemble_spread' columns are present, False otherwise.
         """
-        return (
-            "prior_ensemble_mean".casefold() in map(str.casefold, self.df.columns)
-            and "prior_ensemble_spread".casefold() in map(str.casefold, self.df.columns)
-        )
+        return "prior_ensemble_mean".casefold() in map(
+            str.casefold, self.df.columns
+        ) and "prior_ensemble_spread".casefold() in map(str.casefold, self.df.columns)
 
     def has_posterior(self):
         """
@@ -1026,11 +1025,11 @@ class obs_sequence:
         Returns:
             bool: True if both 'posterior_ensemble_mean' and 'posterior_ensemble_spread' columns are present, False otherwise.
         """
-        return (
-            "posterior_ensemble_mean".casefold() in map(str.casefold, self.df.columns)
-            and "posterior_ensemble_spread".casefold() in map(str.casefold, self.df.columns)
+        return "posterior_ensemble_mean".casefold() in map(
+            str.casefold, self.df.columns
+        ) and "posterior_ensemble_spread".casefold() in map(
+            str.casefold, self.df.columns
         )
-
 
     def create_header(self, n):
         """Create a header for the obs_seq file from the obs_sequence object."""
