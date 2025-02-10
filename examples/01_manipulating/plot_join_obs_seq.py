@@ -1,5 +1,5 @@
 """
-Join Two Observation Sequences
+Join Observation Sequences
 ==============================
 
 This example demonstrates how to read in two observation sequences 
