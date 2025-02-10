@@ -414,6 +414,7 @@ pip install pydartdiags
 </div>
 <p>Import the obs_sequence and plots module</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pydartdiags.obs_sequence</span><span class="w"> </span><span class="kn">import</span> <span class="n">obs_sequence</span> <span class="k">as</span> <span class="n">obsq</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydartdiags.stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">stats</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pydartdiags.plots</span><span class="w"> </span><span class="kn">import</span> <span class="n">plots</span>
 </pre></div>
 </div>
@@ -580,8 +581,8 @@ pip install pydartdiags
     </tr>
 </tbody>
 </table>
-<p>5 rows × 97 columns</p><p>Find the numeber of assimilated (used) observations vs. possible observations by type</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">obsq</span><span class="o">.</span><span class="n">possible_vs_used</span><span class="p">(</span><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="p">)</span>
+<p>5 rows × 97 columns</p><p>Find the number of assimilated (used) observations vs. possible observations by type</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">possible_vs_used</span><span class="p">()</span>
 </pre></div>
 </div>
 <table border="1" class="dataframe">
@@ -729,30 +730,22 @@ pip install pydartdiags
 </tbody>
 </table>
 <p></section>
-<section id="plot-a-rank-histogram">
-<h2>plot a rank histogram<a class="headerlink" href="#plot-a-rank-histogram" title="Link to this heading">#</a></h2>
-<ul class="simple">
-<li><p>Select only observations that were assimilated (QC === 0).</p></li>
-<li><p>Plot the rank histogram</p></li>
-</ul>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df_qc0</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">select_by_dart_qc</span><span class="p">(</span><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-<span class="n">plots</span><span class="o">.</span><span class="n">plot_rank_histogram</span><span class="p">(</span><span class="n">df_qc0</span><span class="p">)</span>
-</pre></div>
-</div>
-<img alt="Rank Histogram" src="../_images/rankhist.png" />
-</section>
-<section id="plot-profiles-of-rmse-and-bias">
-<h2>plot profiles of RMSE and Bias<a class="headerlink" href="#plot-profiles-of-rmse-and-bias" title="Link to this heading">#</a></h2>
+<section id="plot-profiles-of-rmse-and-bias-and-total-spread">
+<h2>Plot Profiles of RMSE and Bias and Total Spread<a class="headerlink" href="#plot-profiles-of-rmse-and-bias-and-total-spread" title="Link to this heading">#</a></h2>
 <ul class="simple">
 <li><p>Choose levels</p></li>
 <li><p>Select only observations that were assimilated (QC === 0).</p></li>
+<li><p>Calculate the statistics</p></li>
+<li><p>Bin by the selected levels</p></li>
 <li><p>Plot the profiles</p></li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">hPalevels</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">,</span>  <span class="mf">150.0</span><span class="p">,</span> <span class="mf">200.0</span><span class="p">,</span> <span class="mf">250.0</span><span class="p">,</span> <span class="mf">300.0</span><span class="p">,</span> <span class="mf">400.0</span><span class="p">,</span> <span class="mf">500.0</span><span class="p">,</span> <span class="mi">700</span><span class="p">,</span> <span class="mi">850</span><span class="p">,</span> <span class="mi">925</span><span class="p">,</span> <span class="mi">1000</span><span class="p">]</span>  <span class="c1"># Pa?</span>
 <span class="n">plevels</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">100</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">hPalevels</span><span class="p">]</span>
 
-<span class="n">df_qc0</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">select_by_dart_qc</span><span class="p">(</span><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># only qc 0</span>
-<span class="n">df_profile</span><span class="p">,</span> <span class="n">figrmse</span><span class="p">,</span> <span class="n">figbias</span><span class="p">,</span> <span class="n">figts</span>  <span class="o">=</span> <span class="n">plots</span><span class="o">.</span><span class="n">plot_profile</span><span class="p">(</span><span class="n">df_qc0</span><span class="p">,</span> <span class="n">plevels</span><span class="p">,</span> <span class="s2">&quot;pressure (Pa)&quot;</span><span class="p">)</span>
+<span class="n">qc0</span> <span class="o">=</span> <span class="n">obs_seq</span><span class="o">.</span><span class="n">select_by_dart_qc</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># only qc 0</span>
+<span class="n">stats</span><span class="o">.</span><span class="n">diag_stats</span><span class="p">(</span><span class="n">qc0</span><span class="p">)</span> <span class="c1"># calculate statistics</span>
+<span class="n">stats</span><span class="o">.</span><span class="n">bin_by_layer</span><span class="p">(</span><span class="n">qc0</span><span class="p">,</span> <span class="n">plevels</span><span class="p">,</span> <span class="n">verticalUnit</span><span class="o">=</span><span class="s2">&quot;pressure (Pa)&quot;</span><span class="p">)</span> <span class="c1"># bin by plevels</span>
+<span class="n">figrmse</span><span class="p">,</span> <span class="n">figbias</span><span class="p">,</span> <span class="n">figts</span>  <span class="o">=</span> <span class="n">plots</span><span class="o">.</span><span class="n">plot_profile</span><span class="p">(</span><span class="n">qc0</span><span class="p">,</span> <span class="s2">&quot;pressure (Pa)&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="RMSE Plot" src="../_images/rmse.png" />
@@ -811,8 +804,7 @@ pip install pydartdiags
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">Installation</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#read-an-obs-sequence-file">Read an obs_sequence file</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examine-the-dataframe">Examine the DataFrame</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-a-rank-histogram">plot a rank histogram</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-profiles-of-rmse-and-bias">plot profiles of RMSE and Bias</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-profiles-of-rmse-and-bias-and-total-spread">Plot Profiles of RMSE and Bias and Total Spread</a></li>
 </ul>
   </nav></div>
 
