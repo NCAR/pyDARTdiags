@@ -9,7 +9,7 @@ import struct
 
 def requires_assimilation_info(func):
     def wrapper(self, *args, **kwargs):
-        if self.has_assimilation_info:
+        if self.has_assimilation_info():
             return func(self, *args, **kwargs)
         else:
             raise ValueError(
@@ -21,7 +21,7 @@ def requires_assimilation_info(func):
 
 def requires_posterior_info(func):
     def wrapper(self, *args, **kwargs):
-        if self.has_posterior:
+        if self.has_posterior():
             return func(self, *args, **kwargs)
         else:
             raise ValueError("Posterior information is required to call this function.")
@@ -87,8 +87,6 @@ class obs_sequence:
 
                 obs_sequence(file, synonyms=['synonym1', 'synonym2']).df
 
-        has_assimilation_info (bool): Indicates if assimilation information is present.
-        has_posterior (bool): Indicates if posterior information is present.
         seq (generator): Generator of observations from the observation sequence file.
         all_obs (list): List of all observations, each observation is a list.
             Valid when the obs_sequence is created from a file.
@@ -129,8 +127,6 @@ class obs_sequence:
         """
 
         self.loc_mod = "None"
-        self.has_assimilation_info = False
-        self.has_posterior = False
         self.file = file
         self.synonyms_for_obs = [
             "NCEP BUFR observation",
@@ -203,13 +199,7 @@ class obs_sequence:
             if old in self.df.columns
         }
         self.df = self.df.rename(columns=rename_dict)
-
-        # check if the assimilation info is present
-        if "prior_ensemble_mean".casefold() in map(str.casefold, self.columns):
-            self.has_assimilation_info = True
-        if "posterior_ensemble_mean".casefold() in map(str.casefold, self.columns):
-            self.has_posterior = True
-
+ 
     def create_all_obs(self):
         """steps through the generator to create a
         list of all observations in the sequence
@@ -889,18 +879,18 @@ class obs_sequence:
 
         # Check if all obs_sequences have compatible attributes
         first_loc_mod = obs_sequences[0].loc_mod
-        first_has_assimilation_info = obs_sequences[0].has_assimilation_info
-        first_has_posterior = obs_sequences[0].has_posterior
+        first_has_assimilation_info = obs_sequences[0].has_assimilation_info()
+        first_has_posterior = obs_sequences[0].has_posterior()
         for obs_seq in obs_sequences:
             if obs_seq.loc_mod != first_loc_mod:
                 raise ValueError(
                     "All observation sequences must have the same loc_mod."
                 )
-            if obs_seq.has_assimilation_info != first_has_assimilation_info:
+            if obs_seq.has_assimilation_info() != first_has_assimilation_info:
                 raise ValueError(
                     "All observation sequences must have assimilation info."
                 )
-            if obs_seq.has_posterior != first_has_posterior:
+            if obs_seq.has_posterior() != first_has_posterior:
                 raise ValueError(
                     "All observation sequences must have the posterior info."
                 )
@@ -1015,21 +1005,32 @@ class obs_sequence:
         combo.df["obs_num"] = combined_df.index + 1
         combo.create_header(len(combo.df))
 
-        # set assimilation info (mean and spread) (prior and posterior)
-        combo.has_assimilation_info = "prior_ensemble_mean".casefold() in map(
-            str.casefold, combo.df.columns
-        )
-        combo.has_assimilation_info = "prior_ensemble_spread".casefold() in map(
-            str.casefold, combo.df.columns
-        )
-        combo.has_posterior = "posterior_ensemble_mean".casefold() in map(
-            str.casefold, combo.df.columns
-        )
-        combo.has_posterior = "posterior_ensemble_spread".casefold() in map(
-            str.casefold, combo.df.columns
+        return combo
+
+    def has_assimilation_info(self):
+        """
+        Check if the DataFrame has prior information.
+
+        Returns:
+            bool: True if both 'prior_ensemble_mean' and 'prior_ensemble_spread' columns are present, False otherwise.
+        """
+        return (
+            "prior_ensemble_mean".casefold() in map(str.casefold, self.df.columns)
+            and "prior_ensemble_spread".casefold() in map(str.casefold, self.df.columns)
         )
 
-        return combo
+    def has_posterior(self):
+        """
+        Check if the DataFrame has posterior information.
+
+        Returns:
+            bool: True if both 'posterior_ensemble_mean' and 'posterior_ensemble_spread' columns are present, False otherwise.
+        """
+        return (
+            "posterior_ensemble_mean".casefold() in map(str.casefold, self.df.columns)
+            and "posterior_ensemble_spread".casefold() in map(str.casefold, self.df.columns)
+        )
+
 
     def create_header(self, n):
         """Create a header for the obs_seq file from the obs_sequence object."""
