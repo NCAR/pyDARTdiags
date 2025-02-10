@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:06.769** total execution time for 6 files **from all galleries**:
+**00:07.039** total execution time for 6 files **from all galleries**:
 
 .. container::
 
@@ -33,20 +33,20 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_examples_01_manipulating_plot_duplicates.py` (``../examples/01_manipulating/plot_duplicates.py``)
-     - 00:03.748
+     - 00:03.807
      - 0.0
    * - :ref:`sphx_glr_examples_03_diagnostics_plot_rank_histogram.py` (``../examples/03_diagnostics/plot_rank_histogram.py``)
-     - 00:02.449
-     - 0.0
-   * - :ref:`sphx_glr_examples_02_visualizing_plot_qc_hover.py` (``../examples/02_visualizing/plot_qc_hover.py``)
-     - 00:00.261
+     - 00:02.544
      - 0.0
    * - :ref:`sphx_glr_examples_01_manipulating_plot_remove_obs.py` (``../examples/01_manipulating/plot_remove_obs.py``)
-     - 00:00.197
+     - 00:00.283
+     - 0.0
+   * - :ref:`sphx_glr_examples_02_visualizing_plot_qc_hover.py` (``../examples/02_visualizing/plot_qc_hover.py``)
+     - 00:00.267
      - 0.0
    * - :ref:`sphx_glr_examples_03_diagnostics_plot_grand_stats.py` (``../examples/03_diagnostics/plot_grand_stats.py``)
-     - 00:00.090
+     - 00:00.113
      - 0.0
    * - :ref:`sphx_glr_examples_03_diagnostics_plot_qc_poss_vs_used.py` (``../examples/03_diagnostics/plot_qc_poss_vs_used.py``)
-     - 00:00.024
+     - 00:00.025
      - 0.0

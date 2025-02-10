@@ -53,7 +53,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'userguide/working-with-obsq';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Developer Guide" href="../devel/index.html" />
+    <link rel="next" title="Statistics" href="statistics.html" />
     <link rel="prev" title="Install Guide" href="installguide.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -336,10 +336,12 @@
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installguide.html">Install Guide</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Working with obs_sequence objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="statistics.html">Statistics</a></li>
 </ul>
 </div>
 </nav></div>
@@ -401,7 +403,7 @@
                 <article class="bd-article">
                   
   <section id="working-with-obs-sequence-objects">
-<h1>Working with obs_sequence objects<a class="headerlink" href="#working-with-obs-sequence-objects" title="Link to this heading">#</a></h1>
+<span id="working-with-obsq"></span><h1>Working with obs_sequence objects<a class="headerlink" href="#working-with-obs-sequence-objects" title="Link to this heading">#</a></h1>
 <p>DART uses observation sequence files to store observations and their associated
 metadata. These files are used as input to the DART assimilation system, and after
 assimilation, the observation sequence files are updated with the assimilation data.</p>
@@ -434,14 +436,14 @@ and write out new observation sequence files.</p>
 <section id="calculating-statistics">
 <h2>Calculating statistics<a class="headerlink" href="#calculating-statistics" title="Link to this heading">#</a></h2>
 <p>The <a class="reference internal" href="../api/stats.html#module-0" title="stats"><code class="xref py py-mod docutils literal notranslate"><span class="pre">stats</span></code></a> module contains functions to calculate statistics on the given DataFrame.
-<code class="docutils literal notranslate"><span class="pre">stats.diag(obs_seq.df)</span></code> modifies the DataFrame in place by adding the following columns:</p>
+<a class="reference internal" href="../api/stats.html#stats.diag_stats" title="stats.diag_stats"><code class="xref py py-func docutils literal notranslate"><span class="pre">stats.diag_stats()</span></code></a> modifies the DataFrame in place by adding the following columns:</p>
 <ul class="simple">
 <li><p>‘prior_sq_err’ and ‘posterior_sq_err’: The square error for the ‘prior’ and ‘posterior’ phases.</p></li>
 <li><p>‘prior_bias’ and ‘posterior_bias’: The bias for the ‘prior’ and ‘posterior’ phases.</p></li>
 <li><p>‘prior_totalvar’ and ‘posterior_totalvar’: The total variance for the ‘prior’ and ‘posterior’ phases.</p></li>
 </ul>
 <p>You may be interested in the statistics at various vertical levels. The <a class="reference internal" href="../api/stats.html#module-0" title="stats"><code class="xref py py-mod docutils literal notranslate"><span class="pre">stats</span></code></a> module function
-<code class="docutils literal notranslate"><span class="pre">bin_by_layer(obs_seq.df,</span> <span class="pre">levels)</span></code> will add two additional columns for the binned vertical levels and
+<a class="reference internal" href="../api/stats.html#stats.bin_by_layer" title="stats.bin_by_layer"><code class="xref py py-func docutils literal notranslate"><span class="pre">stats.bin_by_layer()</span></code></a> will add two additional columns for the binned vertical levels and
 their midpoints:</p>
 <ul class="simple">
 <li><p>‘vlevels’: The categorized vertical levels. [bottom, top]</p></li>
@@ -470,11 +472,11 @@ their midpoints:</p>
       </div>
     </a>
     <a class="right-next"
-       href="../devel/index.html"
+       href="statistics.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Developer Guide</p>
+        <p class="prev-next-title">Statistics</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

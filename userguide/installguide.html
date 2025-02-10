@@ -336,10 +336,12 @@
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Install Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="working-with-obsq.html">Working with obs_sequence objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="statistics.html">Statistics</a></li>
 </ul>
 </div>
 </nav></div>
@@ -404,6 +406,15 @@
 <h1>Install Guide<a class="headerlink" href="#install-guide" title="Link to this heading">#</a></h1>
 <section id="requirements">
 <h2>Requirements<a class="headerlink" href="#requirements" title="Link to this heading">#</a></h2>
+<p>pyDARTdiags currently supports Python 3.8 and above.
+pyDARTdiags requires the following packages:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>&quot;pandas&gt;=2.2.0&quot;,
+&quot;numpy&gt;=1.26&quot;,
+&quot;plotly&gt;=5.22.0&quot;,
+&quot;pyyaml&gt;=6.0.2&quot;,
+&quot;matplotlib&gt;=3.9.4&quot;
+</pre></div>
+</div>
 </section>
 <section id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h2>

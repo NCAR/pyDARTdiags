@@ -1,3 +1,5 @@
+.. _working-with-obsq:
+
 ==================================
 Working with obs_sequence objects
 ==================================
@@ -43,7 +45,7 @@ Calculating statistics
 ----------------------
 
 The :mod:`stats` module contains functions to calculate statistics on the given DataFrame.
-``stats.diag(obs_seq.df)`` modifies the DataFrame in place by adding the following columns:
+:func:`stats.diag_stats` modifies the DataFrame in place by adding the following columns:
 
 - 'prior_sq_err' and 'posterior_sq_err': The square error for the 'prior' and 'posterior' phases.
 - 'prior_bias' and 'posterior_bias': The bias for the 'prior' and 'posterior' phases.
@@ -51,7 +53,7 @@ The :mod:`stats` module contains functions to calculate statistics on the given 
 
 
 You may be interested in the statistics at various vertical levels. The :mod:`stats` module function
-``bin_by_layer(obs_seq.df, levels)`` will add two additional columns for the binned vertical levels and 
+:func:`stats.bin_by_layer` will add two additional columns for the binned vertical levels and 
 their midpoints:
 
 - 'vlevels': The categorized vertical levels. [bottom, top]

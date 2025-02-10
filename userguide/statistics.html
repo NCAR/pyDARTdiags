@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Quickstart &#8212; pyDARTdiags</title>
+    <title>Statistics &#8212; pyDARTdiags</title>
   
   
   
@@ -50,11 +50,12 @@
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'userguide/quickstart';</script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'userguide/statistics';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Install Guide" href="installguide.html" />
-    <link rel="prev" title="User Guide" href="index.html" />
+    <link rel="next" title="Developer Guide" href="../devel/index.html" />
+    <link rel="prev" title="Working with obs_sequence objects" href="working-with-obsq.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -338,10 +339,10 @@
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">User Guide</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installguide.html">Install Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="working-with-obsq.html">Working with obs_sequence objects</a></li>
-<li class="toctree-l1"><a class="reference internal" href="statistics.html">Statistics</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Statistics</a></li>
 </ul>
 </div>
 </nav></div>
@@ -385,7 +386,7 @@
     
     <li class="breadcrumb-item"><a href="index.html" class="nav-link">User Guide</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Quickstart</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Statistics</span></li>
   </ul>
 </nav>
 </div>
@@ -402,362 +403,176 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="quickstart">
-<span id="id1"></span><h1>Quickstart<a class="headerlink" href="#quickstart" title="Link to this heading">#</a></h1>
-<section id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h2>
-<p>pyDARTdiags can be installed through pip.  We recommend installing pydartdiags in a virtual environment:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>python3 -m venv dartdiags
-source dartdiags/bin/activate
-pip install pydartdiags
-</pre></div>
-</div>
-<p>Import the obs_sequence and plots module</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pydartdiags.obs_sequence</span><span class="w"> </span><span class="kn">import</span> <span class="n">obs_sequence</span> <span class="k">as</span> <span class="n">obsq</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pydartdiags.plots</span><span class="w"> </span><span class="kn">import</span> <span class="n">plots</span>
-</pre></div>
-</div>
+  <section id="statistics">
+<span id="id1"></span><h1>Statistics<a class="headerlink" href="#statistics" title="Link to this heading">#</a></h1>
+<p>Observation space diagnostics is a set of metrics used to
+assess the quality of data assimilation system in observation-space.
+In order to produce diagnostics in observation space, forward operators (also
+known as forward models) are used to map the model state to the observation.
+A forward operator is calculated from each of the model states to give an ensemble
+of ‘predicted’ observations. The ensemble of predicted observations together with
+the observation error is used to calculate the statistics for observation space
+diagnostics.</p>
+<p>Observation space diagnostics are calculated per observation type.
+The statistics are calculated for each observation, then averaged over all
+observations of that type in the region and time period of interest.
+The region of interest may be a vertical layer, a horizontal region, or a
+combination of both.</p>
+<p>The statistics are calculated for a DataFrame of observations using the
+<a class="reference internal" href="../api/stats.html#module-0" title="stats"><code class="xref py py-mod docutils literal notranslate"><span class="pre">stats</span></code></a> module. The squared error, total variance, and bias are calculated
+for each observation (row) in the DataFrame by the <a class="reference internal" href="../api/stats.html#stats.diag_stats" title="stats.diag_stats"><code class="xref py py-func docutils literal notranslate"><span class="pre">stats.diag_stats()</span></code></a> function.
+<a class="reference internal" href="#rmse">RMSE</a>, <a class="reference internal" href="#spread">spread</a>, <a class="reference internal" href="#total-spread">total spread</a>, <a class="reference internal" href="#bias">bias</a> can calculated by aggregating over any
+number of rows to produce diagnostics for the region and time period of interest.
+If the observation sequence contains posterior information, posterior statistics
+will be calculated, otherwise only prior statistics will be calculated.</p>
+<section id="definitions">
+<h2>Definitions<a class="headerlink" href="#definitions" title="Link to this heading">#</a></h2>
+<p>Some symbols used throughout:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(y\)</span>: observation</p></li>
+<li><p><span class="math notranslate nohighlight">\(\epsilon\)</span>: observation error estimate</p></li>
+<li><p><span class="math notranslate nohighlight">\(N\)</span>: Number of observations in the group, i.e. in the region and time period of interest</p></li>
+<li><p><span class="math notranslate nohighlight">\(n\)</span>: group member</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mu\)</span>: ensemble mean</p></li>
+<li><p><span class="math notranslate nohighlight">\(\sigma\)</span>: ensemble spread (standard deviation)</p></li>
+<li><p><span class="math notranslate nohighlight">\(\sigma^2\)</span>: ensemble variance</p></li>
+</ul>
+<section id="rmse">
+<h3>RMSE<a class="headerlink" href="#rmse" title="Link to this heading">#</a></h3>
+<p>The root mean square error is defined</p>
+<div class="math notranslate nohighlight">
+\[\text{RMSE} \equiv \sqrt{\frac{1}{N} \sum_{n=1}^{N} (\mu_n - y_n)^2}\]</div>
 </section>
-<section id="read-an-obs-sequence-file">
-<h2>Read an obs_sequence file<a class="headerlink" href="#read-an-obs-sequence-file" title="Link to this heading">#</a></h2>
-<p>Read an observation sequence file into a DataFrame</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">obs_sequence</span><span class="p">(</span><span class="s1">&#39;obs_seq.final.ascii&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
+<section id="spread">
+<h3>Spread<a class="headerlink" href="#spread" title="Link to this heading">#</a></h3>
+<p>The spread is the variability among ensemble members for a given observation.</p>
+<div class="math notranslate nohighlight">
+\[\sigma \equiv \sqrt{\frac{1}{N} \sum_{n=1}^{N} ( \sigma_n)^2}\]</div>
 </section>
-<section id="examine-the-dataframe">
-<h2>Examine the DataFrame<a class="headerlink" href="#examine-the-dataframe" title="Link to this heading">#</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
-</pre></div>
-</div>
-<table border="1" class="dataframe">
+<section id="total-spread">
+<h3>Total spread<a class="headerlink" href="#total-spread" title="Link to this heading">#</a></h3>
+<p>Total Spread (<span class="math notranslate nohighlight">\(\sigma_T\)</span>) is a measure of the combined uncertainty in an
+ensemble of estimated observations. It accounts for both:</p>
+<ul class="simple">
+<li><p>Ensemble spread (<span class="math notranslate nohighlight">\(\sigma_n\)</span>):  the variability among ensemble members for
+a given observation.</p></li>
+<li><p>Observation error estimate (<span class="math notranslate nohighlight">\(\epsilon_n\)</span>):  the expected measurement error
+associated with each observation.</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\sigma_T \equiv \sqrt{\frac{1}{N} \sum_{n=1}^{N} ( \sigma_n^2 + \epsilon_n^2)}\]</div>
+</section>
+<section id="bias">
+<h3>Bias<a class="headerlink" href="#bias" title="Link to this heading">#</a></h3>
+<p>Bias is the average difference between the ensemble mean and the observations</p>
+<div class="math notranslate nohighlight">
+\[\text{bias} \equiv \frac{1}{N} \sum_{n=1}^{N} ( \mu_n - y_n)\]</div>
+</section>
+</section>
+<section id="multi-component-observations">
+<h2>Multi-component Observations<a class="headerlink" href="#multi-component-observations" title="Link to this heading">#</a></h2>
+<p>Some observations are multi-component, such as wind. These observations are combined from
+two (or more) scalar observations. For example, a horizontal wind observation <span class="math notranslate nohighlight">\(s\)</span> is made up
+of two components, <span class="math notranslate nohighlight">\(u\)</span> velocity and <span class="math notranslate nohighlight">\(v\)</span> velocity.</p>
+<p>The velocity components <span class="math notranslate nohighlight">\(u\)</span> and <span class="math notranslate nohighlight">\(v\)</span> are handled individually, as above, and in
+addition the statistics are calculated for the magnitude of the wind vector, <span class="math notranslate nohighlight">\(s\)</span>
+are calculated as follows:</p>
+<div class="math notranslate nohighlight">
+\[s_y^n \equiv \sqrt{y_u^2 + y_v^2}\]</div>
+<div class="math notranslate nohighlight">
+\[s_e^n \equiv \sqrt{\mu_u^2 + \mu_v^2}\]</div>
+<div class="math notranslate nohighlight">
+\[\text{bias} \equiv \frac{1}{N} \sum_{n=1}^{N} (s_e^n - s_y^n)\]</div>
+<div class="math notranslate nohighlight">
+\[\sigma_s \equiv \sqrt{\frac{1}{N} \sum_{n=1}^{N} (\sigma^2_u + \sigma^2_v )}\]</div>
+<div class="math notranslate nohighlight">
+\[\sigma_{T,s} \equiv \sqrt{\frac{1}{N} \sum_{n=1}^{N} (\sigma^2_u + \sigma^2_v + \epsilon^2_u + \epsilon^2_v )}\]</div>
+</section>
+<section id="rank-histogram">
+<h2>Rank Histogram<a class="headerlink" href="#rank-histogram" title="Link to this heading">#</a></h2>
+<p>The rank histogram requires the full ensemble of forward operator values for each observation.
+Sampling noise is added to each member of the forward operator ensemble.:</p>
+<div class="math notranslate nohighlight">
+\[X_i = f_i + N(\mu, \sigma)\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(i\)</span> is the ensemble member index</p></li>
+<li><p><span class="math notranslate nohighlight">\(f_i\)</span> is the forward operator value of the <span class="math notranslate nohighlight">\(i\)</span>-th ensemble member</p></li>
+<li><p><span class="math notranslate nohighlight">\(N(\mu, \sigma)\)</span> is a random number drawn from a normal distribution with the mean <span class="math notranslate nohighlight">\(\mu\)</span>
+and standard deviation <span class="math notranslate nohighlight">\(\sigma\)</span>
+of the ensemble.</p></li>
+</ul>
+<p>The rank of the observation is the number of ensemble members <span class="math notranslate nohighlight">\(X\)</span> whose value is less than the observation value.</p>
+<div class="math notranslate nohighlight">
+\[R = \sum_{i=1}^{M} \mathbf{1} \left( X_i &lt; y \right) + 1\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(R\)</span> is the rank of the observation <span class="math notranslate nohighlight">\(X_o\)</span>,</p></li>
+<li><p><span class="math notranslate nohighlight">\(M\)</span> is the number of ensemble members,</p></li>
+<li><p><span class="math notranslate nohighlight">\(X_i\)</span> represents the value of the <span class="math notranslate nohighlight">\(i\)</span>-th ensemble member,</p></li>
+<li><p><span class="math notranslate nohighlight">\(y\)</span> is the observation value,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathbf{1}(\cdot)\)</span> is the indicator function, which is 1 if <span class="math notranslate nohighlight">\(X_i &lt; y\)</span> and 0 otherwise,
+The <span class="math notranslate nohighlight">\(+1\)</span> ensures a 1-based rank (i.e., the observation is ranked among the ensemble members).</p></li>
+</ul>
+<p>The number of bins is equal to the number of ensemble members.
+The count <span class="math notranslate nohighlight">\(H\)</span> of observations in in each  bin is:</p>
+<div class="math notranslate nohighlight">
+\[H(k) = \sum_{i=1}^{N} \mathbf{1} \left( R_i = k \right)\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(H(k)\)</span> is the count of forecasts that fall into rank bin <span class="math notranslate nohighlight">\(k\)</span>,</p></li>
+<li><p><span class="math notranslate nohighlight">\(N\)</span> is the total number of observations,</p></li>
+<li><p><span class="math notranslate nohighlight">\(R_i\)</span> is the rank of the observation within the ensemble for case <cite>i</cite>,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathbf{1}(\cdot)\)</span> is the indicator function, which is 1 if the condition is true and 0 otherwise.</p></li>
+</ul>
+</section>
+<section id="trusted-observations">
+<h2>Trusted Observations<a class="headerlink" href="#trusted-observations" title="Link to this heading">#</a></h2>
+<p>The DART quality control (DART_QC) values indicate, for each observation, whether the observation
+was used in the assimilation, and if not, why. DART_QC 0 indicates that the observation was assimilated.
+You may choose to include trusted observations in your observation space diagnostics, in which case,
+include DART_QC 0 and DART_QQC 7 observations in the calculation of the statistics.</p>
+<p>For reference, here is the DART QC values and their meaning.</p>
+<div class="pst-scrollable-table-container"><table class="table" id="id2">
+<caption><span class="caption-text">DART Quality Control (DART_QC) Values</span><a class="headerlink" href="#id2" title="Link to this table">#</a></caption>
 <thead>
-    <tr style="text-align: right;">
-    <th></th>
-    <th>obs_num</th>
-    <th>observation</th>
-    <th>prior_ensemble_mean</th>
-    <th>prior_ensemble_spread</th>
-    <th>prior_ensemble_member_1</th>
-    <th>prior_ensemble_member_2</th>
-    <th>prior_ensemble_member_3</th>
-    <th>prior_ensemble_member_4</th>
-    <th>prior_ensemble_member_5</th>
-    <th>prior_ensemble_member_6</th>
-    <th>...</th>
-    <th>latitude</th>
-    <th>vertical</th>
-    <th>vert_unit</th>
-    <th>type</th>
-    <th>seconds</th>
-    <th>days</th>
-    <th>time</th>
-    <th>obs_err_var</th>
-    <th>bias</th>
-    <th>sq_err</th>
-    </tr>
+<tr class="row-odd"><th class="head"><p>QC Value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
 </thead>
 <tbody>
-    <tr>
-    <th>0</th>
-    <td>1</td>
-    <td>230.16</td>
-    <td>231.310652</td>
-    <td>0.405191</td>
-    <td>231.304725</td>
-    <td>231.562874</td>
-    <td>231.333915</td>
-    <td>231.297690</td>
-    <td>232.081416</td>
-    <td>231.051063</td>
-    <td>...</td>
-    <td>0.012188</td>
-    <td>23950.0</td>
-    <td>pressure (Pa)</td>
-    <td>ACARS_TEMPERATURE</td>
-    <td>75603</td>
-    <td>153005</td>
-    <td>2019-12-01 21:00:03</td>
-    <td>1.00</td>
-    <td>1.150652</td>
-    <td>1.324001</td>
-    </tr>
-    <tr>
-    <th>1</th>
-    <td>2</td>
-    <td>18.40</td>
-    <td>15.720527</td>
-    <td>0.630827</td>
-    <td>14.217207</td>
-    <td>15.558196</td>
-    <td>15.805599</td>
-    <td>16.594644</td>
-    <td>14.877743</td>
-    <td>16.334438</td>
-    <td>...</td>
-    <td>0.012188</td>
-    <td>23950.0</td>
-    <td>pressure (Pa)</td>
-    <td>ACARS_U_WIND_COMPONENT</td>
-    <td>75603</td>
-    <td>153005</td>
-    <td>2019-12-01 21:00:03</td>
-    <td>6.25</td>
-    <td>-2.679473</td>
-    <td>7.179578</td>
-    </tr>
-    <tr>
-    <th>2</th>
-    <td>3</td>
-    <td>1.60</td>
-    <td>-4.932073</td>
-    <td>0.825899</td>
-    <td>-5.270562</td>
-    <td>-5.955998</td>
-    <td>-4.209766</td>
-    <td>-5.105016</td>
-    <td>-4.669405</td>
-    <td>-4.365305</td>
-    <td>...</td>
-    <td>0.012188</td>
-    <td>23950.0</td>
-    <td>pressure (Pa)</td>
-    <td>ACARS_V_WIND_COMPONENT</td>
-    <td>75603</td>
-    <td>153005</td>
-    <td>2019-12-01 21:00:03</td>
-    <td>6.25</td>
-    <td>-6.532073</td>
-    <td>42.667980</td>
-    </tr>
-    <tr>
-    <th>3</th>
-    <td>4</td>
-    <td>264.16</td>
-    <td>264.060532</td>
-    <td>0.035584</td>
-    <td>264.107192</td>
-    <td>264.097270</td>
-    <td>264.073212</td>
-    <td>264.047718</td>
-    <td>264.074140</td>
-    <td>264.019895</td>
-    <td>...</td>
-    <td>0.010389</td>
-    <td>56260.0</td>
-    <td>pressure (Pa)</td>
-    <td>ACARS_TEMPERATURE</td>
-    <td>75603</td>
-    <td>153005</td>
-    <td>2019-12-01 21:00:03</td>
-    <td>1.00</td>
-    <td>-0.099468</td>
-    <td>0.009894</td>
-    </tr>
-    <tr>
-    <th>4</th>
-    <td>5</td>
-    <td>11.60</td>
-    <td>10.134115</td>
-    <td>0.063183</td>
-    <td>10.067956</td>
-    <td>10.078798</td>
-    <td>10.120263</td>
-    <td>10.084885</td>
-    <td>10.135112</td>
-    <td>10.140610</td>
-    <td>...</td>
-    <td>0.010389</td>
-    <td>56260.0</td>
-    <td>pressure (Pa)</td>
-    <td>ACARS_U_WIND_COMPONENT</td>
-    <td>75603</td>
-    <td>153005</td>
-    <td>2019-12-01 21:00:03</td>
-    <td>6.25</td>
-    <td>-1.465885</td>
-    <td>2.148818</td>
-    </tr>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>Observation was assimilated successfully</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>Observation was evaluated only so not used in the assimilation</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>The observation was used but one or more of the posterior forward observation operators failed</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>The observation was evaluated only so not used AND one or more of the posterior forward observation operators failed</p></td>
+</tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>One or more prior forward observation operators failed so the observation was not used</p></td>
+</tr>
+<tr class="row-odd"><td><p>5</p></td>
+<td><p>The observation was not used because it was not selected in the namelist to be assimilated or evaluated</p></td>
+</tr>
+<tr class="row-even"><td><p>6</p></td>
+<td><p>The incoming quality control value was larger than the threshold so the observation was not used</p></td>
+</tr>
+<tr class="row-odd"><td><p>7</p></td>
+<td><p>Outlier threshold test failed (as described above)</p></td>
+</tr>
+<tr class="row-even"><td><p>8</p></td>
+<td><p>The location conversion to the vertical localization unit failed so the observation was not used</p></td>
+</tr>
 </tbody>
 </table>
-<p>5 rows × 97 columns</p><p>Find the numeber of assimilated (used) observations vs. possible observations by type</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">obsq</span><span class="o">.</span><span class="n">possible_vs_used</span><span class="p">(</span><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="p">)</span>
-</pre></div>
 </div>
-<table border="1" class="dataframe">
-<thead>
-    <tr style="text-align: right;">
-    <th></th>
-    <th>type</th>
-    <th>possible</th>
-    <th>used</th>
-    </tr>
-</thead>
-<tbody>
-    <tr>
-    <th>0</th>
-    <td>ACARS_TEMPERATURE</td>
-    <td>175429</td>
-    <td>128040</td>
-    </tr>
-    <tr>
-    <th>1</th>
-    <td>ACARS_U_WIND_COMPONENT</td>
-    <td>176120</td>
-    <td>126946</td>
-    </tr>
-    <tr>
-    <th>2</th>
-    <td>ACARS_V_WIND_COMPONENT</td>
-    <td>176120</td>
-    <td>127834</td>
-    </tr>
-    <tr>
-    <th>3</th>
-    <td>AIRCRAFT_TEMPERATURE</td>
-    <td>21335</td>
-    <td>13663</td>
-    </tr>
-    <tr>
-    <th>4</th>
-    <td>AIRCRAFT_U_WIND_COMPONENT</td>
-    <td>21044</td>
-    <td>13694</td>
-    </tr>
-    <tr>
-    <th>5</th>
-    <td>AIRCRAFT_V_WIND_COMPONENT</td>
-    <td>21044</td>
-    <td>13642</td>
-    </tr>
-    <tr>
-    <th>6</th>
-    <td>AIRS_SPECIFIC_HUMIDITY</td>
-    <td>6781</td>
-    <td>0</td>
-    </tr>
-    <tr>
-    <th>7</th>
-    <td>AIRS_TEMPERATURE</td>
-    <td>19583</td>
-    <td>7901</td>
-    </tr>
-    <tr>
-    <th>8</th>
-    <td>GPSRO_REFRACTIVITY</td>
-    <td>81404</td>
-    <td>54626</td>
-    </tr>
-    <tr>
-    <th>9</th>
-    <td>LAND_SFC_ALTIMETER</td>
-    <td>21922</td>
-    <td>0</td>
-    </tr>
-    <tr>
-    <th>10</th>
-    <td>MARINE_SFC_ALTIMETER</td>
-    <td>9987</td>
-    <td>0</td>
-    </tr>
-    <tr>
-    <th>11</th>
-    <td>MARINE_SFC_SPECIFIC_HUMIDITY</td>
-    <td>4196</td>
-    <td>0</td>
-    </tr>
-    <tr>
-    <th>12</th>
-    <td>MARINE_SFC_TEMPERATURE</td>
-    <td>8646</td>
-    <td>0</td>
-    </tr>
-    <tr>
-    <th>13</th>
-    <td>MARINE_SFC_U_WIND_COMPONENT</td>
-    <td>8207</td>
-    <td>0</td>
-    </tr>
-    <tr>
-    <th>14</th>
-    <td>MARINE_SFC_V_WIND_COMPONENT</td>
-    <td>8207</td>
-    <td>0</td>
-    </tr>
-    <tr>
-    <th>15</th>
-    <td>RADIOSONDE_SPECIFIC_HUMIDITY</td>
-    <td>14272</td>
-    <td>0</td>
-    </tr>
-    <tr>
-    <th>16</th>
-    <td>RADIOSONDE_SURFACE_ALTIMETER</td>
-    <td>601</td>
-    <td>0</td>
-    </tr>
-    <tr>
-    <th>17</th>
-    <td>RADIOSONDE_TEMPERATURE</td>
-    <td>29275</td>
-    <td>22228</td>
-    </tr>
-    <tr>
-    <th>18</th>
-    <td>RADIOSONDE_U_WIND_COMPONENT</td>
-    <td>36214</td>
-    <td>27832</td>
-    </tr>
-    <tr>
-    <th>19</th>
-    <td>RADIOSONDE_V_WIND_COMPONENT</td>
-    <td>36214</td>
-    <td>27975</td>
-    </tr>
-    <tr>
-    <th>20</th>
-    <td>SAT_U_WIND_COMPONENT</td>
-    <td>107212</td>
-    <td>82507</td>
-    </tr>
-    <tr>
-    <th>21</th>
-    <td>SAT_V_WIND_COMPONENT</td>
-    <td>107212</td>
-    <td>82647</td>
-    </tr>
-</tbody>
-</table>
-<p></section>
-<section id="plot-a-rank-histogram">
-<h2>plot a rank histogram<a class="headerlink" href="#plot-a-rank-histogram" title="Link to this heading">#</a></h2>
-<ul class="simple">
-<li><p>Select only observations that were assimilated (QC === 0).</p></li>
-<li><p>Plot the rank histogram</p></li>
-</ul>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df_qc0</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">select_by_dart_qc</span><span class="p">(</span><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-<span class="n">plots</span><span class="o">.</span><span class="n">plot_rank_histogram</span><span class="p">(</span><span class="n">df_qc0</span><span class="p">)</span>
-</pre></div>
-</div>
-<img alt="Rank Histogram" src="../_images/rankhist.png" />
-</section>
-<section id="plot-profiles-of-rmse-and-bias">
-<h2>plot profiles of RMSE and Bias<a class="headerlink" href="#plot-profiles-of-rmse-and-bias" title="Link to this heading">#</a></h2>
-<ul class="simple">
-<li><p>Choose levels</p></li>
-<li><p>Select only observations that were assimilated (QC === 0).</p></li>
-<li><p>Plot the profiles</p></li>
-</ul>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">hPalevels</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">,</span>  <span class="mf">150.0</span><span class="p">,</span> <span class="mf">200.0</span><span class="p">,</span> <span class="mf">250.0</span><span class="p">,</span> <span class="mf">300.0</span><span class="p">,</span> <span class="mf">400.0</span><span class="p">,</span> <span class="mf">500.0</span><span class="p">,</span> <span class="mi">700</span><span class="p">,</span> <span class="mi">850</span><span class="p">,</span> <span class="mi">925</span><span class="p">,</span> <span class="mi">1000</span><span class="p">]</span>  <span class="c1"># Pa?</span>
-<span class="n">plevels</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">100</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">hPalevels</span><span class="p">]</span>
-
-<span class="n">df_qc0</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">select_by_dart_qc</span><span class="p">(</span><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># only qc 0</span>
-<span class="n">df_profile</span><span class="p">,</span> <span class="n">figrmse</span><span class="p">,</span> <span class="n">figbias</span><span class="p">,</span> <span class="n">figts</span>  <span class="o">=</span> <span class="n">plots</span><span class="o">.</span><span class="n">plot_profile</span><span class="p">(</span><span class="n">df_qc0</span><span class="p">,</span> <span class="n">plevels</span><span class="p">,</span> <span class="s2">&quot;pressure (Pa)&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-<img alt="RMSE Plot" src="../_images/rmse.png" />
-<img alt="Bias Plot" src="../_images/bias.png" />
-<img alt="Bias Plot" src="../_images/totalspread.png" />
+<p>For more detail on the DART QC values refer to the
+<a class="reference external" href="https://docs.dart.ucar.edu/en/latest/assimilation_code/modules/assimilation/quality_control_mod.html">DART documentation</a>.</p>
 </section>
 </section>
 
@@ -772,20 +587,20 @@ pip install pydartdiags
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="index.html"
+       href="working-with-obsq.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">User Guide</p>
+        <p class="prev-next-title">Working with obs_sequence objects</p>
       </div>
     </a>
     <a class="right-next"
-       href="installguide.html"
+       href="../devel/index.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Install Guide</p>
+        <p class="prev-next-title">Developer Guide</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -808,11 +623,16 @@ pip install pydartdiags
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">Installation</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#read-an-obs-sequence-file">Read an obs_sequence file</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examine-the-dataframe">Examine the DataFrame</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-a-rank-histogram">plot a rank histogram</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-profiles-of-rmse-and-bias">plot profiles of RMSE and Bias</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#definitions">Definitions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rmse">RMSE</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#spread">Spread</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#total-spread">Total spread</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias">Bias</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-component-observations">Multi-component Observations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rank-histogram">Rank Histogram</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#trusted-observations">Trusted Observations</a></li>
 </ul>
   </nav></div>
 

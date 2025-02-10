@@ -336,7 +336,8 @@
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Developer Guide</span></p>
+<ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Contributors Guide</a></li>
 </ul>
 </div>
@@ -413,7 +414,7 @@ the contributors guide.</p>
 <li><p><strong>Report Bugs</strong>: If you find a bug, please report it by opening an <a class="reference external" href="https://github.com/NCAR/pyDARTdiags/issues">issue</a>.</p></li>
 <li><p><strong>Fix Bugs</strong>: Look through the <a class="reference external" href="https://github.com/NCAR/pyDARTdiags/issues">issue tracker</a> for bugs that need fixing.</p></li>
 <li><p><strong>Add Features</strong>: If you have an idea for a new feature, open an issue to discuss it before starting work.</p></li>
-<li><p><strong>Improve Documentation</strong>: Help us improve our documentation by making it clearer and more comprehensive.</p></li>
+<li><p><strong>Improve Documentation</strong>: Help us improve our documentation by making it clearer and more comprehensive, or adding examples.</p></li>
 <li><p><strong>Write Tests</strong>: We use the <a class="reference external" href="https://docs.pytest.org/en/stable/">pytest framework</a>.</p></li>
 </ul>
 </section>
@@ -428,39 +429,14 @@ Include as much detail as necessary to help us understand and reproduce the issu
 <li><p>What actually happened.</p></li>
 </ul>
 </section>
-<section id="setting-up-your-development-environment">
-<h2>Setting up your development environment<a class="headerlink" href="#setting-up-your-development-environment" title="Link to this heading">#</a></h2>
-<p>For developers of pyDARTdiags, we recommend installing pyDARTdiags as a local project in “editable” mode.</p>
-<p>To set up your development environment, follow these steps:</p>
-<ol class="arabic">
-<li><p><strong>Create a Virtual Environment</strong>:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>
-<span class="nb">source</span><span class="w"> </span>py-dart/bin/activate<span class="w"> </span>
-</pre></div>
-</div>
-</li>
-<li><p><strong>Clone the Repository</strong>:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/NCAR/pyDARTdiags.git
-<span class="nb">cd</span><span class="w"> </span>pyDARTdiags
-</pre></div>
-</div>
-</li>
-<li><p><strong>Install Dependencies</strong>:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>docs/requirements.txt
-</pre></div>
-</div>
-</li>
-<li><p><strong>Install the Package in Editable Mode</strong>:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
-</pre></div>
-</div>
-</li>
-</ol>
-<p>pyDARTdiags is now installed in your virtual environment in editable mode.</p>
+<section id="source-code">
+<h2>Source Code<a class="headerlink" href="#source-code" title="Link to this heading">#</a></h2>
+<p>The source code for pyDARTdiags is available on our <a class="reference external" href="https://github.com/NCAR/pyDARTdiags">GitHub repository</a>. Feel free to explore and understand the codebase.</p>
 </section>
 <section id="pull-requests">
 <h2>Pull Requests<a class="headerlink" href="#pull-requests" title="Link to this heading">#</a></h2>
-<p>We welcome pull requests! To submit a pull request:</p>
+<p>We welcome pull requests! Please take a read through the <a class="reference internal" href="index.html#devel"><span class="std std-ref">Developer Guide</span></a> for how to start developing
+with pyDARTdiags. To submit a pull request:</p>
 <ol class="arabic">
 <li><p><strong>Fork the Repository</strong>: Click the “Fork” button on the repository’s GitHub page.</p></li>
 <li><p><strong>Create a Branch</strong>: Create a new branch for your work.</p>
@@ -477,53 +453,6 @@ Include as much detail as necessary to help us understand and reproduce the issu
 <li><p><strong>Open a Pull Request</strong>: Open a pull request from your forked repository to the main repository. Provide a
 description of your changes - the “why” - and note any issues that are being addressed.</p></li>
 </ol>
-</section>
-<section id="source-code">
-<h2>Source Code<a class="headerlink" href="#source-code" title="Link to this heading">#</a></h2>
-<p>The source code for pyDARTdiags is available on our <a class="reference external" href="https://github.com/NCAR/pyDARTdiags">GitHub repository</a>. Feel free to explore and understand the codebase.</p>
-</section>
-<section id="documentation">
-<h2>Documentation<a class="headerlink" href="#documentation" title="Link to this heading">#</a></h2>
-<p>The documentation is built using Sphinx, is written in rst or MyST, and can be found in the docs
-directory.
-The API guide is built directly from docstrings in the python code, using Sphinx autodoc.
-You can contribute by improving existing documentation or adding examples.</p>
-<p>Assuming you have set up your development environment as above, with the dependencies listed
-in docs/requirements.txt, you can build the documentation locally</p>
-<ol class="arabic">
-<li><p><strong>Navigate to the docs directory</strong>:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>docs
-</pre></div>
-</div>
-</li>
-<li><p><strong>Build the Documentation</strong>:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>html
-</pre></div>
-</div>
-</li>
-</ol>
-</section>
-<section id="tests">
-<h2>Tests<a class="headerlink" href="#tests" title="Link to this heading">#</a></h2>
-<p>We use <code class="docutils literal notranslate"><span class="pre">pytest</span></code> for testing.</p>
-<section id="running-tests">
-<h3>Running Tests<a class="headerlink" href="#running-tests" title="Link to this heading">#</a></h3>
-<p>To run the tests, use the following command:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>tests
-pytest
-</pre></div>
-</div>
-<p>Or for more verbose output:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pytest<span class="w"> </span>-v
-</pre></div>
-</div>
-<p>Make sure all tests pass before submitting a pull request.</p>
-</section>
-<section id="code-coverage">
-<h3>Code Coverage<a class="headerlink" href="#code-coverage" title="Link to this heading">#</a></h3>
-<p>We use <a class="reference external" href="https://about.codecov.io/">Codecov</a> to measure the percentage of code covered by tests.
-You can view the code coverage reports for the project at <a class="reference external" href="https://app.codecov.io/gh/NCAR/pyDARTdiags">Codecov for pyDARTdiags</a>.</p>
-</section>
 </section>
 </section>
 
@@ -577,15 +506,8 @@ You can view the code coverage reports for the project at <a class="reference ex
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-can-i-do">What Can I Do?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reporting-a-bug">Reporting a Bug</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up-your-development-environment">Setting up your development environment</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pull-requests">Pull Requests</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#source-code">Source Code</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation">Documentation</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tests">Tests</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#running-tests">Running Tests</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#code-coverage">Code Coverage</a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pull-requests">Pull Requests</a></li>
 </ul>
   </nav></div>
 

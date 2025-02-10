@@ -54,7 +54,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Contributors Guide" href="CONTRIBUTING.html" />
-    <link rel="prev" title="Working with obs_sequence objects" href="../userguide/working-with-obsq.html" />
+    <link rel="prev" title="Statistics" href="../userguide/statistics.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -336,7 +336,8 @@
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Developer Guide</span></p>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contributors Guide</a></li>
 </ul>
 </div>
@@ -397,29 +398,51 @@
                   
   <section id="developer-guide">
 <span id="devel"></span><h1>Developer Guide<a class="headerlink" href="#developer-guide" title="Link to this heading">#</a></h1>
-<p>Contributions to pyDARTdiags are welcome! We encourage you to contribute to pyDARTdiags by
-reporting issues, suggesting new features, and submitting pull requests.  This page provides
+<p>Contributions to pyDARTdiags are welcome! This page provides
 information for developers of pyDARTdiags, including how to set up your development
 environment and how to build the documentation locally. We also encourage you to read the
 <a class="reference internal" href="CONTRIBUTING.html"><span class="doc">contributors guide</span></a>.</p>
 <div class="toctree-wrapper compound">
 </div>
-<section id="editable-installation">
-<h2>Editable Installation<a class="headerlink" href="#editable-installation" title="Link to this heading">#</a></h2>
-<p>For developers of pyDARTdiags, we recommend installing pyDARTdiags as a
-local project in “editable” mode in your virtual environment. This allows you to
-make changes to the code and see the changes reflected in your environment without
+<section id="setting-up-your-development-environment">
+<h2>Setting Up Your Development Environment<a class="headerlink" href="#setting-up-your-development-environment" title="Link to this heading">#</a></h2>
+<p>For developers of pyDARTdiags, we recommend installing pyDARTdiags as a local project in “editable” mode.
+This allows you to make changes to the code and see the changes reflected in your environment without
 having to reinstall the package.</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/NCAR/pyDARTdiags
-python -m pip install -e pyDARTdiags
+<p>To set up your development environment, follow these steps:</p>
+<ol class="arabic">
+<li><p>Create a Virtual Environment:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>python -m venv py-dart
+source py-dart/bin/activate
 </pre></div>
 </div>
+</li>
+<li><p>Clone the Repository:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/NCAR/pyDARTdiags.git
+cd pyDARTdiags
+</pre></div>
+</div>
+</li>
+<li><p>Install Dependencies:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pip install -r docs/requirements.txt
+</pre></div>
+</div>
+</li>
+<li><p>Install the Package in Editable Mode:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pip install -e .
+</pre></div>
+</div>
+</li>
+</ol>
+<p>pyDARTdiags is now installed in your virtual environment in editable mode.</p>
 </section>
 <section id="building-the-documentation-locally">
 <h2>Building the Documentation Locally<a class="headerlink" href="#building-the-documentation-locally" title="Link to this heading">#</a></h2>
+<p>The documentation is built using Sphinx, is written in rst or MyST, and can be found in the docs
+directory. The API guide is built directly from docstrings in the python code, using Sphinx autodoc.</p>
 <p>To build the documentation locally, you will need to install the dependencies.
 The dependencies are listed in the <code class="docutils literal notranslate"><span class="pre">docs/requirements.txt</span></code> file. You can install
-the dependencies with the following command:</p>
+the dependencies with the following command in the root directory of the repository:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>python -m pip install -r docs/requirements.txt
 </pre></div>
 </div>
@@ -470,7 +493,13 @@ files.</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pytest tests
 </pre></div>
 </div>
-<p>Code coverage for the test can be calculated using the pytest-cov package.
+</section>
+<section id="code-coverage">
+<h2>Code Coverage<a class="headerlink" href="#code-coverage" title="Link to this heading">#</a></h2>
+<p>We use <a class="reference external" href="https://about.codecov.io/">Codecov</a> to measure the percentage of code covered by tests.
+You can view the code coverage reports for the project at
+<a class="reference external" href="https://app.codecov.io/gh/NCAR/pyDARTdiags">Codecov for pyDARTdiags</a>.
+Code coverage for the test can be calculated locally using the pytest-cov package.
 To install pytest-cov, run the following command:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pip install pytest-cov
 </pre></div>
@@ -498,12 +527,12 @@ To install pytest-cov, run the following command:</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../userguide/working-with-obsq.html"
+       href="../userguide/statistics.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Working with obs_sequence objects</p>
+        <p class="prev-next-title">Statistics</p>
       </div>
     </a>
     <a class="right-next"
@@ -534,11 +563,12 @@ To install pytest-cov, run the following command:</p>
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#editable-installation">Editable Installation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up-your-development-environment">Setting Up Your Development Environment</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-the-documentation-locally">Building the Documentation Locally</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-examples">Creating Examples</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#linting-your-code">Linting your code</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#writing-tests">Writing Tests</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#code-coverage">Code Coverage</a></li>
 </ul>
   </nav></div>
 
