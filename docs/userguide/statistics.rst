@@ -38,7 +38,7 @@ Some symbols used throughout:
 - :math:`N`: Number of observations in the group, i.e. in the region and time period of interest
 - :math:`n`: group member
 - :math:`\mu`: ensemble mean
-- :math:`\sigma`: ensemble spread
+- :math:`\sigma`: ensemble spread (standard deviation)
 - :math:`\sigma^2`: ensemble variance
 
 RMSE
@@ -48,13 +48,13 @@ The root mean square error is defined
 
 .. math::
 
-   \text{RMSE} = \sqrt{\frac{1}{N} \sum_{n=1}^{N} (\mu_n - y_n)^2}
+   \text{RMSE} \equiv \sqrt{\frac{1}{N} \sum_{n=1}^{N} (\mu_n - y_n)^2}
 
 
 Spread
 ~~~~~~
 
-The spread is the standard deviation of the ensemble members
+The spread is the variability among ensemble members for a given observation.
 
 .. math::
    \sigma \equiv \sqrt{\frac{1}{N} \sum_{n=1}^{N} ( \sigma_n)^2}
@@ -86,7 +86,7 @@ Multi-component Observations
 -----------------------------
 
 Some observations are multi-component, such as wind. These observations are combined from 
-two (or more) scalar observations. For example, a horizontal wind observation is made up 
+two (or more) scalar observations. For example, a horizontal wind observation :math:`s` is made up 
 of two components, :math:`u` velocity and :math:`v` velocity.
 
 The velocity components :math:`u` and :math:`v` are handled individually, as above, and in
@@ -108,10 +108,65 @@ are calculated as follows:
 .. math::
    \sigma_{T,s} \equiv \sqrt{\frac{1}{N} \sum_{n=1}^{N} (\sigma^2_u + \sigma^2_v + \epsilon^2_u + \epsilon^2_v )}
 
+Rank Histogram
+--------------
+
+The rank histogram requires the full ensemble of forward operator values for each observation.
+Sampling noise is added to each member of the forward operator ensemble.:
+
+.. math::
+
+   X_i = f_i + N(\mu, \sigma)
+
+where:
+
+- :math:`i` is the ensemble member index
+- :math:`f_i` is the forward operator value of the :math:`i`-th ensemble member
+- :math:`N(\mu, \sigma)` is a random number drawn from a normal distribution with the mean :math:`\mu` 
+  and standard deviation :math:`\sigma`
+  of the ensemble.  
+
+The rank of the observation is the number of ensemble members :math:`X` whose value is less than the observation value.
+
+.. math::
+
+   R = \sum_{i=1}^{M} \mathbf{1} \left( X_i < y \right) + 1
+
+where:
+
+- :math:`R` is the rank of the observation :math:`X_o`,  
+- :math:`M` is the number of ensemble members,  
+- :math:`X_i` represents the value of the :math:`i`-th ensemble member,  
+- :math:`y` is the observation value,
+- :math:`\mathbf{1}(\cdot)` is the indicator function, which is 1 if :math:`X_i < y` and 0 otherwise,  
+  The :math:`+1` ensures a 1-based rank (i.e., the observation is ranked among the ensemble members).  
+
+
+The number of bins is equal to the number of ensemble members. 
+The count :math:`H` of observations in in each  bin is: 
+
+.. math::
+
+   H(k) = \sum_{i=1}^{N} \mathbf{1} \left( R_i = k \right)
+
+where:
+
+- :math:`H(k)` is the count of forecasts that fall into rank bin :math:`k`,
+- :math:`N` is the total number of observations,
+- :math:`R_i` is the rank of the observation within the ensemble for case `i`,
+- :math:`\mathbf{1}(\cdot)` is the indicator function, which is 1 if the condition is true and 0 otherwise.
+
 Trusted Observations
 --------------------
 
-.. list-table:: Observation Quality Control (QC) Values
+The DART quality control (DART_QC) values are indicate, for each observation, whether the observation
+was used in the assimilation, and if not, why. DART_QC 0 indicates that the observation was assimilated.
+You may choose to include trusted observations in your observation space diagnostics, in which case,
+include DART_QC 0 and DART_QQC 7 observations in the calculation of the statistics.
+
+For reference, here is the DART QC values and their meaning. 
+
+.. list-table:: DART Quality Control (DART_QC) Values
    :header-rows: 1
 
    * - QC Value
@@ -139,8 +194,6 @@ Trusted Observations
 For more detail on the DART QC values refer to the 
 `DART documentation <https://docs.dart.ucar.edu/en/latest/assimilation_code/modules/assimilation/quality_control_mod.html>`_.
 
-Rank Histogram
---------------
 
 
 .. The notation used here is taken from `https://doi.org/doi:10.1175/2010MWR3253.1`.
