@@ -161,14 +161,15 @@ class TestObsDataframe:
         data = {
             'DART_quality_control': [0, 1, 2, 0, 3, 0],
             'type': ['type1', 'type2', 'type1', 'type3', 'type2', 'type1'],
-            'observation': [1.0, 2.0, 3.0, 4.0, 5.0, 5.2]
+            'observation': [1.0, 2.0, 3.0, 4.0, 5.0, 5.2],
+            'prior_ensemble_mean': [1.1, 2.1, 3.1, 4.1, 5.1, 5.3],
+            'prior_ensemble_spread': [0.1, 0.2, 0.3, 0.4, 0.5, 0.6],
         }
         df = pd.DataFrame(data)
         
         # Create an instance of ObsSequence with the sample DataFrame
         obs_seq = obsq.obs_sequence(file=None)
         obs_seq.df = df
-        obs_seq.has_assimilation_info = True  # Set to True for testing purposes
         return obs_seq
 
     def test_select_by_dart_qc(self, obs_seq):
@@ -179,7 +180,9 @@ class TestObsDataframe:
         expected_data = {
             'DART_quality_control': [2],
             'type': ['type1'],
-            'observation': [3.0]
+            'observation': [3.0],
+            'prior_ensemble_mean': [3.1],
+            'prior_ensemble_spread': [0.3]
         }
         expected_df = pd.DataFrame(expected_data)
         
@@ -193,7 +196,9 @@ class TestObsDataframe:
         expected_data = {
             'DART_quality_control': [1, 2, 3],
             'type': ['type2', 'type1', 'type2'],
-            'observation': [2.0, 3.0, 5.0]
+            'observation': [2.0, 3.0, 5.0],
+            'prior_ensemble_mean': [2.1, 3.1, 5.1],
+            'prior_ensemble_spread': [0.2, 0.3, 0.5]
         }
         expected_df = pd.DataFrame(expected_data)
         
@@ -272,8 +277,8 @@ class TestJoin:
         assert obs_seq_mega.all_obs == None
         assert len(obs_seq_mega.df) == 16 # obs in the dataframe
         assert obs_seq_mega.loc_mod == 'loc3d'
-        assert obs_seq_mega.has_assimilation_info == True
-        assert obs_seq_mega.has_posterior == False
+        assert obs_seq_mega.has_assimilation_info() == True
+        assert obs_seq_mega.has_posterior() == False
         assert list(obs_seq_mega.types.keys()) == list(range(1,26)) # 25 obs types
         obs_types =   ['AIRCRAFT_TEMPERATURE',
                     'BLUE_LAND_SFC_ALTIMETER',
@@ -345,8 +350,8 @@ class TestJoin:
         obj1 = obsq.obs_sequence(ascii_obs_seq_file_path1)
         obj3 = obsq.obs_sequence(ascii_obs_seq_file_path3)
         obs_seq_mega = obsq.obs_sequence.join([obj1, obj3],['prior_ensemble_mean', 'observation', 'Data_QC'])
-        assert obs_seq_mega.has_assimilation_info == False
-        assert obs_seq_mega.has_posterior == False
+        assert obs_seq_mega.has_assimilation_info() == False
+        assert obs_seq_mega.has_posterior() == False
 
 class TestCreateHeader:
     def test_create_header(self):
