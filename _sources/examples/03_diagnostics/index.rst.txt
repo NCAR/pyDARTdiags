@@ -71,6 +71,23 @@ Examples of the diagnostic tools available in the library.
     </div>
 
 
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to plot profiles of  RMSE, bias, and totalspread.">
+
+.. only:: html
+
+  .. image:: /examples/03_diagnostics/images/thumb/sphx_glr_plot_profiles_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_03_diagnostics_plot_profiles.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Plot Profiles</div>
+    </div>
+
+
 .. thumbnail-parent-div-close
 
 .. raw:: html
@@ -84,4 +101,5 @@ Examples of the diagnostic tools available in the library.
    /examples/03_diagnostics/plot_qc_poss_vs_used
    /examples/03_diagnostics/plot_grand_stats
    /examples/03_diagnostics/plot_rank_histogram
+   /examples/03_diagnostics/plot_profiles
 

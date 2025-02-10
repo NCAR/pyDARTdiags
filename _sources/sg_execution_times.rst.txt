@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:06.801** total execution time for 6 files **from all galleries**:
+**00:07.711** total execution time for 7 files **from all galleries**:
 
 .. container::
 
@@ -33,20 +33,23 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_examples_01_manipulating_plot_duplicates.py` (``../examples/01_manipulating/plot_duplicates.py``)
-     - 00:03.731
+     - 00:03.856
      - 0.0
    * - :ref:`sphx_glr_examples_03_diagnostics_plot_rank_histogram.py` (``../examples/03_diagnostics/plot_rank_histogram.py``)
-     - 00:02.434
+     - 00:02.545
      - 0.0
-   * - :ref:`sphx_glr_examples_02_visualizing_plot_qc_hover.py` (``../examples/02_visualizing/plot_qc_hover.py``)
-     - 00:00.256
-     - 0.0
-   * - :ref:`sphx_glr_examples_01_manipulating_plot_remove_obs.py` (``../examples/01_manipulating/plot_remove_obs.py``)
-     - 00:00.228
+   * - :ref:`sphx_glr_examples_03_diagnostics_plot_profiles.py` (``../examples/03_diagnostics/plot_profiles.py``)
+     - 00:00.566
      - 0.0
    * - :ref:`sphx_glr_examples_03_diagnostics_plot_grand_stats.py` (``../examples/03_diagnostics/plot_grand_stats.py``)
-     - 00:00.127
+     - 00:00.261
+     - 0.0
+   * - :ref:`sphx_glr_examples_02_visualizing_plot_qc_hover.py` (``../examples/02_visualizing/plot_qc_hover.py``)
+     - 00:00.258
+     - 0.0
+   * - :ref:`sphx_glr_examples_01_manipulating_plot_remove_obs.py` (``../examples/01_manipulating/plot_remove_obs.py``)
+     - 00:00.200
      - 0.0
    * - :ref:`sphx_glr_examples_03_diagnostics_plot_qc_poss_vs_used.py` (``../examples/03_diagnostics/plot_qc_poss_vs_used.py``)
-     - 00:00.024
+     - 00:00.025
      - 0.0
