@@ -52,6 +52,23 @@ Here are some examples of how to use pyDARTdiags to read, modify, and write obse
     </div>
 
 
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to read in two observation sequences  and join them together.">
+
+.. only:: html
+
+  .. image:: /examples/01_manipulating/images/thumb/sphx_glr_plot_join_obs_seq_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_01_manipulating_plot_join_obs_seq.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Join Observation Sequences</div>
+    </div>
+
+
 .. thumbnail-parent-div-close
 
 .. raw:: html
@@ -64,4 +81,5 @@ Here are some examples of how to use pyDARTdiags to read, modify, and write obse
 
    /examples/01_manipulating/plot_remove_obs
    /examples/01_manipulating/plot_duplicates
+   /examples/01_manipulating/plot_join_obs_seq
 

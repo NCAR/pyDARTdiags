@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Possible vs. Used Observations &#8212; pyDARTdiags</title>
+    <title>Join Observation Sequences &#8212; pyDARTdiags</title>
   
   
   
@@ -50,11 +50,11 @@
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/03_diagnostics/plot_qc_poss_vs_used';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/01_manipulating/plot_join_obs_seq';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Grand Statistics" href="plot_grand_stats.html" />
-    <link rel="prev" title="Diagnostics" href="index.html" />
+    <link rel="next" title="Visualizing Observation Sequences" href="../02_visualizing/index.html" />
+    <link rel="prev" title="Finding Duplicates in a Observation Sequence" href="plot_duplicates.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -333,21 +333,21 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 has-children"><a class="reference internal" href="../01_manipulating/index.html">Manipulating Observation Sequences</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../01_manipulating/plot_remove_obs.html">Remove Observations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../01_manipulating/plot_duplicates.html">Finding Duplicates in a Observation Sequence</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../01_manipulating/plot_join_obs_seq.html">Join Observation Sequences</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Manipulating Observation Sequences</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="plot_remove_obs.html">Remove Observations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_duplicates.html">Finding Duplicates in a Observation Sequence</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Join Observation Sequences</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../02_visualizing/index.html">Visualizing Observation Sequences</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../02_visualizing/plot_qc_hover.html">Geographic Plot of Observations to look at QC</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Diagnostics</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Possible vs. Used Observations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_grand_stats.html">Grand Statistics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_rank_histogram.html">Rank Histogram</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_profiles.html">Plot Profiles</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../03_diagnostics/index.html">Diagnostics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../03_diagnostics/plot_qc_poss_vs_used.html">Possible vs. Used Observations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_diagnostics/plot_grand_stats.html">Grand Statistics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_diagnostics/plot_rank_histogram.html">Rank Histogram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_diagnostics/plot_profiles.html">Plot Profiles</a></li>
 </ul>
 </details></li>
 </ul>
@@ -394,9 +394,9 @@
     <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Examples</a></li>
     
     
-    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Diagnostics</a></li>
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Manipulating Observation Sequences</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Possible vs. Used Observations</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Join Observation Sequences</span></li>
   </ul>
 </nav>
 </div>
@@ -415,33 +415,74 @@
                   
   <div class="sphx-glr-download-link-note admonition note">
 <p class="admonition-title">Note</p>
-<p><a class="reference internal" href="#sphx-glr-download-examples-03-diagnostics-plot-qc-poss-vs-used-py"><span class="std std-ref">Go to the end</span></a>
+<p><a class="reference internal" href="#sphx-glr-download-examples-01-manipulating-plot-join-obs-seq-py"><span class="std std-ref">Go to the end</span></a>
 to download the full example code.</p>
 </div>
-<section class="sphx-glr-example-title" id="possible-vs-used-observations">
-<span id="sphx-glr-examples-03-diagnostics-plot-qc-poss-vs-used-py"></span><h1>Possible vs. Used Observations<a class="headerlink" href="#possible-vs-used-observations" title="Link to this heading">#</a></h1>
-<p>This example demonstrates how to read and observation sequence
-file, and view the number of used versus possible observations
-by type.</p>
-<p>Import the obs_sequence module</p>
+<section class="sphx-glr-example-title" id="join-observation-sequences">
+<span id="sphx-glr-examples-01-manipulating-plot-join-obs-seq-py"></span><h1>Join Observation Sequences<a class="headerlink" href="#join-observation-sequences" title="Link to this heading">#</a></h1>
+<p>This example demonstrates how to read in two observation sequences
+and join them together.</p>
+<p>Import the obs_sequence module.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pydartdiags.obs_sequence.obs_sequence</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">obsq</span>
 </pre></div>
 </div>
-<p>Chose an obs_seq file to read.
-This is a small obs_seq file “obs_seq.final.ascii.small”
+<p>Chose the first obs_seq file to read.
+In this example, we are using a small obs_seq file “obs_seq.final.1000”
 that comes with the pyDARTdiags package
-in the data directory, so we <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">os</span></code> to get the path to the file</p>
+in the data directory, so we <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">os</span></code> to get the path to the file.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="n">data_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="s2">&quot;../..&quot;</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">)</span>
-<span class="n">data_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="s2">&quot;obs_seq.final.ascii.small&quot;</span><span class="p">)</span>
+<span class="n">data_file1</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="s2">&quot;obs_seq.final.1000&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>read the obs_seq file into an obs_seq object</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">obs_sequence</span><span class="p">(</span><span class="n">data_file</span><span class="p">)</span>
+<p>Read the obs_seq file into an obs_seq object.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq1</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">obs_sequence</span><span class="p">(</span><span class="n">data_file1</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;obs_seq1 has assimilation info:&#39;</span><span class="p">,</span> <span class="n">obs_seq1</span><span class="o">.</span><span class="n">has_assimilation_info</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;obs_seq1 has posterior:&#39;</span><span class="p">,</span> <span class="n">obs_seq1</span><span class="o">.</span><span class="n">has_posterior</span><span class="p">())</span>
 </pre></div>
 </div>
-<p>Examine the dataframe</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>obs_seq1 has assimilation info: True
+obs_seq1 has posterior: True
+</pre></div>
+</div>
+<p>Chose the second obs_seq file to read.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">data_file2</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="s2">&quot;obs_seq.final.ascii.small&quot;</span><span class="p">)</span>
+<span class="n">obs_seq2</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">obs_sequence</span><span class="p">(</span><span class="n">data_file2</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;obs_seq2 has assimilation info:&#39;</span><span class="p">,</span> <span class="n">obs_seq2</span><span class="o">.</span><span class="n">has_assimilation_info</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;obs_seq2 has posterior:&#39;</span><span class="p">,</span> <span class="n">obs_seq2</span><span class="o">.</span><span class="n">has_posterior</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>obs_seq2 has assimilation info: True
+obs_seq2 has posterior: False
+</pre></div>
+</div>
+<p>obs_seq1 has posterior information, but obs_seq2 does not.
+So we will remove the posterior columns from obs_seq1 DataFrame, using the pandas
+<cite>drop</cite> method before joining the two obs_seq objects together.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq1</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">obs_seq1</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">like</span><span class="o">=</span><span class="s1">&#39;posterior&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;obs_seq1 has posterior:&#39;</span><span class="p">,</span> <span class="n">obs_seq1</span><span class="o">.</span><span class="n">has_posterior</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>obs_seq1 has posterior: False
+</pre></div>
+</div>
+<p>Now, let’s join the two obs_seq objects together using the join method.
+<a class="reference internal" href="../../api/obs_sequence.html#obs_sequence.obs_sequence.join" title="obs_sequence.obs_sequence.join"><code class="xref py py-meth docutils literal notranslate"><span class="pre">obs_sequence.obs_sequence.join()</span></code></a> is a class method, so it is called
+on the obs_sequence class, which
+we’ve imported as obsq. The method takes a list of obs_seq objects to join.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq_mega</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">obs_sequence</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">obs_seq1</span><span class="p">,</span> <span class="n">obs_seq2</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;length of obs_seq1: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">obs_seq1</span><span class="o">.</span><span class="n">df</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">),</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;length of obs_seq2: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">obs_seq2</span><span class="o">.</span><span class="n">df</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;length of obs_seq_mega: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">obs_seq_mega</span><span class="o">.</span><span class="n">df</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">obs_seq_mega</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>length of obs_seq1: 1000
+length of obs_seq2: 10
+length of obs_seq_mega: 1010
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
@@ -618,7 +659,7 @@ in the data directory, so we <code class="docutils literal notranslate"><span cl
       <td>231.405045</td>
       <td>1.0</td>
       <td>0.0</td>
-      <td>-1           2          -1</td>
+      <td>-1          2          -1</td>
       <td>274.460</td>
       <td>40.010</td>
       <td>23950.0</td>
@@ -973,86 +1014,88 @@ in the data directory, so we <code class="docutils literal notranslate"><span cl
 </div>
 </div>
 <br />
-<br /><p>Find number of used versus possible observations</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">possible_vs_used</span><span class="p">()</span>
+<br /><p>Now, the obs_seq_mega object has the observations from both obs_seq1 and obs_seq2.
+with the prior columns from both obs_seq DataFrames.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq_mega</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span>
 </pre></div>
 </div>
-<div class="output_subarea output_html rendered_html output_result">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>type</th>
-      <th>possible</th>
-      <th>used</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>ACARS_TEMPERATURE</td>
-      <td>3</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>ACARS_U_WIND_COMPONENT</td>
-      <td>2</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>ACARS_V_WIND_COMPONENT</td>
-      <td>2</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>AIRCRAFT_TEMPERATURE</td>
-      <td>1</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>AIRCRAFT_U_WIND_COMPONENT</td>
-      <td>1</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>AIRCRAFT_V_WIND_COMPONENT</td>
-      <td>1</td>
-      <td>1</td>
-    </tr>
-  </tbody>
-</table>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Index([&#39;obs_num&#39;, &#39;observation&#39;, &#39;prior_ensemble_mean&#39;,
+       &#39;prior_ensemble_spread&#39;, &#39;prior_ensemble_member_1&#39;,
+       &#39;prior_ensemble_member_2&#39;, &#39;prior_ensemble_member_3&#39;,
+       &#39;prior_ensemble_member_4&#39;, &#39;prior_ensemble_member_5&#39;,
+       &#39;prior_ensemble_member_6&#39;, &#39;prior_ensemble_member_7&#39;,
+       &#39;prior_ensemble_member_8&#39;, &#39;prior_ensemble_member_9&#39;,
+       &#39;prior_ensemble_member_10&#39;, &#39;prior_ensemble_member_11&#39;,
+       &#39;prior_ensemble_member_12&#39;, &#39;prior_ensemble_member_13&#39;,
+       &#39;prior_ensemble_member_14&#39;, &#39;prior_ensemble_member_15&#39;,
+       &#39;prior_ensemble_member_16&#39;, &#39;prior_ensemble_member_17&#39;,
+       &#39;prior_ensemble_member_18&#39;, &#39;prior_ensemble_member_19&#39;,
+       &#39;prior_ensemble_member_20&#39;, &#39;prior_ensemble_member_21&#39;,
+       &#39;prior_ensemble_member_22&#39;, &#39;prior_ensemble_member_23&#39;,
+       &#39;prior_ensemble_member_24&#39;, &#39;prior_ensemble_member_25&#39;,
+       &#39;prior_ensemble_member_26&#39;, &#39;prior_ensemble_member_27&#39;,
+       &#39;prior_ensemble_member_28&#39;, &#39;prior_ensemble_member_29&#39;,
+       &#39;prior_ensemble_member_30&#39;, &#39;prior_ensemble_member_31&#39;,
+       &#39;prior_ensemble_member_32&#39;, &#39;prior_ensemble_member_33&#39;,
+       &#39;prior_ensemble_member_34&#39;, &#39;prior_ensemble_member_35&#39;,
+       &#39;prior_ensemble_member_36&#39;, &#39;prior_ensemble_member_37&#39;,
+       &#39;prior_ensemble_member_38&#39;, &#39;prior_ensemble_member_39&#39;,
+       &#39;prior_ensemble_member_40&#39;, &#39;prior_ensemble_member_41&#39;,
+       &#39;prior_ensemble_member_42&#39;, &#39;prior_ensemble_member_43&#39;,
+       &#39;prior_ensemble_member_44&#39;, &#39;prior_ensemble_member_45&#39;,
+       &#39;prior_ensemble_member_46&#39;, &#39;prior_ensemble_member_47&#39;,
+       &#39;prior_ensemble_member_48&#39;, &#39;prior_ensemble_member_49&#39;,
+       &#39;prior_ensemble_member_50&#39;, &#39;prior_ensemble_member_51&#39;,
+       &#39;prior_ensemble_member_52&#39;, &#39;prior_ensemble_member_53&#39;,
+       &#39;prior_ensemble_member_54&#39;, &#39;prior_ensemble_member_55&#39;,
+       &#39;prior_ensemble_member_56&#39;, &#39;prior_ensemble_member_57&#39;,
+       &#39;prior_ensemble_member_58&#39;, &#39;prior_ensemble_member_59&#39;,
+       &#39;prior_ensemble_member_60&#39;, &#39;prior_ensemble_member_61&#39;,
+       &#39;prior_ensemble_member_62&#39;, &#39;prior_ensemble_member_63&#39;,
+       &#39;prior_ensemble_member_64&#39;, &#39;prior_ensemble_member_65&#39;,
+       &#39;prior_ensemble_member_66&#39;, &#39;prior_ensemble_member_67&#39;,
+       &#39;prior_ensemble_member_68&#39;, &#39;prior_ensemble_member_69&#39;,
+       &#39;prior_ensemble_member_70&#39;, &#39;prior_ensemble_member_71&#39;,
+       &#39;prior_ensemble_member_72&#39;, &#39;prior_ensemble_member_73&#39;,
+       &#39;prior_ensemble_member_74&#39;, &#39;prior_ensemble_member_75&#39;,
+       &#39;prior_ensemble_member_76&#39;, &#39;prior_ensemble_member_77&#39;,
+       &#39;prior_ensemble_member_78&#39;, &#39;prior_ensemble_member_79&#39;,
+       &#39;prior_ensemble_member_80&#39;, &#39;Data_QC&#39;, &#39;DART_quality_control&#39;,
+       &#39;linked_list&#39;, &#39;longitude&#39;, &#39;latitude&#39;, &#39;vertical&#39;, &#39;vert_unit&#39;, &#39;type&#39;,
+       &#39;metadata&#39;, &#39;external_FO&#39;, &#39;seconds&#39;, &#39;days&#39;, &#39;time&#39;, &#39;obs_err_var&#39;],
+      dtype=&#39;object&#39;)
+</pre></div>
 </div>
+<p>You can pass a list of columns to the join method to only join the columns you want.
+For example, if you only want to join the ‘prior_mean’ and ‘prior_spread’ columns,
+and discard the rest of the columns from the obs_seq objects,
+you can do so like this:</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq_no_members</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">obs_sequence</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">obs_seq1</span><span class="p">,</span> <span class="n">obs_seq2</span><span class="p">],</span>
+                                            <span class="p">[</span><span class="s1">&#39;prior_ensemble_mean&#39;</span><span class="p">,</span>
+                                             <span class="s1">&#39;prior_ensemble_spread&#39;</span><span class="p">])</span>
+</pre></div>
 </div>
-<br />
-<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.024 seconds)</p>
-<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-03-diagnostics-plot-qc-poss-vs-used-py">
+<p>Note, the join method will still include the required columns for the obs_seq object to function properly.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq_no_members</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Index([&#39;obs_num&#39;, &#39;observation&#39;, &#39;prior_ensemble_mean&#39;,
+       &#39;prior_ensemble_spread&#39;, &#39;linked_list&#39;, &#39;longitude&#39;, &#39;latitude&#39;,
+       &#39;vertical&#39;, &#39;vert_unit&#39;, &#39;type&#39;, &#39;metadata&#39;, &#39;external_FO&#39;, &#39;seconds&#39;,
+       &#39;days&#39;, &#39;time&#39;, &#39;obs_err_var&#39;],
+      dtype=&#39;object&#39;)
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.096 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-01-manipulating-plot-join-obs-seq-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/fab812091467099906cf4212ae4d2052/plot_qc_poss_vs_used.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_qc_poss_vs_used.ipynb</span></code></a></p>
+<p><a class="reference download internal" download="" href="../../_downloads/59ec61044c62ea21e72b2a07e34c4636/plot_join_obs_seq.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_join_obs_seq.ipynb</span></code></a></p>
 </div>
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/21f8c607b07bcc3631d8187786709535/plot_qc_poss_vs_used.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_qc_poss_vs_used.py</span></code></a></p>
+<p><a class="reference download internal" download="" href="../../_downloads/57938e85ef51f8097079ec604df080a3/plot_join_obs_seq.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_join_obs_seq.py</span></code></a></p>
 </div>
 <div class="sphx-glr-download sphx-glr-download-zip docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/bf4ebc95533b21c763a4cc2e8a181208/plot_qc_poss_vs_used.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">plot_qc_poss_vs_used.zip</span></code></a></p>
+<p><a class="reference download internal" download="" href="../../_downloads/64d90465dd9bfd1cfab5e78c2251ae10/plot_join_obs_seq.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">plot_join_obs_seq.zip</span></code></a></p>
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
@@ -1069,20 +1112,20 @@ in the data directory, so we <code class="docutils literal notranslate"><span cl
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="index.html"
+       href="plot_duplicates.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Diagnostics</p>
+        <p class="prev-next-title">Finding Duplicates in a Observation Sequence</p>
       </div>
     </a>
     <a class="right-next"
-       href="plot_grand_stats.html"
+       href="../02_visualizing/index.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Grand Statistics</p>
+        <p class="prev-next-title">Visualizing Observation Sequences</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
