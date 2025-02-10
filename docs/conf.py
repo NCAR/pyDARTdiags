@@ -72,6 +72,7 @@ sphinx_gallery_conf = {
      'examples_dirs': '../examples',   # path to your example scripts
      'gallery_dirs': 'examples',  # path to where to save gallery generated output
      'default_thumb_file': default_thumb_file,
+     'remove_config_comments': True,
 }
 
 pio.renderers.default = 'sphinx_gallery' # for plotly output in examples

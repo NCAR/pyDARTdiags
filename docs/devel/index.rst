@@ -4,12 +4,10 @@
 Developer Guide
 =================
 
-Contributions to pyDARTdiags are welcome! We encourage you to contribute to pyDARTdiags by
-reporting issues, suggesting new features, and submitting pull requests.  This page provides
+Contributions to pyDARTdiags are welcome! This page provides
 information for developers of pyDARTdiags, including how to set up your development
 environment and how to build the documentation locally. We also encourage you to read the
 :doc:`contributors guide <CONTRIBUTING>`.
-
 
 .. toctree::
    :hidden:
@@ -18,26 +16,53 @@ environment and how to build the documentation locally. We also encourage you to
    CONTRIBUTING
 
 
-Editable Installation
----------------------
+Setting Up Your Development Environment
+----------------------------------------
 
-For developers of pyDARTdiags, we recommend installing pyDARTdiags as a 
-local project in “editable” mode in your virtual environment. This allows you to
-make changes to the code and see the changes reflected in your environment without
+For developers of pyDARTdiags, we recommend installing pyDARTdiags as a local project in "editable" mode.
+This allows you to make changes to the code and see the changes reflected in your environment without
 having to reinstall the package.
 
-.. code-block :: text
+To set up your development environment, follow these steps:
 
-   git clone https://github.com/NCAR/pyDARTdiags
-   python -m pip install -e pyDARTdiags
+#. Create a Virtual Environment:
+
+   .. code-block:: text
+
+      python -m venv py-dart
+      source py-dart/bin/activate 
+
+#. Clone the Repository:
+
+   .. code-block:: text
+
+      git clone https://github.com/NCAR/pyDARTdiags.git
+      cd pyDARTdiags
+
+#. Install Dependencies:
+
+   .. code-block:: text
+
+      pip install -r docs/requirements.txt
+
+#. Install the Package in Editable Mode:
+
+   .. code-block:: text
+
+      pip install -e .
+
+pyDARTdiags is now installed in your virtual environment in editable mode.
 
 
 Building the Documentation Locally
 ----------------------------------
 
+The documentation is built using Sphinx, is written in rst or MyST, and can be found in the docs
+directory. The API guide is built directly from docstrings in the python code, using Sphinx autodoc.
+
 To build the documentation locally, you will need to install the dependencies. 
 The dependencies are listed in the ``docs/requirements.txt`` file. You can install
-the dependencies with the following command:
+the dependencies with the following command in the root directory of the repository:
 
 .. code-block :: text
 
@@ -103,7 +128,13 @@ To run the tests, you can use the following command:
 
    pytest tests
 
-Code coverage for the test can be calculated using the pytest-cov package. 
+Code Coverage
+-------------
+
+We use `Codecov <https://about.codecov.io/>`_ to measure the percentage of code covered by tests. 
+You can view the code coverage reports for the project at 
+`Codecov for pyDARTdiags <https://app.codecov.io/gh/NCAR/pyDARTdiags>`_.
+Code coverage for the test can be calculated locally using the pytest-cov package. 
 To install pytest-cov, run the following command: 
 
 .. code-block :: text

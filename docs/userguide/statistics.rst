@@ -159,7 +159,7 @@ where:
 Trusted Observations
 --------------------
 
-The DART quality control (DART_QC) values are indicate, for each observation, whether the observation
+The DART quality control (DART_QC) values indicate, for each observation, whether the observation
 was used in the assimilation, and if not, why. DART_QC 0 indicates that the observation was assimilated.
 You may choose to include trusted observations in your observation space diagnostics, in which case,
 include DART_QC 0 and DART_QQC 7 observations in the calculation of the statistics.
