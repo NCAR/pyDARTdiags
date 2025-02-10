@@ -22,6 +22,7 @@ Import the obs_sequence and plots module
 .. code-block :: python
 
     from pydartdiags.obs_sequence import obs_sequence as obsq
+    from pydartdiags.stats import stats
     from pydartdiags.plots import plots
 
 
@@ -198,11 +199,11 @@ Examine the DataFrame
 
 
 
-Find the numeber of assimilated (used) observations vs. possible observations by type
+Find the number of assimilated (used) observations vs. possible observations by type
 
 .. code-block :: python
 
-    obsq.possible_vs_used(obs_seq.df)
+    obs_seq.possible_vs_used()
 
 .. raw :: html
 
@@ -353,25 +354,13 @@ Find the numeber of assimilated (used) observations vs. possible observations by
     <p>
 
 
-plot a rank histogram
-----------------------
-
-* Select only observations that were assimilated (QC === 0).
-* Plot the rank histogram
-
-.. code-block :: python
-
-    df_qc0 = obsq.select_by_dart_qc(obs_seq.df, 0) 
-    plots.plot_rank_histogram(df_qc0)
-
-.. image:: ../images/rankhist.png
-   :alt: Rank Histogram
-
-plot profiles of RMSE and Bias
-------------------------------
+Plot Profiles of RMSE and Bias and Total Spread
+------------------------------------------------
 
 * Choose levels
 * Select only observations that were assimilated (QC === 0).
+* Calculate the statistics
+* Bin by the selected levels
 * Plot the profiles
 
 .. code-block :: python
@@ -379,8 +368,10 @@ plot profiles of RMSE and Bias
     hPalevels = [0.0, 100.0,  150.0, 200.0, 250.0, 300.0, 400.0, 500.0, 700, 850, 925, 1000]  # Pa?
     plevels = [i * 100 for i in hPalevels]
 
-    df_qc0 = obsq.select_by_dart_qc(obs_seq.df, 0)  # only qc 0
-    df_profile, figrmse, figbias, figts  = plots.plot_profile(df_qc0, plevels, "pressure (Pa)")
+    qc0 = obs_seq.select_by_dart_qc(0)  # only qc 0
+    stats.diag_stats(qc0) # calculate statistics 
+    stats.bin_by_layer(qc0, plevels, verticalUnit="pressure (Pa)") # bin by plevels
+    figrmse, figbias, figts  = plots.plot_profile(qc0, "pressure (Pa)")
 
 .. image:: ../images/rmse.png
    :alt: RMSE Plot
