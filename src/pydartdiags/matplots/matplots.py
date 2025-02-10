@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: Apache-2.0
 from pydartdiags.stats import stats
 import matplotlib.pyplot as plt
+import textwrap
 
 # HK @todo color scheme class
 dacolors = ["green", "magenta", "orange", "red"]
@@ -32,6 +33,10 @@ def plot_profile(obs_seq, levels, type, bias=True, rmse=True, totalspread=True):
 
     # filter by type
     qc0 = qc0[qc0["type"] == type]
+    if qc0.empty:
+        print(f"No rows found for type: {type}")
+        return None
+
     all_df = obs_seq.df[obs_seq.df["type"] == type]
 
     # grand statistics
@@ -45,7 +50,7 @@ def plot_profile(obs_seq, levels, type, bias=True, rmse=True, totalspread=True):
     df_pvu = stats.possible_vs_used_by_layer(all_df)  # possible vs used
     df = stats.layer_statistics(qc0)  # bias, rmse, totalspread for plotting
 
-    fig, ax1 = plt.subplots()
+    fig, ax1 = plt.subplots(figsize=(8, 8))
 
     # convert to hPa HK @todo only for Pressure (Pa)
     df["midpoint"] = df["midpoint"].astype(float)
@@ -152,31 +157,38 @@ def plot_profile(obs_seq, levels, type, bias=True, rmse=True, totalspread=True):
 
     ax1.invert_yaxis()
     ax1.set_title(type)
-    datalabel = "bias," + " " + "rmse," + " " + "totalspread"
-    ax1.set_xlabel(datalabel)
+    # Build the datalabel string
+    datalabel = []
+    if bias:
+        datalabel.append("bias")
+    if rmse:
+        datalabel.append("rmse")
+    if totalspread:
+        datalabel.append("totalspread")
+    ax1.set_xlabel(", ".join(datalabel))
 
     lines1, labels1 = ax1.get_legend_handles_labels()
     ax1.legend(lines1, labels1, loc="upper left", bbox_to_anchor=(1.05, 1))
 
     ax1.text(
-        0.5, -0.15, obs_seq.file, ha="center", va="center", transform=ax1.transAxes
+        0.6, -0.08, obs_seq.file, ha="center", va="center", transform=ax1.transAxes
     )
 
     # Add a text box with information below the legend
     textstr = "Grand statistics:\n"
     if bias:
-        textstr += f"- prior_bias: {bias_prior:.7f}\n"
+        textstr += f"prior_bias: {bias_prior:.7f}\n"
     if rmse:
-        textstr += f"- rmse_prior: {rmse_prior:.7f}\n"
+        textstr += f"rmse_prior: {rmse_prior:.7f}\n"
     if totalspread:
-        textstr += f"- totalspread_prior: {totalspread_prior:.7f}\n"
+        textstr += f"totalspread_prior: {totalspread_prior:.7f}\n"
     if "posterior_bias" in df.columns:
         if bias:
-            textstr += f"- posterior_bias: {bias_posterior:.7f}\n"
+            textstr += f"posterior_bias: {bias_posterior:.7f}\n"
         if rmse:
-            textstr += f"- rmse_posterior: {rmse_posterior:.7f}\n"
+            textstr += f"rmse_posterior: {rmse_posterior:.7f}\n"
         if totalspread:
-            textstr += f"- totalspread_posterior: {totalspread_posterior:.7f}\n"
+            textstr += f"totalspread_posterior: {totalspread_posterior:.7f}\n"
 
     props = dict(boxstyle="round", facecolor="wheat", alpha=0.5)
     ax1.text(
@@ -189,6 +201,7 @@ def plot_profile(obs_seq, levels, type, bias=True, rmse=True, totalspread=True):
         bbox=props,
     )
 
+    plt.tight_layout()  
     plt.show()
 
     return fig
