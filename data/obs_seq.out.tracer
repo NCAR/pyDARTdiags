@@ -1,0 +1,35 @@
+ obs_sequence
+obs_type_definitions
+           2
+           1 RAW_STATE_VARIABLE             
+           2 RAW_TRACER_CONCENTRATION       
+  num_copies:            2  num_qc:            1
+  num_obs:        2  max_num_obs:        2
+observations                                                    
+truth                                                           
+Quality Control                                                 
+  first:            1  last:        2
+ OBS            1
+   2.0725625157212870     
+   1.6488630019849135     
+   0.0000000000000000     
+          -1           2          -1
+obdef
+loc1d
+   0.0976320288609713
+kind
+           2
+     0          0
+   10.010000000000000     
+ OBS            2
+  0.50940099779359427     
+  0.71515334314452661     
+   0.0000000000000000     
+           1           -1          -1
+obdef
+loc1d
+   0.1116066654212773
+kind
+          1
+     0          0
+   9.9900000000000002     
