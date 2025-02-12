@@ -53,8 +53,8 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'examples/03_diagnostics/plot_profiles';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="API Guide" href="../../api/index.html" />
-    <link rel="prev" title="Rank Histogram" href="plot_rank_histogram.html" />
+    <link rel="next" title="Possible vs. Used Observations" href="plot_qc_poss_vs_used.html" />
+    <link rel="prev" title="Grand Statistics" href="plot_grand_stats.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -334,9 +334,10 @@
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1 has-children"><a class="reference internal" href="../01_manipulating/index.html">Manipulating Observation Sequences</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../01_manipulating/plot_remove_obs.html">Remove Observations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../01_manipulating/plot_duplicates.html">Finding Duplicates in a Observation Sequence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_manipulating/plot_external_fo.html">Adding External Forward Operators to an Observation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../01_manipulating/plot_join_obs_seq.html">Join Observation Sequences</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_manipulating/plot_remove_obs.html">Remove Observations</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../02_visualizing/index.html">Visualizing Observation Sequences</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -344,10 +345,10 @@
 </ul>
 </details></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Diagnostics</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="plot_qc_poss_vs_used.html">Possible vs. Used Observations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_grand_stats.html">Grand Statistics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_rank_histogram.html">Rank Histogram</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Plot Profiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_qc_poss_vs_used.html">Possible vs. Used Observations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_rank_histogram.html">Rank Histogram</a></li>
 </ul>
 </details></li>
 </ul>
@@ -470,7 +471,7 @@ ACARS_TEMPERATURE observations.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">plot_profile</span><span class="p">(</span><span class="n">obs_seq</span><span class="p">,</span> <span class="n">levels</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">rmse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">totalspread</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_profiles_002.png" srcset="../../_images/sphx_glr_plot_profiles_002.png" alt="ACARS_TEMPERATURE" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.540 seconds)</p>
+<img src="../../_images/sphx_glr_plot_profiles_002.png" srcset="../../_images/sphx_glr_plot_profiles_002.png" alt="ACARS_TEMPERATURE" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.559 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-03-diagnostics-plot-profiles-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/bc705c3dddb5668c2e2af27eeb8ae104/plot_profiles.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_profiles.ipynb</span></code></a></p>
@@ -496,20 +497,20 @@ ACARS_TEMPERATURE observations.</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="plot_rank_histogram.html"
+       href="plot_grand_stats.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Rank Histogram</p>
+        <p class="prev-next-title">Grand Statistics</p>
       </div>
     </a>
     <a class="right-next"
-       href="../../api/index.html"
+       href="plot_qc_poss_vs_used.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">API Guide</p>
+        <p class="prev-next-title">Possible vs. Used Observations</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

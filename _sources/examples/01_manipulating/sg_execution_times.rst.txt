@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:04.045** total execution time for 3 files **from examples/01_manipulating**:
+**00:04.179** total execution time for 4 files **from examples/01_manipulating**:
 
 .. container::
 
@@ -33,11 +33,14 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_examples_01_manipulating_plot_duplicates.py` (``plot_duplicates.py``)
-     - 00:03.753
-     - 0.0
-   * - :ref:`sphx_glr_examples_01_manipulating_plot_remove_obs.py` (``plot_remove_obs.py``)
-     - 00:00.196
+     - 00:04.046
      - 0.0
    * - :ref:`sphx_glr_examples_01_manipulating_plot_join_obs_seq.py` (``plot_join_obs_seq.py``)
      - 00:00.095
+     - 0.0
+   * - :ref:`sphx_glr_examples_01_manipulating_plot_remove_obs.py` (``plot_remove_obs.py``)
+     - 00:00.030
+     - 0.0
+   * - :ref:`sphx_glr_examples_01_manipulating_plot_external_fo.py` (``plot_external_fo.py``)
+     - 00:00.007
      - 0.0

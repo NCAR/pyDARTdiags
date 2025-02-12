@@ -20,23 +20,6 @@ Here are some examples of how to use pyDARTdiags to read, modify, and write obse
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to remove observations from an observation sequence and write a new observation sequence file.">
-
-.. only:: html
-
-  .. image:: /examples/01_manipulating/images/thumb/sphx_glr_plot_remove_obs_thumb.png
-    :alt:
-
-  :ref:`sphx_glr_examples_01_manipulating_plot_remove_obs.py`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">Remove Observations</div>
-    </div>
-
-
-.. raw:: html
-
     <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to find duplicates in an observation sequence, and how to remove them.">
 
 .. only:: html
@@ -49,6 +32,23 @@ Here are some examples of how to use pyDARTdiags to read, modify, and write obse
 .. raw:: html
 
       <div class="sphx-glr-thumbnail-title">Finding Duplicates in a Observation Sequence</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="External, or &quot;precomputed&quot; forward operators are forward operators that are not calculated during filter, DART&#x27;s assimilation program.  They are calculated externally, written to an observation sequence file, and read it by DART.  ">
+
+.. only:: html
+
+  .. image:: /examples/01_manipulating/images/thumb/sphx_glr_plot_external_fo_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_01_manipulating_plot_external_fo.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Adding External Forward Operators to an Observation</div>
     </div>
 
 
@@ -69,6 +69,23 @@ Here are some examples of how to use pyDARTdiags to read, modify, and write obse
     </div>
 
 
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to remove observations from an observation sequence and write a new observation sequence file.">
+
+.. only:: html
+
+  .. image:: /examples/01_manipulating/images/thumb/sphx_glr_plot_remove_obs_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_01_manipulating_plot_remove_obs.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Remove Observations</div>
+    </div>
+
+
 .. thumbnail-parent-div-close
 
 .. raw:: html
@@ -79,7 +96,8 @@ Here are some examples of how to use pyDARTdiags to read, modify, and write obse
 .. toctree::
    :hidden:
 
-   /examples/01_manipulating/plot_remove_obs
    /examples/01_manipulating/plot_duplicates
+   /examples/01_manipulating/plot_external_fo
    /examples/01_manipulating/plot_join_obs_seq
+   /examples/01_manipulating/plot_remove_obs
 

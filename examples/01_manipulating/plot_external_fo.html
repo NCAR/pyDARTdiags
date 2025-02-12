@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Remove Observations &#8212; pyDARTdiags</title>
+    <title>Adding External Forward Operators to an Observation &#8212; pyDARTdiags</title>
   
   
   
@@ -50,11 +50,11 @@
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/01_manipulating/plot_remove_obs';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/01_manipulating/plot_external_fo';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Visualizing Observation Sequences" href="../02_visualizing/index.html" />
-    <link rel="prev" title="Join Observation Sequences" href="plot_join_obs_seq.html" />
+    <link rel="next" title="Join Observation Sequences" href="plot_join_obs_seq.html" />
+    <link rel="prev" title="Finding Duplicates in a Observation Sequence" href="plot_duplicates.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -335,9 +335,9 @@
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Manipulating Observation Sequences</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="plot_duplicates.html">Finding Duplicates in a Observation Sequence</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_external_fo.html">Adding External Forward Operators to an Observation</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Adding External Forward Operators to an Observation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_join_obs_seq.html">Join Observation Sequences</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Remove Observations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_remove_obs.html">Remove Observations</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../02_visualizing/index.html">Visualizing Observation Sequences</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -397,7 +397,7 @@
     
     <li class="breadcrumb-item"><a href="index.html" class="nav-link">Manipulating Observation Sequences</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Remove Observations</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Adding External Forward Operators to an Observation</span></li>
   </ul>
 </nav>
 </div>
@@ -416,32 +416,34 @@
                   
   <div class="sphx-glr-download-link-note admonition note">
 <p class="admonition-title">Note</p>
-<p><a class="reference internal" href="#sphx-glr-download-examples-01-manipulating-plot-remove-obs-py"><span class="std std-ref">Go to the end</span></a>
+<p><a class="reference internal" href="#sphx-glr-download-examples-01-manipulating-plot-external-fo-py"><span class="std std-ref">Go to the end</span></a>
 to download the full example code.</p>
 </div>
-<section class="sphx-glr-example-title" id="remove-observations">
-<span id="sphx-glr-examples-01-manipulating-plot-remove-obs-py"></span><h1>Remove Observations<a class="headerlink" href="#remove-observations" title="Link to this heading">#</a></h1>
-<p>This example demonstrates how to remove observations from an
-observation sequence and write a new observation sequence file.</p>
-<p>Import the obs_sequence module</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pydartdiags.obs_sequence.obs_sequence</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">obsq</span>
-</pre></div>
-</div>
-<p>Chose an obs_seq file to read.
-In this example, we are using a small obs_seq file “obs_seq.final.medium”
-that comes with the pyDARTdiags package
-in the data directory, so we <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">os</span></code> to get the path to the file.</p>
+<section class="sphx-glr-example-title" id="adding-external-forward-operators-to-an-observation">
+<span id="sphx-glr-examples-01-manipulating-plot-external-fo-py"></span><h1>Adding External Forward Operators to an Observation<a class="headerlink" href="#adding-external-forward-operators-to-an-observation" title="Link to this heading">#</a></h1>
+<p>External, or “precomputed” forward operators are forward operators
+that are not calculated during filter, DART’s assimilation program.
+They are calculated externally, written to an observation sequence file,
+and read it by DART.</p>
+<p>This example shows how to add an external forward operator to an observation.
+We’ll be using observations for the Lorenz 96 tracer model, which is a toy
+model used to test assimilation algorithms.  We are going to create some
+RAW_TRACER_CONCENTRATION forward operators.</p>
+<p>Import the obs_sequence module, and numpy</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-<span class="n">data_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="s2">&quot;../..&quot;</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">)</span>
-<span class="n">data_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="s2">&quot;obs_seq.final.ascii.medium&quot;</span><span class="p">)</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pydartdiags.obs_sequence.obs_sequence</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">obsq</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 </pre></div>
 </div>
-<p>Read the obs_seq file into an obs_seq object.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">obs_sequence</span><span class="p">(</span><span class="n">data_file</span><span class="p">)</span>
+<p>Read in the observation sequence file. In this example we’ll use the
+obs_seq.out.tracer file that comes with the pyDARTdiags package.
+This file only has two observations.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">data_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="s2">&quot;../..&quot;</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">)</span>
+<span class="n">data_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="s2">&quot;obs_seq.out.tracer&quot;</span><span class="p">)</span>
+<span class="n">obs_seq</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">obs_sequence</span><span class="p">(</span><span class="n">data_file</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Take a look at the observation sequence.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span>
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
@@ -465,15 +467,10 @@ in the data directory, so we <code class="docutils literal notranslate"><span cl
       <th></th>
       <th>obs_num</th>
       <th>observation</th>
-      <th>prior_ensemble_mean</th>
-      <th>prior_ensemble_spread</th>
-      <th>Data_QC</th>
-      <th>DART_quality_control</th>
+      <th>truth</th>
+      <th>Quality_Control</th>
       <th>linked_list</th>
-      <th>longitude</th>
-      <th>latitude</th>
-      <th>vertical</th>
-      <th>vert_unit</th>
+      <th>location</th>
       <th>type</th>
       <th>metadata</th>
       <th>external_FO</th>
@@ -487,176 +484,90 @@ in the data directory, so we <code class="docutils literal notranslate"><span cl
     <tr>
       <th>0</th>
       <td>1</td>
-      <td>230.16</td>
-      <td>231.310652</td>
-      <td>0.405191</td>
-      <td>1.0</td>
+      <td>2.072563</td>
+      <td>1.648863</td>
       <td>0.0</td>
       <td>-1           2          -1</td>
-      <td>274.460</td>
-      <td>40.010</td>
-      <td>23950.0</td>
-      <td>pressure (Pa)</td>
-      <td>ACARS_TEMPERATURE</td>
+      <td>0.097632</td>
+      <td>RAW_TRACER_CONCENTRATION</td>
       <td>[]</td>
       <td>[]</td>
-      <td>75603</td>
-      <td>153005</td>
-      <td>2019-12-01 21:00:03</td>
-      <td>1.00</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1601-01-01 00:00:00</td>
+      <td>10.01</td>
     </tr>
     <tr>
       <th>1</th>
       <td>2</td>
-      <td>18.40</td>
-      <td>15.720527</td>
-      <td>0.630827</td>
-      <td>1.0</td>
+      <td>0.509401</td>
+      <td>0.715153</td>
       <td>0.0</td>
-      <td>1           3          -1</td>
-      <td>274.460</td>
-      <td>40.010</td>
-      <td>23950.0</td>
-      <td>pressure (Pa)</td>
-      <td>ACARS_U_WIND_COMPONENT</td>
+      <td>1           -1          -1</td>
+      <td>0.111607</td>
+      <td>RAW_STATE_VARIABLE</td>
       <td>[]</td>
       <td>[]</td>
-      <td>75603</td>
-      <td>153005</td>
-      <td>2019-12-01 21:00:03</td>
-      <td>6.25</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>3</td>
-      <td>1.60</td>
-      <td>-4.932073</td>
-      <td>0.825899</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>2           4          -1</td>
-      <td>274.460</td>
-      <td>40.010</td>
-      <td>23950.0</td>
-      <td>pressure (Pa)</td>
-      <td>ACARS_V_WIND_COMPONENT</td>
-      <td>[]</td>
-      <td>[]</td>
-      <td>75603</td>
-      <td>153005</td>
-      <td>2019-12-01 21:00:03</td>
-      <td>6.25</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>4</td>
-      <td>264.16</td>
-      <td>264.060532</td>
-      <td>0.035584</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>3           5          -1</td>
-      <td>242.628</td>
-      <td>34.105</td>
-      <td>56260.0</td>
-      <td>pressure (Pa)</td>
-      <td>ACARS_TEMPERATURE</td>
-      <td>[]</td>
-      <td>[]</td>
-      <td>75603</td>
-      <td>153005</td>
-      <td>2019-12-01 21:00:03</td>
-      <td>1.00</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>5</td>
-      <td>11.60</td>
-      <td>10.134115</td>
-      <td>0.063183</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>4           6          -1</td>
-      <td>242.628</td>
-      <td>34.105</td>
-      <td>56260.0</td>
-      <td>pressure (Pa)</td>
-      <td>ACARS_U_WIND_COMPONENT</td>
-      <td>[]</td>
-      <td>[]</td>
-      <td>75603</td>
-      <td>153005</td>
-      <td>2019-12-01 21:00:03</td>
-      <td>6.25</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1601-01-01 00:00:00</td>
+      <td>9.99</td>
     </tr>
   </tbody>
 </table>
 </div>
 </div>
 <br />
-<br /><p>To count of the number of observations by type, use the groupby method.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+<br /><p>The external forward operator is stored in the ‘external_FO’ column.
+Currently, the ‘external_FO’ column is empty.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;external_FO&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>type
-ACARS_TEMPERATURE            107
-ACARS_U_WIND_COMPONENT       106
-ACARS_V_WIND_COMPONENT       105
-AIRCRAFT_TEMPERATURE          20
-AIRCRAFT_U_WIND_COMPONENT     20
-AIRCRAFT_V_WIND_COMPONENT     20
-AIRS_SPECIFIC_HUMIDITY        39
-AIRS_TEMPERATURE              81
-GPSRO_REFRACTIVITY           503
-dtype: int64
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[]
 </pre></div>
 </div>
-<p>Let’s remove the ‘GPSRO_REFRACTIVITY’ observations.
-Remove rows where <code class="docutils literal notranslate"><span class="pre">'type'</span> <span class="pre">==</span> <span class="pre">'GPSRO_REFRACTIVITY'</span></code></p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;GPSRO_REFRACTIVITY&#39;</span><span class="p">]</span>
+<p>Let’s add a forward operator to the RAW_TRACER_CONCENTRATION observation.
+For this example, we’re going to use random numbers to create our ensemble
+of forward operators. For a scientific experiment, you would use appropriate
+forward operator results from your model.
+We want 80 ensemble members, so we’ll create 80 random numbers, and we want tracer
+concentrations, so we’ll force the numbers to be positive.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">n</span> <span class="o">=</span> <span class="mi">80</span>
+<span class="n">random_numbers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">))</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Now let’s check the number of observations by type again.
-For only the ‘GPSRO_REFRACTIVITY’ observations:</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">gpsro_count</span> <span class="o">=</span> <span class="p">(</span><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;GPSRO_REFRACTIVITY&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of observations with type &#39;GPSRO_REFRACTIVITY&#39;: </span><span class="si">{</span><span class="n">gpsro_count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<p>DART observation sequence files have a specific format. DART expects the list
+of forward operators to have ‘external_FO’ followed by the number of ensemble
+members, followed by the ‘key’ for the forward operator. The ‘key’ is not
+used by DART, so we will just put 1 for the value.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">random_numbers</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;external_FO </span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s1"> 1&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Number of observations with type &#39;GPSRO_REFRACTIVITY&#39;: 0
+<p>Now we can add the forward operator to the ‘external_FO’ column for row 0</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="s1">&#39;external_FO&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">random_numbers</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Count the observations by type again. You’ll see that the ‘GPSRO_REFRACTIVITY’
-observations have been removed from the dataFrame</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+<p>Now the ‘external_FO’ column has the forward operator.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;external_FO&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>type
-ACARS_TEMPERATURE            107
-ACARS_U_WIND_COMPONENT       106
-ACARS_V_WIND_COMPONENT       105
-AIRCRAFT_TEMPERATURE          20
-AIRCRAFT_U_WIND_COMPONENT     20
-AIRCRAFT_V_WIND_COMPONENT     20
-AIRS_SPECIFIC_HUMIDITY        39
-AIRS_TEMPERATURE              81
-dtype: int64
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;external_FO 80 1&#39;, 0.6206871740254891, 0.6726537498980191, 0.55590519426942, 0.868673254024104, 0.6093424558105808, 0.6946488243035439, 0.8209111390145457, 0.717257810505776, 0.7054453840393875, 0.6999607160840031, 0.6792709476239198, 0.6698221513015459, 0.6782487514544924, 0.8418449281143543, 0.7839042619844762, 0.5167120353645605, 0.8452919805583029, 0.5876930858195972, 0.8423764518475507, 0.7460802111140531, 0.8148169637666154, 0.8242877069662605, 0.7236625362543068, 0.5882903684278085, 0.561802977555047, 0.7385205932828638, 0.6920867749790077, 0.6419086195390097, 0.9059684032886506, 0.8090375541367208, 0.7750749464944771, 0.7699016091536737, 0.7104652307524381, 0.732442002086918, 0.7986598820463543, 0.7972555726708181, 0.8237850574324711, 0.9273615332756644, 0.9052111757750502, 0.7496577582392395, 0.6108702293778105, 0.8680325388991201, 0.7265495662990151, 0.8151183819769839, 0.8277406253564876, 0.6752737533002034, 0.542017808807265, 0.9302350933477547, 0.7602002741113535, 0.9416686793368526, 0.71622041279636, 0.7625227762180125, 0.8159365577564607, 0.7791608499235501, 0.6392655575725465, 0.7353967416560672, 0.6228200165849347, 0.7703672231635761, 0.7922876570625482, 0.7000864070121279, 0.7045379826033313, 0.697465831603365, 0.6752402689293677, 0.7362912050943886, 0.7519440913790826, 0.8097481111106983, 0.8226577605758397, 0.7573606518544529, 0.7262043501364822, 0.832913494810545, 0.7589780088216095, 0.8411911521156742, 0.7921352288693227, 0.6980689692631464, 0.5980762248445681, 0.6390395021839019, 0.859760637323717, 0.6281680533715607, 0.6215524160962058, 0.7901832943836323]
 </pre></div>
 </div>
-<p>Write the new observation sequence to a file.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">write_obs_seq</span><span class="p">(</span><span class="s1">&#39;obs_seq.final.ascii.medium.no_gpsro&#39;</span><span class="p">)</span>
+<p>Let’s write the observation sequence file with the new forward operator.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">write_obs_seq</span><span class="p">(</span><span class="s1">&#39;obs_seq.out.tracer_with_external_FO&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The new file will not have the ‘GPSRO_REFRACTIVITY’ observations.</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.030 seconds)</p>
-<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-01-manipulating-plot-remove-obs-py">
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.007 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-01-manipulating-plot-external-fo-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/35cc49d2ff3b046822bbe1eb8f180401/plot_remove_obs.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_remove_obs.ipynb</span></code></a></p>
+<p><a class="reference download internal" download="" href="../../_downloads/4b1e29eb5a16321306a4851e86279a4e/plot_external_fo.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_external_fo.ipynb</span></code></a></p>
 </div>
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/c400bbdf0a68590c3a099a547513b40b/plot_remove_obs.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_remove_obs.py</span></code></a></p>
+<p><a class="reference download internal" download="" href="../../_downloads/a31e5fd9ddf13ed64cce110ddc11f57d/plot_external_fo.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_external_fo.py</span></code></a></p>
 </div>
 <div class="sphx-glr-download sphx-glr-download-zip docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/1b0d96e63054fccf5b366e9082c7ebc2/plot_remove_obs.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">plot_remove_obs.zip</span></code></a></p>
+<p><a class="reference download internal" download="" href="../../_downloads/3b30ed6443bbb62f697ad525a90cb969/plot_external_fo.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">plot_external_fo.zip</span></code></a></p>
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
@@ -673,20 +584,20 @@ dtype: int64
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="plot_join_obs_seq.html"
+       href="plot_duplicates.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Join Observation Sequences</p>
+        <p class="prev-next-title">Finding Duplicates in a Observation Sequence</p>
       </div>
     </a>
     <a class="right-next"
-       href="../02_visualizing/index.html"
+       href="plot_join_obs_seq.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Visualizing Observation Sequences</p>
+        <p class="prev-next-title">Join Observation Sequences</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

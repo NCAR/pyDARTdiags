@@ -53,7 +53,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'examples/01_manipulating/index';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Remove Observations" href="plot_remove_obs.html" />
+    <link rel="next" title="Finding Duplicates in a Observation Sequence" href="plot_duplicates.html" />
     <link rel="prev" title="Examples" href="../index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -334,9 +334,10 @@
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">Manipulating Observation Sequences</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="plot_remove_obs.html">Remove Observations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_duplicates.html">Finding Duplicates in a Observation Sequence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_external_fo.html">Adding External Forward Operators to an Observation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_join_obs_seq.html">Join Observation Sequences</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_remove_obs.html">Remove Observations</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../02_visualizing/index.html">Visualizing Observation Sequences</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -344,10 +345,10 @@
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../03_diagnostics/index.html">Diagnostics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../03_diagnostics/plot_qc_poss_vs_used.html">Possible vs. Used Observations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../03_diagnostics/plot_grand_stats.html">Grand Statistics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../03_diagnostics/plot_rank_histogram.html">Rank Histogram</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../03_diagnostics/plot_profiles.html">Plot Profiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_diagnostics/plot_qc_poss_vs_used.html">Possible vs. Used Observations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_diagnostics/plot_rank_histogram.html">Rank Histogram</a></li>
 </ul>
 </details></li>
 </ul>
@@ -413,15 +414,18 @@
   <section id="manipulating-observation-sequences">
 <span id="manip-examples-index"></span><span id="sphx-glr-examples-01-manipulating"></span><h1>Manipulating Observation Sequences<a class="headerlink" href="#manipulating-observation-sequences" title="Link to this heading">#</a></h1>
 <p>Here are some examples of how to use pyDARTdiags to read, modify, and write observation sequences</p>
-<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to remove observations from an observation sequence and write a new observation sequence file."><img alt="" src="../../_images/sphx_glr_plot_remove_obs_thumb.png" />
-<p><a class="reference internal" href="plot_remove_obs.html#sphx-glr-examples-01-manipulating-plot-remove-obs-py"><span class="std std-ref">Remove Observations</span></a></p>
-  <div class="sphx-glr-thumbnail-title">Remove Observations</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example shows how to find duplicates in an observation sequence, and how to remove them."><img alt="" src="../../_images/sphx_glr_plot_duplicates_thumb.png" />
+<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="This example shows how to find duplicates in an observation sequence, and how to remove them."><img alt="" src="../../_images/sphx_glr_plot_duplicates_thumb.png" />
 <p><a class="reference internal" href="plot_duplicates.html#sphx-glr-examples-01-manipulating-plot-duplicates-py"><span class="std std-ref">Finding Duplicates in a Observation Sequence</span></a></p>
   <div class="sphx-glr-thumbnail-title">Finding Duplicates in a Observation Sequence</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="External, or &quot;precomputed&quot; forward operators are forward operators that are not calculated during filter, DART&#x27;s assimilation program.  They are calculated externally, written to an observation sequence file, and read it by DART.  "><img alt="" src="../../_images/sphx_glr_plot_external_fo_thumb.png" />
+<p><a class="reference internal" href="plot_external_fo.html#sphx-glr-examples-01-manipulating-plot-external-fo-py"><span class="std std-ref">Adding External Forward Operators to an Observation</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Adding External Forward Operators to an Observation</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to read in two observation sequences  and join them together."><img alt="" src="../../_images/sphx_glr_plot_join_obs_seq_thumb.png" />
 <p><a class="reference internal" href="plot_join_obs_seq.html#sphx-glr-examples-01-manipulating-plot-join-obs-seq-py"><span class="std std-ref">Join Observation Sequences</span></a></p>
   <div class="sphx-glr-thumbnail-title">Join Observation Sequences</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to remove observations from an observation sequence and write a new observation sequence file."><img alt="" src="../../_images/sphx_glr_plot_remove_obs_thumb.png" />
+<p><a class="reference internal" href="plot_remove_obs.html#sphx-glr-examples-01-manipulating-plot-remove-obs-py"><span class="std std-ref">Remove Observations</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Remove Observations</div>
 </div></div><div class="toctree-wrapper compound">
 </div>
 </section>
@@ -446,11 +450,11 @@
       </div>
     </a>
     <a class="right-next"
-       href="plot_remove_obs.html"
+       href="plot_duplicates.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Remove Observations</p>
+        <p class="prev-next-title">Finding Duplicates in a Observation Sequence</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

@@ -53,7 +53,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'examples/03_diagnostics/index';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Possible vs. Used Observations" href="plot_qc_poss_vs_used.html" />
+    <link rel="next" title="Grand Statistics" href="plot_grand_stats.html" />
     <link rel="prev" title="Geographic Plot of Observations to look at QC" href="../02_visualizing/plot_qc_hover.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -334,9 +334,10 @@
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1 has-children"><a class="reference internal" href="../01_manipulating/index.html">Manipulating Observation Sequences</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../01_manipulating/plot_remove_obs.html">Remove Observations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../01_manipulating/plot_duplicates.html">Finding Duplicates in a Observation Sequence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_manipulating/plot_external_fo.html">Adding External Forward Operators to an Observation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../01_manipulating/plot_join_obs_seq.html">Join Observation Sequences</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_manipulating/plot_remove_obs.html">Remove Observations</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../02_visualizing/index.html">Visualizing Observation Sequences</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -344,10 +345,10 @@
 </ul>
 </details></li>
 <li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">Diagnostics</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="plot_qc_poss_vs_used.html">Possible vs. Used Observations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_grand_stats.html">Grand Statistics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_rank_histogram.html">Rank Histogram</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_profiles.html">Plot Profiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_qc_poss_vs_used.html">Possible vs. Used Observations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_rank_histogram.html">Rank Histogram</a></li>
 </ul>
 </details></li>
 </ul>
@@ -413,18 +414,18 @@
   <section id="diagnostics">
 <span id="diag-examples-index"></span><span id="sphx-glr-examples-03-diagnostics"></span><h1>Diagnostics<a class="headerlink" href="#diagnostics" title="Link to this heading">#</a></h1>
 <p>Examples of the diagnostic tools available in the library.</p>
-<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to read and observation sequence file, and view the number of used versus possible observations by type."><img alt="" src="../../_images/sphx_glr_plot_qc_poss_vs_used_thumb.png" />
-<p><a class="reference internal" href="plot_qc_poss_vs_used.html#sphx-glr-examples-03-diagnostics-plot-qc-poss-vs-used-py"><span class="std std-ref">Possible vs. Used Observations</span></a></p>
-  <div class="sphx-glr-thumbnail-title">Possible vs. Used Observations</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to compute grand statistics for an observation sequence."><img alt="" src="../../_images/sphx_glr_plot_grand_stats_thumb.png" />
+<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to compute grand statistics for an observation sequence."><img alt="" src="../../_images/sphx_glr_plot_grand_stats_thumb.png" />
 <p><a class="reference internal" href="plot_grand_stats.html#sphx-glr-examples-03-diagnostics-plot-grand-stats-py"><span class="std std-ref">Grand Statistics</span></a></p>
   <div class="sphx-glr-thumbnail-title">Grand Statistics</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to plot a rank histogram."><img alt="" src="../../_images/sphx_glr_plot_rank_histogram_thumb.png" />
-<p><a class="reference internal" href="plot_rank_histogram.html#sphx-glr-examples-03-diagnostics-plot-rank-histogram-py"><span class="std std-ref">Rank Histogram</span></a></p>
-  <div class="sphx-glr-thumbnail-title">Rank Histogram</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to plot profiles of  RMSE, bias, and totalspread."><img alt="" src="../../_images/sphx_glr_plot_profiles_thumb.png" />
 <p><a class="reference internal" href="plot_profiles.html#sphx-glr-examples-03-diagnostics-plot-profiles-py"><span class="std std-ref">Plot Profiles</span></a></p>
   <div class="sphx-glr-thumbnail-title">Plot Profiles</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to read and observation sequence file, and view the number of used versus possible observations by type."><img alt="" src="../../_images/sphx_glr_plot_qc_poss_vs_used_thumb.png" />
+<p><a class="reference internal" href="plot_qc_poss_vs_used.html#sphx-glr-examples-03-diagnostics-plot-qc-poss-vs-used-py"><span class="std std-ref">Possible vs. Used Observations</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Possible vs. Used Observations</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to plot a rank histogram."><img alt="" src="../../_images/sphx_glr_plot_rank_histogram_thumb.png" />
+<p><a class="reference internal" href="plot_rank_histogram.html#sphx-glr-examples-03-diagnostics-plot-rank-histogram-py"><span class="std std-ref">Rank Histogram</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Rank Histogram</div>
 </div></div><div class="toctree-wrapper compound">
 </div>
 </section>
@@ -449,11 +450,11 @@
       </div>
     </a>
     <a class="right-next"
-       href="plot_qc_poss_vs_used.html"
+       href="plot_grand_stats.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Possible vs. Used Observations</p>
+        <p class="prev-next-title">Grand Statistics</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
