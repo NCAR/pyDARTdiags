@@ -73,6 +73,7 @@ sphinx_gallery_conf = {
      'gallery_dirs': 'examples',  # path to where to save gallery generated output
      'default_thumb_file': default_thumb_file,
      'remove_config_comments': True,
+     'within_subsection_order': 'FileNameSortKey',
 }
 
 pio.renderers.default = 'sphinx_gallery' # for plotly output in examples
