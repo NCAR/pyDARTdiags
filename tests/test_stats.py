@@ -311,6 +311,8 @@ class TestGrandStatistics:
         )
         # ------
 
+    # HK @todo add test for layer_statistics
+
 
 class TestSelectFailedQcs:
 
@@ -399,6 +401,49 @@ class TestPossibleVsUsed:
 
         # Assert that the result matches the expected DataFrame
         pd.testing.assert_frame_equal(result.reset_index(drop=True), expected_df)
+
+    def test_possible_vs_used_by_layer(self):
+
+        data = {
+            "observation": [2.5, 3.0, 4.5, 5.0, 6.0],
+            "DART_quality_control": [0, 1, 0, 2, 0],  # Quality control flags
+            "type": ["A", "B", "A", "B", "A"],  # Observation type
+            "vertical": [99, 226, 150, 250, 278],  # Pressure level
+            "vert_unit": [
+                "pressure (Pa)",
+                "pressure (Pa)",
+                "pressure (Pa)",
+                "pressure (Pa)",
+                "pressure (Pa)",
+            ],
+        }
+        df = pd.DataFrame(data)
+
+        # Define the layers
+        layers = [0, 100, 200, 300]  # midpoints are 50, 150, 250
+        stats.bin_by_layer(df, layers)
+
+        # Call the function
+        result = stats.possible_vs_used_by_layer(df)
+
+        # Check if the result DataFrame has the expected columns
+        expected_columns = ["type", "possible", "used", "midpoint"]
+        assert all(column in result.columns for column in expected_columns)
+
+        # Check the values of the new columns
+        expected_midpoints = pd.Categorical(
+            [50.0, 150.0, 250.0, 50.0, 150.0, 250.0],
+            categories=[50.0, 150.0, 250.0],
+            ordered=True,
+        )
+        expected_data = {
+            "type": ["A", "A", "A", "B", "B", "B"],
+            "midpoint": expected_midpoints,
+            "possible": [1, 1, 1, 0, 0, 2],
+            "used": [1, 1, 1, 0, 0, 0],
+        }
+        expected_df = pd.DataFrame(expected_data)
+        pd.testing.assert_frame_equal(result, expected_df)
 
 
 class TestLayers:
