@@ -9,3 +9,4 @@ plotly
 sphinx-gallery
 matplotlib
 black
+pystest

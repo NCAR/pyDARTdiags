@@ -358,7 +358,7 @@ Plot Profiles of RMSE and Bias and Total Spread
 ------------------------------------------------
 
 * Choose levels
-* Select only observations that were assimilated (QC === 0).
+* Select only observations that were assimilated (QC == 0)
 * Calculate the statistics
 * Bin by the selected levels
 * Plot the profiles
