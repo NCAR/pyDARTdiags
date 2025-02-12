@@ -8,5 +8,5 @@ build
 docs/examples
 sg_execution_times.rst
 .vscode
-examples/obs_seq*
+examples/**/obs_seq*
 
