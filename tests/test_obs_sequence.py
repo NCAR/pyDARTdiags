@@ -5,6 +5,7 @@ import tempfile
 import datetime as dt
 import pandas as pd
 from pydartdiags.obs_sequence import obs_sequence as obsq
+from pydartdiags.stats import stats
 
 
 class TestConvertDartTime:
@@ -177,6 +178,77 @@ class TestWriteAscii:
 
         # Compare the written file with the reference file, line by line
         self.compare_files_line_by_line(temp_output_file_path, ascii_obs_seq_file_path)
+
+        # Clean up is handled by the temporary directory context manager
+
+    @pytest.mark.parametrize(
+        "obs_seq_file_path",
+        [
+            os.path.join(
+                os.path.dirname(__file__), "data", "obs_seq.final.ascii.small"
+            ),
+            os.path.join(os.path.dirname(__file__), "data", "obs_seq.out.GSI.small"),
+        ],
+    )
+    def test_write_after_stats(self, obs_seq_file_path, temp_dir):
+        # Create a temporary file path for the output
+        temp_output_file_path = os.path.join(
+            temp_dir, "obs_seq.final.ascii.write-after-stats"
+        )
+
+        # Create an instance of the obs_sequence class and write the output file
+        obj = obsq.obs_sequence(obs_seq_file_path)
+        stats.diag_stats(obj.df)  # add the stats columns
+        obj.write_obs_seq(temp_output_file_path)
+
+        # Ensure the output file exists
+        assert os.path.exists(temp_output_file_path)
+
+        # Compare the written file with the reference file, line by line
+        self.compare_files_line_by_line(temp_output_file_path, obs_seq_file_path)
+
+        # Clean up is handled by the temporary directory context manager
+
+    @pytest.mark.parametrize(
+        "obs_seq_file_path",
+        [
+            os.path.join(
+                os.path.dirname(__file__), "data", "obs_seq.final.ascii.small"
+            ),
+            os.path.join(os.path.dirname(__file__), "data", "obs_seq.out.GSI.small"),
+        ],
+    )
+    def test_write_after_bin(self, obs_seq_file_path, temp_dir):
+        # Create a temporary file path for the output
+        temp_output_file_path = os.path.join(
+            temp_dir, "obs_seq.final.ascii.write-after-bin"
+        )
+
+        # Create an instance of the obs_sequence class and write the output file
+        obj = obsq.obs_sequence(obs_seq_file_path)
+        hPalevels = [
+            0.0,
+            100.0,
+            150.0,
+            200.0,
+            250.0,
+            300.0,
+            400.0,
+            500.0,
+            700,
+            850,
+            925,
+            1000,
+        ]  # hPa
+        levels = [i * 100 for i in hPalevels]
+        stats.bin_by_layer(obj.df, levels)  # add the stats columns
+        obj.write_obs_seq(temp_output_file_path)
+
+        # Ensure the output file exists
+        assert os.path.exists(temp_output_file_path)
+
+        # Compare the written file with the reference file, line by line
+        self.compare_files_line_by_line(temp_output_file_path, obs_seq_file_path)
 
         # Clean up is handled by the temporary directory context manager
 
