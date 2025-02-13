@@ -211,15 +211,7 @@ def bin_by_layer(df, levels, verticalUnit="pressure (Pa)"):
     df.loc[df["vert_unit"] == verticalUnit, "vlevels"] = pd.cut(
         df.loc[df["vert_unit"] == verticalUnit, "vertical"], levels
     )
-    if verticalUnit == "pressure (Pa)":
-        df.loc[:, "midpoint"] = df["vlevels"].apply(
-            lambda x: x.mid
-        )  # HK todo units HPa - change now or in plotting?
-        df.loc[:, "vlevels"] = df["vlevels"].apply(
-            lambda x: x
-        )  # HK todo units HPa - change now or in plotting?
-    else:
-        df.loc[:, "midpoint"] = df["vlevels"].apply(lambda x: x.mid)
+    df.loc[:, "midpoint"] = df["vlevels"].apply(lambda x: x.mid)
 
 
 @apply_to_phases_by_type_return_df

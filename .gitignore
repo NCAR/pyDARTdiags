@@ -4,9 +4,13 @@ dist
 __pycache__/
 *.egg-info/
 .coverage 
+
+# docs and sphinx-gallery build
 build
 docs/examples
 sg_execution_times.rst
-.vscode
 examples/**/obs_seq*
 
+# 
+.DS_Store
+.vscode
