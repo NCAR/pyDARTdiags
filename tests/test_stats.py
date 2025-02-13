@@ -543,7 +543,7 @@ class TestLayers:
         layers = [0, 100, 200, 300]
 
         # Call the function
-        stats.bin_by_layer(df, layers,verticalUnit="height (m)" )
+        stats.bin_by_layer(df, layers, verticalUnit="height (m)")
 
         # Check if the result DataFrame has the expected columns
         expected_columns = [
@@ -597,6 +597,7 @@ class TestLayers:
 
         expected_df = pd.DataFrame(data_result)
         pd.testing.assert_frame_equal(df, expected_df)
+
 
 if __name__ == "__main__":
     pytest.main()
