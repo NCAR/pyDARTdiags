@@ -453,7 +453,7 @@ class TestLayers:
             "observation": [2.5, 3.0, 4.5, 5.0, 6.0],
             "DART_quality_control": [0, 1, 0, 2, 0],  # Quality control flags
             "type": ["A", "B", "A", "B", "A"],  # Observation type
-            "vertical": [99, 226, 150, 250, 278],  # Pressure level
+            "vertical": [99, 226, 150, 250, 278],  # Pressure Pa
             "vert_unit": [
                 "pressure (Pa)",
                 "pressure (Pa)",
@@ -469,6 +469,81 @@ class TestLayers:
 
         # Call the function
         stats.bin_by_layer(df, layers)
+
+        # Check if the result DataFrame has the expected columns
+        expected_columns = [
+            "observation",
+            "DART_quality_control",
+            "type",
+            "vertical",
+            "vert_unit",
+            "vlevels",
+            "midpoint",
+        ]
+        assert all(column in df.columns for column in expected_columns)
+
+        # Check the values of the new columns: vlevels and midpoint
+        expected_vlevels = pd.Categorical(
+            [
+                pd.Interval(left=0, right=100, closed="right"),
+                pd.Interval(left=200, right=300, closed="right"),
+                pd.Interval(left=100, right=200, closed="right"),
+                pd.Interval(left=200, right=300, closed="right"),
+                pd.Interval(left=200, right=300, closed="right"),
+            ],
+            categories=[
+                pd.Interval(left=0, right=100, closed="right"),
+                pd.Interval(left=100, right=200, closed="right"),
+                pd.Interval(left=200, right=300, closed="right"),
+            ],
+            ordered=True,
+        )
+
+        expected_midpoints = pd.Categorical(
+            [50.0, 250.0, 150.0, 250.0, 250.0],
+            categories=[50.0, 150.0, 250.0],
+            ordered=True,
+        )
+        data_result = {
+            "observation": [2.5, 3.0, 4.5, 5.0, 6.0],
+            "DART_quality_control": [0, 1, 0, 2, 0],  # Quality control flags
+            "type": ["A", "B", "A", "B", "A"],  # Observation type
+            "vertical": [99, 226, 150, 250, 278],  # Pressure level
+            "vert_unit": [
+                "pressure (Pa)",
+                "pressure (Pa)",
+                "pressure (Pa)",
+                "pressure (Pa)",
+                "pressure (Pa)",
+            ],
+            "vlevels": expected_vlevels,
+            "midpoint": expected_midpoints,
+        }
+
+        expected_df = pd.DataFrame(data_result)
+        pd.testing.assert_frame_equal(df, expected_df)
+
+    def test_bin_by_layer_height(self):
+        data = {
+            "observation": [2.5, 3.0, 4.5, 5.0, 6.0],
+            "DART_quality_control": [0, 1, 0, 2, 0],  # Quality control flags
+            "type": ["A", "B", "A", "B", "A"],  # Observation type
+            "vertical": [99, 226, 150, 250, 278],  # Height in m
+            "vert_unit": [
+                "height (m)",
+                "height (m)",
+                "height (m)",
+                "height (m)",
+                "height (m)",
+            ],
+        }
+        df = pd.DataFrame(data)
+
+        # Define the layers
+        layers = [0, 100, 200, 300]
+
+        # Call the function
+        stats.bin_by_layer(df, layers,verticalUnit="height (m)" )
 
         # Check if the result DataFrame has the expected columns
         expected_columns = [
@@ -510,11 +585,11 @@ class TestLayers:
             "type": ["A", "B", "A", "B", "A"],  # Observation type
             "vertical": [99, 226, 150, 250, 278],  # Pressure level
             "vert_unit": [
-                "pressure (Pa)",
-                "pressure (Pa)",
-                "pressure (Pa)",
-                "pressure (Pa)",
-                "pressure (Pa)",
+                "height (m)",
+                "height (m)",
+                "height (m)",
+                "height (m)",
+                "height (m)",
             ],
             "vlevels": expected_vlevels,
             "midpoint": expected_midpoints,
@@ -522,7 +597,6 @@ class TestLayers:
 
         expected_df = pd.DataFrame(data_result)
         pd.testing.assert_frame_equal(df, expected_df)
-
 
 if __name__ == "__main__":
     pytest.main()
