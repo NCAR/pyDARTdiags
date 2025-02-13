@@ -358,14 +358,14 @@ Plot Profiles of RMSE and Bias and Total Spread
 ------------------------------------------------
 
 * Choose levels
-* Select only observations that were assimilated (QC === 0).
+* Select only observations that were assimilated (QC == 0)
 * Calculate the statistics
 * Bin by the selected levels
 * Plot the profiles
 
 .. code-block :: python
 
-    hPalevels = [0.0, 100.0,  150.0, 200.0, 250.0, 300.0, 400.0, 500.0, 700, 850, 925, 1000]  # Pa?
+    hPalevels = [0.0, 100.0,  150.0, 200.0, 250.0, 300.0, 400.0, 500.0, 700, 850, 925, 1000]  # hPa
     plevels = [i * 100 for i in hPalevels]
 
     qc0 = obs_seq.select_by_dart_qc(0)  # only qc 0

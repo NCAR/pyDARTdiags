@@ -21,6 +21,7 @@ setup(
         "pandas>=2.2.0",
         "numpy>=1.26",
         "plotly>=5.22.0",
-        "pyyaml>=6.0.2"
+        "pyyaml>=6.0.2",
+        "matplotlib>=3.9.4"
     ],
 )

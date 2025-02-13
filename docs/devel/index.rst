@@ -29,7 +29,7 @@ To set up your development environment, follow these steps:
 
    .. code-block:: text
 
-      python -m venv py-dart
+      python3 -m venv py-dart
       source py-dart/bin/activate 
 
 #. Clone the Repository:
@@ -60,15 +60,7 @@ Building the Documentation Locally
 The documentation is built using Sphinx, is written in rst or MyST, and can be found in the docs
 directory. The API guide is built directly from docstrings in the python code, using Sphinx autodoc.
 
-To build the documentation locally, you will need to install the dependencies. 
-The dependencies are listed in the ``docs/requirements.txt`` file. You can install
-the dependencies with the following command in the root directory of the repository:
-
-.. code-block :: text
-
-   python -m pip install -r docs/requirements.txt
-
-Then you can build the documentation with the following commands:
+You can build the documentation with the following commands:
 
 .. code-block :: text
 
