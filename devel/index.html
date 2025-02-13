@@ -412,7 +412,7 @@ having to reinstall the package.</p>
 <p>To set up your development environment, follow these steps:</p>
 <ol class="arabic">
 <li><p>Create a Virtual Environment:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>python -m venv py-dart
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>python3 -m venv py-dart
 source py-dart/bin/activate
 </pre></div>
 </div>
@@ -440,13 +440,7 @@ cd pyDARTdiags
 <h2>Building the Documentation Locally<a class="headerlink" href="#building-the-documentation-locally" title="Link to this heading">#</a></h2>
 <p>The documentation is built using Sphinx, is written in rst or MyST, and can be found in the docs
 directory. The API guide is built directly from docstrings in the python code, using Sphinx autodoc.</p>
-<p>To build the documentation locally, you will need to install the dependencies.
-The dependencies are listed in the <code class="docutils literal notranslate"><span class="pre">docs/requirements.txt</span></code> file. You can install
-the dependencies with the following command in the root directory of the repository:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>python -m pip install -r docs/requirements.txt
-</pre></div>
-</div>
-<p>Then you can build the documentation with the following commands:</p>
+<p>You can build the documentation with the following commands:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>cd docs
 make html
 </pre></div>
