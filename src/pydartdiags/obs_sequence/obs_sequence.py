@@ -367,12 +367,15 @@ class obs_sequence:
                 df_copy["longitude"] = np.deg2rad(self.df["longitude"]).round(16)
                 df_copy["latitude"] = np.deg2rad(self.df["latitude"]).round(16)
             if "prior_bias" in df_copy.columns:
-                df_copy = df_copy.drop(columns=["prior_bias", "prior_sq_err", "prior_totalvar"])
+                df_copy = df_copy.drop(
+                    columns=["prior_bias", "prior_sq_err", "prior_totalvar"]
+                )
             if "posterior_bias" in df_copy.columns:
-                df_copy = df_copy.drop(columns=["posterior_bias", "posterior_sq_err", "posterior_totalvar"])
+                df_copy = df_copy.drop(
+                    columns=["posterior_bias", "posterior_sq_err", "posterior_totalvar"]
+                )
             if "midpoint" in df_copy.columns:
                 df_copy = df_copy.drop(columns=["midpoint", "vlevels"])
-                  
 
             # linked list for reading by dart programs
             df_copy = df_copy.sort_values(
