@@ -37,31 +37,49 @@ def plot_profile(obs_seq, levels, type, bias=True, rmse=True, totalspread=True):
         print(f"No rows found for type: {type}")
         return None
 
-    all_df = obs_seq.df[obs_seq.df["type"] == type]
+    all_df = obs_seq.df[obs_seq.df["type"] == type]  # for possible vs used
+
+    if all_df["vert_unit"].nunique() > 1:
+        print(
+            f"Multiple vertical units found in the data: {all_df['vert_unit'].unique()} for type: {type}"
+        )
+        return None
+
+    vert_unit = all_df.iloc[0]["vert_unit"]
+    print("Vertical unit: ", vert_unit)
+    if vert_unit == "pressure (Pa)":
+        conversion = 0.01  # from Pa to hPa
+    else:
+        conversion = 1.0  # no conversion needed
 
     # grand statistics
     grand = stats.grand_statistics(qc0)
 
     # add level bins to the dataframe
-    stats.bin_by_layer(all_df, levels)  # have to count used vs possible
-    stats.bin_by_layer(qc0, levels)
+    stats.bin_by_layer(all_df, levels, verticalUnit=vert_unit)
+    stats.bin_by_layer(qc0, levels, verticalUnit=vert_unit)
 
     # aggregate by layer
     df_pvu = stats.possible_vs_used_by_layer(all_df)  # possible vs used
     df = stats.layer_statistics(qc0)  # bias, rmse, totalspread for plotting
 
+    # using rmse because mean_sqrt vs mean for bias (get a column with 0 obs)
+    if "prior_rmse" not in df.columns:
+        print(f"All layers empty for type: {type}")
+        return None
+
     fig, ax1 = plt.subplots(figsize=(8, 8))
 
     # convert to hPa HK @todo only for Pressure (Pa)
     df["midpoint"] = df["midpoint"].astype(float)
-    df["midpoint"] = df["midpoint"] / 100.0
+    df["midpoint"] = df["midpoint"] * conversion
 
     df_pvu["midpoint"] = df_pvu["midpoint"].astype(float)
-    df_pvu["midpoint"] = df_pvu["midpoint"] / 100.0
+    df_pvu["midpoint"] = df_pvu["midpoint"] * conversion
 
     # Add horizontal stripes alternating between gray and white to represent the vertical levels
-    left = df["vlevels"].apply(lambda x: x.left / 100.0)  # todo convert to HPa
-    right = df["vlevels"].apply(lambda x: x.right / 100.0)
+    left = df["vlevels"].apply(lambda x: x.left * conversion)  # todo convert to HPa
+    right = df["vlevels"].apply(lambda x: x.right * conversion)
     for i in range(len(left)):
         color = "gray" if i % 2 == 0 else "white"
         ax1.axhspan(left.iloc[i], right.iloc[i], color=color, alpha=0.3)
@@ -155,7 +173,8 @@ def plot_profile(obs_seq, levels, type, bias=True, rmse=True, totalspread=True):
     )
     ax3.set_xlim(left=0)
 
-    ax1.invert_yaxis()
+    if vert_unit == "pressure (Pa)":
+        ax1.invert_yaxis()
     ax1.set_title(type)
     # Build the datalabel string
     datalabel = []
