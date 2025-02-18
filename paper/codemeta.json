@@ -1,0 +1,37 @@
+{
+  "@context": "https://raw.githubusercontent.com/codemeta/codemeta/master/codemeta.jsonld",
+  "@type": "Code",
+  "author": [
+    {
+      "@id": "https://orcid.org/0009-0002-3755-9978",
+      "@type": "Person",
+      "email": "",
+      "name": "Helen Kershaw",
+      "affiliation": "NSF National Center for Atmospheric Research"
+    },
+    {
+      "@id": "",
+      "@type": "Person",
+      "email": "",
+      "name": "iarsenea",
+      "affiliation": ""
+    },
+    {
+      "@id": "",
+      "@type": "Person",
+      "email": "",
+      "name": "Marlee Smith",
+      "affiliation": "NSF National Center for Atmospheric Research"
+    }
+  ],
+  "identifier": "",
+  "codeRepository": "https://github.com/NCAR/pyDARTdiags",
+  "datePublished": "2025-02-18",
+  "dateModified": "2025-02-18",
+  "dateCreated": "2025-02-18",
+  "description": "pyDARTdiags is a Python library for manipulating observation sequences and calculating observation-space diagnostics for the Data Assimilation Research Testbed (DART).",
+  "keywords": "data assimilation",
+  "license": "Apache 2.0",
+  "title": "pyDARTdiags",
+  "version": ""
+}
