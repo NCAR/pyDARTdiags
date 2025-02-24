@@ -553,7 +553,7 @@ vertical level bin. Only observations (row) with the specified vertical unit are
 <dd><p>Calculates the count of possible vs. used observations by type.</p>
 <p>This function takes a DataFrame containing observation data, including a ‘type’ column for the observation
 type and an ‘observation’ column. The number of used observations (‘used’), is the total number
-minus the observations that failed quality control checks (as determined by the <cite>select_failed_qcs</cite> function).
+of assimilated observations (as determined by the <cite>select_used_qcs</cite> function).
 The result is a DataFrame with each observation type, the count of possible observations, and the count of
 used observations.</p>
 <dl class="field-list simple">
@@ -575,12 +575,13 @@ that passed quality control checks.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="stats.select_failed_qcs">
-<span class="sig-prename descclassname"><span class="pre">stats.</span></span><span class="sig-name descname"><span class="pre">select_failed_qcs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#stats.select_failed_qcs" title="Link to this definition">#</a></dt>
-<dd><p>Select rows from the DataFrame where the DART quality control flag is greater than 0.</p>
+<dt class="sig sig-object py" id="stats.select_used_qcs">
+<span class="sig-prename descclassname"><span class="pre">stats.</span></span><span class="sig-name descname"><span class="pre">select_used_qcs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#stats.select_used_qcs" title="Link to this definition">#</a></dt>
+<dd><p>Select rows from the DataFrame where the observation was used.
+Includes observations for which the posterior forward observation operators failed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A DataFrame containing only the rows with a DART quality control flag greater than 0.</p>
+<dd class="field-odd"><p>A DataFrame containing only the rows with a DART quality control flag 0 or 2.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>pandas.DataFrame</p>
@@ -646,7 +647,7 @@ that passed quality control checks.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stats.bin_by_layer"><code class="docutils literal notranslate"><span class="pre">bin_by_layer()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stats.possible_vs_used"><code class="docutils literal notranslate"><span class="pre">possible_vs_used()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stats.possible_vs_used_by_layer"><code class="docutils literal notranslate"><span class="pre">possible_vs_used_by_layer()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stats.select_failed_qcs"><code class="docutils literal notranslate"><span class="pre">select_failed_qcs()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stats.select_used_qcs"><code class="docutils literal notranslate"><span class="pre">select_used_qcs()</span></code></a></li>
 </ul>
   </nav></div>
 
