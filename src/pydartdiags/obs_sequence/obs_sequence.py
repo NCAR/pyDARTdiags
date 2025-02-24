@@ -446,8 +446,10 @@ class obs_sequence:
         Returns:
             pandas.DataFrame: A DataFrame containing only the rows with a DART quality control flag 0 or 2.
         """
-        return self.df[(self.df["DART_quality_control"] == 0) 
-                       | (self.df["DART_quality_control"] == 2)]
+        return self.df[
+            (self.df["DART_quality_control"] == 0)
+            | (self.df["DART_quality_control"] == 2)
+        ]
 
     @requires_assimilation_info
     def possible_vs_used(self):
