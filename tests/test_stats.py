@@ -314,9 +314,9 @@ class TestGrandStatistics:
     # HK @todo add test for layer_statistics
 
 
-class TestSelectFailedQcs:
+class TestSelectUsedQcs:
 
-    def test_select_failed_qcs(self):
+    def test_select_used_qcs(self):
         data = {
             "observation": [
                 20.5,
@@ -364,13 +364,31 @@ class TestSelectFailedQcs:
         df = pd.DataFrame(data)
 
         # Call the function
-        result = stats.select_failed_qcs(df)
+        result = stats.select_used_qcs(df)
 
         # Check if the result DataFrame has the expected rows
         expected_data = {
-            "observation": [32.0, -5.0, 5.24, -24.4, 1000.34, 1.34, 0.02, 8.2],
-            "DART_quality_control": [1, 2, 4, 5, 6, 7, 8, 1],
-            "type": ["B", "B", "A", "B", "A", "B", "A", "B"],
+            "observation": [
+                20.5,
+                434.5,
+                -5.0,
+                0.0,
+                1423.5,
+            ],  # Observation values
+            "DART_quality_control": [
+                0,
+                0,
+                2,
+                0,
+                0,
+            ],  # Quality control flags
+            "type": [
+                "A",
+                "A",
+                "B",
+                "B",
+                "A",
+            ],  # Observation type
         }
         expected_df = pd.DataFrame(expected_data)
 
@@ -396,7 +414,7 @@ class TestPossibleVsUsed:
         assert all(column in result.columns for column in expected_columns)
 
         # Check the values of the new columns
-        expected_data = {"type": ["A", "B"], "possible": [4, 1], "used": [3, 0]}
+        expected_data = {"type": ["A", "B"], "possible": [4, 1], "used": [4, 0]}
         expected_df = pd.DataFrame(expected_data)
 
         # Assert that the result matches the expected DataFrame
@@ -440,7 +458,7 @@ class TestPossibleVsUsed:
             "type": ["A", "A", "A", "B", "B", "B"],
             "midpoint": expected_midpoints,
             "possible": [1, 1, 1, 0, 0, 2],
-            "used": [1, 1, 1, 0, 0, 0],
+            "used": [1, 1, 1, 0, 0, 1],
         }
         expected_df = pd.DataFrame(expected_data)
         pd.testing.assert_frame_equal(result, expected_df)
