@@ -438,14 +438,18 @@ class obs_sequence:
             return self.df[self.df["DART_quality_control"] == dart_qc]
 
     @requires_assimilation_info
-    def select_failed_qcs(self):
+    def select_used_qcs(self):
         """
-        Select rows from the DataFrame where the DART quality control flag is greater than 0.
+        Select rows from the DataFrame where the observation was used.
+        Includes observations for which the posterior forward observation operators failed.
 
         Returns:
-            pandas.DataFrame: A DataFrame containing only the rows with a DART quality control flag greater than 0.
+            pandas.DataFrame: A DataFrame containing only the rows with a DART quality control flag 0 or 2.
         """
-        return self.df[self.df["DART_quality_control"] > 0]
+        return self.df[
+            (self.df["DART_quality_control"] == 0)
+            | (self.df["DART_quality_control"] == 2)
+        ]
 
     @requires_assimilation_info
     def possible_vs_used(self):
@@ -454,7 +458,7 @@ class obs_sequence:
 
         This function takes a DataFrame containing observation data, including a 'type' column for the observation
         type and an 'observation' column. The number of used observations ('used'), is the total number
-        minus the observations that failed quality control checks (as determined by the `select_failed_qcs` function).
+        of assimilated observations (as determined by the `select_used_qcs` function).
         The result is a DataFrame with each observation type, the count of possible observations, and the count of
         used observations.
 
@@ -466,8 +470,8 @@ class obs_sequence:
         possible = self.df.groupby("type")["observation"].count()
         possible.rename("possible", inplace=True)
 
-        failed_qcs = self.select_failed_qcs().groupby("type")["observation"].count()
-        used = possible - failed_qcs.reindex(possible.index, fill_value=0)
+        used_qcs = self.select_used_qcs().groupby("type")["observation"].count()
+        used = used_qcs.reindex(possible.index, fill_value=0)
         used.rename("used", inplace=True)
 
         return pd.concat([possible, used], axis=1).reset_index()

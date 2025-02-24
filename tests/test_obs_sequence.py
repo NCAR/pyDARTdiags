@@ -288,16 +288,16 @@ class TestObsDataframe:
         # Assert that the result matches the expected DataFrame, ignoring the index
         pd.testing.assert_frame_equal(result, expected_df)
 
-    def test_select_failed_qcs(self, obs_seq):
-        result = obs_seq.select_failed_qcs().reset_index(drop=True)
+    def test_select_used_qcs(self, obs_seq):
+        result = obs_seq.select_used_qcs().reset_index(drop=True)
 
         # Expected DataFrame
         expected_data = {
-            "DART_quality_control": [1, 2, 3],
-            "type": ["type2", "type1", "type2"],
-            "observation": [2.0, 3.0, 5.0],
-            "prior_ensemble_mean": [2.1, 3.1, 5.1],
-            "prior_ensemble_spread": [0.2, 0.3, 0.5],
+            "DART_quality_control": [0, 2, 0, 0],
+            "type": ["type1", "type1", "type3", "type1"],
+            "observation": [1.0, 3.0, 4.0, 5.2],
+            "prior_ensemble_mean": [1.1, 3.1, 4.1, 5.3],
+            "prior_ensemble_spread": [0.1, 0.3, 0.4, 0.6],
         }
         expected_df = pd.DataFrame(expected_data)
 
@@ -311,7 +311,7 @@ class TestObsDataframe:
         expected_data = {
             "type": ["type1", "type2", "type3"],
             "possible": [3, 2, 1],
-            "used": [2, 0, 1],
+            "used": [3, 0, 1],
         }
         expected_df = pd.DataFrame(expected_data)
 
