@@ -268,7 +268,7 @@ def possible_vs_used(df):
 
     This function takes a DataFrame containing observation data, including a 'type' column for the observation
     type and an 'observation' column. The number of used observations ('used'), is the total number
-    minus the observations that failed quality control checks (as determined by the `select_failed_qcs` function).
+    of assimilated observations (as determined by the `select_used_qcs` function).
     The result is a DataFrame with each observation type, the count of possible observations, and the count of
     used observations.
 
@@ -280,8 +280,8 @@ def possible_vs_used(df):
     possible = df.groupby("type")["observation"].count()
     possible.rename("possible", inplace=True)
 
-    failed_qcs = select_failed_qcs(df).groupby("type")["observation"].count()
-    used = possible - failed_qcs.reindex(possible.index, fill_value=0)
+    used_qcs = select_used_qcs(df).groupby("type")["observation"].count()
+    used = used_qcs.reindex(possible.index, fill_value=0)
     used.rename("used", inplace=True)
 
     return pd.concat([possible, used], axis=1).reset_index()
@@ -294,22 +294,24 @@ def possible_vs_used_by_layer(df):
     possible = df.groupby(["type", "midpoint"], observed=False)["type"].count()
     possible.rename("possible", inplace=True)
 
-    failed_qcs = (
-        select_failed_qcs(df)
+    used_qcs = (
+        select_used_qcs(df)
         .groupby(["type", "midpoint"], observed=False)["type"]
         .count()
     )
-    used = possible - failed_qcs.reindex(possible.index, fill_value=0)
+
+    used = used_qcs.reindex(possible.index, fill_value=0)
     used.rename("used", inplace=True)
 
     return pd.concat([possible, used], axis=1).reset_index()
 
 
-def select_failed_qcs(df):
+def select_used_qcs(df):
     """
-    Select rows from the DataFrame where the DART quality control flag is greater than 0.
+    Select rows from the DataFrame where the observation was used.
+    Includes observations for which the posterior forward observation operators failed.
 
     Returns:
-        pandas.DataFrame: A DataFrame containing only the rows with a DART quality control flag greater than 0.
+        pandas.DataFrame: A DataFrame containing only the rows with a DART quality control flag 0 or 2.
     """
-    return df[df["DART_quality_control"] > 0]
+    return df[(df["DART_quality_control"] == 0) | (df["DART_quality_control"] == 2)]
