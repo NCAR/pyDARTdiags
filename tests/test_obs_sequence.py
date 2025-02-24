@@ -311,7 +311,7 @@ class TestObsDataframe:
         expected_data = {
             "type": ["type1", "type2", "type3"],
             "possible": [3, 2, 1],
-            "used": [2, 0, 1],
+            "used": [3, 0, 1],
         }
         expected_df = pd.DataFrame(expected_data)
 
