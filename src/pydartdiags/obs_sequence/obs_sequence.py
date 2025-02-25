@@ -381,7 +381,8 @@ class obs_sequence:
             df_copy = df_copy.sort_values(
                 by=["time"], kind="stable"
             )  # sort the DataFrame by time
-            df_copy["obs_num"] = self.df.index + 1  # obs_num in time order
+            df_copy.reset_index(drop=True, inplace=True)
+            df_copy["obs_num"] = df_copy.index + 1  # obs_num in time order
             df_copy["linked_list"] = obs_sequence.generate_linked_list_pattern(
                 len(df_copy)
             )  # linked list pattern
