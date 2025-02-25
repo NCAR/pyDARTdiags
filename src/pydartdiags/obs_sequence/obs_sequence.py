@@ -253,7 +253,7 @@ class obs_sequence:
         data.append(int(time[1]))  # days
         data.append(
             convert_dart_time(int(time[0]), int(time[1]))
-        )  # datetime   # HK todo what is approprate for 1d models?
+        )  # datetime   # HK todo what is appropriate for 1d models?
         data.append(float(obs[-1]))  # obs error variance ?convert to sd?
 
         return data
@@ -345,20 +345,13 @@ class obs_sequence:
             obsq.write_obs_seq('obs_seq.new')
 
         """
+
+        self.create_header_from_dataframe()
+
         with open(file, "w") as f:
 
-            # If a DataFrame is provided, update the header with the number of observations
-            num_rows = len(self.df)
-            replacement_string = f"num_obs: {num_rows:>10} max_num_obs: {num_rows:>10}"
-            new_header = [
-                replacement_string if "num_obs" in element else element
-                for element in self.header
-            ]
-
-            for line in new_header[:-1]:
+            for line in self.header:
                 f.write(str(line) + "\n")
-            first = 1
-            f.write(f"first: {first:>12} last: {num_rows:>12}\n")
 
             # TODO HK is there something better than copying the whole thing here?
             df_copy = self.df.copy()  # copy since you want to change for writing.
@@ -393,6 +386,69 @@ class obs_sequence:
                     f.write(str(line) + "\n")
 
             df_copy.apply(write_row, axis=1)
+
+    def create_header_from_dataframe(self):
+        """
+        Create a header for the observation sequence based on the data in the DataFrame.
+
+        It creates a dictionary of unique observation types, counts the
+        number of observations, and constructs the header with necessary information.
+
+        Example:
+        self.create_header_from_dataframe()
+
+        """
+
+        # Create a dictionary of observation types from the dataframe
+        unique_types = self.df["type"].unique()
+        not_sorted_types = {
+            self.reverse_types[obs_type]: obs_type for obs_type in unique_types
+        }
+        types = {
+            k: not_sorted_types[k] for k in sorted(not_sorted_types)
+        }  # to get keys in numerical order
+        num_obs = len(self.df)
+
+        self.header = []
+        self.header.append("obs_sequence")
+        self.header.append("obs_type_definitions")
+        self.header.append(f"{len(types)}")
+        for key, value in types.items():
+            self.header.append(f"{key} {value}")
+        self.header.append(
+            f"num_copies: {self.n_non_qc}  num_qc: {self.n_qc}"
+        )  # @todo HK not keeping track if num_qc changes
+        self.header.append(f"num_obs: {num_obs:>10} max_num_obs: {num_obs:>10}")
+        stats_cols = [
+            "prior_bias",
+            "prior_sq_err",
+            "prior_totalvar",
+            "posterior_bias",
+            "posterior_sq_err",
+            "posterior_totalvar",
+        ]
+        level_cols = ["vlevels", "midpoint"]
+        non_copie_cols = [
+            "obs_num",
+            "linked_list",
+            "longitude",
+            "latitude",
+            "vertical",
+            "vert_unit",
+            "type",
+            "metadata",
+            "external_FO",
+            "seconds",
+            "days",
+            "time",
+            "obs_err_var",
+            "location",
+        ]
+        for copie in self.df.columns:
+            if copie not in stats_cols + non_copie_cols + level_cols:
+                self.header.append(copie.replace("_", " "))
+        first = 1
+        self.header.append(f"first: {first:>12} last: {num_obs:>12}")
 
     def column_headers(self):
         """define the columns for the dataframe"""
@@ -911,7 +967,7 @@ class obs_sequence:
         combo.loc_mod = first_loc_mod
 
         # check the copies are compatible (list of copies to combine?)
-        # subset of copies if needed
+        # subset of copies if needed   # @todo HK 1d or 3d
         if copies:
             start_required_columns = ["obs_num", "observation"]
             end_required_columns = [
