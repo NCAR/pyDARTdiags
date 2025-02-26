@@ -252,6 +252,33 @@ class TestWriteAscii:
 
         # Clean up is handled by the temporary directory context manager
 
+    def test_write_after_remove_obs(self, temp_dir):
+        # Create a temporary file path for the output
+        temp_output_file_path = os.path.join(
+            temp_dir, "obs_seq.final.ascii.write-after-remove-obs"
+        )
+
+        # Create an instance of the obs_sequence class
+        obs_seq_file_path = os.path.join(
+            os.path.dirname(__file__), "data", "obs_seq.final.ascii.small"
+        )
+        obj = obsq.obs_sequence(obs_seq_file_path)
+
+        # Remove obs except ACARS_TEMPERATURE
+        obj.df = obj.df[(obj.df['type'] == 'ACARS_TEMPERATURE')] 
+        
+        # Write the output file
+        obj.write_obs_seq(temp_output_file_path)
+
+        # Ensure the output file exists
+        assert os.path.exists(temp_output_file_path)
+
+        reference_file_path = os.path.join(
+            os.path.dirname(__file__), "data", "only_acars.final")
+
+        # Compare the written file with the reference file, line by line
+        self.compare_files_line_by_line(temp_output_file_path, reference_file_path)
+
 
 class TestObsDataframe:
     @pytest.fixture

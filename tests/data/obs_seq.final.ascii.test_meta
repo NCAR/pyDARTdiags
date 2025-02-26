@@ -1,28 +1,12 @@
  obs_sequence
 obs_type_definitions
-          22
-           4 GPSRO_REFRACTIVITY             
-          51 RADIOSONDE_U_WIND_COMPONENT    
-          52 RADIOSONDE_V_WIND_COMPONENT    
-          55 RADIOSONDE_TEMPERATURE         
-          56 RADIOSONDE_SPECIFIC_HUMIDITY   
+           6
           62 AIRCRAFT_U_WIND_COMPONENT      
           63 AIRCRAFT_V_WIND_COMPONENT      
           64 AIRCRAFT_TEMPERATURE           
           66 ACARS_U_WIND_COMPONENT         
           67 ACARS_V_WIND_COMPONENT         
           68 ACARS_TEMPERATURE              
-          70 MARINE_SFC_U_WIND_COMPONENT    
-          71 MARINE_SFC_V_WIND_COMPONENT    
-          72 MARINE_SFC_TEMPERATURE         
-          73 MARINE_SFC_SPECIFIC_HUMIDITY   
-          80 SAT_U_WIND_COMPONENT           
-          81 SAT_V_WIND_COMPONENT           
-          83 AIRS_TEMPERATURE               
-          84 AIRS_SPECIFIC_HUMIDITY         
-          90 RADIOSONDE_SURFACE_ALTIMETER   
-          92 MARINE_SFC_ALTIMETER           
-          93 LAND_SFC_ALTIMETER             
   num_copies:           83  num_qc:            2
   num_obs:      10  max_num_obs:      10
 observation                                                     

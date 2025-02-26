@@ -4,7 +4,7 @@ obs_type_definitions
            1 RAW_STATE_VARIABLE             
   num_copies:           46  num_qc:            2
   num_obs:           40  max_num_obs:           40
-observations                                                    
+observation                                                    
 truth                                                           
 prior ensemble mean                                             
 posterior ensemble mean                                         

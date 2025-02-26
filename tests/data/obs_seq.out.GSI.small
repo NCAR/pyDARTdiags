@@ -1,16 +1,7 @@
  obs_sequence
 obs_type_definitions
-          10
-          20 MARINE_SFC_U_WIND_COMPONENT    
-          21 MARINE_SFC_V_WIND_COMPONENT    
-          22 MARINE_SFC_TEMPERATURE         
-          24 MARINE_SFC_PRESSURE            
+          1
           29 LAND_SFC_PRESSURE              
-          30 SAT_U_WIND_COMPONENT           
-          31 SAT_V_WIND_COMPONENT           
-          84 PILOT_U_WIND_COMPONENT         
-          85 PILOT_V_WIND_COMPONENT         
-         238 MARINE_SFC_RELATIVE_HUMIDITY   
   num_copies:            1  num_qc:            1
   num_obs:            3  max_num_obs:          3
 observation                                                     
