@@ -69,7 +69,7 @@ class obs_sequence:
         reverse_types (dict): Dictionary of types with keys and values reversed, e.g
             {'ACARS_TEMPERATURE': 23}
         synonyms_for_obs (list): List of synonyms for the observation column in the DataFrame.
-            The defualt list is
+            The default list is
 
             .. code-block:: python
 
@@ -142,6 +142,9 @@ class obs_sequence:
             else:
                 self.synonyms_for_obs.append(synonyms)
 
+        module_dir = os.path.dirname(__file__)
+        self.default_composite_types = os.path.join(module_dir, "composite_types.yaml")
+
         if file is None:
             # Early exit - for testing purposes or creating obs_seq objects from scratch
             self.df = pd.DataFrame()
@@ -156,9 +159,6 @@ class obs_sequence:
             self.seq = []
             self.all_obs = []
             return
-
-        module_dir = os.path.dirname(__file__)
-        self.default_composite_types = os.path.join(module_dir, "composite_types.yaml")
 
         if self.is_binary(file):
             self.header = self.read_binary_header(file)
@@ -875,7 +875,8 @@ class obs_sequence:
         components and adds them to the DataFrame.
 
         Args:
-            composite_types (str, optional): The YAML configuration for composite types. If 'use_default', the default configuration is used. Otherwise, a custom YAML configuration can be provided.
+            composite_types (str, optional): The YAML configuration for composite types.
+            If 'use_default', the default configuration is used. Otherwise, a custom YAML configuration can be provided.
 
         Returns:
             pd.DataFrame: The updated DataFrame with the new composite rows added.
@@ -897,24 +898,24 @@ class obs_sequence:
         if len(components) != len(set(components)):
             raise Exception("There are repeat values in components.")
 
+        # data frame for the composite types
         df_comp = self.df[
             self.df["type"]
             .str.upper()
             .isin([component.upper() for component in components])
         ]
-        df_no_comp = self.df[
-            ~self.df["type"]
-            .str.upper()
-            .isin([component.upper() for component in components])
-        ]
 
+        df = pd.DataFrame()
         for key in self.composite_types_dict:
+            print(key)
             df_new = construct_composit(
                 df_comp, key, self.composite_types_dict[key]["components"]
             )
-            df_no_comp = pd.concat([df_no_comp, df_new], axis=0)
+            df = pd.concat([df, df_new], axis=0)
 
-        return df_no_comp
+        # add the composite types to the DataFrame
+        self.df = pd.concat([self.df, df], axis=0)
+        return
 
     @classmethod
     def join(cls, obs_sequences, copies=None):
@@ -1162,17 +1163,39 @@ def construct_composit(df_comp, composite, components):
         components (list of str): A list containing the type names of the two components to be combined.
 
     Returns:
-        merged_df (pd.DataFrame): The updated DataFrame with the new composite rows added.
+        merged_df (pd.DataFrame): A DataFrame containing the new composite rows.
     """
     selected_rows = df_comp[df_comp["type"] == components[0].upper()]
     selected_rows_v = df_comp[df_comp["type"] == components[1].upper()]
 
-    columns_to_combine = df_comp.filter(regex="ensemble").columns.tolist()
-    columns_to_combine.append("observation")  # TODO HK: bias, sq_err, obs_err_var
+    prior_columns_to_combine = df_comp.filter(regex="prior_ensemble").columns.tolist()
+    posterior_columns_to_combine = df_comp.filter(
+        regex="posterior_ensemble"
+    ).columns.tolist()
+    columns_to_combine = (
+        prior_columns_to_combine
+        + posterior_columns_to_combine
+        + ["observation", "obs_err_var"]
+    )
     merge_columns = ["latitude", "longitude", "vertical", "time"]
+    same_obs_columns = merge_columns + [
+        "observation",
+        "obs_err_var",
+    ]  # same observation is duplicated
 
-    print("duplicates in u: ", selected_rows[merge_columns].duplicated().sum())
-    print("duplicates in v: ", selected_rows_v[merge_columns].duplicated().sum())
+    if (
+        selected_rows[same_obs_columns].duplicated().sum() > 0
+        or selected_rows_v[same_obs_columns].duplicated().sum() > 0
+    ):
+        print(
+            f"{selected_rows[same_obs_columns].duplicated().sum()} duplicates in {composite} component {components[0]}: "
+        )
+        print(f"{selected_rows[same_obs_columns]}")
+        print(
+            f"{selected_rows_v[same_obs_columns].duplicated().sum()} duplicates in {composite} component {components[0]}: "
+        )
+        print(f"{selected_rows_v[same_obs_columns]}")
+        raise Exception("There are duplicates in the components.")
 
     # Merge the two DataFrames on location and time columns
     merged_df = pd.merge(
