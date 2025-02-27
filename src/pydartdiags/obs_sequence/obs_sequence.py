@@ -401,19 +401,27 @@ class obs_sequence:
 
         # Create a dictionary of observation types from the dataframe
         unique_types = self.df["type"].unique()
+
+        # Ensure all unique types are in reverse_types
+        for obs_type in unique_types:
+            if obs_type not in self.reverse_types:
+                new_id = int(max(self.reverse_types.values(), default=0)) + 1
+                self.reverse_types[obs_type] = str(new_id)
+
         not_sorted_types = {
             self.reverse_types[obs_type]: obs_type for obs_type in unique_types
         }
-        types = {
+        self.types = {
             k: not_sorted_types[k] for k in sorted(not_sorted_types)
         }  # to get keys in numerical order
+
         num_obs = len(self.df)
 
         self.header = []
         self.header.append("obs_sequence")
         self.header.append("obs_type_definitions")
-        self.header.append(f"{len(types)}")
-        for key, value in types.items():
+        self.header.append(f"{len(self.types)}")
+        for key, value in self.types.items():
             self.header.append(f"{key} {value}")
         self.header.append(
             f"num_copies: {self.n_non_qc}  num_qc: {self.n_qc}"
