@@ -750,6 +750,9 @@ class TestCompositeTypes:
         return obs_seq
 
     def test_composite_types(self, obs_seq):
+
+        # Save the original DataFrame for comparison
+        orig_df = obs_seq.df.copy()
         # Call the composite_types method
         obs_seq.composite_types()
 
@@ -763,22 +766,73 @@ class TestCompositeTypes:
         ]
 
         assert len(types) == len(expected_composite_types)
-
         for type in expected_composite_types:
             assert type in types
 
-        # Verify composite types are correctly calculated
-        u_wind = obs_seq.df.loc[
-            obs_seq.df["type"] == "ACARS_U_WIND_COMPONENT", "observation"
-        ].values[0]
-        v_wind = obs_seq.df.loc[
-            obs_seq.df["type"] == "ACARS_V_WIND_COMPONENT", "observation"
-        ].values[0]
-        wind = obs_seq.df.loc[
-            obs_seq.df["type"] == "ACARS_HORIZONTAL_WIND", "observation"
-        ].values[0]
+        # Verify that the columns themselves are unchanged
+        assert obs_seq.df.columns.equals(
+            orig_df.columns
+        ), f"Columns changed: {obs_seq.df.columns}"
 
-        assert np.sqrt(u_wind**2 + v_wind**2) == wind
+        # Verify composite types are correctly calculated
+        prior_columns = obs_seq.df.filter(regex="prior_ensemble").columns.tolist()
+        posterior_columns = obs_seq.df.filter(
+            regex="posterior_ensemble"
+        ).columns.tolist()
+        combo_cols = ["observation", "obs_err_var"] + prior_columns + posterior_columns
+
+        for col in combo_cols:
+            u_wind = obs_seq.df.loc[
+                obs_seq.df["type"] == "ACARS_U_WIND_COMPONENT", col
+            ].values[0]
+            v_wind = obs_seq.df.loc[
+                obs_seq.df["type"] == "ACARS_V_WIND_COMPONENT", col
+            ].values[0]
+            wind = obs_seq.df.loc[
+                obs_seq.df["type"] == "ACARS_HORIZONTAL_WIND", col
+            ].values[0]
+            assert np.isclose(
+                np.sqrt(u_wind**2 + v_wind**2), wind
+            ), f"Mismatch in column {col}: {wind} != sqrt({u_wind}^2 + {v_wind}^2)"
+
+        # Verify that the non-composite columns are unchanged
+        for col in obs_seq.df.columns:
+            if col not in combo_cols:
+                assert (
+                    obs_seq.df.loc[
+                        obs_seq.df["type"] == "ACARS_U_WIND_COMPONENT", col
+                    ].values[0]
+                    == orig_df.loc[
+                        orig_df["type"] == "ACARS_U_WIND_COMPONENT", col
+                    ].values[0]
+                )
+                assert (
+                    obs_seq.df.loc[
+                        obs_seq.df["type"] == "ACARS_V_WIND_COMPONENT", col
+                    ].values[0]
+                    == orig_df.loc[
+                        orig_df["type"] == "ACARS_V_WIND_COMPONENT", col
+                    ].values[0]
+                )
+
+        # Horizontal wind not in original, should be the same as the component
+        for col in obs_seq.df.columns:
+            if col not in combo_cols and col is not "type":
+                assert (
+                    obs_seq.df.loc[
+                        obs_seq.df["type"] == "ACARS_HORIZONTAL_WIND", col
+                    ].values[0]
+                    == obs_seq.df.loc[
+                        obs_seq.df["type"] == "ACARS_U_WIND_COMPONENT", col
+                    ].values[0]
+                )
+
+        # Verify that the non-composite types are unchanged for all columns
+        for col in obs_seq.df.columns:
+            assert (
+                obs_seq.df.loc[obs_seq.df["type"] == "ACARS_TEMPERATURE", col].values[0]
+                == orig_df.loc[orig_df["type"] == "ACARS_TEMPERATURE", col].values[0]
+            )
 
 
 if __name__ == "__main__":
