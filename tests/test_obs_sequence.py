@@ -698,5 +698,45 @@ class TestCreateHeaderFromDataFrame:
         assert expected_header == obs_seq.header
 
 
+class TestUpdateTypesDicts:
+    @pytest.fixture
+    def sample_df(self):
+        data = {
+            "type": [
+                "ACARS_TEMPERATURE",
+                "ACARS_TEMPERATURE",
+                "RADIOSONDE_U_WIND_COMPONENT",
+                "PINEAPPLE_COUNT",
+            ],
+            "latitude": [10.0, 20.0, 30.0, 40.0],
+            "longitude": [40.0, 50.0, 60.0, 70.0],
+            "vertical": [100.0, 200.0, 300.0, 400.0],
+            "time": [1000, 2000, 3000, 4000],
+            "observation": [1.0, 2.0, 3.0, 4.0],
+            "obs_err_var": [0.01, 0.02, 0.03, 0.04],
+        }
+        return pd.DataFrame(data)
+
+    def test_update_types_dicts(self, sample_df):
+        reverse_types = {"ACARS_TEMPERATURE": "32", "RADIOSONDE_U_WIND_COMPONENT": "51"}
+        expected_reverse_types = {
+            "ACARS_TEMPERATURE": "32",
+            "RADIOSONDE_U_WIND_COMPONENT": "51",
+            "PINEAPPLE_COUNT": "52",
+        }
+        expected_types = {
+            "32": "ACARS_TEMPERATURE",
+            "51": "RADIOSONDE_U_WIND_COMPONENT",
+            "52": "PINEAPPLE_COUNT",
+        }
+
+        updated_reverse_types, types = obsq.obs_sequence.update_types_dicts(
+            sample_df, reverse_types
+        )
+
+        assert updated_reverse_types == expected_reverse_types
+        assert types == expected_types
+
+
 if __name__ == "__main__":
     pytest.main()
