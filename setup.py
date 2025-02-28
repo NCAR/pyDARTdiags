@@ -2,9 +2,13 @@ from setuptools import setup, find_packages
 
 setup(
     name="pydartdiags",
-    version="0.0.43",
+    version="0.5.1",
     packages=find_packages(where="src"),
     package_dir={"": "src"},
+    include_package_data=True,
+    package_data={
+        "pydartdiags": ["obs_sequence/composite_types.yaml"],
+    },
     author="Helen Kershaw",
     author_email="hkershaw@ucar.edu",
     description="Observation Sequence Diagnostics for DART",
