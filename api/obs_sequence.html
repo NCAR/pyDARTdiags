@@ -569,7 +569,7 @@ e.g. {23: ‘ACARS_TEMPERATURE’},</p>
 <dt class="sig sig-object py" id="obs_sequence.obs_sequence.synonyms_for_obs">
 <span class="sig-name descname"><span class="pre">synonyms_for_obs</span></span><a class="headerlink" href="#obs_sequence.obs_sequence.synonyms_for_obs" title="Link to this definition">#</a></dt>
 <dd><p>List of synonyms for the observation column in the DataFrame.
-The defualt list is</p>
+The default list is</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="s1">&#39;NCEP BUFR observation&#39;</span><span class="p">,</span>
 <span class="s1">&#39;AIRS observation&#39;</span><span class="p">,</span>
 <span class="s1">&#39;GTSPP observation&#39;</span><span class="p">,</span>
@@ -689,6 +689,28 @@ list pattern for reading by DART programs.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="obs_sequence.obs_sequence.update_types_dicts">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">update_types_dicts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reverse_types</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.obs_sequence.update_types_dicts" title="Link to this definition">#</a></dt>
+<dd><p>Ensure all unique observation types are in the reverse_types dictionary and create
+the types dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – The DataFrame containing the observation sequence data.</p></li>
+<li><p><strong>reverse_types</strong> (<em>dict</em>) – The dictionary mapping observation types to their corresponding integer values.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The updated reverse_types dictionary.
+dict: The types dictionary with keys sorted in numerical order.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="obs_sequence.obs_sequence.create_header_from_dataframe">
 <span class="sig-name descname"><span class="pre">create_header_from_dataframe</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.obs_sequence.create_header_from_dataframe" title="Link to this definition">#</a></dt>
 <dd><p>Create a header for the observation sequence based on the data in the DataFrame.</p>
@@ -799,7 +821,12 @@ a default configuration. It constructs new composite rows by combining specified
 components and adds them to the DataFrame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>composite_types</strong> (<em>str</em><em>, </em><em>optional</em>) – The YAML configuration for composite types. If ‘use_default’, the default configuration is used. Otherwise, a custom YAML configuration can be provided.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>composite_types</strong> (<em>str</em><em>, </em><em>optional</em>) – The YAML configuration for composite types.</p></li>
+<li><p><strong>'use_default'</strong> (<em>If</em>)</p></li>
+<li><p><strong>Otherwise</strong> (<em>the default configuration is used.</em>)</p></li>
+<li><p><strong>provided.</strong> (<em>a custom YAML configuration can be</em>)</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The updated DataFrame with the new composite rows added.</p>
@@ -922,7 +949,7 @@ specified columns using the square root of the sum of squares method.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The updated DataFrame with the new composite rows added.</p>
+<dd class="field-even"><p>A DataFrame containing the new composite rows.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>merged_df (pd.DataFrame)</p>
@@ -1001,6 +1028,7 @@ specified columns using the square root of the sum of squares method.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#obs_sequence.obs_sequence.list_to_obs"><code class="docutils literal notranslate"><span class="pre">obs_sequence.list_to_obs()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#obs_sequence.obs_sequence.generate_linked_list_pattern"><code class="docutils literal notranslate"><span class="pre">obs_sequence.generate_linked_list_pattern()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#obs_sequence.obs_sequence.write_obs_seq"><code class="docutils literal notranslate"><span class="pre">obs_sequence.write_obs_seq()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#obs_sequence.obs_sequence.update_types_dicts"><code class="docutils literal notranslate"><span class="pre">obs_sequence.update_types_dicts()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#obs_sequence.obs_sequence.create_header_from_dataframe"><code class="docutils literal notranslate"><span class="pre">obs_sequence.create_header_from_dataframe()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#obs_sequence.obs_sequence.column_headers"><code class="docutils literal notranslate"><span class="pre">obs_sequence.column_headers()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#obs_sequence.obs_sequence.is_binary"><code class="docutils literal notranslate"><span class="pre">obs_sequence.is_binary()</span></code></a></li>
