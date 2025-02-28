@@ -6,6 +6,8 @@ import datetime as dt
 import pandas as pd
 from pydartdiags.obs_sequence import obs_sequence as obsq
 from pydartdiags.stats import stats
+import numpy as np
+import yaml
 
 
 class TestConvertDartTime:
@@ -265,8 +267,8 @@ class TestWriteAscii:
         obj = obsq.obs_sequence(obs_seq_file_path)
 
         # Remove obs except ACARS_TEMPERATURE
-        obj.df = obj.df[(obj.df['type'] == 'ACARS_TEMPERATURE')] 
-        
+        obj.df = obj.df[(obj.df["type"] == "ACARS_TEMPERATURE")]
+
         # Write the output file
         obj.write_obs_seq(temp_output_file_path)
 
@@ -274,7 +276,8 @@ class TestWriteAscii:
         assert os.path.exists(temp_output_file_path)
 
         reference_file_path = os.path.join(
-            os.path.dirname(__file__), "data", "only_acars.final")
+            os.path.dirname(__file__), "data", "only_acars.final"
+        )
 
         # Compare the written file with the reference file, line by line
         self.compare_files_line_by_line(temp_output_file_path, reference_file_path)
@@ -630,6 +633,246 @@ class TestGenerateLinkedListPattern:
         ]
         result = obsq.obs_sequence.generate_linked_list_pattern(n)
         assert result == expected_pattern
+
+
+class TestCreateHeaderFromDataFrame:
+    @pytest.fixture
+    def obs_seq(self):
+        # Create a sample DataFrame for testing - some columns are not used in the header
+        data = {
+            "type": [
+                "ACARS_TEMPERATURE",
+                "ACARS_TEMPERATURE",
+                "RADIOSONDE_U_WIND_COMPONENT",
+            ],
+            "latitude": [10.0, 20.0, 30.0],
+            "longitude": [40.0, 50.0, 60.0],
+            "vertical": [100.0, 200.0, 300.0],
+            "observation": [1.0, 2.0, 3.0],
+            "prior_ensemble_mean": [1.1, 2.1, 3.1],
+            "prior_ensemble_spread": [0.1, 0.2, 0.3],
+            "posterior_ensemble_mean": [1.2, 2.2, 3.2],
+            "posterior_ensemble_spread": [0.2, 0.3, 0.4],
+            "DART_quality_control": [0, 1, 2],
+            "obs_err_var": [0.01, 0.02, 0.03],
+            "linked_list": [
+                "-1          2          -1",
+                "1           3          -1",
+                "2           -1         -1",
+            ],
+            "posterior_sq_err": [0.04, 0.05, 0.06],
+        }
+        df = pd.DataFrame(data)
+
+        # Create an instance of obs_sequence with the sample DataFrame
+        obs_seq = obsq.obs_sequence(file=None)
+        obs_seq.df = df
+        obs_seq.reverse_types = {
+            "ACARS_TEMPERATURE": 1,
+            "RADIOSONDE_U_WIND_COMPONENT": 2,
+        }
+        obs_seq.n_non_qc = 4
+        obs_seq.n_qc = 1
+        return obs_seq
+
+    def test_create_header_from_dataframe(self, obs_seq):
+        # Call the method to create the header
+        obs_seq.create_header_from_dataframe()
+
+        # Verify the header is correctly created
+        expected_header = [
+            "obs_sequence",
+            "obs_type_definitions",
+            "2",
+            "1 ACARS_TEMPERATURE",
+            "2 RADIOSONDE_U_WIND_COMPONENT",
+            "num_copies: 4  num_qc: 1",
+            "num_obs:          3 max_num_obs:          3",
+            "observation",
+            "prior ensemble mean",
+            "prior ensemble spread",
+            "posterior ensemble mean",
+            "posterior ensemble spread",
+            "DART quality control",
+            "first:            1 last:            3",
+        ]
+
+        assert expected_header == obs_seq.header
+
+
+class TestUpdateTypesDicts:
+    @pytest.fixture
+    def sample_df(self):
+        data = {
+            "type": [
+                "ACARS_TEMPERATURE",
+                "ACARS_TEMPERATURE",
+                "RADIOSONDE_U_WIND_COMPONENT",
+                "PINEAPPLE_COUNT",
+            ],
+            "latitude": [10.0, 20.0, 30.0, 40.0],
+            "longitude": [40.0, 50.0, 60.0, 70.0],
+            "vertical": [100.0, 200.0, 300.0, 400.0],
+            "time": [1000, 2000, 3000, 4000],
+            "observation": [1.0, 2.0, 3.0, 4.0],
+            "obs_err_var": [0.01, 0.02, 0.03, 0.04],
+        }
+        return pd.DataFrame(data)
+
+    def test_update_types_dicts(self, sample_df):
+        reverse_types = {"ACARS_TEMPERATURE": "32", "RADIOSONDE_U_WIND_COMPONENT": "51"}
+        expected_reverse_types = {
+            "ACARS_TEMPERATURE": "32",
+            "RADIOSONDE_U_WIND_COMPONENT": "51",
+            "PINEAPPLE_COUNT": "52",
+        }
+        expected_types = {
+            "32": "ACARS_TEMPERATURE",
+            "51": "RADIOSONDE_U_WIND_COMPONENT",
+            "52": "PINEAPPLE_COUNT",
+        }
+
+        updated_reverse_types, types = obsq.obs_sequence.update_types_dicts(
+            sample_df, reverse_types
+        )
+
+        assert updated_reverse_types == expected_reverse_types
+        assert types == expected_types
+
+
+class TestCompositeTypes:
+    @pytest.fixture
+    def obs_seq(self):
+        test_dir = os.path.dirname(__file__)
+        file_path = os.path.join(test_dir, "data", "three-obs.final")
+
+        # Create an instance of obs_sequence with the 'three-obs.final' file
+        obs_seq = obsq.obs_sequence(file_path)
+        return obs_seq
+
+    @pytest.mark.parametrize(
+        "composite_types_arg",
+        [
+            None,
+            "use_default",
+            os.path.join(os.path.dirname(__file__), "data", "composite_acars.yaml"),
+        ],
+    )
+    def test_composite_types(self, obs_seq, composite_types_arg):
+
+        # Save the original DataFrame for comparison
+        orig_df = obs_seq.df.copy()
+        # Call the composite_types method
+        if composite_types_arg is None:
+            obs_seq.composite_types()
+        else:
+            obs_seq.composite_types(composite_types=composite_types_arg)
+
+        # Verify composite types added to the DataFrame
+        types = obs_seq.df["type"].unique()
+        expected_composite_types = [
+            "ACARS_TEMPERATURE",
+            "ACARS_U_WIND_COMPONENT",
+            "ACARS_V_WIND_COMPONENT",
+            "ACARS_HORIZONTAL_WIND",
+        ]
+
+        assert len(types) == len(expected_composite_types)
+        for type in expected_composite_types:
+            assert type in types
+
+        # Verify that the columns themselves are unchanged
+        assert obs_seq.df.columns.equals(
+            orig_df.columns
+        ), f"Columns changed: {obs_seq.df.columns}"
+
+        # Verify composite types are correctly calculated
+        prior_columns = obs_seq.df.filter(regex="prior_ensemble").columns.tolist()
+        posterior_columns = obs_seq.df.filter(
+            regex="posterior_ensemble"
+        ).columns.tolist()
+        combo_cols = ["observation", "obs_err_var"] + prior_columns + posterior_columns
+
+        for col in combo_cols:
+            u_wind = obs_seq.df.loc[
+                obs_seq.df["type"] == "ACARS_U_WIND_COMPONENT", col
+            ].values[0]
+            v_wind = obs_seq.df.loc[
+                obs_seq.df["type"] == "ACARS_V_WIND_COMPONENT", col
+            ].values[0]
+            wind = obs_seq.df.loc[
+                obs_seq.df["type"] == "ACARS_HORIZONTAL_WIND", col
+            ].values[0]
+            assert np.isclose(
+                np.sqrt(u_wind**2 + v_wind**2), wind
+            ), f"Mismatch in column {col}: {wind} != sqrt({u_wind}^2 + {v_wind}^2)"
+
+        # Verify that the non-composite columns are unchanged
+        for col in obs_seq.df.columns:
+            if col not in combo_cols:
+                assert (
+                    obs_seq.df.loc[
+                        obs_seq.df["type"] == "ACARS_U_WIND_COMPONENT", col
+                    ].values[0]
+                    == orig_df.loc[
+                        orig_df["type"] == "ACARS_U_WIND_COMPONENT", col
+                    ].values[0]
+                )
+                assert (
+                    obs_seq.df.loc[
+                        obs_seq.df["type"] == "ACARS_V_WIND_COMPONENT", col
+                    ].values[0]
+                    == orig_df.loc[
+                        orig_df["type"] == "ACARS_V_WIND_COMPONENT", col
+                    ].values[0]
+                )
+
+        # Horizontal wind not in original, should be the same as the component
+        for col in obs_seq.df.columns:
+            if col not in combo_cols and col != "type":
+                assert (
+                    obs_seq.df.loc[
+                        obs_seq.df["type"] == "ACARS_HORIZONTAL_WIND", col
+                    ].values[0]
+                    == obs_seq.df.loc[
+                        obs_seq.df["type"] == "ACARS_U_WIND_COMPONENT", col
+                    ].values[0]
+                )
+
+        # Verify that the non-composite types are unchanged for all columns
+        for col in obs_seq.df.columns:
+            assert (
+                obs_seq.df.loc[obs_seq.df["type"] == "ACARS_TEMPERATURE", col].values[0]
+                == orig_df.loc[orig_df["type"] == "ACARS_TEMPERATURE", col].values[0]
+            )
+
+    def test_composite_types_dups(self):
+        test_dir = os.path.dirname(__file__)
+        file_path = os.path.join(test_dir, "data", "dups-obs.final")
+
+        dup = obsq.obs_sequence(file_path)
+        # Test that composite_types raises an error
+        with pytest.raises(Exception, match="There are duplicates in the components."):
+            dup.composite_types()
+
+    def test_no_yaml_file(self):
+        with pytest.raises(Exception):
+            obsq.load_yaml_to_dict("nonexistent.yaml")
+
+    def test_load_yaml_to_dict_broken_file(self, tmpdir):
+        # Create a broken YAML file
+        broken_yaml_content = """
+        composite_types:
+          ACARS_HORIZONTAL_WIND:
+            components: [ACARS_U_WIND_COMPONENT, ACARS_V_WIND_COMPONENT
+        """
+        broken_file = tmpdir.join("broken_composite_types.yaml")
+        with open(broken_file, "w") as f:
+            f.write(broken_yaml_content)
+
+        # Test that load_yaml_to_dict raises an exception for the broken YAML file
+        with pytest.raises(yaml.YAMLError):
+            obsq.load_yaml_to_dict(broken_file)
 
 
 if __name__ == "__main__":
