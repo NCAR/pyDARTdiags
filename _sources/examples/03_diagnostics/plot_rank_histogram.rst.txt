@@ -81,34 +81,17 @@ Read the obs_seq file into an obs_seq object.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 30-31
-
-Select observations with QC value of 0.
-
-.. GENERATED FROM PYTHON SOURCE LINES 31-33
-
-.. code-block:: Python
-
-    qc0 = obs_seq.select_by_dart_qc(0)
-
-
-
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 34-37
+.. GENERATED FROM PYTHON SOURCE LINES 30-33
 
 Chose an observation type.
 The observation types are stored in the 'type' column.
 To see which observation types are in the dataframe, use the unique method:
 
-.. GENERATED FROM PYTHON SOURCE LINES 37-39
+.. GENERATED FROM PYTHON SOURCE LINES 33-35
 
 .. code-block:: Python
 
-    qc0['type'].unique()
+    obs_seq.df['type'].unique()
 
 
 
@@ -126,12 +109,12 @@ To see which observation types are in the dataframe, use the unique method:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 40-42
+.. GENERATED FROM PYTHON SOURCE LINES 36-38
 
 For this example, we are going to look at the rank histogram for 
 ACARS_TEMPERATURE observations.
 
-.. GENERATED FROM PYTHON SOURCE LINES 42-44
+.. GENERATED FROM PYTHON SOURCE LINES 38-40
 
 .. code-block:: Python
 
@@ -144,7 +127,7 @@ ACARS_TEMPERATURE observations.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 45-50
+.. GENERATED FROM PYTHON SOURCE LINES 41-46
 
 Chose the levels to plot.
 The vertical coordinate of the observations are stored in the ``vertical`` column.
@@ -152,7 +135,7 @@ The units for the vertical coordinate are stored in the ``vert_unit`` column
 In this case the vertical coordinate of the observations are in pressure (Pa).
 Typically in atmospheric science we use hPa as the unit for pressure.
 
-.. GENERATED FROM PYTHON SOURCE LINES 50-53
+.. GENERATED FROM PYTHON SOURCE LINES 46-49
 
 .. code-block:: Python
 
@@ -166,13 +149,13 @@ Typically in atmospheric science we use hPa as the unit for pressure.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 54-57
+.. GENERATED FROM PYTHON SOURCE LINES 50-53
 
 Plot the rank histogram.
 The dataframe has prior and posterior information so both the prior
 and posterior rank histograms are plotted.
 
-.. GENERATED FROM PYTHON SOURCE LINES 57-59
+.. GENERATED FROM PYTHON SOURCE LINES 53-55
 
 .. code-block:: Python
 
@@ -240,7 +223,7 @@ and posterior rank histograms are plotted.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 2.474 seconds)
+   **Total running time of the script:** (0 minutes 2.558 seconds)
 
 
 .. _sphx_glr_download_examples_03_diagnostics_plot_rank_histogram.py:
