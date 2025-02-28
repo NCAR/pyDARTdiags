@@ -19,16 +19,6 @@ def requires_assimilation_info(func):
     return wrapper
 
 
-def requires_posterior_info(func):
-    def wrapper(self, *args, **kwargs):
-        if self.has_posterior():
-            return func(self, *args, **kwargs)
-        else:
-            raise ValueError("Posterior information is required to call this function.")
-
-    return wrapper
-
-
 class obs_sequence:
     """
     Initialize an obs_sequence object from an ASCII or binary observation sequence file,
