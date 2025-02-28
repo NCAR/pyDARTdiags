@@ -26,14 +26,10 @@ data_file = os.path.join(data_dir, "obs_seq.final.1000")
 obs_seq = obsq.obs_sequence(data_file)
 
 ###########################################
-# Select observations with QC value of 0.
-qc0 = obs_seq.select_by_dart_qc(0)
-
-###########################################
 # Chose an observation type.
 # The observation types are stored in the 'type' column.
 # To see which observation types are in the dataframe, use the unique method:
-qc0['type'].unique()
+obs_seq.df['type'].unique()
 
 ###########################################
 # For this example, we are going to look at the rank histogram for 
