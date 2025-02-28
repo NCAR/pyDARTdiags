@@ -6,6 +6,7 @@ import datetime as dt
 import pandas as pd
 from pydartdiags.obs_sequence import obs_sequence as obsq
 from pydartdiags.stats import stats
+import numpy as np
 
 
 class TestConvertDartTime:
@@ -736,6 +737,48 @@ class TestUpdateTypesDicts:
 
         assert updated_reverse_types == expected_reverse_types
         assert types == expected_types
+
+
+class TestCompositeTypes:
+    @pytest.fixture
+    def obs_seq(self):
+        test_dir = os.path.dirname(__file__)
+        file_path = os.path.join(test_dir, "data", "three-obs.final")
+
+        # Create an instance of obs_sequence with the 'three-obs.final' file
+        obs_seq = obsq.obs_sequence(file_path)
+        return obs_seq
+
+    def test_composite_types(self, obs_seq):
+        # Call the composite_types method
+        obs_seq.composite_types()
+
+        # Verify composite types added to the DataFrame
+        types = obs_seq.df["type"].unique()
+        expected_composite_types = [
+            "ACARS_TEMPERATURE",
+            "ACARS_U_WIND_COMPONENT",
+            "ACARS_V_WIND_COMPONENT",
+            "ACARS_HORIZONTAL_WIND",
+        ]
+
+        assert len(types) == len(expected_composite_types)
+
+        for type in expected_composite_types:
+            assert type in types
+
+        # Verify composite types are correctly calculated
+        u_wind = obs_seq.df.loc[
+            obs_seq.df["type"] == "ACARS_U_WIND_COMPONENT", "observation"
+        ].values[0]
+        v_wind = obs_seq.df.loc[
+            obs_seq.df["type"] == "ACARS_V_WIND_COMPONENT", "observation"
+        ].values[0]
+        wind = obs_seq.df.loc[
+            obs_seq.df["type"] == "ACARS_HORIZONTAL_WIND", "observation"
+        ].values[0]
+
+        assert np.sqrt(u_wind**2 + v_wind**2) == wind
 
 
 if __name__ == "__main__":
