@@ -387,6 +387,38 @@ class obs_sequence:
 
             df_copy.apply(write_row, axis=1)
 
+    @staticmethod
+    def update_types_dicts(df, reverse_types):
+        """
+        Ensure all unique observation types are in the reverse_types dictionary and create
+        the types dictionary.
+
+        Args:
+            df (pd.DataFrame): The DataFrame containing the observation sequence data.
+            reverse_types (dict): The dictionary mapping observation types to their corresponding integer values.
+
+        Returns:
+            dict: The updated reverse_types dictionary.
+            dict: The types dictionary with keys sorted in numerical order.
+        """
+        # Create a dictionary of observation types from the dataframe
+        unique_types = df["type"].unique()
+
+        # Ensure all unique types are in reverse_types
+        for obs_type in unique_types:
+            if obs_type not in reverse_types:
+                new_id = int(max(reverse_types.values(), default=0)) + 1
+                reverse_types[obs_type] = str(new_id)
+
+        not_sorted_types = {
+            reverse_types[obs_type]: obs_type for obs_type in unique_types
+        }
+        types = {
+            k: not_sorted_types[k] for k in sorted(not_sorted_types)
+        }  # to get keys in numerical order
+
+        return reverse_types, types
+
     def create_header_from_dataframe(self):
         """
         Create a header for the observation sequence based on the data in the DataFrame.
@@ -399,21 +431,9 @@ class obs_sequence:
 
         """
 
-        # Create a dictionary of observation types from the dataframe
-        unique_types = self.df["type"].unique()
-
-        # Ensure all unique types are in reverse_types
-        for obs_type in unique_types:
-            if obs_type not in self.reverse_types:
-                new_id = int(max(self.reverse_types.values(), default=0)) + 1
-                self.reverse_types[obs_type] = str(new_id)
-
-        not_sorted_types = {
-            self.reverse_types[obs_type]: obs_type for obs_type in unique_types
-        }
-        self.types = {
-            k: not_sorted_types[k] for k in sorted(not_sorted_types)
-        }  # to get keys in numerical order
+        self.reverse_types, self.types = self.update_types_dicts(
+            self.df, self.reverse_types
+        )
 
         num_obs = len(self.df)
 
@@ -915,7 +935,6 @@ class obs_sequence:
 
         df = pd.DataFrame()
         for key in self.composite_types_dict:
-            print(key)
             df_new = construct_composit(
                 df_comp, key, self.composite_types_dict[key]["components"]
             )

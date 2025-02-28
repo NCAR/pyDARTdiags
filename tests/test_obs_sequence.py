@@ -265,8 +265,8 @@ class TestWriteAscii:
         obj = obsq.obs_sequence(obs_seq_file_path)
 
         # Remove obs except ACARS_TEMPERATURE
-        obj.df = obj.df[(obj.df['type'] == 'ACARS_TEMPERATURE')] 
-        
+        obj.df = obj.df[(obj.df["type"] == "ACARS_TEMPERATURE")]
+
         # Write the output file
         obj.write_obs_seq(temp_output_file_path)
 
@@ -274,7 +274,8 @@ class TestWriteAscii:
         assert os.path.exists(temp_output_file_path)
 
         reference_file_path = os.path.join(
-            os.path.dirname(__file__), "data", "only_acars.final")
+            os.path.dirname(__file__), "data", "only_acars.final"
+        )
 
         # Compare the written file with the reference file, line by line
         self.compare_files_line_by_line(temp_output_file_path, reference_file_path)
@@ -630,6 +631,71 @@ class TestGenerateLinkedListPattern:
         ]
         result = obsq.obs_sequence.generate_linked_list_pattern(n)
         assert result == expected_pattern
+
+
+class TestCreateHeaderFromDataFrame:
+    @pytest.fixture
+    def obs_seq(self):
+        # Create a sample DataFrame for testing - some columns are not used in the header
+        data = {
+            "type": [
+                "ACARS_TEMPERATURE",
+                "ACARS_TEMPERATURE",
+                "RADIOSONDE_U_WIND_COMPONENT",
+            ],
+            "latitude": [10.0, 20.0, 30.0],
+            "longitude": [40.0, 50.0, 60.0],
+            "vertical": [100.0, 200.0, 300.0],
+            "observation": [1.0, 2.0, 3.0],
+            "prior_ensemble_mean": [1.1, 2.1, 3.1],
+            "prior_ensemble_spread": [0.1, 0.2, 0.3],
+            "posterior_ensemble_mean": [1.2, 2.2, 3.2],
+            "posterior_ensemble_spread": [0.2, 0.3, 0.4],
+            "DART_quality_control": [0, 1, 2],
+            "obs_err_var": [0.01, 0.02, 0.03],
+            "linked_list": [
+                "-1          2          -1",
+                "1           3          -1",
+                "2           -1         -1",
+            ],
+            "posterior_sq_err": [0.04, 0.05, 0.06],
+        }
+        df = pd.DataFrame(data)
+
+        # Create an instance of obs_sequence with the sample DataFrame
+        obs_seq = obsq.obs_sequence(file=None)
+        obs_seq.df = df
+        obs_seq.reverse_types = {
+            "ACARS_TEMPERATURE": 1,
+            "RADIOSONDE_U_WIND_COMPONENT": 2,
+        }
+        obs_seq.n_non_qc = 4
+        obs_seq.n_qc = 1
+        return obs_seq
+
+    def test_create_header_from_dataframe(self, obs_seq):
+        # Call the method to create the header
+        obs_seq.create_header_from_dataframe()
+
+        # Verify the header is correctly created
+        expected_header = [
+            "obs_sequence",
+            "obs_type_definitions",
+            "2",
+            "1 ACARS_TEMPERATURE",
+            "2 RADIOSONDE_U_WIND_COMPONENT",
+            "num_copies: 4  num_qc: 1",
+            "num_obs:          3 max_num_obs:          3",
+            "observation",
+            "prior ensemble mean",
+            "prior ensemble spread",
+            "posterior ensemble mean",
+            "posterior ensemble spread",
+            "DART quality control",
+            "first:            1 last:            3",
+        ]
+
+        assert expected_header == obs_seq.header
 
 
 if __name__ == "__main__":
