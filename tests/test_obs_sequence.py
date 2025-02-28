@@ -7,6 +7,7 @@ import pandas as pd
 from pydartdiags.obs_sequence import obs_sequence as obsq
 from pydartdiags.stats import stats
 import numpy as np
+import yaml
 
 
 class TestConvertDartTime:
@@ -844,6 +845,34 @@ class TestCompositeTypes:
                 obs_seq.df.loc[obs_seq.df["type"] == "ACARS_TEMPERATURE", col].values[0]
                 == orig_df.loc[orig_df["type"] == "ACARS_TEMPERATURE", col].values[0]
             )
+
+    def test_composite_types_dups(self):
+        test_dir = os.path.dirname(__file__)
+        file_path = os.path.join(test_dir, "data", "dups-obs.final")
+
+        dup = obsq.obs_sequence(file_path)
+        # Test that composite_types raises an error
+        with pytest.raises(Exception, match="There are duplicates in the components."):
+            dup.composite_types()
+
+    def test_no_yaml_file(self):
+        with pytest.raises(Exception):
+            obsq.load_yaml_to_dict("nonexistent.yaml")
+
+    def test_load_yaml_to_dict_broken_file(self, tmpdir):
+        # Create a broken YAML file
+        broken_yaml_content = """
+        composite_types:
+          ACARS_HORIZONTAL_WIND:
+            components: [ACARS_U_WIND_COMPONENT, ACARS_V_WIND_COMPONENT
+        """
+        broken_file = tmpdir.join("broken_composite_types.yaml")
+        with open(broken_file, "w") as f:
+            f.write(broken_yaml_content)
+
+        # Test that load_yaml_to_dict raises an exception for the broken YAML file
+        with pytest.raises(yaml.YAMLError):
+            obsq.load_yaml_to_dict(broken_file)
 
 
 if __name__ == "__main__":

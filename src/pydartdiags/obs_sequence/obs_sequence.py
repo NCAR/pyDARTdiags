@@ -1162,7 +1162,7 @@ def load_yaml_to_dict(file_path):
             return yaml.safe_load(file)
     except Exception as e:
         print(f"Error loading YAML file: {e}")
-        return None
+        raise
 
 
 def convert_dart_time(seconds, days):
