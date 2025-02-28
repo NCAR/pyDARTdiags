@@ -29,7 +29,7 @@ def plot_profile(obs_seq, levels, type, bias=True, rmse=True, totalspread=True):
 
     # calculate stats and add to dataframe
     stats.diag_stats(obs_seq.df)
-    qc0 = obs_seq.select_by_dart_qc(0)  # filter only qc=0
+    qc0 = stats.select_used_qcs(obs_seq.df)  # filter only qc=0, qc=2
 
     # filter by type
     qc0 = qc0[qc0["type"] == type]
@@ -228,7 +228,7 @@ def plot_profile(obs_seq, levels, type, bias=True, rmse=True, totalspread=True):
 
 def plot_rank_histogram(obs_seq, levels, type, ens_size):
 
-    qc0 = obs_seq.select_by_dart_qc(0)  # filter only qc=0
+    qc0 = stats.select_used_qcs(obs_seq.df)  # filter only qc=0, qc=2
     qc0 = qc0[qc0["type"] == type]  # filter by type
     stats.bin_by_layer(qc0, levels)  # bin by level
 
