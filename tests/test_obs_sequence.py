@@ -817,7 +817,7 @@ class TestCompositeTypes:
 
         # Horizontal wind not in original, should be the same as the component
         for col in obs_seq.df.columns:
-            if col not in combo_cols and col is not "type":
+            if col not in combo_cols and col != "type":
                 assert (
                     obs_seq.df.loc[
                         obs_seq.df["type"] == "ACARS_HORIZONTAL_WIND", col
