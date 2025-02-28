@@ -749,12 +749,23 @@ class TestCompositeTypes:
         obs_seq = obsq.obs_sequence(file_path)
         return obs_seq
 
-    def test_composite_types(self, obs_seq):
+    @pytest.mark.parametrize(
+        "composite_types_arg",
+        [
+            None,
+            "use_default",
+            os.path.join(os.path.dirname(__file__), "data", "composite_acars.yaml"),
+        ],
+    )
+    def test_composite_types(self, obs_seq, composite_types_arg):
 
         # Save the original DataFrame for comparison
         orig_df = obs_seq.df.copy()
         # Call the composite_types method
-        obs_seq.composite_types()
+        if composite_types_arg is None:
+            obs_seq.composite_types()
+        else:
+            obs_seq.composite_types(composite_types=composite_types_arg)
 
         # Verify composite types added to the DataFrame
         types = obs_seq.df["type"].unique()

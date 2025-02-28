@@ -1,0 +1,5 @@
+acars_horizontal_wind:
+  description: ACARS-derived Horizontal wind speed
+  components:
+    - acars_u_wind_component
+    - acars_v_wind_component
