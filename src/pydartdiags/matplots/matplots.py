@@ -46,7 +46,6 @@ def plot_profile(obs_seq, levels, type, bias=True, rmse=True, totalspread=True):
         return None
 
     vert_unit = all_df.iloc[0]["vert_unit"]
-    print("Vertical unit: ", vert_unit)
     if vert_unit == "pressure (Pa)":
         conversion = 0.01  # from Pa to hPa
     else:
