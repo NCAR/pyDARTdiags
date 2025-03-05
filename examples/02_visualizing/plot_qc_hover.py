@@ -2,8 +2,8 @@
 Geographic Plot of Observations to look at QC
 ==============================================
 
-This example demonstrates how to read and observation sequence
-file, and plot the observations on a map, with the color
+This example demonstrates how to read an observation sequence
+file and plot the observations on a map, with the color
 indicating the QC value.
 
 
