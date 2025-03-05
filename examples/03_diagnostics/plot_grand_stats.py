@@ -3,13 +3,14 @@ Grand Statistics
 ================
 
 This example demonstrates how to compute grand statistics for
-an observation sequence.
+an observation sequence. For an explanation of the statistics calculations see
+the :ref:`statistics` guide.
 
 """
 
 ###########################################
 # Import the obs_sequence module 
-# and the statistics module
+# and the statistics module.
 import pydartdiags.obs_sequence.obs_sequence as obsq
 from pydartdiags.stats import stats
 ###########################################
@@ -23,20 +24,20 @@ data_file = os.path.join(data_dir, "obs_seq.final.ascii.medium")
 
 
 ###########################################
-# Read the obs_seq file into an obs_seq object
+# Read the obs_seq file into an obs_seq object.
 obs_seq = obsq.obs_sequence(data_file)
 
-# Select observations that were used in the assimilation
+# Select observations that were used in the assimilation.
 used_obs = obs_seq.select_used_qcs()
 
 ###########################################
 # `used_obs` is a dataframe with only the observations with QC value of 0.
 #
-# The columns of the dataframe are the same as the original obs_seq dataframe
+# The columns of the dataframe are the same as the original obs_seq dataframe.
 used_obs.columns
 
 ###########################################
-# Now we calculate the statistics required for DART diagnostics
+# Now we calculate the statistics required for DART diagnostics.
 
 stats.diag_stats(used_obs)
 
@@ -48,7 +49,7 @@ used_obs.columns
 
 ###########################################
 # The help function can be used to find out more about the diag_stats function
-# including what statistics are calculated
+# including what statistics are calculated.
 help(stats.diag_stats)
 
 
