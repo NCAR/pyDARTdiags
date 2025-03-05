@@ -422,9 +422,10 @@ to download the full example code.</p>
 <section class="sphx-glr-example-title" id="grand-statistics">
 <span id="sphx-glr-examples-03-diagnostics-plot-grand-stats-py"></span><h1>Grand Statistics<a class="headerlink" href="#grand-statistics" title="Link to this heading">#</a></h1>
 <p>This example demonstrates how to compute grand statistics for
-an observation sequence.</p>
+an observation sequence. For an explanation of the statistics calculations see
+the <a class="reference internal" href="../../userguide/statistics.html#statistics"><span class="std std-ref">Statistics</span></a> guide.</p>
 <p>Import the obs_sequence module
-and the statistics module</p>
+and the statistics module.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pydartdiags.obs_sequence.obs_sequence</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">obsq</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pydartdiags.stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">stats</span>
 </pre></div>
@@ -438,16 +439,16 @@ in the data directory, so we <code class="docutils literal notranslate"><span cl
 <span class="n">data_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="s2">&quot;obs_seq.final.ascii.medium&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Read the obs_seq file into an obs_seq object</p>
+<p>Read the obs_seq file into an obs_seq object.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">obs_sequence</span><span class="p">(</span><span class="n">data_file</span><span class="p">)</span>
 
-<span class="c1"># Select observations with QC value of 0</span>
-<span class="n">qc0</span> <span class="o">=</span> <span class="n">obs_seq</span><span class="o">.</span><span class="n">select_by_dart_qc</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="c1"># Select observations that were used in the assimilation.</span>
+<span class="n">used_obs</span> <span class="o">=</span> <span class="n">obs_seq</span><span class="o">.</span><span class="n">select_used_qcs</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>qc0 is a dataframe with only the observations with QC value of 0.</p>
-<p>The columns of the dataframe are the same as the original obs_seq dataframe</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">qc0</span><span class="o">.</span><span class="n">columns</span>
+<p><cite>used_obs</cite> is a dataframe with only the observations with QC value of 0.</p>
+<p>The columns of the dataframe are the same as the original obs_seq dataframe.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">used_obs</span><span class="o">.</span><span class="n">columns</span>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Index([&#39;obs_num&#39;, &#39;observation&#39;, &#39;prior_ensemble_mean&#39;,
@@ -457,8 +458,8 @@ in the data directory, so we <code class="docutils literal notranslate"><span cl
       dtype=&#39;object&#39;)
 </pre></div>
 </div>
-<p>Now we calculate the statistics required for DART diagnostics</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">stats</span><span class="o">.</span><span class="n">diag_stats</span><span class="p">(</span><span class="n">qc0</span><span class="p">)</span>
+<p>Now we calculate the statistics required for DART diagnostics.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">stats</span><span class="o">.</span><span class="n">diag_stats</span><span class="p">(</span><span class="n">used_obs</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
@@ -776,7 +777,7 @@ in the data directory, so we <code class="docutils literal notranslate"><span cl
 <br />
 <br /><p>The statistics are calculated for each row in the dataframe,
 and the results are stored in new columns.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">qc0</span><span class="o">.</span><span class="n">columns</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">used_obs</span><span class="o">.</span><span class="n">columns</span>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Index([&#39;obs_num&#39;, &#39;observation&#39;, &#39;prior_ensemble_mean&#39;,
@@ -788,7 +789,7 @@ and the results are stored in new columns.</p>
 </pre></div>
 </div>
 <p>The help function can be used to find out more about the diag_stats function
-including what statistics are calculated</p>
+including what statistics are calculated.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">stats</span><span class="o">.</span><span class="n">diag_stats</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -820,7 +821,7 @@ diag_stats(df, phase)
 </div>
 <p>Summarize the grand statistics, which are the statistics aggregated over all the observations
 for each type of observation.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">stats</span><span class="o">.</span><span class="n">grand_statistics</span><span class="p">(</span><span class="n">qc0</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">stats</span><span class="o">.</span><span class="n">grand_statistics</span><span class="p">(</span><span class="n">used_obs</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
@@ -910,7 +911,7 @@ for each type of observation.</p>
 </div>
 </div>
 <br />
-<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.171 seconds)</p>
+<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.365 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-03-diagnostics-plot-grand-stats-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/ce101c761d274087ecac0cbfd4585183/plot_grand_stats.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_grand_stats.ipynb</span></code></a></p>
@@ -992,7 +993,7 @@ for each type of observation.</p>
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.1.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     <br/>
   </p>
 </div>

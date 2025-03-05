@@ -3,7 +3,8 @@ Plot Profiles
 =============
 
 This example demonstrates how to plot profiles of 
-RMSE, bias, and totalspread.
+RMSE, bias, and totalspread. For an explanation of the statistics calculations see
+the :ref:`statistics` guide.
 """
 
 ###########################################

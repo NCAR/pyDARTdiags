@@ -22,14 +22,15 @@ Plot Profiles
 =============
 
 This example demonstrates how to plot profiles of 
-RMSE, bias, and totalspread.
+RMSE, bias, and totalspread. For an explanation of the statistics calculations see
+the :ref:`statistics` guide.
 
-.. GENERATED FROM PYTHON SOURCE LINES 10-12
+.. GENERATED FROM PYTHON SOURCE LINES 11-13
 
 Import the obs_sequence module
 and the matplots module for plotting.
 
-.. GENERATED FROM PYTHON SOURCE LINES 12-15
+.. GENERATED FROM PYTHON SOURCE LINES 13-16
 
 .. code-block:: Python
 
@@ -43,14 +44,14 @@ and the matplots module for plotting.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 16-20
+.. GENERATED FROM PYTHON SOURCE LINES 17-21
 
 Chose an obs_seq file to read.
 In this example, we are using a small obs_seq file "obs_seq.final.1000"
 that comes with the pyDARTdiags package 
 in the data directory, so we ``import os`` to get the path to the file.
 
-.. GENERATED FROM PYTHON SOURCE LINES 20-24
+.. GENERATED FROM PYTHON SOURCE LINES 21-25
 
 .. code-block:: Python
 
@@ -65,11 +66,11 @@ in the data directory, so we ``import os`` to get the path to the file.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 25-26
+.. GENERATED FROM PYTHON SOURCE LINES 26-27
 
 Read the obs_seq file into an obs_seq object.
 
-.. GENERATED FROM PYTHON SOURCE LINES 26-28
+.. GENERATED FROM PYTHON SOURCE LINES 27-29
 
 .. code-block:: Python
 
@@ -82,13 +83,13 @@ Read the obs_seq file into an obs_seq object.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 29-32
+.. GENERATED FROM PYTHON SOURCE LINES 30-33
 
 Chose an observation type.
 The observation types are stored in the 'type' column.
 To see which observation types are in the dataframe, use the unique method:
 
-.. GENERATED FROM PYTHON SOURCE LINES 32-34
+.. GENERATED FROM PYTHON SOURCE LINES 33-35
 
 .. code-block:: Python
 
@@ -110,12 +111,12 @@ To see which observation types are in the dataframe, use the unique method:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 35-37
+.. GENERATED FROM PYTHON SOURCE LINES 36-38
 
 For this example, we are going to look at the rank histogram for 
 ACARS_TEMPERATURE observations.
 
-.. GENERATED FROM PYTHON SOURCE LINES 37-43
+.. GENERATED FROM PYTHON SOURCE LINES 38-44
 
 .. code-block:: Python
 
@@ -134,20 +135,14 @@ ACARS_TEMPERATURE observations.
    :class: sphx-glr-single-img
 
 
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    Vertical unit:  pressure (Pa)
 
 
 
-
-.. GENERATED FROM PYTHON SOURCE LINES 44-45
+.. GENERATED FROM PYTHON SOURCE LINES 45-46
 
 To plot only the bias, set rmse=False and totalspread=False.
 
-.. GENERATED FROM PYTHON SOURCE LINES 45-45
+.. GENERATED FROM PYTHON SOURCE LINES 46-46
 
 .. code-block:: Python
 
@@ -160,19 +155,13 @@ To plot only the bias, set rmse=False and totalspread=False.
    :class: sphx-glr-single-img
 
 
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    Vertical unit:  pressure (Pa)
-
 
 
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.619 seconds)
+   **Total running time of the script:** (0 minutes 0.584 seconds)
 
 
 .. _sphx_glr_download_examples_03_diagnostics_plot_profiles.py:

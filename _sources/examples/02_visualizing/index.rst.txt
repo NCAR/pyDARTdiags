@@ -18,7 +18,7 @@ Examples of visualizing observation sequence data.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to read and observation sequence file, and plot the observations on a map, with the color indicating the QC value.">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to read an observation sequence file and plot the observations on a map, with the color indicating the QC value.">
 
 .. only:: html
 

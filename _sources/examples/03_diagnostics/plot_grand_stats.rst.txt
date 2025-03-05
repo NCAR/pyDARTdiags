@@ -22,14 +22,15 @@ Grand Statistics
 ================
 
 This example demonstrates how to compute grand statistics for
-an observation sequence.
+an observation sequence. For an explanation of the statistics calculations see
+the :ref:`statistics` guide.
 
-.. GENERATED FROM PYTHON SOURCE LINES 11-13
+.. GENERATED FROM PYTHON SOURCE LINES 12-14
 
 Import the obs_sequence module 
-and the statistics module
+and the statistics module.
 
-.. GENERATED FROM PYTHON SOURCE LINES 13-15
+.. GENERATED FROM PYTHON SOURCE LINES 14-16
 
 .. code-block:: Python
 
@@ -42,14 +43,14 @@ and the statistics module
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 16-20
+.. GENERATED FROM PYTHON SOURCE LINES 17-21
 
 Chose an obs_seq file to read.
 This is a small obs_seq file "obs_seq.final.ascii.medium"
 that comes with the pyDARTdiags package 
 in the data directory, so we ``import os`` to get the path to the file
 
-.. GENERATED FROM PYTHON SOURCE LINES 20-25
+.. GENERATED FROM PYTHON SOURCE LINES 21-26
 
 .. code-block:: Python
 
@@ -65,18 +66,18 @@ in the data directory, so we ``import os`` to get the path to the file
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 26-27
+.. GENERATED FROM PYTHON SOURCE LINES 27-28
 
-Read the obs_seq file into an obs_seq object
+Read the obs_seq file into an obs_seq object.
 
-.. GENERATED FROM PYTHON SOURCE LINES 27-32
+.. GENERATED FROM PYTHON SOURCE LINES 28-33
 
 .. code-block:: Python
 
     obs_seq = obsq.obs_sequence(data_file)
 
-    # Select observations with QC value of 0
-    qc0 = obs_seq.select_by_dart_qc(0)
+    # Select observations that were used in the assimilation.
+    used_obs = obs_seq.select_used_qcs()
 
 
 
@@ -85,17 +86,17 @@ Read the obs_seq file into an obs_seq object
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 33-36
+.. GENERATED FROM PYTHON SOURCE LINES 34-37
 
-qc0 is a dataframe with only the observations with QC value of 0.
+`used_obs` is a dataframe with only the observations with QC value of 0.
 
-The columns of the dataframe are the same as the original obs_seq dataframe
+The columns of the dataframe are the same as the original obs_seq dataframe.
 
-.. GENERATED FROM PYTHON SOURCE LINES 36-38
+.. GENERATED FROM PYTHON SOURCE LINES 37-39
 
 .. code-block:: Python
 
-    qc0.columns
+    used_obs.columns
 
 
 
@@ -114,16 +115,16 @@ The columns of the dataframe are the same as the original obs_seq dataframe
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 39-40
+.. GENERATED FROM PYTHON SOURCE LINES 40-41
 
-Now we calculate the statistics required for DART diagnostics
+Now we calculate the statistics required for DART diagnostics.
 
-.. GENERATED FROM PYTHON SOURCE LINES 40-43
+.. GENERATED FROM PYTHON SOURCE LINES 41-44
 
 .. code-block:: Python
 
 
-    stats.diag_stats(qc0)
+    stats.diag_stats(used_obs)
 
 
 
@@ -447,17 +448,17 @@ Now we calculate the statistics required for DART diagnostics
     <br />
     <br />
 
-.. GENERATED FROM PYTHON SOURCE LINES 44-46
+.. GENERATED FROM PYTHON SOURCE LINES 45-47
 
 The statistics are calculated for each row in the dataframe, 
 and the results are stored in new columns.
 
-.. GENERATED FROM PYTHON SOURCE LINES 46-49
+.. GENERATED FROM PYTHON SOURCE LINES 47-50
 
 .. code-block:: Python
 
 
-    qc0.columns
+    used_obs.columns
 
 
 
@@ -477,12 +478,12 @@ and the results are stored in new columns.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 50-52
+.. GENERATED FROM PYTHON SOURCE LINES 51-53
 
 The help function can be used to find out more about the diag_stats function
-including what statistics are calculated
+including what statistics are calculated.
 
-.. GENERATED FROM PYTHON SOURCE LINES 52-55
+.. GENERATED FROM PYTHON SOURCE LINES 53-56
 
 .. code-block:: Python
 
@@ -526,16 +527,16 @@ including what statistics are calculated
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 56-58
+.. GENERATED FROM PYTHON SOURCE LINES 57-59
 
 Summarize the grand statistics, which are the statistics aggregated over all the observations
 for each type of observation.
 
-.. GENERATED FROM PYTHON SOURCE LINES 58-59
+.. GENERATED FROM PYTHON SOURCE LINES 59-60
 
 .. code-block:: Python
 
-    stats.grand_statistics(qc0)
+    stats.grand_statistics(used_obs)
 
 
 
@@ -635,7 +636,7 @@ for each type of observation.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.171 seconds)
+   **Total running time of the script:** (0 minutes 0.365 seconds)
 
 
 .. _sphx_glr_download_examples_03_diagnostics_plot_grand_stats.py:

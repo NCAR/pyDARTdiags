@@ -22,7 +22,7 @@ Examples of the diagnostic tools available in the library.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to compute grand statistics for an observation sequence.">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to compute grand statistics for an observation sequence. For an explanation of the statistics calculations see the statistics guide.">
 
 .. only:: html
 
@@ -39,7 +39,7 @@ Examples of the diagnostic tools available in the library.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to plot profiles of  RMSE, bias, and totalspread.">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to plot profiles of  RMSE, bias, and totalspread. For an explanation of the statistics calculations see the statistics guide.">
 
 .. only:: html
 

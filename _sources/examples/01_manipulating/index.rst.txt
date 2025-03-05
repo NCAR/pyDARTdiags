@@ -37,7 +37,7 @@ Here are some examples of how to use pyDARTdiags to read, modify, and write obse
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="External, or &quot;precomputed&quot; forward operators are forward operators that are not calculated during filter, DART&#x27;s assimilation program.  They are calculated externally, written to an observation sequence file, and read it by DART.  ">
+    <div class="sphx-glr-thumbcontainer" tooltip="External, or &quot;precomputed&quot; forward operators are forward operators that are not calculated during filter, DART&#x27;s assimilation program.  They are calculated externally, written to an observation sequence file, and read in by filter.  ">
 
 .. only:: html
 

@@ -62,7 +62,7 @@ Here are some examples of how to use pyDARTdiags to read, modify, and write obse
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="External, or &quot;precomputed&quot; forward operators are forward operators that are not calculated during filter, DART&#x27;s assimilation program.  They are calculated externally, written to an observation sequence file, and read it by DART.  ">
+    <div class="sphx-glr-thumbcontainer" tooltip="External, or &quot;precomputed&quot; forward operators are forward operators that are not calculated during filter, DART&#x27;s assimilation program.  They are calculated externally, written to an observation sequence file, and read in by filter.  ">
 
 .. only:: html
 
@@ -132,7 +132,7 @@ Examples of visualizing observation sequence data.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to read and observation sequence file, and plot the observations on a map, with the color indicating the QC value.">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to read an observation sequence file and plot the observations on a map, with the color indicating the QC value.">
 
 .. only:: html
 
@@ -172,7 +172,7 @@ Examples of the diagnostic tools available in the library.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to compute grand statistics for an observation sequence.">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to compute grand statistics for an observation sequence. For an explanation of the statistics calculations see the statistics guide.">
 
 .. only:: html
 
@@ -189,7 +189,7 @@ Examples of the diagnostic tools available in the library.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to plot profiles of  RMSE, bias, and totalspread.">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to plot profiles of  RMSE, bias, and totalspread. For an explanation of the statistics calculations see the statistics guide.">
 
 .. only:: html
 

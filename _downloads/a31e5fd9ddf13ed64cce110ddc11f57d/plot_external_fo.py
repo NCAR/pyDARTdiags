@@ -3,9 +3,9 @@ Adding External Forward Operators to an Observation
 ===================================================
 
 External, or "precomputed" forward operators are forward operators
-that are not calculated during filter, DART's assimilation program. 
+that are not calculated during ``filter``, DART's assimilation program. 
 They are calculated externally, written to an observation sequence file,
-and read it by DART.  
+and read in by ``filter``.  
 
 This example shows how to add an external forward operator to an observation.
 We'll be using observations for the Lorenz 96 tracer model, which is a toy
