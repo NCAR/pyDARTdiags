@@ -2,6 +2,7 @@
 from pydartdiags.stats import stats
 import matplotlib.pyplot as plt
 import textwrap
+import pandas as pd
 
 # HK @todo color scheme class
 dacolors = ["green", "magenta", "orange", "red"]
@@ -272,3 +273,134 @@ def plot_rank_histogram(obs_seq, levels, type, ens_size):
         plt.show()
 
     return fig
+
+
+def plot_evolution(obs_seq, type, time_bins, stat, levels=None, columns=None):
+    """
+    Plot the time evolution of the requested statistics.
+
+    Args:
+        obs_seq: The observation sequence object.
+        type (str): The type of observation to filter by.
+        levels (list, optional): The levels to bin by. If None, plot every row.
+        stat (str): The statistic to plot. Default is "prior_rmse".
+
+    Returns:
+        None
+    """
+    # Calculate stats and add to dataframe
+    stats.diag_stats(obs_seq.df)
+    qc0 = stats.select_used_qcs(obs_seq.df)  # filter only qc=0, qc=2
+    qc0 = qc0[qc0["type"] == type]  # filter by type
+
+    if levels:
+        stats.bin_by_layer(qc0, levels)  # bin by level
+        midpoints = qc0["midpoint"].unique()
+
+        print(qc0.columns)
+
+        for level in sorted(midpoints):
+            df = qc0[qc0["midpoint"] == level]
+
+            # bin by time
+            df["time_bin"] = pd.cut(df["time"], bins=time_bins)
+            # aggregate by time bin
+            if stat == "rmse":
+                if "posterior_rmse" in df.columns:
+                    df = df.groupby("time_bin").agg(
+                        prior_rmse=("prior_rmse", "mean"),
+                        posterior_rmse=("posterior_rmse", "mean"),
+                    )
+                else:
+                    df = df.groupby("time_bin").agg(
+                        prior_rmse=("prior_rmse", "mean"),
+                    )
+            elif stat == "bias":
+                if "posterior_bias" in df.columns:
+                    df = df.groupby("time_bin").agg(
+                        prior_bias=("prior_bias", mean_then_sqrt),
+                        posterior_bias=("posterior_bias", mean_then_sqrt),
+                    )
+                else:
+                    df = df.groupby("time_bin").agg(
+                        prior_bias=("prior_bias", mean_then_sqrt),
+                    )
+            elif stat == "totalspread":
+                if "posterior_totalspread" in df.columns:
+                    df = df.groupby("time_bin").agg(
+                        prior_totalspread=("prior_totalspread", "mean"),
+                        posterior_totalspread=("posterior_totalspread", "mean"),
+                    )
+                else:
+                    df = df.groupby("time_bin").agg(
+                        prior_totalspread=("prior_totalspread", "mean"),
+                    )
+
+            # Plot the time evolution of requested stats
+            fig, ax1 = plt.subplots()
+            if "prior_" + stat in df.columns:
+                ax1.plot(df["time"], df["prior_" + stat], label=stat)
+            if "posterior_" + stat in df.columns:
+                ax1.plot(df["time"], df["posterior_" + stat], label=f"posterior {stat}")
+            if columns is not None:
+                for col in columns:
+                    ax1.plot(df["time"], df[col], label=col)
+            ax1.legend()
+            ax1.set_title(f"{type} at level {level}")
+            ax1.set_xlabel("time")
+            ax1.set_ylabel(stat)
+            plt.show()
+    else:
+
+        # bin by time
+        print(time_bins)
+        qc0["time_bin"] = pd.cut(qc0["time"], bins=time_bins)
+        stats.time_statistics(qc0)
+        df = qc0
+
+        # aggregate by time bin
+        if stat == "rmse":
+            if "posterior_rmse" in df.columns:
+                df = df.groupby("time_bin").agg(
+                    prior_rmse=("prior_rmse", "mean"),
+                    posterior_rmse=("posterior_rmse", "mean"),
+                )
+            else:
+                df = df.groupby("time_bin").agg(
+                    prior_rmse=("prior_rmse", "mean"),
+                )
+        elif stat == "bias":
+            if "posterior_bias" in df.columns:
+                df = df.groupby("time_bin").agg(
+                    prior_bias=("prior_bias", mean_then_sqrt),
+                    posterior_bias=("posterior_bias", mean_then_sqrt),
+                )
+            else:
+                df = df.groupby("time_bin").agg(
+                    prior_bias=("prior_bias", mean_then_sqrt),
+                )
+        elif stat == "totalspread":
+            if "posterior_totalspread" in df.columns:
+                df = df.groupby("time_bin").agg(
+                    prior_totalspread=("prior_totalspread", "mean"),
+                    posterior_totalspread=("posterior_totalspread", "mean"),
+                )
+            else:
+                df = df.groupby("time_bin").agg(
+                    prior_totalspread=("prior_totalspread", "mean"),
+                )
+
+        # Plot the time evolution of requested stats
+        fig, ax1 = plt.subplots()
+        if "prior_" + stat in df.columns:
+            ax1.plot(df["time_bin"], df["prior_" + stat], label=stat)
+        if "posterior_" + stat in df.columns:
+            ax1.plot(df["time_bin"], df["posterior_" + stat], label=f"posterior {stat}")
+        if columns is not None:
+            for col in columns:
+                ax1.plot(df["time_bin"], df[col], label=col)
+        ax1.legend()
+        ax1.set_title(f"{type}")
+        ax1.set_xlabel("time")
+        ax1.set_ylabel(stat)
+        plt.show()

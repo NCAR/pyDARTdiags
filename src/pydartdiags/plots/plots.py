@@ -189,3 +189,24 @@ def plot_profile_prior(df_profile, stat, verticalUnit):
         fig_stat.update_yaxes(autorange="reversed")
 
     return fig_stat
+
+def plot_evolution(obs_seq, levels, type, stats="prior_rmse"):
+    
+    # calculate stats and add to dataframe
+    stats.diag_stats(obs_seq.df)
+    qc0 = stats.select_used_qcs(obs_seq.df) # filter only qc=0, qc=2
+    qc0 = qc0[qc0["type"] == type]  # filter by type
+    stats.bin_by_layer(qc0, levels)  # bin by level
+
+    midpoints = qc0["midpoint"].unique()
+
+    for level in sorted(midpoints):
+    
+        df = qc0[qc0["midpoint"] == level]
+        # plot the time evolution of requested stats
+        fig, ax1 = plt.subplots()
+        ax1.plot(df["time"], df[stat], label=stat)
+        ax1.legend()
+        ax1.set_title(f"{type} at level {level}")
+        ax1.set_xlabel("time")
+        ax1.set_ylabel(stat)

@@ -2,6 +2,7 @@
 import pandas as pd
 import numpy as np
 from functools import wraps
+from datetime import datetime, timedelta
 
 # from pydartdiags.obs_sequence import obs_sequence as obsq
 
@@ -261,6 +262,27 @@ def layer_statistics(df, phase):
 
     return layer_stats
 
+@apply_to_phases_by_type_return_df
+def time_statistics(df, phase):
+
+    # assuming diag_stats has been called
+    stats = (
+        df.groupby(["time_bin", "type"], observed=False)
+        .agg(
+            {
+                f"{phase}_sq_err": mean_then_sqrt,
+                f"{phase}_bias": "mean",
+                f"{phase}_totalvar": mean_then_sqrt,
+            }
+        )
+        .reset_index()
+    )
+
+    stats.rename(columns={f"{phase}_sq_err": f"{phase}_rmse"}, inplace=True)
+    stats.rename(columns={f"{phase}_totalvar": f"{phase}_totalspread"}, inplace=True)
+
+    return stats
+
 
 def possible_vs_used(df):
     """
@@ -315,3 +337,105 @@ def select_used_qcs(df):
         pandas.DataFrame: A DataFrame containing only the rows with a DART quality control flag 0 or 2.
     """
     return df[(df["DART_quality_control"] == 0) | (df["DART_quality_control"] == 2)]
+
+
+def generate_time_bins(bin_width, start_time, end_time=None, periods=None):
+    """
+    Generate bins in time.
+
+    Args:
+        bin_width (str): The width of each bin (e.g., '1H' for 1 hour, '30T' for 30 minutes).
+        start_time (str or datetime): The start time for the bins.
+        end_time (str or datetime, optional): The end time for the bins. If not provided, 'periods' must be specified.
+        periods (int, optional): The number of periods (time bins) to generate. If not provided, 'end_time' must be specified.
+
+    Returns:
+        list: A list of datetime objects representing the time bins.
+    """
+    # Ensure start_time and end_time are datetime objects
+    if isinstance(start_time, str):
+        start_time = datetime.fromisoformat(start_time)
+    if end_time is not None and isinstance(end_time, str):
+        end_time = datetime.fromisoformat(end_time)
+
+    # Parse the bin width
+    bin_width_timedelta = parse_bin_width(bin_width)
+
+    # Generate the time bins
+    time_bins = []
+    current_time = start_time
+
+    if end_time is not None:
+        while current_time <= end_time:
+            time_bins.append(current_time)
+            current_time += bin_width_timedelta
+    elif periods is not None:
+        for _ in range(periods):
+            time_bins.append(current_time)
+            current_time += bin_width_timedelta
+    else:
+        raise ValueError("Either 'end_time' or 'periods' must be specified.")
+
+    return time_bins
+
+def parse_bin_width(bin_width):
+    """
+    Parse the bin width string and return a timedelta object.
+
+    Args:
+        bin_width (str): The width of each bin (e.g., '1H' for 1 hour, '30T' for 30 minutes).
+
+    Returns:
+        timedelta: A timedelta object representing the bin width.
+    """
+    unit = bin_width[-1]
+    value = int(bin_width[:-1])
+
+    if unit == 'H':
+        return timedelta(hours=value)
+    elif unit == 'T':
+        return timedelta(minutes=value)
+    elif unit == 'S':
+        return timedelta(seconds=value)
+    else:
+        raise ValueError("Unsupported bin width unit. Use 'H' for hours, 'T' for minutes, or 'S' for seconds.")
+
+def generate_time_bins(bin_width, start_time, end_time=None, periods=None):
+    """
+    Generate bins in time.
+
+    Args:
+        bin_width (str): The width of each bin (e.g., '1H' for 1 hour, '30T' for 30 minutes).
+        start_time (str or datetime): The start time for the bins.
+        end_time (str or datetime, optional): The end time for the bins. If not provided, 'periods' must be specified.
+        periods (int, optional): The number of periods (time bins) to generate. If not provided, 'end_time' must be specified.
+
+    Returns:
+        list: A list of datetime objects representing the time bins.
+    """
+    # Ensure start_time and end_time are datetime objects
+    if isinstance(start_time, str):
+        start_time = datetime.fromisoformat(start_time)
+    if end_time is not None and isinstance(end_time, str):
+        end_time = datetime.fromisoformat(end_time)
+
+    # Parse the bin width
+    bin_width_timedelta = parse_bin_width(bin_width)
+
+    # Generate the time bins
+    time_bins = []
+    current_time = start_time
+
+    if end_time is not None:
+        while current_time <= end_time:
+            time_bins.append(current_time)
+            current_time += bin_width_timedelta
+    elif periods is not None:
+        for _ in range(periods):
+            time_bins.append(current_time)
+            current_time += bin_width_timedelta
+    else:
+        raise ValueError("Either 'end_time' or 'periods' must be specified.")
+
+    return time_bins
+
