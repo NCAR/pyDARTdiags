@@ -276,7 +276,9 @@ def plot_rank_histogram(obs_seq, levels, type, ens_size):
     return fig
 
 
-def plot_evolution(obs_seq, type, time_value, stat, levels=None, tick_interval=2, time_format='%m-%d'):
+def plot_evolution(
+    obs_seq, type, time_value, stat, levels=None, tick_interval=2, time_format="%m-%d"
+):
     """
     Plot the time evolution of the requested statistics.
 
@@ -346,14 +348,18 @@ def plot_time_evolution(df, stat, type, level, tick_interval, time_format):
 
     # Plot prior and posterior statistics
     if f"prior_{stat}" in df.columns:
-        ax1.plot(df['time_bin_midpoint'], df[f"prior_{stat}"], label=f"prior {stat}")
+        ax1.plot(df["time_bin_midpoint"], df[f"prior_{stat}"], label=f"prior {stat}")
     if f"posterior_{stat}" in df.columns:
-        ax1.plot(df['time_bin_midpoint'], df[f"posterior_{stat}"], label=f"posterior {stat}")
+        ax1.plot(
+            df["time_bin_midpoint"], df[f"posterior_{stat}"], label=f"posterior {stat}"
+        )
 
     # Set x-axis ticks every 'tick_interval' values
-    tick_positions = df['time_bin_midpoint'][::tick_interval]
+    tick_positions = df["time_bin_midpoint"][::tick_interval]
     ax1.set_xticks(tick_positions)
-    ax1.set_xticklabels(tick_positions.dt.strftime(time_format), rotation=45, ha='right')
+    ax1.set_xticklabels(
+        tick_positions.dt.strftime(time_format), rotation=45, ha="right"
+    )
 
     # Add labels, title, and legend
     ax1.legend()

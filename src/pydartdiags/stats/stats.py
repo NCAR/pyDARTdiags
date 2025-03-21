@@ -41,7 +41,9 @@ def apply_to_phases_by_type_return_df(func):
                 results.append(result)
 
         if not results:
-            return pd.DataFrame()  # Return an empty DataFrame if no results are generated
+            return (
+                pd.DataFrame()
+            )  # Return an empty DataFrame if no results are generated
 
         # Dynamically determine merge keys based on common columns
         common_columns = set(results[0].columns)
@@ -49,8 +51,13 @@ def apply_to_phases_by_type_return_df(func):
             common_columns &= set(result.columns)
 
         # Exclude phase-specific columns from the merge keys
-        phase_specific_columns = {f"{phase}_sq_err", f"{phase}_bias", f"{phase}_totalvar",
-                                   f"{phase}_rmse", f"{phase}_totalspread"}
+        phase_specific_columns = {
+            f"{phase}_sq_err",
+            f"{phase}_bias",
+            f"{phase}_totalvar",
+            f"{phase}_rmse",
+            f"{phase}_totalspread",
+        }
         merge_keys = list(common_columns - phase_specific_columns)
 
         if len(results) == 2:
@@ -233,7 +240,7 @@ def bin_by_time(df, time_value):
     time_bins = pd.date_range(
         start=df["time"].min() - pd.Timedelta(seconds=1),
         end=df["time"].max(),
-        freq=time_value
+        freq=time_value,
     )
     df["time_bin"] = pd.cut(df["time"], bins=time_bins)
 
@@ -241,6 +248,7 @@ def bin_by_time(df, time_value):
     df["time_bin_midpoint"] = df["time_bin"].apply(
         lambda x: x.left + (x.right - x.left) / 2 if pd.notnull(x) else None
     )
+
 
 @apply_to_phases_by_type_return_df
 def grand_statistics(df, phase):
@@ -289,6 +297,7 @@ def layer_statistics(df, phase):
 
     return layer_stats
 
+
 @apply_to_phases_by_type_return_df
 def time_statistics(df, phase):
     """
@@ -317,7 +326,9 @@ def time_statistics(df, phase):
     )
 
     time_stats.rename(columns={f"{phase}_sq_err": f"{phase}_rmse"}, inplace=True)
-    time_stats.rename(columns={f"{phase}_totalvar": f"{phase}_totalspread"}, inplace=True)
+    time_stats.rename(
+        columns={f"{phase}_totalvar": f"{phase}_totalspread"}, inplace=True
+    )
 
     return time_stats
 
