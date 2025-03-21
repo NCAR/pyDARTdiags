@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: Apache-2.0
 from pydartdiags.stats import stats
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 import textwrap
 import pandas as pd
 
@@ -275,15 +276,18 @@ def plot_rank_histogram(obs_seq, levels, type, ens_size):
     return fig
 
 
-def plot_evolution(obs_seq, type, time_bins, stat, levels=None, columns=None):
+def plot_evolution(obs_seq, type, time_value, stat, levels=None, tick_interval=2, time_format='%m-%d'):
     """
     Plot the time evolution of the requested statistics.
 
     Args:
         obs_seq: The observation sequence object.
         type (str): The type of observation to filter by.
-        levels (list, optional): The levels to bin by. If None, plot every row.
+        time_value (str): The width of each time bin (e.g., '3600S' for 1 hour).
         stat (str): The statistic to plot. Default is "prior_rmse".
+        levels (list, optional): The levels to bin by. If None, no binning by level.
+        tick_interval (int): Interval for x-axis ticks (default is 2).
+        time_format (str): Format string for time labels on the x-axis (default is '%m-%d').
 
     Returns:
         None
@@ -293,114 +297,70 @@ def plot_evolution(obs_seq, type, time_bins, stat, levels=None, columns=None):
     qc0 = stats.select_used_qcs(obs_seq.df)  # filter only qc=0, qc=2
     qc0 = qc0[qc0["type"] == type]  # filter by type
 
+    if qc0.empty:
+        print(f"No data found for type: {type}")
+        return
+
     if levels:
         stats.bin_by_layer(qc0, levels)  # bin by level
         midpoints = qc0["midpoint"].unique()
 
-        print(qc0.columns)
-
         for level in sorted(midpoints):
             df = qc0[qc0["midpoint"] == level]
 
-            # bin by time
-            df["time_bin"] = pd.cut(df["time"], bins=time_bins)
-            # aggregate by time bin
-            if stat == "rmse":
-                if "posterior_rmse" in df.columns:
-                    df = df.groupby("time_bin").agg(
-                        prior_rmse=("prior_rmse", "mean"),
-                        posterior_rmse=("posterior_rmse", "mean"),
-                    )
-                else:
-                    df = df.groupby("time_bin").agg(
-                        prior_rmse=("prior_rmse", "mean"),
-                    )
-            elif stat == "bias":
-                if "posterior_bias" in df.columns:
-                    df = df.groupby("time_bin").agg(
-                        prior_bias=("prior_bias", mean_then_sqrt),
-                        posterior_bias=("posterior_bias", mean_then_sqrt),
-                    )
-                else:
-                    df = df.groupby("time_bin").agg(
-                        prior_bias=("prior_bias", mean_then_sqrt),
-                    )
-            elif stat == "totalspread":
-                if "posterior_totalspread" in df.columns:
-                    df = df.groupby("time_bin").agg(
-                        prior_totalspread=("prior_totalspread", "mean"),
-                        posterior_totalspread=("posterior_totalspread", "mean"),
-                    )
-                else:
-                    df = df.groupby("time_bin").agg(
-                        prior_totalspread=("prior_totalspread", "mean"),
-                    )
+            # Bin by time
+            stats.bin_by_time(df, time_value)
+
+            # Aggregate by time bin
+            df = stats.time_statistics(df)
 
             # Plot the time evolution of requested stats
-            fig, ax1 = plt.subplots()
-            if "prior_" + stat in df.columns:
-                ax1.plot(df["time"], df["prior_" + stat], label=stat)
-            if "posterior_" + stat in df.columns:
-                ax1.plot(df["time"], df["posterior_" + stat], label=f"posterior {stat}")
-            if columns is not None:
-                for col in columns:
-                    ax1.plot(df["time"], df[col], label=col)
-            ax1.legend()
-            ax1.set_title(f"{type} at level {level}")
-            ax1.set_xlabel("time")
-            ax1.set_ylabel(stat)
-            plt.show()
+            plot_time_evolution(df, stat, type, level, tick_interval, time_format)
     else:
+        # Bin by time
+        stats.bin_by_time(qc0, time_value)
 
-        # bin by time
-        print(time_bins)
-        qc0["time_bin"] = pd.cut(qc0["time"], bins=time_bins)
-        stats.time_statistics(qc0)
-        df = qc0
-
-        # aggregate by time bin
-        if stat == "rmse":
-            if "posterior_rmse" in df.columns:
-                df = df.groupby("time_bin").agg(
-                    prior_rmse=("prior_rmse", "mean"),
-                    posterior_rmse=("posterior_rmse", "mean"),
-                )
-            else:
-                df = df.groupby("time_bin").agg(
-                    prior_rmse=("prior_rmse", "mean"),
-                )
-        elif stat == "bias":
-            if "posterior_bias" in df.columns:
-                df = df.groupby("time_bin").agg(
-                    prior_bias=("prior_bias", mean_then_sqrt),
-                    posterior_bias=("posterior_bias", mean_then_sqrt),
-                )
-            else:
-                df = df.groupby("time_bin").agg(
-                    prior_bias=("prior_bias", mean_then_sqrt),
-                )
-        elif stat == "totalspread":
-            if "posterior_totalspread" in df.columns:
-                df = df.groupby("time_bin").agg(
-                    prior_totalspread=("prior_totalspread", "mean"),
-                    posterior_totalspread=("posterior_totalspread", "mean"),
-                )
-            else:
-                df = df.groupby("time_bin").agg(
-                    prior_totalspread=("prior_totalspread", "mean"),
-                )
+        # Aggregate by time bin
+        df = stats.time_statistics(qc0)
 
         # Plot the time evolution of requested stats
-        fig, ax1 = plt.subplots()
-        if "prior_" + stat in df.columns:
-            ax1.plot(df["time_bin"], df["prior_" + stat], label=stat)
-        if "posterior_" + stat in df.columns:
-            ax1.plot(df["time_bin"], df["posterior_" + stat], label=f"posterior {stat}")
-        if columns is not None:
-            for col in columns:
-                ax1.plot(df["time_bin"], df[col], label=col)
-        ax1.legend()
-        ax1.set_title(f"{type}")
-        ax1.set_xlabel("time")
-        ax1.set_ylabel(stat)
-        plt.show()
+        plot_time_evolution(df, stat, type, None, tick_interval, time_format)
+
+
+def plot_time_evolution(df, stat, type, level, tick_interval, time_format):
+    """
+    Plot the time evolution of the requested statistics.
+
+    Args:
+        df (pd.DataFrame): The aggregated DataFrame.
+        stat (str): The statistic to plot.
+        type (str): The type of observation.
+        level (float or None): The vertical level (if applicable).
+        tick_interval (int): Interval for x-axis ticks (default is 2).
+        time_format (str): Format string for time labels on the x-axis.
+
+    Returns:
+        None
+    """
+    fig, ax1 = plt.subplots()
+
+    # Plot prior and posterior statistics
+    if f"prior_{stat}" in df.columns:
+        ax1.plot(df['time_bin_midpoint'], df[f"prior_{stat}"], label=f"prior {stat}")
+    if f"posterior_{stat}" in df.columns:
+        ax1.plot(df['time_bin_midpoint'], df[f"posterior_{stat}"], label=f"posterior {stat}")
+
+    # Set x-axis ticks every 'tick_interval' values
+    tick_positions = df['time_bin_midpoint'][::tick_interval]
+    ax1.set_xticks(tick_positions)
+    ax1.set_xticklabels(tick_positions.dt.strftime(time_format), rotation=45, ha='right')
+
+    # Add labels, title, and legend
+    ax1.legend()
+    title = f"{type}" if level is None else f"{type} at level {level}"
+    ax1.set_title(title)
+    ax1.set_xlabel("Time")
+    ax1.set_ylabel(stat)
+
+    plt.tight_layout()
+    plt.show()
