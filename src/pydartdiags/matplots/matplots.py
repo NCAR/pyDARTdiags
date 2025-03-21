@@ -277,10 +277,17 @@ def plot_rank_histogram(obs_seq, levels, type, ens_size):
 
 
 def plot_evolution(
-    obs_seq, type, time_value, stat, levels=None, tick_interval=2, time_format="%m-%d"
+    obs_seq,
+    type,
+    time_value,
+    stat,
+    levels=None,
+    tick_interval=2,
+    time_format="%m-%d",
+    plot_pvu=True,
 ):
     """
-    Plot the time evolution of the requested statistics.
+    Plot the time evolution of the requested statistics and optionally used vs possible observations.
 
     Args:
         obs_seq: The observation sequence object.
@@ -290,9 +297,10 @@ def plot_evolution(
         levels (list, optional): The levels to bin by. If None, no binning by level.
         tick_interval (int): Interval for x-axis ticks (default is 2).
         time_format (str): Format string for time labels on the x-axis (default is '%m-%d').
+        plot_pvu (bool): Whether to plot possible vs used observations (default is True).
 
     Returns:
-        None
+        fig: The matplotlib figure object.
     """
     # Calculate stats and add to dataframe
     stats.diag_stats(obs_seq.df)
@@ -302,6 +310,8 @@ def plot_evolution(
     if qc0.empty:
         print(f"No data found for type: {type}")
         return
+
+    all_df = obs_seq.df[obs_seq.df["type"] == type]  # for possible vs used
 
     if levels:
         stats.bin_by_layer(qc0, levels)  # bin by level
@@ -316,8 +326,16 @@ def plot_evolution(
             # Aggregate by time bin
             df = stats.time_statistics(df)
 
+            # Calculate possible vs used if enabled
+            df_pvu = None
+            if plot_pvu:
+                stats.bin_by_time(all_df, time_value)
+                df_pvu = stats.possible_vs_used_by_time(all_df)
+
             # Plot the time evolution of requested stats
-            plot_time_evolution(df, stat, type, level, tick_interval, time_format)
+            plot_time_evolution(
+                df, df_pvu, stat, type, level, tick_interval, time_format, plot_pvu
+            )
     else:
         # Bin by time
         stats.bin_by_time(qc0, time_value)
@@ -325,24 +343,36 @@ def plot_evolution(
         # Aggregate by time bin
         df = stats.time_statistics(qc0)
 
+        # Calculate possible vs used if enabled
+        df_pvu = None
+        if plot_pvu:
+            stats.bin_by_time(all_df, time_value)
+            df_pvu = stats.possible_vs_used_by_time(all_df)
+
         # Plot the time evolution of requested stats
-        plot_time_evolution(df, stat, type, None, tick_interval, time_format)
+        return plot_time_evolution(
+            df, df_pvu, stat, type, None, tick_interval, time_format, plot_pvu
+        )
 
 
-def plot_time_evolution(df, stat, type, level, tick_interval, time_format):
+def plot_time_evolution(
+    df, df_pvu, stat, type, level, tick_interval, time_format, plot_pvu
+):
     """
-    Plot the time evolution of the requested statistics.
+    Plot the time evolution of the requested statistics and optionally used vs possible observations.
 
     Args:
-        df (pd.DataFrame): The aggregated DataFrame.
+        df (pd.DataFrame): The aggregated DataFrame for statistics.
+        df_pvu (pd.DataFrame): The DataFrame for possible vs used observations (if plot_pvu is True).
         stat (str): The statistic to plot.
         type (str): The type of observation.
         level (float or None): The vertical level (if applicable).
         tick_interval (int): Interval for x-axis ticks (default is 2).
         time_format (str): Format string for time labels on the x-axis.
+        plot_pvu (bool): Whether to plot possible vs used observations (default is True).
 
     Returns:
-        None
+        fig: The matplotlib figure object.
     """
     fig, ax1 = plt.subplots()
 
@@ -361,12 +391,36 @@ def plot_time_evolution(df, stat, type, level, tick_interval, time_format):
         tick_positions.dt.strftime(time_format), rotation=45, ha="right"
     )
 
-    # Add labels, title, and legend
-    ax1.legend()
+    # Add a secondary y-axis for possible vs used observations if enabled
+    if plot_pvu and df_pvu is not None:
+        ax2 = ax1.twinx()
+        ax2.set_ylabel("# obs (o=possible; +=assimilated)", color="red")
+        ax2.tick_params(axis="y", colors="red")
+
+        # Plot possible and used observations
+        ax2.plot(
+            df_pvu["time_bin_midpoint"],
+            df_pvu["possible"],
+            color="red",
+            marker="o",
+            linestyle="",
+            markerfacecolor="none",
+        )
+        ax2.plot(
+            df_pvu["time_bin_midpoint"],
+            df_pvu["used"],
+            color="red",
+            marker="+",
+            linestyle="",
+        )
+        ax2.set_ylim(bottom=0)
+
+    ax1.legend(loc="upper right")
     title = f"{type}" if level is None else f"{type} at level {level}"
     ax1.set_title(title)
     ax1.set_xlabel("Time")
     ax1.set_ylabel(stat)
 
     plt.tight_layout()
-    plt.show()
+
+    return fig
