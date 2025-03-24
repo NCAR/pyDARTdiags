@@ -276,7 +276,7 @@ def plot_rank_histogram(obs_seq, levels, type, ens_size):
 def plot_evolution(
     obs_seq,
     type,
-    time_value,
+    time_bin_width,
     stat,
     levels=None,
     tick_interval=2,
@@ -289,7 +289,7 @@ def plot_evolution(
     Args:
         obs_seq: The observation sequence object.
         type (str): The type of observation to filter by.
-        time_value (str): The width of each time bin (e.g., '3600S' for 1 hour).
+        time_bin_width (str): The width of each time bin (e.g., '3600s' for 1 hour).
         stat (str): The statistic to plot. Default is "prior_rmse".
         levels (list, optional): The levels to bin by. If None, no binning by level.
         tick_interval (int): Interval for x-axis ticks (default is 2).
@@ -318,7 +318,7 @@ def plot_evolution(
             df = qc0[qc0["midpoint"] == level]
 
             # Bin by time
-            stats.bin_by_time(df, time_value)
+            stats.bin_by_time(df, time_bin_width)
 
             # Aggregate by time bin
             df = stats.time_statistics(df)
@@ -326,7 +326,7 @@ def plot_evolution(
             # Calculate possible vs used if enabled
             df_pvu = None
             if plot_pvu:
-                stats.bin_by_time(all_df, time_value)
+                stats.bin_by_time(all_df, time_bin_width)
                 df_pvu = stats.possible_vs_used_by_time(all_df)
 
             # Plot the time evolution of requested stats
@@ -335,7 +335,7 @@ def plot_evolution(
             )
     else:
         # Bin by time
-        stats.bin_by_time(qc0, time_value)
+        stats.bin_by_time(qc0, time_bin_width)
 
         # Aggregate by time bin
         df = stats.time_statistics(qc0)
@@ -343,7 +343,7 @@ def plot_evolution(
         # Calculate possible vs used if enabled
         df_pvu = None
         if plot_pvu:
-            stats.bin_by_time(all_df, time_value)
+            stats.bin_by_time(all_df, time_bin_width)
             df_pvu = stats.possible_vs_used_by_time(all_df)
 
         # Plot the time evolution of requested stats
