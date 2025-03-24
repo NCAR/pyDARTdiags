@@ -107,6 +107,8 @@ class obs_sequence:
 
         Returns:
             an obs_sequence object
+            1D observations are given a datetime of days, seconds since 2000-01-01 00:00:00
+            3D observations are given a datetime of days, seconds since 1601-01-01 00:00:00 (DART Gregorian calendar)
 
         Examples:
 
@@ -241,9 +243,13 @@ class obs_sequence:
         time = obs[-2].split()
         data.append(int(time[0]))  # seconds
         data.append(int(time[1]))  # days
-        data.append(
-            convert_dart_time(int(time[0]), int(time[1]))
-        )  # datetime   # HK todo what is appropriate for 1d models?
+        if self.loc_mod == "loc3d":
+            data.append(convert_dart_time(int(time[0]), int(time[1])))
+        else:  # HK todo what is appropriate for 1d models?
+            data.append(
+                dt.datetime(2000, 1, 1)
+                + dt.timedelta(seconds=int(time[0]), days=int(time[1]))
+            )
         data.append(float(obs[-1]))  # obs error variance ?convert to sd?
 
         return data
