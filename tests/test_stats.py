@@ -617,5 +617,62 @@ class TestLayers:
         pd.testing.assert_frame_equal(df, expected_df)
 
 
+class TestTimeStats:
+
+    def test_bin_by_time(self):
+        # Create a sample DataFrame with a 'time' column
+        data = {
+            "time": pd.to_datetime(
+                [
+                    "2025-01-01 00:00:00",
+                    "2025-01-01 00:30:00",
+                    "2025-01-01 01:00:00",
+                    "2025-01-01 01:30:00",
+                    "2025-01-01 01:34:00",
+                ]
+            )
+        }
+        df = pd.DataFrame(data)
+
+        # Call the function with a 1-hour time bin
+        stats.bin_by_time(df, "1h")
+
+        # Expected time bins
+        expected_time_bins = pd.IntervalIndex.from_tuples(
+            [
+                (
+                    pd.Timestamp("2024-12-31 23:59:59"),
+                    pd.Timestamp("2025-01-01 00:59:59"),
+                ),
+                (
+                    pd.Timestamp("2025-01-01 00:59:59"),
+                    pd.Timestamp("2025-01-01 01:59:59"),
+                ),
+            ]
+        )
+
+        # Expected midpoints
+        expected_midpoints = [
+            pd.Timestamp("2025-01-01 00:29:59"),
+            pd.Timestamp("2025-01-01 00:29:59"),
+            pd.Timestamp("2025-01-01 01:29:59"),
+            pd.Timestamp("2025-01-01 01:29:59"),
+            pd.Timestamp("2025-01-01 01:29:59"),
+        ]
+
+        # Assert that the 'time_bin' column is correct
+        assert all(
+            df["time_bin"].cat.categories == expected_time_bins
+        ), "Time bins are incorrect."
+
+        # Assert that the 'time_bin_midpoint' column is correct
+        assert (
+            list(df["time_bin_midpoint"]) == expected_midpoints
+        ), "Time bin midpoints are incorrect."
+
+        # Assert that the DataFrame has the correct number of rows
+        assert len(df) == 5, "The DataFrame should have 5 rows."
+
+
 if __name__ == "__main__":
     pytest.main()
