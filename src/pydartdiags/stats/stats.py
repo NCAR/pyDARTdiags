@@ -237,11 +237,17 @@ def bin_by_time(df, time_value):
         None: The function modifies the DataFrame in place by adding 'time_bin' and 'time_bin_midpoint' columns.
     """
     # Create time bins
+    start = df["time"].min() - timedelta(seconds=1)
+    end = df["time"].max()
+    # Adjust the end time to align with the frequency
+    aligned_end = (pd.Timestamp(end) + pd.Timedelta(time_value)).floor(time_value)
+
     time_bins = pd.date_range(
-        start=df["time"].min() - pd.Timedelta(seconds=1),
-        end=df["time"].max(),
+        start=start,
+        end=aligned_end,
         freq=time_value,
     )
+
     df["time_bin"] = pd.cut(df["time"], bins=time_bins)
 
     # Calculate the midpoint of each time bin
