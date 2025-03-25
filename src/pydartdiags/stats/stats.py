@@ -239,8 +239,18 @@ def bin_by_time(df, time_value):
     # Create time bins
     start = df["time"].min() - timedelta(seconds=1)
     end = df["time"].max()
-    # Adjust the end time to align with the frequency
-    aligned_end = (pd.Timestamp(end) + pd.Timedelta(time_value)).floor(time_value)
+    # Determine if the end time aligns with the bin boundary
+    time_delta = pd.Timedelta(time_value)
+    remainder = (pd.Timestamp(end) - pd.Timestamp(start)) % time_delta
+    print(remainder)
+
+    if remainder == pd.Timedelta(0):
+        # If the end aligns with the bin boundary, use ceil
+        aligned_end = (pd.Timestamp(end) + time_delta).ceil(time_value)
+        print("hello helen")
+    else:
+        # Otherwise, use floor
+        aligned_end = (pd.Timestamp(end) + time_delta).floor(time_value)
 
     time_bins = pd.date_range(
         start=start,
