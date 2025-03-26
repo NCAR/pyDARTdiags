@@ -228,8 +228,8 @@ def bin_by_layer(df, levels, verticalUnit="pressure (Pa)"):
 def bin_by_time(df, time_value):
     """
     Bin observations by time and add 'time_bin' and 'time_bin_midpoint' columns to the DataFrame.
-    The first bin is inclusive of the minimum time value, and the last bin is inclusive of the
-    maximum time value.
+    The first bin starts 1 second before the minimum time value, so the minimum time is included in the
+    first bin. The last bin is inclusive of the maximum time value.
 
     Args:
         df (pd.DataFrame): The input DataFrame containing a 'time' column.
