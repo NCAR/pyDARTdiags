@@ -463,7 +463,48 @@ class TestPossibleVsUsed:
         expected_df = pd.DataFrame(expected_data)
         pd.testing.assert_frame_equal(result, expected_df)
 
+    def test_possible_vs_used_by_time(self):    
+        data = {
+            "time": pd.to_datetime([
+                "2025-01-01 00:00:00",
+                "2025-01-01 00:30:00",
+                "2025-01-01 01:00:00",
+                "2025-01-01 01:30:00",
+                "2025-01-01 02:00:00",
+            ]),
+            "observation": [2.5, 3.0, 4.5, 5.0, 6.0],
+            "DART_quality_control": [0, 1, 0, 2, 0],  # Quality control flags
+            "type": ["A", "B", "A", "A", "A"],  # Observation type
+        }
+        df = pd.DataFrame(data)
 
+        # Call the function with a 1-hour time bin
+        stats.bin_by_time(df, "1h")
+        result = stats.possible_vs_used_by_time(df)
+
+        # Check if the result DataFrame has the expected columns
+        expected_columns = ["time_bin_midpoint", "type", "possible", "used"]
+        assert all(column in result.columns for column in expected_columns)
+
+        # Check the values of the new columns
+        expected_midpoints = [
+                pd.Timestamp("2025-01-01 00:29:59"),
+                pd.Timestamp("2025-01-01 00:29:59"),
+                pd.Timestamp("2025-01-01 01:29:59"),
+                pd.Timestamp("2025-01-01 01:29:59"),
+                pd.Timestamp("2025-01-01 02:29:59"),
+                pd.Timestamp("2025-01-01 02:29:59"),
+            ]
+
+        expected_type = ["A", "B", "A", "B", "A", "B"]
+        expected_possible =  [1, 1, 2, 0, 1, 0]
+        expected_used =  [1, 0, 2, 0, 1, 0]
+
+        assert(expected_midpoints == result["time_bin_midpoint"].tolist())
+        assert(expected_type == result["type"].tolist())
+        assert(expected_possible == result["possible"].tolist())
+        assert(expected_used == result["used"].tolist())
+        
 class TestLayers:
 
     def test_bin_by_layer_pressure(self):
@@ -615,6 +656,127 @@ class TestLayers:
 
         expected_df = pd.DataFrame(data_result)
         pd.testing.assert_frame_equal(df, expected_df)
+
+
+class TestTimeStats:
+
+    def test_bin_by_time(self):
+        """
+        Test bin_by_time with a standard case where all times fall within bins.
+        """
+        # Create a sample DataFrame with a 'time' column
+        data = {
+            "time": pd.to_datetime(
+                [
+                    "2025-01-01 00:00:00",
+                    "2025-01-01 00:30:00",
+                    "2025-01-01 01:00:00",
+                    "2025-01-01 01:30:00",
+                    "2025-01-01 01:34:00",
+                ]
+            )
+        }
+        df = pd.DataFrame(data)
+
+        # Call the function with a 1-hour time bin
+        stats.bin_by_time(df, "1h")
+
+        # Expected time bins
+        expected_time_bins = pd.IntervalIndex.from_tuples(
+            [
+                (
+                    pd.Timestamp("2024-12-31 23:59:59"),
+                    pd.Timestamp("2025-01-01 00:59:59"),
+                ),
+                (
+                    pd.Timestamp("2025-01-01 00:59:59"),
+                    pd.Timestamp("2025-01-01 01:59:59"),
+                ),
+            ]
+        )
+
+        # Expected midpoints
+        expected_midpoints = [
+            pd.Timestamp("2025-01-01 00:29:59"),
+            pd.Timestamp("2025-01-01 00:29:59"),
+            pd.Timestamp("2025-01-01 01:29:59"),
+            pd.Timestamp("2025-01-01 01:29:59"),
+            pd.Timestamp("2025-01-01 01:29:59"),
+        ]
+
+        # Assert that the 'time_bin' column is correct
+        assert all(
+            df["time_bin"].cat.categories == expected_time_bins
+        ), "Time bins are incorrect."
+
+        # Assert that the 'time_bin_midpoint' column is correct
+        assert (
+            list(df["time_bin_midpoint"]) == expected_midpoints
+        ), "Time bin midpoints are incorrect."
+
+        # Assert that the DataFrame has the correct number of rows
+        assert len(df) == 5, "The DataFrame should have 5 rows."
+
+    def test_bin_by_time_edge_case(self):
+        """
+        Test bin_by_time with a case where one of the values is exactly on the edge of the last bin.
+        """
+        # Create a sample DataFrame with a 'time' column
+        data = {
+            "time": pd.to_datetime(
+                [
+                    "2025-01-01 00:00:00",
+                    "2025-01-01 00:30:00",
+                    "2025-01-01 01:20:00",
+                    "2025-01-01 01:59:59",
+                    "2025-01-01 02:00:00",  # Exactly on the edge of the last bin
+                ]
+            )
+        }
+        df = pd.DataFrame(data)
+
+        # Call the function with a 1-hour time bin
+        stats.bin_by_time(df, "1h")
+
+        # Expected time bins
+        expected_time_bins = pd.IntervalIndex.from_tuples(
+            [
+                (
+                    pd.Timestamp("2024-12-31 23:59:59"),
+                    pd.Timestamp("2025-01-01 00:59:59"),
+                ),
+                (
+                    pd.Timestamp("2025-01-01 00:59:59"),
+                    pd.Timestamp("2025-01-01 01:59:59"),
+                ),
+                (
+                    pd.Timestamp("2025-01-01 01:59:59"),
+                    pd.Timestamp("2025-01-01 02:59:59"),
+                ),
+            ]
+        )
+
+        # Expected midpoints
+        expected_midpoints = [
+            pd.Timestamp("2025-01-01 00:29:59"),
+            pd.Timestamp("2025-01-01 00:29:59"),
+            pd.Timestamp("2025-01-01 01:29:59"),
+            pd.Timestamp("2025-01-01 01:29:59"),
+            pd.Timestamp("2025-01-01 02:29:59"),  # Midpoint for the last bin
+        ]
+
+        # Assert that the 'time_bin' column is correct
+        assert all(
+            df["time_bin"].cat.categories == expected_time_bins
+        ), "Time bins are incorrect."
+
+        # Assert that the 'time_bin_midpoint' column is correct
+        assert (
+            list(df["time_bin_midpoint"]) == expected_midpoints
+        ), "Time bin midpoints are incorrect."
+
+        # Assert that the DataFrame has the correct number of rows
+        assert len(df) == 5, "The DataFrame should have 5 rows."
 
 
 if __name__ == "__main__":

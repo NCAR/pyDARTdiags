@@ -2,6 +2,7 @@
 import pandas as pd
 import numpy as np
 from functools import wraps
+from datetime import datetime, timedelta
 
 # from pydartdiags.obs_sequence import obs_sequence as obsq
 
@@ -39,20 +40,30 @@ def apply_to_phases_by_type_return_df(func):
                 result = func(df, phase, *args, **kwargs)
                 results.append(result)
 
-        if "midpoint" in result.columns:
-            if len(results) == 2:
-                return pd.merge(
-                    results[0],
-                    results[1],
-                    on=["midpoint", "vlevels", "type", "vert_unit"],
-                )
-            else:
-                return results[0]
+        if not results:
+            return (
+                pd.DataFrame()
+            )  # Return an empty DataFrame if no results are generated
+
+        # Dynamically determine merge keys based on common columns
+        common_columns = set(results[0].columns)
+        for result in results[1:]:
+            common_columns &= set(result.columns)
+
+        # Exclude phase-specific columns from the merge keys
+        phase_specific_columns = {
+            f"{phase}_sq_err",
+            f"{phase}_bias",
+            f"{phase}_totalvar",
+            f"{phase}_rmse",
+            f"{phase}_totalspread",
+        }
+        merge_keys = list(common_columns - phase_specific_columns)
+
+        if len(results) == 2:
+            return pd.merge(results[0], results[1], on=merge_keys)
         else:
-            if len(results) == 2:
-                return pd.merge(results[0], results[1], on="type")
-            else:
-                return results[0]
+            return results[0]
 
     return wrapper
 
@@ -214,6 +225,40 @@ def bin_by_layer(df, levels, verticalUnit="pressure (Pa)"):
     df.loc[:, "midpoint"] = df["vlevels"].apply(lambda x: x.mid)
 
 
+def bin_by_time(df, time_value):
+    """
+    Bin observations by time and add 'time_bin' and 'time_bin_midpoint' columns to the DataFrame.
+    The first bin starts 1 second before the minimum time value, so the minimum time is included in the
+    first bin. The last bin is inclusive of the maximum time value.
+
+    Args:
+        df (pd.DataFrame): The input DataFrame containing a 'time' column.
+        time_value (str): The width of each time bin (e.g., '3600S' for 1 hour).
+
+    Returns:
+        None: The function modifies the DataFrame in place by adding 'time_bin' and 'time_bin_midpoint' columns.
+    """
+    # Create time bins
+    start = df["time"].min() - timedelta(seconds=1)
+    end = df["time"].max()
+    # Determine if the end time aligns with the bin boundary
+    time_delta = pd.Timedelta(time_value)
+    aligned_end = (pd.Timestamp(end) + time_delta).floor(time_value)
+
+    time_bins = pd.date_range(
+        start=start,
+        end=aligned_end,
+        freq=time_value,
+    )
+
+    df["time_bin"] = pd.cut(df["time"], bins=time_bins)
+
+    # Calculate the midpoint of each time bin
+    df["time_bin_midpoint"] = df["time_bin"].apply(
+        lambda x: x.left + (x.right - x.left) / 2 if pd.notnull(x) else None
+    )
+
+
 @apply_to_phases_by_type_return_df
 def grand_statistics(df, phase):
 
@@ -260,6 +305,41 @@ def layer_statistics(df, phase):
     )
 
     return layer_stats
+
+
+@apply_to_phases_by_type_return_df
+def time_statistics(df, phase):
+    """
+    Calculate time-based statistics for a given phase and return a new DataFrame.
+
+    Args:
+        df (pandas.DataFrame): The input DataFrame containing observation data and ensemble statistics.
+        phase (str): The phase for which to calculate the statistics ('prior' or 'posterior').
+
+    Returns:
+        pandas.DataFrame: A DataFrame containing time-based statistics for the specified phase.
+    """
+    # Assuming diag_stats has been called
+    time_stats = (
+        df.groupby(["time_bin_midpoint", "type"], observed=False)
+        .agg(
+            {
+                f"{phase}_sq_err": mean_then_sqrt,
+                f"{phase}_bias": "mean",
+                f"{phase}_totalvar": mean_then_sqrt,
+                "time_bin": "first",
+                "time": "first",
+            }
+        )
+        .reset_index()
+    )
+
+    time_stats.rename(columns={f"{phase}_sq_err": f"{phase}_rmse"}, inplace=True)
+    time_stats.rename(
+        columns={f"{phase}_totalvar": f"{phase}_totalspread"}, inplace=True
+    )
+
+    return time_stats
 
 
 def possible_vs_used(df):
@@ -315,3 +395,38 @@ def select_used_qcs(df):
         pandas.DataFrame: A DataFrame containing only the rows with a DART quality control flag 0 or 2.
     """
     return df[(df["DART_quality_control"] == 0) | (df["DART_quality_control"] == 2)]
+
+
+def possible_vs_used_by_time(df):
+    """
+    Calculates the count of possible vs. used observations by type and time bin.
+
+    Args:
+        df (pd.DataFrame): The input DataFrame containing observation data. The DataFrame must include:
+                           - 'type': The observation type.
+                           - 'time_bin_midpoint': The midpoint of the time bin.
+                           - 'observation': The observation values.
+                           - 'DART_quality_control': The quality control flag.
+
+    Returns:
+        pd.DataFrame: A DataFrame with the following columns:
+                      - 'time_bin_midpoint': The midpoint of the time bin.
+                      - 'type': The observation type.
+                      - 'possible': The count of all observations in the time bin.
+                      - 'used': The count of observations in the time bin that passed quality control checks.
+    """
+    # Count all observations (possible) grouped by time_bin_midpoint and type
+    possible = df.groupby(["time_bin_midpoint", "type"], observed=False)["type"].count()
+    possible.rename("possible", inplace=True)
+
+    # Count used observations (QC=0 or QC=2) grouped by time_bin_midpoint and type
+    used_qcs = (
+        select_used_qcs(df)
+        .groupby(["time_bin_midpoint", "type"], observed=False)["type"]
+        .count()
+    )
+    used = used_qcs.reindex(possible.index, fill_value=0)
+    used.rename("used", inplace=True)
+
+    # Combine possible and used into a single DataFrame
+    return pd.concat([possible, used], axis=1).reset_index()
