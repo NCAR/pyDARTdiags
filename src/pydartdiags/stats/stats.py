@@ -228,6 +228,8 @@ def bin_by_layer(df, levels, verticalUnit="pressure (Pa)"):
 def bin_by_time(df, time_value):
     """
     Bin observations by time and add 'time_bin' and 'time_bin_midpoint' columns to the DataFrame.
+    The first bin is inclusive of the minimum time value, and the last bin is inclusive of the 
+    maximum time value. 
 
     Args:
         df (pd.DataFrame): The input DataFrame containing a 'time' column.
@@ -241,16 +243,7 @@ def bin_by_time(df, time_value):
     end = df["time"].max()
     # Determine if the end time aligns with the bin boundary
     time_delta = pd.Timedelta(time_value)
-    remainder = (pd.Timestamp(end) - pd.Timestamp(start)) % time_delta
-    print(remainder)
-
-    if remainder == pd.Timedelta(0):
-        # If the end aligns with the bin boundary, use ceil
-        aligned_end = (pd.Timestamp(end) + time_delta).ceil(time_value)
-        print("hello helen")
-    else:
-        # Otherwise, use floor
-        aligned_end = (pd.Timestamp(end) + time_delta).floor(time_value)
+    aligned_end = (pd.Timestamp(end) + time_delta).floor(time_value)
 
     time_bins = pd.date_range(
         start=start,
