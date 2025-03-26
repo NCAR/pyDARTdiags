@@ -172,6 +172,23 @@ Examples of the diagnostic tools available in the library.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to plot the evolution of RMSE, bias, or totalspread. For an explanation of the statistics calculations see the statistics guide.">
+
+.. only:: html
+
+  .. image:: /examples/03_diagnostics/images/thumb/sphx_glr_plot_evolution_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_03_diagnostics_plot_evolution.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Plot Evolution</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to compute grand statistics for an observation sequence. For an explanation of the statistics calculations see the statistics guide.">
 
 .. only:: html

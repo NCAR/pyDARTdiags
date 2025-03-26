@@ -434,6 +434,58 @@ levels = [i * 100 for i in hPalevels]</p>
 <p>plot_profile(obs_seq, levels, type, bias=True, rmse=True, totalspread=True)</p>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="matplots.plot_evolution">
+<span class="sig-prename descclassname"><span class="pre">matplots.</span></span><span class="sig-name descname"><span class="pre">plot_evolution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obs_seq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_bin_width</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">levels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tick_interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'%m-%d'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_pvu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#matplots.plot_evolution" title="Link to this definition">#</a></dt>
+<dd><p>Plot the time evolution of the requested statistics and optionally used vs possible observations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obs_seq</strong> – The observation sequence object.</p></li>
+<li><p><strong>type</strong> (<em>str</em>) – The type of observation to filter by.</p></li>
+<li><p><strong>time_bin_width</strong> (<em>str</em>) – The width of each time bin (e.g., ‘3600s’ for 1 hour).</p></li>
+<li><p><strong>stat</strong> (<em>str</em>) – The statistic to plot. Default is “prior_rmse”.</p></li>
+<li><p><strong>levels</strong> (<em>list</em><em>, </em><em>optional</em>) – The levels to bin by. If None, no binning by level.</p></li>
+<li><p><strong>tick_interval</strong> (<em>int</em>) – Interval for x-axis ticks (default is 2).</p></li>
+<li><p><strong>time_format</strong> (<em>str</em>) – Format string for time labels on the x-axis (default is ‘%m-%d’).</p></li>
+<li><p><strong>plot_pvu</strong> (<em>bool</em>) – Whether to plot possible vs used observations (default is True).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The matplotlib figure object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>fig</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="matplots.plot_time_evolution">
+<span class="sig-prename descclassname"><span class="pre">matplots.</span></span><span class="sig-name descname"><span class="pre">plot_time_evolution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df_pvu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tick_interval</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_format</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_pvu</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#matplots.plot_time_evolution" title="Link to this definition">#</a></dt>
+<dd><p>Plot the time evolution of the requested statistics and optionally used vs possible observations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – The aggregated DataFrame for statistics.</p></li>
+<li><p><strong>df_pvu</strong> (<em>pd.DataFrame</em>) – The DataFrame for possible vs used observations (if plot_pvu is True).</p></li>
+<li><p><strong>stat</strong> (<em>str</em>) – The statistic to plot.</p></li>
+<li><p><strong>type</strong> (<em>str</em>) – The type of observation.</p></li>
+<li><p><strong>level</strong> (<em>float</em><em> or </em><em>None</em>) – The vertical level (if applicable).</p></li>
+<li><p><strong>tick_interval</strong> (<em>int</em>) – Interval for x-axis ticks (default is 2).</p></li>
+<li><p><strong>time_format</strong> (<em>str</em>) – Format string for time labels on the x-axis.</p></li>
+<li><p><strong>plot_pvu</strong> (<em>bool</em>) – Whether to plot possible vs used observations (default is True).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The matplotlib figure object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>fig</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
 
@@ -484,6 +536,8 @@ levels = [i * 100 for i in hPalevels]</p>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#matplots.plot_profile"><code class="docutils literal notranslate"><span class="pre">plot_profile()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#matplots.plot_evolution"><code class="docutils literal notranslate"><span class="pre">plot_evolution()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#matplots.plot_time_evolution"><code class="docutils literal notranslate"><span class="pre">plot_time_evolution()</span></code></a></li>
 </ul>
   </nav></div>
 

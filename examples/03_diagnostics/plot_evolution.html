@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Rank Histogram &#8212; pyDARTdiags</title>
+    <title>Plot Evolution &#8212; pyDARTdiags</title>
   
   
   
@@ -50,11 +50,11 @@
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/03_diagnostics/plot_rank_histogram';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/03_diagnostics/plot_evolution';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="API Guide" href="../../api/index.html" />
-    <link rel="prev" title="Possible vs. Used Observations" href="plot_qc_poss_vs_used.html" />
+    <link rel="next" title="Grand Statistics" href="plot_grand_stats.html" />
+    <link rel="prev" title="Diagnostics" href="index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -345,11 +345,11 @@
 </ul>
 </details></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Diagnostics</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="plot_evolution.html">Plot Evolution</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Plot Evolution</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_grand_stats.html">Grand Statistics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_profiles.html">Plot Profiles</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_qc_poss_vs_used.html">Possible vs. Used Observations</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Rank Histogram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_rank_histogram.html">Rank Histogram</a></li>
 </ul>
 </details></li>
 </ul>
@@ -398,7 +398,7 @@
     
     <li class="breadcrumb-item"><a href="index.html" class="nav-link">Diagnostics</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Rank Histogram</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Plot Evolution</span></li>
   </ul>
 </nav>
 </div>
@@ -417,12 +417,13 @@
                   
   <div class="sphx-glr-download-link-note admonition note">
 <p class="admonition-title">Note</p>
-<p><a class="reference internal" href="#sphx-glr-download-examples-03-diagnostics-plot-rank-histogram-py"><span class="std std-ref">Go to the end</span></a>
+<p><a class="reference internal" href="#sphx-glr-download-examples-03-diagnostics-plot-evolution-py"><span class="std std-ref">Go to the end</span></a>
 to download the full example code.</p>
 </div>
-<section class="sphx-glr-example-title" id="rank-histogram">
-<span id="sphx-glr-examples-03-diagnostics-plot-rank-histogram-py"></span><h1>Rank Histogram<a class="headerlink" href="#rank-histogram" title="Link to this heading">#</a></h1>
-<p>This example demonstrates how to plot a rank histogram.</p>
+<section class="sphx-glr-example-title" id="plot-evolution">
+<span id="sphx-glr-examples-03-diagnostics-plot-evolution-py"></span><h1>Plot Evolution<a class="headerlink" href="#plot-evolution" title="Link to this heading">#</a></h1>
+<p>This example demonstrates how to plot the evolution of RMSE, bias, or totalspread.
+For an explanation of the statistics calculations see the <a class="reference internal" href="../../userguide/statistics.html#statistics"><span class="std std-ref">Statistics</span></a> guide.</p>
 <p>Import the obs_sequence module
 and the matplots module for plotting.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pydartdiags.obs_sequence.obs_sequence</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">obsq</span>
@@ -430,70 +431,74 @@ and the matplots module for plotting.</p>
 </pre></div>
 </div>
 <p>Chose an obs_seq file to read.
-In this example, we are using a small obs_seq file “obs_seq.final.1000”
-that comes with the pyDARTdiags package
+In this example, we are using “obs_seq.final.lorenz_96” which is from
+a Lorenz 96 model run with the DART assimilation system.
+The obs_seq.final.lorenz_96 file comes with the pyDARTdiags package
 in the data directory, so we <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">os</span></code> to get the path to the file.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="n">data_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="s2">&quot;../..&quot;</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">)</span>
-<span class="n">data_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="s2">&quot;obs_seq.final.1000&quot;</span><span class="p">)</span>
+<span class="n">data_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="s2">&quot;obs_seq.final.lorenz_96&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Read the obs_seq file into an obs_seq object.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">obs_sequence</span><span class="p">(</span><span class="n">data_file</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Chose an observation type.
-The observation types are stored in the ‘type’ column.
-To see which observation types are in the dataframe, use the unique method:</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">plot_evolution</span><span class="p">(</span>
+    <span class="n">obs_seq</span><span class="o">=</span><span class="n">obs_seq</span><span class="p">,</span>
+    <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;RAW_STATE_VARIABLE&quot;</span><span class="p">,</span>
+    <span class="n">time_bin_width</span><span class="o">=</span><span class="s2">&quot;3600s&quot;</span><span class="p">,</span>  <span class="c1"># 1-hour bins</span>
+    <span class="n">stat</span><span class="o">=</span><span class="s2">&quot;rmse&quot;</span><span class="p">,</span>
+    <span class="n">tick_interval</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span>
+    <span class="n">time_format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">,</span> <span class="c1"># days</span>
+    <span class="n">plot_pvu</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>array([&#39;ACARS_TEMPERATURE&#39;, &#39;ACARS_U_WIND_COMPONENT&#39;,
-       &#39;ACARS_V_WIND_COMPONENT&#39;, &#39;AIRCRAFT_TEMPERATURE&#39;,
-       &#39;AIRCRAFT_U_WIND_COMPONENT&#39;, &#39;AIRCRAFT_V_WIND_COMPONENT&#39;],
-      dtype=object)
+<img src="../../_images/sphx_glr_plot_evolution_001.png" srcset="../../_images/sphx_glr_plot_evolution_001.png" alt="RAW_STATE_VARIABLE" class = "sphx-glr-single-img"/><p>To plot the bias, set stat=”bias”. Let’s also plot the
+possible vs used observations.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">plot_evolution</span><span class="p">(</span>
+    <span class="n">obs_seq</span><span class="o">=</span><span class="n">obs_seq</span><span class="p">,</span>
+    <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;RAW_STATE_VARIABLE&quot;</span><span class="p">,</span>
+    <span class="n">time_bin_width</span><span class="o">=</span><span class="s2">&quot;3600s&quot;</span><span class="p">,</span>  <span class="c1"># 1-hour bins</span>
+    <span class="n">stat</span><span class="o">=</span><span class="s2">&quot;bias&quot;</span><span class="p">,</span>
+    <span class="n">tick_interval</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span>
+    <span class="n">time_format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">,</span> <span class="c1"># days</span>
+    <span class="n">plot_pvu</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
 </pre></div>
 </div>
-<p>For this example, we are going to look at the rank histogram for
-ACARS_TEMPERATURE observations.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_type</span> <span class="o">=</span> <span class="s1">&#39;ACARS_TEMPERATURE&#39;</span>
+<img src="../../_images/sphx_glr_plot_evolution_002.png" srcset="../../_images/sphx_glr_plot_evolution_002.png" alt="RAW_STATE_VARIABLE" class = "sphx-glr-single-img"/><p>The legend is being covered by the ‘used vs. assimilated’ observation count,
+so let’s move the legend to the lower right corner.
+We can do this by accessing the <a class="reference external" href="https://matplotlib.org/stable/">matplotlib</a>
+axes object from the figure and using the <cite>legend</cite> method to move the legend.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">plot_evolution</span><span class="p">(</span>
+    <span class="n">obs_seq</span><span class="o">=</span><span class="n">obs_seq</span><span class="p">,</span>
+    <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;RAW_STATE_VARIABLE&quot;</span><span class="p">,</span>
+    <span class="n">time_bin_width</span><span class="o">=</span><span class="s2">&quot;3600s&quot;</span><span class="p">,</span>  <span class="c1"># 1-hour bins</span>
+    <span class="n">stat</span><span class="o">=</span><span class="s2">&quot;bias&quot;</span><span class="p">,</span>
+    <span class="n">tick_interval</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span>
+    <span class="n">time_format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">,</span> <span class="c1"># days</span>
+    <span class="n">plot_pvu</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+
+<span class="c1"># Get the Axes object from the figure</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Axis 0 refers to the first Axes object</span>
+
+<span class="c1"># Move the legend to a new location</span>
+<span class="n">legend</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower right&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Chose the levels to plot.
-The vertical coordinate of the observations are stored in the <code class="docutils literal notranslate"><span class="pre">vertical</span></code> column.
-The units for the vertical coordinate are stored in the <code class="docutils literal notranslate"><span class="pre">vert_unit</span></code> column
-In this case the vertical coordinate of the observations are in pressure (Pa).
-Typically in atmospheric science we use hPa as the unit for pressure.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">hPalevels</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">,</span>  <span class="mf">150.0</span><span class="p">,</span> <span class="mf">200.0</span><span class="p">,</span> <span class="mf">250.0</span><span class="p">,</span> <span class="mf">300.0</span><span class="p">,</span> <span class="mf">400.0</span><span class="p">,</span> <span class="mf">500.0</span><span class="p">,</span> <span class="mi">700</span><span class="p">,</span> <span class="mi">850</span><span class="p">,</span> <span class="mi">925</span><span class="p">,</span> <span class="mi">1000</span><span class="p">]</span>
-<span class="n">levels</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">100</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">hPalevels</span><span class="p">]</span> <span class="c1"># convert hPa to Pa</span>
-</pre></div>
-</div>
-<p>Plot the rank histogram.
-The dataframe has prior and posterior information so both the prior
-and posterior rank histograms are plotted.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">ens_size</span> <span class="o">=</span> <span class="mi">80</span>
-<span class="n">fig</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">plot_rank_histogram</span><span class="p">(</span><span class="n">obs_seq</span><span class="p">,</span> <span class="n">levels</span><span class="p">,</span> <span class="n">obs_type</span><span class="p">,</span> <span class="n">ens_size</span><span class="p">)</span>
-</pre></div>
-</div>
-<ul class="sphx-glr-horizontal">
-<li><img src="../../_images/sphx_glr_plot_rank_histogram_001.png" srcset="../../_images/sphx_glr_plot_rank_histogram_001.png" alt="ACARS_TEMPERATURE at Level 17500.0, Prior Rank Histogram, Posterior Rank Histogram" class = "sphx-glr-multi-img"/></li>
-<li><img src="../../_images/sphx_glr_plot_rank_histogram_002.png" srcset="../../_images/sphx_glr_plot_rank_histogram_002.png" alt="ACARS_TEMPERATURE at Level 22500.0, Prior Rank Histogram, Posterior Rank Histogram" class = "sphx-glr-multi-img"/></li>
-<li><img src="../../_images/sphx_glr_plot_rank_histogram_003.png" srcset="../../_images/sphx_glr_plot_rank_histogram_003.png" alt="ACARS_TEMPERATURE at Level 27500.0, Prior Rank Histogram, Posterior Rank Histogram" class = "sphx-glr-multi-img"/></li>
-<li><img src="../../_images/sphx_glr_plot_rank_histogram_004.png" srcset="../../_images/sphx_glr_plot_rank_histogram_004.png" alt="ACARS_TEMPERATURE at Level 35000.0, Prior Rank Histogram, Posterior Rank Histogram" class = "sphx-glr-multi-img"/></li>
-<li><img src="../../_images/sphx_glr_plot_rank_histogram_005.png" srcset="../../_images/sphx_glr_plot_rank_histogram_005.png" alt="ACARS_TEMPERATURE at Level 45000.0, Prior Rank Histogram, Posterior Rank Histogram" class = "sphx-glr-multi-img"/></li>
-<li><img src="../../_images/sphx_glr_plot_rank_histogram_006.png" srcset="../../_images/sphx_glr_plot_rank_histogram_006.png" alt="ACARS_TEMPERATURE at Level 60000.0, Prior Rank Histogram, Posterior Rank Histogram" class = "sphx-glr-multi-img"/></li>
-<li><img src="../../_images/sphx_glr_plot_rank_histogram_007.png" srcset="../../_images/sphx_glr_plot_rank_histogram_007.png" alt="ACARS_TEMPERATURE at Level 77500.0, Prior Rank Histogram, Posterior Rank Histogram" class = "sphx-glr-multi-img"/></li>
-</ul>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 2.446 seconds)</p>
-<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-03-diagnostics-plot-rank-histogram-py">
+<img src="../../_images/sphx_glr_plot_evolution_003.png" srcset="../../_images/sphx_glr_plot_evolution_003.png" alt="RAW_STATE_VARIABLE" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.864 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-03-diagnostics-plot-evolution-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/57f04f4b48ecf7be9b1367cccc55b5cf/plot_rank_histogram.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_rank_histogram.ipynb</span></code></a></p>
+<p><a class="reference download internal" download="" href="../../_downloads/d52c59b9fddbf5a8d763495b67900fe5/plot_evolution.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_evolution.ipynb</span></code></a></p>
 </div>
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/899415dd0fd112869536a3355fb15f0c/plot_rank_histogram.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_rank_histogram.py</span></code></a></p>
+<p><a class="reference download internal" download="" href="../../_downloads/586da76380661576c947e76ef029c95b/plot_evolution.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_evolution.py</span></code></a></p>
 </div>
 <div class="sphx-glr-download sphx-glr-download-zip docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/e92af54cefd75b2f951e6f2aa1b87089/plot_rank_histogram.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">plot_rank_histogram.zip</span></code></a></p>
+<p><a class="reference download internal" download="" href="../../_downloads/a2771618c446467c42910afe57a02f29/plot_evolution.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">plot_evolution.zip</span></code></a></p>
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
@@ -510,20 +515,20 @@ and posterior rank histograms are plotted.</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="plot_qc_poss_vs_used.html"
+       href="index.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Possible vs. Used Observations</p>
+        <p class="prev-next-title">Diagnostics</p>
       </div>
     </a>
     <a class="right-next"
-       href="../../api/index.html"
+       href="plot_grand_stats.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">API Guide</p>
+        <p class="prev-next-title">Grand Statistics</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

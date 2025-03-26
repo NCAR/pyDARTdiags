@@ -548,6 +548,48 @@ vertical level bin. Only observations (row) with the specified vertical unit are
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="stats.bin_by_time">
+<span class="sig-prename descclassname"><span class="pre">stats.</span></span><span class="sig-name descname"><span class="pre">bin_by_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#stats.bin_by_time" title="Link to this definition">#</a></dt>
+<dd><p>Bin observations by time and add ‘time_bin’ and ‘time_bin_midpoint’ columns to the DataFrame.
+The first bin starts 1 second before the minimum time value, so the minimum time is included in the
+first bin. The last bin is inclusive of the maximum time value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – The input DataFrame containing a ‘time’ column.</p></li>
+<li><p><strong>time_value</strong> (<em>str</em>) – The width of each time bin (e.g., ‘3600S’ for 1 hour).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The function modifies the DataFrame in place by adding ‘time_bin’ and ‘time_bin_midpoint’ columns.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="stats.time_statistics">
+<span class="sig-prename descclassname"><span class="pre">stats.</span></span><span class="sig-name descname"><span class="pre">time_statistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#stats.time_statistics" title="Link to this definition">#</a></dt>
+<dd><p>Calculate time-based statistics for a given phase and return a new DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pandas.DataFrame</em>) – The input DataFrame containing observation data and ensemble statistics.</p></li>
+<li><p><strong>phase</strong> (<em>str</em>) – The phase for which to calculate the statistics (‘prior’ or ‘posterior’).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A DataFrame containing time-based statistics for the specified phase.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="stats.possible_vs_used">
 <span class="sig-prename descclassname"><span class="pre">stats.</span></span><span class="sig-name descname"><span class="pre">possible_vs_used</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#stats.possible_vs_used" title="Link to this definition">#</a></dt>
 <dd><p>Calculates the count of possible vs. used observations by type.</p>
@@ -585,6 +627,36 @@ Includes observations for which the posterior forward observation operators fail
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="stats.possible_vs_used_by_time">
+<span class="sig-prename descclassname"><span class="pre">stats.</span></span><span class="sig-name descname"><span class="pre">possible_vs_used_by_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#stats.possible_vs_used_by_time" title="Link to this definition">#</a></dt>
+<dd><p>Calculates the count of possible vs. used observations by type and time bin.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – The input DataFrame containing observation data. The DataFrame must include:
+- ‘type’: The observation type.
+- ‘time_bin_midpoint’: The midpoint of the time bin.
+- ‘observation’: The observation values.
+- ‘DART_quality_control’: The quality control flag.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>A DataFrame with the following columns:</dt><dd><ul class="simple">
+<li><p>’time_bin_midpoint’: The midpoint of the time bin.</p></li>
+<li><p>’type’: The observation type.</p></li>
+<li><p>’possible’: The count of all observations in the time bin.</p></li>
+<li><p>’used’: The count of observations in the time bin that passed quality control checks.</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -645,9 +717,12 @@ Includes observations for which the posterior forward observation operators fail
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stats.mean_then_sqrt"><code class="docutils literal notranslate"><span class="pre">mean_then_sqrt()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stats.diag_stats"><code class="docutils literal notranslate"><span class="pre">diag_stats()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stats.bin_by_layer"><code class="docutils literal notranslate"><span class="pre">bin_by_layer()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stats.bin_by_time"><code class="docutils literal notranslate"><span class="pre">bin_by_time()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stats.time_statistics"><code class="docutils literal notranslate"><span class="pre">time_statistics()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stats.possible_vs_used"><code class="docutils literal notranslate"><span class="pre">possible_vs_used()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stats.possible_vs_used_by_layer"><code class="docutils literal notranslate"><span class="pre">possible_vs_used_by_layer()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stats.select_used_qcs"><code class="docutils literal notranslate"><span class="pre">select_used_qcs()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stats.possible_vs_used_by_time"><code class="docutils literal notranslate"><span class="pre">possible_vs_used_by_time()</span></code></a></li>
 </ul>
   </nav></div>
 
