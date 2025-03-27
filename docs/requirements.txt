@@ -10,3 +10,4 @@ sphinx-gallery
 matplotlib
 black
 pytest
+pytest-cov
