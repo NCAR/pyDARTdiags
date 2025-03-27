@@ -111,8 +111,8 @@ files.
    pyDARTdiags/
                ├── docs/
                ├── src/
-               ├── test/
-                        ├── data/      
+               ├── tests/
+                         ├── data/      
 
 To run the tests, you can use the following command:
 
@@ -127,11 +127,6 @@ We use `Codecov <https://about.codecov.io/>`_ to measure the percentage of code 
 You can view the code coverage reports for the project at 
 `Codecov for pyDARTdiags <https://app.codecov.io/gh/NCAR/pyDARTdiags>`_.
 Code coverage for the test can be calculated locally using the pytest-cov package. 
-To install pytest-cov, run the following command: 
-
-.. code-block :: text
-
-   pip install pytest-cov 
 
 To create the coverage report, run the following command in the root directory:
 
