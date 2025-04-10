@@ -1,0 +1,173 @@
+"""
+Select observations to add them to a new obs sequence
+=====================================================
+
+This example demonstrates how to read an observation sequence
+file, and plot the observations on a map, with the color
+indicating the QC value. 
+
+You can then select observations on the map to add them to a
+new observation sequence file.
+
+- Choose the lasso or rectangle tool in the graph's menu bar and
+then select points in the plot.
+
+- Selection data accumulates if you perform multiple selections,
+and the currently selected observations will be shown below the plot.
+
+- When you are finished selecting your desired observations, press the
+  submit button to create a new observation sequence file that contains
+  only the selected observations. This will be saved in the current
+  directory (pyDARTdiags/examples/04_interacting).
+"""
+
+# Import packages
+from dash import Dash, dcc, html, Input, Output, callback
+import pandas as pd
+import plotly.express as px
+import json
+import pydartdiags.obs_sequence.obs_sequence as obsq
+import os
+
+###########################################
+# Read the obs_seq file into an obs_seq object.
+
+# In this example, we use a small obs_seq file "obs_seq.final.ascii.medium"
+# that comes with the pyDARTdiags package in the data directory, so we use
+# ``os`` to get the path to the file
+data_dir = os.path.join(os.getcwd(), "../..", "data")
+data_file = os.path.join(data_dir, "obs_seq.final.ascii.medium")
+obs_seq = obsq.obs_sequence(data_file)
+
+# We also create a copy of this obs_seq file to be mainuplated
+# through map selection
+obs_seq_selected = obsq.obs_sequence(data_file)
+
+###########################################
+# Examine the dataframe.
+obs_seq.df.head()
+
+###########################################
+# Plot the observations on a map.
+
+# In this case, the colors of the points will indicate the DART quality
+# control value and the hover data will show the observation number,
+# the observation value, the type of observation, and the QC value.
+
+# You can change the coloring and hover data of the map to use any of 
+# the column names in the dataframe.
+
+dash_styles = {
+    'pre': {
+        'border': 'thin lightgrey solid',
+        'overflowX': 'scroll',
+        'color': 'black'
+    },
+    'txt': {
+        'color': 'black'
+    }
+}
+
+fig = px.scatter_geo(
+    obs_seq.df,
+    lat='latitude',
+    lon='longitude',
+    color='DART_quality_control',
+    hover_data={'DART_quality_control':True,
+                'type': True,
+                'observation': True,
+                'obs_num': True
+    },
+    width=1400,
+    height=850,
+)
+
+fig.update_traces(hoverinfo='skip', hovertemplate=None)
+fig.update_layout(clickmode='event+select')
+
+#Initialize the Dash app
+app = Dash()
+
+# App layout
+app.layout = [
+    dcc.Markdown("""
+        ## **Select observations to add them to a new obs sequence**
+
+        Choose the lasso or rectangle tool in the graph's menu
+        bar and then select points in the plot.
+
+        Selection data accumulates if you perform multiple selections,
+        and the currently selected observations will be shown below
+        the plot.
+
+        When you are finished selecting the desired observation, press
+        the select button to create a new observation sequence file
+        that contains only the selected observations.
+    """, style=dash_styles['txt']),
+
+    dcc.Graph(id='select-obs', figure=fig),
+
+    html.Button('Submit', id='submit-val', n_clicks=0),
+
+    html.Pre(id='confirmation', style=dash_styles['pre']),
+
+    html.Pre(id='selected-data', style=dash_styles['pre']),
+
+    dcc.Store(id="store")
+]
+
+customdata_list = []
+unique_obs_types = []
+
+@callback(
+    Output('selected-data', 'children'),#, allow_duplicate=True),
+    Output('store', 'data'),
+    Input('select-obs', 'selectedData'),
+    prevent_initial_call=True
+)
+def display_selected_data(selectedData):
+    selected_list = [point['customdata'] for point in selectedData['points']]
+#    print(selected_list)
+    for item in selected_list:
+        if item not in customdata_list:
+            customdata_list.append(item)
+
+    # Retrieve the observation number and type from customdata_list
+    obs_numbers = [data[-1] for data in customdata_list]
+    obs_types = [data[1] for data in customdata_list]
+
+    # Create list where selected obs types are only included once
+    for item in obs_types:
+        if item not in unique_obs_types:
+            unique_obs_types.append(item)
+
+    # Dump lists to json
+    obs_numbers_json = json.dumps(obs_numbers, indent=2)
+    obs_types_json = json.dumps(unique_obs_types, indent=2)
+
+    # Display info on the selected data in the Dash app
+    return ('Total number of observations selected: ', len(obs_numbers),
+            '\n\nTypes of observations selected: ', obs_types_json,
+            '\n\nSelected observations (obs_num): ', obs_numbers_json), obs_numbers
+
+@callback(
+    Output('confirmation', 'children'),
+    Input('submit-val', 'n_clicks'),
+    Input('store', 'data'),
+    prevent_initial_call=True
+)
+def update_output(n_clicks, data):
+    if n_clicks >= 1:
+        # Update the obs_seq_selected dataframe to only include the selected observations
+        obs_seq_selected.df = obs_seq_selected.df[obs_seq_selected.df['obs_num'].isin(data)]
+
+        # Write the updated  observation sequence to a file
+        obs_seq_selected.write_obs_seq('./obs_seq.final.'+str(len(data))+'_selected_obs')
+
+        # Display confirmation message in Dash app
+        return 'New observation sequence created with the '+str(len(data))+' selected observations!'
+
+# Run the app
+if __name__ == '__main__':
+    app.run(debug=True, use_reloader=True)
+
