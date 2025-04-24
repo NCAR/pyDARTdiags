@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:04.126** total execution time for 5 files **from examples/03_diagnostics**:
+**00:04.218** total execution time for 5 files **from examples/03_diagnostics**:
 
 .. container::
 
@@ -33,17 +33,17 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_examples_03_diagnostics_plot_rank_histogram.py` (``plot_rank_histogram.py``)
-     - 00:02.518
+     - 00:02.534
      - 0.0
    * - :ref:`sphx_glr_examples_03_diagnostics_plot_evolution.py` (``plot_evolution.py``)
-     - 00:00.875
+     - 00:00.849
      - 0.0
    * - :ref:`sphx_glr_examples_03_diagnostics_plot_profiles.py` (``plot_profiles.py``)
-     - 00:00.564
+     - 00:00.559
      - 0.0
    * - :ref:`sphx_glr_examples_03_diagnostics_plot_grand_stats.py` (``plot_grand_stats.py``)
-     - 00:00.144
+     - 00:00.251
      - 0.0
    * - :ref:`sphx_glr_examples_03_diagnostics_plot_qc_poss_vs_used.py` (``plot_qc_poss_vs_used.py``)
-     - 00:00.025
+     - 00:00.024
      - 0.0
