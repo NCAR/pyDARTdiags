@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:00.269** total execution time for 1 file **from examples/02_visualizing**:
+**00:00.263** total execution time for 1 file **from examples/02_visualizing**:
 
 .. container::
 
@@ -33,5 +33,5 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_examples_02_visualizing_plot_qc_hover.py` (``plot_qc_hover.py``)
-     - 00:00.269
+     - 00:00.263
      - 0.0
