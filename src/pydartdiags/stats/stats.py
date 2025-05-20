@@ -93,6 +93,12 @@ def calculate_rank(df, phase):
     """
     Calculate the rank of observations within an ensemble.
 
+    Note:
+
+        This function is decorated with @apply_to_phases_by_obs, which modifies its usage.
+        You should call it as calculate_rank(df), and the decorator will automatically apply the
+        function to all relevant phases (‘prior’ and ‘posterior’).
+
     This function takes a DataFrame containing ensemble predictions and observed values,
     adds sampling noise to the ensemble predictions, and calculates the rank of the observed
     value within the perturbed ensemble for each observation. The rank indicates the position
@@ -102,8 +108,6 @@ def calculate_rank(df, phase):
 
     Parameters:
         df (pd.DataFrame): A DataFrame with columns for rank, and observation type.
-
-        phase (str): The phase for which to calculate the statistics ('prior' or 'posterior')
 
     Returns:
         DataFrame containing columns for 'rank' and observation 'type'.
@@ -158,15 +162,20 @@ def diag_stats(df, phase):
     """
     Calculate diagnostic statistics for a given phase and add them to the DataFrame.
 
+    Note:
+        This function is decorated with @apply_to_phases_in_place, which modifies its usage.
+        You should call it as diag_stats(df), and the decorator will automatically apply the
+        function to all relevant phases (‘prior’ and ‘posterior’) modifying the DataFrame
+        in place.
+
     Args:
         df (pandas.DataFrame): The input DataFrame containing observation data and ensemble statistics.
-                               The DataFrame must include the following columns:
-                               - 'observation': The actual observation values.
-                               - 'obs_err_var': The variance of the observation error.
-                               - 'prior_ensemble_mean' and/or 'posterior_ensemble_mean': The mean of the ensemble.
-                               - 'prior_ensemble_spread' and/or 'posterior_ensemble_spread': The spread of the ensemble.
+            The DataFrame must include the following columns:
 
-        phase (str): The phase for which to calculate the statistics ('prior' or 'posterior')
+            - 'observation': The actual observation values.
+            - 'obs_err_var': The variance of the observation error.
+            - 'prior_ensemble_mean' and/or 'posterior_ensemble_mean': The mean of the ensemble.
+            - 'prior_ensemble_spread' and/or 'posterior_ensemble_spread': The spread of the ensemble.
 
     Returns:
         None: The function modifies the DataFrame in place by adding the following columns:
@@ -203,9 +212,12 @@ def bin_by_layer(df, levels, verticalUnit="pressure (Pa)"):
     vertical level bin. Only observations (row) with the specified vertical unit are binned.
 
     Args:
-        df (pandas.DataFrame): The input DataFrame containing observation data. The DataFrame must include the following columns:
+        df (pandas.DataFrame): The input DataFrame containing observation data.
+                               The DataFrame must include the following columns:
+
                                - 'vertical': The vertical coordinate values of the observations.
                                - 'vert_unit': The unit of the vertical coordinate values.
+
         levels (list): A list of bin edges for the vertical levels.
         verticalUnit (str, optional): The unit of the vertical axis (e.g., 'pressure (Pa)'). Default is 'pressure (Pa)'.
 
@@ -261,6 +273,28 @@ def bin_by_time(df, time_value):
 
 @apply_to_phases_by_type_return_df
 def grand_statistics(df, phase):
+    """
+    Calculate grand statistics (RMSE, bias, total spread) for each observation type and phase.
+
+    This function assumes that diagnostic statistics (such as squared error, bias, and total variance)
+    have already been computed by :func:`diag_stats` and are present in the DataFrame. It groups the data by observation
+    type and computes the root mean square error (RMSE), mean bias, and total spread for the specified phase.
+
+    Note:
+        This function is decorated with @apply_to_phases_by_type_return_df, which modifies its usage
+        You should call it as grand_statistics(df), and the decorator will automatically apply the function
+        to all relevant phases ('prior' and 'posterior') and return a merged DataFrame.
+
+    Args:
+        df (pandas.DataFrame): The input DataFrame containing diagnostic statistics for observations.
+
+    Returns:
+        pandas.DataFrame: A DataFrame with columns:
+            - 'type': The observation type.
+            - '{phase}_rmse': The root mean square error for the phase.
+            - '{phase}_bias': The mean bias for the phase.
+            - '{phase}_totalspread': The total spread for the phase.
+    """
 
     # assuming diag_stats has been called
     grand = (
@@ -283,6 +317,33 @@ def grand_statistics(df, phase):
 
 @apply_to_phases_by_type_return_df
 def layer_statistics(df, phase):
+    """
+    Calculate statistics (RMSE, bias, total spread) for each observation type and vertical layer.
+
+    This function assumes that diagnostic statistics (such as squared error, bias, and total variance)
+    have already been computed with :func:`diag_stats` and are present in the DataFrame. It groups the data by
+    vertical layer midpoint and observation type, and computes the root mean square error (RMSE),
+    mean bias, and total spread for the specified phase for each vertical layer.
+
+    Note:
+        This function is decorated with @apply_to_phases_by_type_return_df, which modifies its usage
+        You should call it as layer_statistics(df), and the decorator will automatically apply the function
+        to all relevant phases ('prior' and 'posterior') and return a merged DataFrame.
+
+    Args:
+        df (pandas.DataFrame): The input DataFrame containing diagnostic statistics for observations.
+        phase (str): The phase for which to calculate the statistics ('prior' or 'posterior').
+
+    Returns:
+        pandas.DataFrame: A DataFrame with columns:
+            - 'midpoint': The midpoint of the vertical layer.
+            - 'type': The observation type.
+            - '{phase}_rmse': The root mean square error for the phase.
+            - '{phase}_bias': The mean bias for the phase.
+            - '{phase}_totalspread': The total spread for the phase.
+            - 'vert_unit': The vertical unit.
+            - 'vlevels': The categorized vertical level.
+    """
 
     # assuming diag_stats has been called
     layer_stats = (
@@ -310,14 +371,31 @@ def layer_statistics(df, phase):
 @apply_to_phases_by_type_return_df
 def time_statistics(df, phase):
     """
-    Calculate time-based statistics for a given phase and return a new DataFrame.
+    Calculate time-based statistics (RMSE, bias, total spread) for each observation type and time bin.
+
+    This function assumes that diagnostic statistics (such as squared error, bias, and total variance)
+    have already been computed by :func:`diag_stats` and are present in the DataFrame. It groups the data
+    by time bin midpoint and observation type, and computes the root mean square error (RMSE), mean bias,
+    and total spread for the specified phase for each time bin.
+
+    Note:
+        This function is decorated with @apply_to_phases_by_type_return_df.
+        You should call it as time_statistics(df), and the decorator will automatically apply the function
+        to all relevant phases ('prior' and 'posterior') and return a merged DataFrame.
 
     Args:
-        df (pandas.DataFrame): The input DataFrame containing observation data and ensemble statistics.
+        df (pandas.DataFrame): The input DataFrame containing diagnostic statistics for observations.
         phase (str): The phase for which to calculate the statistics ('prior' or 'posterior').
 
     Returns:
-        pandas.DataFrame: A DataFrame containing time-based statistics for the specified phase.
+        pandas.DataFrame: A DataFrame with columns:
+            - 'time_bin_midpoint': The midpoint of the time bin.
+            - 'type': The observation type.
+            - '{phase}_rmse': The root mean square error for the phase.
+            - '{phase}_bias': The mean bias for the phase.
+            - '{phase}_totalspread': The total spread for the phase.
+            - 'time_bin': The time bin interval.
+            - 'time': The first time value in the bin.
     """
     # Assuming diag_stats has been called
     time_stats = (
@@ -402,7 +480,9 @@ def possible_vs_used_by_time(df):
     Calculates the count of possible vs. used observations by type and time bin.
 
     Args:
-        df (pd.DataFrame): The input DataFrame containing observation data. The DataFrame must include:
+        df (pd.DataFrame): The input DataFrame containing observation data.
+                           The DataFrame must include:
+
                            - 'type': The observation type.
                            - 'time_bin_midpoint': The midpoint of the time bin.
                            - 'observation': The observation values.
