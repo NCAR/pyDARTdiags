@@ -799,15 +799,20 @@ including what statistics are calculated.</p>
 diag_stats(df, phase)
     Calculate diagnostic statistics for a given phase and add them to the DataFrame.
 
+    Note:
+        This function is decorated with @apply_to_phases_in_place, which modifies its usage.
+        You should call it as diag_stats(df), and the decorator will automatically apply the
+        function to all relevant phases (‘prior’ and ‘posterior’) modifying the DataFrame
+        in place.
+
     Args:
         df (pandas.DataFrame): The input DataFrame containing observation data and ensemble statistics.
-                               The DataFrame must include the following columns:
-                               - &#39;observation&#39;: The actual observation values.
-                               - &#39;obs_err_var&#39;: The variance of the observation error.
-                               - &#39;prior_ensemble_mean&#39; and/or &#39;posterior_ensemble_mean&#39;: The mean of the ensemble.
-                               - &#39;prior_ensemble_spread&#39; and/or &#39;posterior_ensemble_spread&#39;: The spread of the ensemble.
+            The DataFrame must include the following columns:
 
-        phase (str): The phase for which to calculate the statistics (&#39;prior&#39; or &#39;posterior&#39;)
+            - &#39;observation&#39;: The actual observation values.
+            - &#39;obs_err_var&#39;: The variance of the observation error.
+            - &#39;prior_ensemble_mean&#39; and/or &#39;posterior_ensemble_mean&#39;: The mean of the ensemble.
+            - &#39;prior_ensemble_spread&#39; and/or &#39;posterior_ensemble_spread&#39;: The spread of the ensemble.
 
     Returns:
         None: The function modifies the DataFrame in place by adding the following columns:
@@ -912,7 +917,7 @@ for each type of observation.</p>
 </div>
 </div>
 <br />
-<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.199 seconds)</p>
+<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.162 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-03-diagnostics-plot-grand-stats-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/ce101c761d274087ecac0cbfd4585183/plot_grand_stats.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_grand_stats.ipynb</span></code></a></p>

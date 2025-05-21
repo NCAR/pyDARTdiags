@@ -430,6 +430,12 @@ and modify the DataFrame in place.</p>
 <dt class="sig sig-object py" id="stats.calculate_rank">
 <span class="sig-prename descclassname"><span class="pre">stats.</span></span><span class="sig-name descname"><span class="pre">calculate_rank</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#stats.calculate_rank" title="Link to this definition">#</a></dt>
 <dd><p>Calculate the rank of observations within an ensemble.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is decorated with &#64;apply_to_phases_by_obs, which modifies its usage.
+You should call it as calculate_rank(df), and the decorator will automatically apply the
+function to all relevant phases (‘prior’ and ‘posterior’).</p>
+</div>
 <p>This function takes a DataFrame containing ensemble predictions and observed values,
 adds sampling noise to the ensemble predictions, and calculates the rank of the observed
 value within the perturbed ensemble for each observation. The rank indicates the position
@@ -438,10 +444,7 @@ observed value is larger than the largest ensemble member, its rank is set to th
 size plus one.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – A DataFrame with columns for rank, and observation type.</p></li>
-<li><p><strong>phase</strong> (<em>str</em>) – The phase for which to calculate the statistics (‘prior’ or ‘posterior’)</p></li>
-</ul>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – A DataFrame with columns for rank, and observation type.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>DataFrame containing columns for ‘rank’ and observation ‘type’.</p>
@@ -475,17 +478,24 @@ The elements should be numeric.</p>
 <dt class="sig sig-object py" id="stats.diag_stats">
 <span class="sig-prename descclassname"><span class="pre">stats.</span></span><span class="sig-name descname"><span class="pre">diag_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#stats.diag_stats" title="Link to this definition">#</a></dt>
 <dd><p>Calculate diagnostic statistics for a given phase and add them to the DataFrame.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is decorated with &#64;apply_to_phases_in_place, which modifies its usage.
+You should call it as diag_stats(df), and the decorator will automatically apply the
+function to all relevant phases (‘prior’ and ‘posterior’) modifying the DataFrame
+in place.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>df</strong> (<em>pandas.DataFrame</em>) – The input DataFrame containing observation data and ensemble statistics.
-The DataFrame must include the following columns:
-- ‘observation’: The actual observation values.
-- ‘obs_err_var’: The variance of the observation error.
-- ‘prior_ensemble_mean’ and/or ‘posterior_ensemble_mean’: The mean of the ensemble.
-- ‘prior_ensemble_spread’ and/or ‘posterior_ensemble_spread’: The spread of the ensemble.</p></li>
-<li><p><strong>phase</strong> (<em>str</em>) – The phase for which to calculate the statistics (‘prior’ or ‘posterior’)</p></li>
+<dd class="field-odd"><p><strong>df</strong> (<em>pandas.DataFrame</em>) – <p>The input DataFrame containing observation data and ensemble statistics.
+The DataFrame must include the following columns:</p>
+<ul class="simple">
+<li><p>’observation’: The actual observation values.</p></li>
+<li><p>’obs_err_var’: The variance of the observation error.</p></li>
+<li><p>’prior_ensemble_mean’ and/or ‘posterior_ensemble_mean’: The mean of the ensemble.</p></li>
+<li><p>’prior_ensemble_spread’ and/or ‘posterior_ensemble_spread’: The spread of the ensemble.</p></li>
 </ul>
+</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><dl class="simple">
@@ -519,9 +529,13 @@ vertical level bin. Only observations (row) with the specified vertical unit are
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>df</strong> (<em>pandas.DataFrame</em>) – The input DataFrame containing observation data. The DataFrame must include the following columns:
-- ‘vertical’: The vertical coordinate values of the observations.
-- ‘vert_unit’: The unit of the vertical coordinate values.</p></li>
+<li><p><strong>df</strong> (<em>pandas.DataFrame</em>) – <p>The input DataFrame containing observation data.
+The DataFrame must include the following columns:</p>
+<ul>
+<li><p>’vertical’: The vertical coordinate values of the observations.</p></li>
+<li><p>’vert_unit’: The unit of the vertical coordinate values.</p></li>
+</ul>
+</p></li>
 <li><p><strong>levels</strong> (<em>list</em>) – A list of bin edges for the vertical levels.</p></li>
 <li><p><strong>verticalUnit</strong> (<em>str</em><em>, </em><em>optional</em>) – The unit of the vertical axis (e.g., ‘pressure (Pa)’). Default is ‘pressure (Pa)’.</p></li>
 </ul>
@@ -570,18 +584,117 @@ first bin. The last bin is inclusive of the maximum time value.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="stats.time_statistics">
-<span class="sig-prename descclassname"><span class="pre">stats.</span></span><span class="sig-name descname"><span class="pre">time_statistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#stats.time_statistics" title="Link to this definition">#</a></dt>
-<dd><p>Calculate time-based statistics for a given phase and return a new DataFrame.</p>
+<dt class="sig sig-object py" id="stats.grand_statistics">
+<span class="sig-prename descclassname"><span class="pre">stats.</span></span><span class="sig-name descname"><span class="pre">grand_statistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#stats.grand_statistics" title="Link to this definition">#</a></dt>
+<dd><p>Calculate grand statistics (RMSE, bias, total spread) for each observation type and phase.</p>
+<p>This function assumes that diagnostic statistics (such as squared error, bias, and total variance)
+have already been computed by <a class="reference internal" href="#stats.diag_stats" title="stats.diag_stats"><code class="xref py py-func docutils literal notranslate"><span class="pre">diag_stats()</span></code></a> and are present in the DataFrame. It groups the data by observation
+type and computes the root mean square error (RMSE), mean bias, and total spread for the specified phase.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is decorated with &#64;apply_to_phases_by_type_return_df, which modifies its usage
+You should call it as grand_statistics(df), and the decorator will automatically apply the function
+to all relevant phases (‘prior’ and ‘posterior’) and return a merged DataFrame.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pandas.DataFrame</em>) – The input DataFrame containing diagnostic statistics for observations.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>A DataFrame with columns:</dt><dd><ul class="simple">
+<li><p>’type’: The observation type.</p></li>
+<li><p>’{phase}_rmse’: The root mean square error for the phase.</p></li>
+<li><p>’{phase}_bias’: The mean bias for the phase.</p></li>
+<li><p>’{phase}_totalspread’: The total spread for the phase.</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="stats.layer_statistics">
+<span class="sig-prename descclassname"><span class="pre">stats.</span></span><span class="sig-name descname"><span class="pre">layer_statistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#stats.layer_statistics" title="Link to this definition">#</a></dt>
+<dd><p>Calculate statistics (RMSE, bias, total spread) for each observation type and vertical layer.</p>
+<p>This function assumes that diagnostic statistics (such as squared error, bias, and total variance)
+have already been computed with <a class="reference internal" href="#stats.diag_stats" title="stats.diag_stats"><code class="xref py py-func docutils literal notranslate"><span class="pre">diag_stats()</span></code></a> and are present in the DataFrame. It groups the data by
+vertical layer midpoint and observation type, and computes the root mean square error (RMSE),
+mean bias, and total spread for the specified phase for each vertical layer.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is decorated with &#64;apply_to_phases_by_type_return_df, which modifies its usage
+You should call it as layer_statistics(df), and the decorator will automatically apply the function
+to all relevant phases (‘prior’ and ‘posterior’) and return a merged DataFrame.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>df</strong> (<em>pandas.DataFrame</em>) – The input DataFrame containing observation data and ensemble statistics.</p></li>
+<li><p><strong>df</strong> (<em>pandas.DataFrame</em>) – The input DataFrame containing diagnostic statistics for observations.</p></li>
 <li><p><strong>phase</strong> (<em>str</em>) – The phase for which to calculate the statistics (‘prior’ or ‘posterior’).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A DataFrame containing time-based statistics for the specified phase.</p>
+<dd class="field-even"><p><dl class="simple">
+<dt>A DataFrame with columns:</dt><dd><ul class="simple">
+<li><p>’midpoint’: The midpoint of the vertical layer.</p></li>
+<li><p>’type’: The observation type.</p></li>
+<li><p>’{phase}_rmse’: The root mean square error for the phase.</p></li>
+<li><p>’{phase}_bias’: The mean bias for the phase.</p></li>
+<li><p>’{phase}_totalspread’: The total spread for the phase.</p></li>
+<li><p>’vert_unit’: The vertical unit.</p></li>
+<li><p>’vlevels’: The categorized vertical level.</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="stats.time_statistics">
+<span class="sig-prename descclassname"><span class="pre">stats.</span></span><span class="sig-name descname"><span class="pre">time_statistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#stats.time_statistics" title="Link to this definition">#</a></dt>
+<dd><p>Calculate time-based statistics (RMSE, bias, total spread) for each observation type and time bin.</p>
+<p>This function assumes that diagnostic statistics (such as squared error, bias, and total variance)
+have already been computed by <a class="reference internal" href="#stats.diag_stats" title="stats.diag_stats"><code class="xref py py-func docutils literal notranslate"><span class="pre">diag_stats()</span></code></a> and are present in the DataFrame. It groups the data
+by time bin midpoint and observation type, and computes the root mean square error (RMSE), mean bias,
+and total spread for the specified phase for each time bin.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is decorated with &#64;apply_to_phases_by_type_return_df.
+You should call it as time_statistics(df), and the decorator will automatically apply the function
+to all relevant phases (‘prior’ and ‘posterior’) and return a merged DataFrame.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pandas.DataFrame</em>) – The input DataFrame containing diagnostic statistics for observations.</p></li>
+<li><p><strong>phase</strong> (<em>str</em>) – The phase for which to calculate the statistics (‘prior’ or ‘posterior’).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>A DataFrame with columns:</dt><dd><ul class="simple">
+<li><p>’time_bin_midpoint’: The midpoint of the time bin.</p></li>
+<li><p>’type’: The observation type.</p></li>
+<li><p>’{phase}_rmse’: The root mean square error for the phase.</p></li>
+<li><p>’{phase}_bias’: The mean bias for the phase.</p></li>
+<li><p>’{phase}_totalspread’: The total spread for the phase.</p></li>
+<li><p>’time_bin’: The time bin interval.</p></li>
+<li><p>’time’: The first time value in the bin.</p></li>
+</ul>
+</dd>
+</dl>
+</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>pandas.DataFrame</p>
@@ -637,11 +750,15 @@ Includes observations for which the posterior forward observation operators fail
 <dd><p>Calculates the count of possible vs. used observations by type and time bin.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – The input DataFrame containing observation data. The DataFrame must include:
-- ‘type’: The observation type.
-- ‘time_bin_midpoint’: The midpoint of the time bin.
-- ‘observation’: The observation values.
-- ‘DART_quality_control’: The quality control flag.</p>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – <p>The input DataFrame containing observation data.
+The DataFrame must include:</p>
+<ul class="simple">
+<li><p>’type’: The observation type.</p></li>
+<li><p>’time_bin_midpoint’: The midpoint of the time bin.</p></li>
+<li><p>’observation’: The observation values.</p></li>
+<li><p>’DART_quality_control’: The quality control flag.</p></li>
+</ul>
+</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><dl class="simple">
@@ -718,6 +835,8 @@ Includes observations for which the posterior forward observation operators fail
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stats.diag_stats"><code class="docutils literal notranslate"><span class="pre">diag_stats()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stats.bin_by_layer"><code class="docutils literal notranslate"><span class="pre">bin_by_layer()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stats.bin_by_time"><code class="docutils literal notranslate"><span class="pre">bin_by_time()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stats.grand_statistics"><code class="docutils literal notranslate"><span class="pre">grand_statistics()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stats.layer_statistics"><code class="docutils literal notranslate"><span class="pre">layer_statistics()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stats.time_statistics"><code class="docutils literal notranslate"><span class="pre">time_statistics()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stats.possible_vs_used"><code class="docutils literal notranslate"><span class="pre">possible_vs_used()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stats.possible_vs_used_by_layer"><code class="docutils literal notranslate"><span class="pre">possible_vs_used_by_layer()</span></code></a></li>

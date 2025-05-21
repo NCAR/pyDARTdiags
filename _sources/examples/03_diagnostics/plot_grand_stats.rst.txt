@@ -503,15 +503,20 @@ including what statistics are calculated.
     diag_stats(df, phase)
         Calculate diagnostic statistics for a given phase and add them to the DataFrame.
 
+        Note:
+            This function is decorated with @apply_to_phases_in_place, which modifies its usage.
+            You should call it as diag_stats(df), and the decorator will automatically apply the
+            function to all relevant phases (‘prior’ and ‘posterior’) modifying the DataFrame
+            in place.
+
         Args:
             df (pandas.DataFrame): The input DataFrame containing observation data and ensemble statistics.
-                                   The DataFrame must include the following columns:
-                                   - 'observation': The actual observation values.
-                                   - 'obs_err_var': The variance of the observation error.
-                                   - 'prior_ensemble_mean' and/or 'posterior_ensemble_mean': The mean of the ensemble.
-                                   - 'prior_ensemble_spread' and/or 'posterior_ensemble_spread': The spread of the ensemble.
+                The DataFrame must include the following columns:
 
-            phase (str): The phase for which to calculate the statistics ('prior' or 'posterior')
+                - 'observation': The actual observation values.
+                - 'obs_err_var': The variance of the observation error.
+                - 'prior_ensemble_mean' and/or 'posterior_ensemble_mean': The mean of the ensemble.
+                - 'prior_ensemble_spread' and/or 'posterior_ensemble_spread': The spread of the ensemble.
 
         Returns:
             None: The function modifies the DataFrame in place by adding the following columns:
@@ -636,7 +641,7 @@ for each type of observation.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.199 seconds)
+   **Total running time of the script:** (0 minutes 0.162 seconds)
 
 
 .. _sphx_glr_download_examples_03_diagnostics_plot_grand_stats.py:
