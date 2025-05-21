@@ -40,7 +40,9 @@ obs_seq.df.columns
 # In this case, the colors of the points
 # will indicate the DART quality control value
 # and the hover data will show the observation number,
-# the observation value, the type of observation, and the QC value
+# the observation value, the type of observation, and the QC value.
+# You can change the columns used for hover data and coloring. Refer
+# to the columns in the dataframe to see your options.
 
 fig = px.scatter_geo(
     obs_seq.df,
