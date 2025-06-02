@@ -24,18 +24,34 @@ class obs_sequence:
     Initialize an obs_sequence object from an ASCII or binary observation sequence file,
     or create an empty obs_sequence object from scratch.
 
+    1D observations are given a datetime of days, seconds since 2000-01-01 00:00:00
+
+    3D observations are given a datetime of days, seconds since 1601-01-01 00:00:00 (DART Gregorian calendar)
+
     Args:
         file (str): The input observation sequence ASCII or binary file.
-                If None, an empty obs_sequence object is created from scratch.
+            If None, an empty obs_sequence object is created from scratch.
         synonyms (list, optional): List of additional synonyms for the observation column in the DataFrame.
+            The default list is
 
+            .. code-block:: python
 
-    Returns:
-        An obs_sequence object
+                ['NCEP BUFR observation',
+                'AIRS observation',
+                'GTSPP observation',
+                'SST observation',
+                'observations',
+                'WOD observation']
 
-        1D observations are given a datetime of days, seconds since 2000-01-01 00:00:00
+            You can add more synonyms by providing a list of strings when
+            creating the obs_sequence object.
 
-        3D observations are given a datetime of days, seconds since 1601-01-01 00:00:00 (DART Gregorian calendar)
+            .. code-block:: python
+
+                obs_sequence(file, synonyms=['synonym1', 'synonym2'])
+
+    Raises:
+        ValueError: If neither 'loc3d' nor 'loc1d' could be found in the observation sequence.
 
     Examples:
 
@@ -67,28 +83,12 @@ class obs_sequence:
             - scale height: 'VERTISSCALEHEIGHT' (unitless)
         loc_mod (str): The location model, either 'loc3d' or 'loc1d'.
             For 3D sphere models: latitude and longitude are in degrees in the DataFrame.
-        types (dict): Dictionary of types of observations the observation sequence,
+        types (dict): Dictionary of types of observations in the observation sequence,
             e.g. {23: 'ACARS_TEMPERATURE'},
         reverse_types (dict): Dictionary of types with keys and values reversed, e.g
             {'ACARS_TEMPERATURE': 23}
         synonyms_for_obs (list): List of synonyms for the observation column in the DataFrame.
-            The default list is
 
-            .. code-block:: python
-
-                [ 'NCEP BUFR observation',
-                'AIRS observation',
-                'GTSPP observation',
-                'SST observation',
-                'observations',
-                'WOD observation']
-
-            You can add more synonyms by providing a list of strings when
-            creating the obs_sequence object.
-
-            .. code-block:: python
-
-                obs_sequence(file, synonyms=['synonym1', 'synonym2']).df
 
         seq (generator): Generator of observations from the observation sequence file.
         all_obs (list): List of all observations, each observation is a list.
