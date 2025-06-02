@@ -409,15 +409,39 @@
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">obs_sequence.</span></span><span class="sig-name descname"><span class="pre">obs_sequence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">synonyms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.obs_sequence" title="Link to this definition">#</a></dt>
 <dd><p>Initialize an obs_sequence object from an ASCII or binary observation sequence file,
 or create an empty obs_sequence object from scratch.</p>
+<p>1D observations are given a datetime of days, seconds since 2000-01-01 00:00:00</p>
+<p>3D observations are given a datetime of days, seconds since 1601-01-01 00:00:00 (DART Gregorian calendar)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>file</strong> (<em>str</em>) – The input observation sequence ASCII or binary file.
-If None, an empty obs_sequence object is created from scratch.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file</strong> (<em>str</em>) – The input observation sequence ASCII or binary file.
+If None, an empty obs_sequence object is created from scratch.</p></li>
+<li><p><strong>synonyms</strong> (<em>list</em><em>, </em><em>optional</em>) – <p>List of additional synonyms for the observation column in the DataFrame.
+The default list is</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s1">&#39;NCEP BUFR observation&#39;</span><span class="p">,</span>
+<span class="s1">&#39;AIRS observation&#39;</span><span class="p">,</span>
+<span class="s1">&#39;GTSPP observation&#39;</span><span class="p">,</span>
+<span class="s1">&#39;SST observation&#39;</span><span class="p">,</span>
+<span class="s1">&#39;observations&#39;</span><span class="p">,</span>
+<span class="s1">&#39;WOD observation&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>You can add more synonyms by providing a list of strings when
+creating the obs_sequence object.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_sequence</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">synonyms</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;synonym1&#39;</span><span class="p">,</span> <span class="s1">&#39;synonym2&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</p></li>
+</ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>An obs_sequence object</p>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If neither ‘loc3d’ nor ‘loc1d’ could be found in the observation sequence.</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span> <span class="o">=</span> <span class="n">obs_sequence</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="s1">&#39;obs_seq.final&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="obs_sequence.obs_sequence.df">
 <span class="sig-name descname"><span class="pre">df</span></span><a class="headerlink" href="#obs_sequence.obs_sequence.df" title="Link to this definition">#</a></dt>
@@ -544,7 +568,7 @@ For 3D sphere models: latitude and longitude are in degrees in the DataFrame.</p
 <dl class="py attribute">
 <dt class="sig sig-object py" id="obs_sequence.obs_sequence.types">
 <span class="sig-name descname"><span class="pre">types</span></span><a class="headerlink" href="#obs_sequence.obs_sequence.types" title="Link to this definition">#</a></dt>
-<dd><p>Dictionary of types of observations the observation sequence,
+<dd><p>Dictionary of types of observations in the observation sequence,
 e.g. {23: ‘ACARS_TEMPERATURE’},</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -568,21 +592,7 @@ e.g. {23: ‘ACARS_TEMPERATURE’},</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="obs_sequence.obs_sequence.synonyms_for_obs">
 <span class="sig-name descname"><span class="pre">synonyms_for_obs</span></span><a class="headerlink" href="#obs_sequence.obs_sequence.synonyms_for_obs" title="Link to this definition">#</a></dt>
-<dd><p>List of synonyms for the observation column in the DataFrame.
-The default list is</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="s1">&#39;NCEP BUFR observation&#39;</span><span class="p">,</span>
-<span class="s1">&#39;AIRS observation&#39;</span><span class="p">,</span>
-<span class="s1">&#39;GTSPP observation&#39;</span><span class="p">,</span>
-<span class="s1">&#39;SST observation&#39;</span><span class="p">,</span>
-<span class="s1">&#39;observations&#39;</span><span class="p">,</span>
-<span class="s1">&#39;WOD observation&#39;</span><span class="p">]</span>
-</pre></div>
-</div>
-<p>You can add more synonyms by providing a list of strings when
-creating the obs_sequence object.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_sequence</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">synonyms</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;synonym1&#39;</span><span class="p">,</span> <span class="s1">&#39;synonym2&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">df</span>
-</pre></div>
-</div>
+<dd><p>List of synonyms for the observation column in the DataFrame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list</p>
