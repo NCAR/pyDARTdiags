@@ -27,9 +27,22 @@ class obs_sequence:
     Args:
         file (str): The input observation sequence ASCII or binary file.
                 If None, an empty obs_sequence object is created from scratch.
+        synonyms (list, optional): List of additional synonyms for the observation column in the DataFrame.
+
 
     Returns:
         An obs_sequence object
+
+        1D observations are given a datetime of days, seconds since 2000-01-01 00:00:00
+
+        3D observations are given a datetime of days, seconds since 1601-01-01 00:00:00 (DART Gregorian calendar)
+
+    Examples:
+
+        .. code-block:: python
+
+            obs_seq = obs_sequence(file='obs_seq.final')
+
 
     Attributes:
         df (pandas.DataFrame): The DataFrame containing the observation sequence data.
@@ -96,27 +109,6 @@ class obs_sequence:
     reversed_vert = {value: key for key, value in vert.items()}
 
     def __init__(self, file, synonyms=None):
-        """
-        Create an obs_sequence object from an ASCII or binary observation sequence file,
-        or create an empty obs_sequence object from scratch.
-
-        Args:
-            file (str): The input observation sequence ASCII or binary file.
-                    If None, an empty obs_sequence object is created from scratch.
-            synonyms (list, optional): List of synonyms for the observation column in the DataFrame.
-
-        Returns:
-            an obs_sequence object
-            1D observations are given a datetime of days, seconds since 2000-01-01 00:00:00
-            3D observations are given a datetime of days, seconds since 1601-01-01 00:00:00 (DART Gregorian calendar)
-
-        Examples:
-
-            .. code-block:: python
-
-                obs_seq = obs_sequence(file='obs_seq.final')
-
-        """
 
         self.loc_mod = "None"
         self.file = file
