@@ -33,7 +33,7 @@ obs_seq = obsq.obs_sequence(data_file)
 obs_seq.df['type'].unique()
 
 ###########################################
-# For this example, we are going to look at the rank histogram for 
+# For this example, we are going to look at the profile for 
 # ACARS_TEMPERATURE observations.
 type = 'ACARS_TEMPERATURE'
 hPalevels = [0.0, 100.0,  150.0, 200.0, 250.0, 300.0, 400.0, 500.0, 700, 850, 925, 1000]  # hPa
