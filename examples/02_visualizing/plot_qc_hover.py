@@ -28,7 +28,7 @@ import pydartdiags.obs_sequence.obs_sequence as obsq
 data_dir = os.path.join(os.getcwd(), "../..", "data")
 data_file = os.path.join(data_dir, "obs_seq.final.ascii.medium")
 
-obs_seq = obsq.obs_sequence(data_file)
+obs_seq = obsq.ObsSequence(data_file)
 
 
 ###########################################

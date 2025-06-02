@@ -4,8 +4,6 @@ import numpy as np
 from functools import wraps
 from datetime import datetime, timedelta
 
-# from pydartdiags.obs_sequence import obs_sequence as obsq
-
 
 def apply_to_phases_in_place(func):
     """

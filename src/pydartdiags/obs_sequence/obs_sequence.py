@@ -19,10 +19,10 @@ def requires_assimilation_info(func):
     return wrapper
 
 
-class obs_sequence:
+class ObsSequence:
     """
-    Initialize an obs_sequence object from an ASCII or binary observation sequence file,
-    or create an empty obs_sequence object from scratch.
+    Initialize an ObsSequence object from an ASCII or binary observation sequence file,
+    or create an empty ObsSequence object from scratch.
 
     1D observations are given a datetime of days, seconds since 2000-01-01 00:00:00
 
@@ -30,7 +30,7 @@ class obs_sequence:
 
     Args:
         file (str): The input observation sequence ASCII or binary file.
-            If None, an empty obs_sequence object is created from scratch.
+            If None, an empty ObsSequence object is created from scratch.
         synonyms (list, optional): List of additional synonyms for the observation column in the DataFrame.
             The default list is
 
@@ -44,11 +44,11 @@ class obs_sequence:
                 'WOD observation']
 
             You can add more synonyms by providing a list of strings when
-            creating the obs_sequence object.
+            creating the ObsSequence object.
 
             .. code-block:: python
 
-                obs_sequence(file, synonyms=['synonym1', 'synonym2'])
+                ObsSequence(file, synonyms=['synonym1', 'synonym2'])
 
     Raises:
         ValueError: If neither 'loc3d' nor 'loc1d' could be found in the observation sequence.
@@ -57,7 +57,7 @@ class obs_sequence:
 
         .. code-block:: python
 
-            obs_seq = obs_sequence(file='obs_seq.final')
+            obs_seq = ObsSequence(file='obs_seq.final')
 
 
     Attributes:
@@ -92,9 +92,9 @@ class obs_sequence:
 
         seq (generator): Generator of observations from the observation sequence file.
         all_obs (list): List of all observations, each observation is a list.
-            Valid when the obs_sequence is created from a file.
-            Set to None when the obs_sequence is created from scratch or multiple
-            obs_sequences are joined.
+            Valid when the ObsSequence is created from a file.
+            Set to None when the ObsSequence is created from scratch or multiple
+            ObsSequences are joined.
     """
 
     vert = {
@@ -206,7 +206,7 @@ class obs_sequence:
             data.append(float(location[0]))  # location x
             data.append(float(location[1]))  # location y
             data.append(float(location[2]))  # location z
-            data.append(obs_sequence.vert[int(location[3])])
+            data.append(ObsSequence.vert[int(location[3])])
             self.loc_mod = "loc3d"
         except ValueError:
             try:
@@ -364,7 +364,7 @@ class obs_sequence:
             )  # sort the DataFrame by time
             df_copy.reset_index(drop=True, inplace=True)
             df_copy["obs_num"] = df_copy.index + 1  # obs_num in time order
-            df_copy["linked_list"] = obs_sequence.generate_linked_list_pattern(
+            df_copy["linked_list"] = ObsSequence.generate_linked_list_pattern(
                 len(df_copy)
             )  # linked list pattern
 
@@ -586,7 +586,7 @@ class obs_sequence:
         with open(file, "rb") as f:
             while True:
                 # Read the record length
-                record_length = obs_sequence.read_record_length(f)
+                record_length = ObsSequence.read_record_length(f)
                 if record_length is None:
                     break
                 record = f.read(record_length)
@@ -594,7 +594,7 @@ class obs_sequence:
                     break
 
                 # Read the trailing record length (should match the leading one)
-                obs_sequence.check_trailing_record_length(f, record_length)
+                ObsSequence.check_trailing_record_length(f, record_length)
 
                 linecount += 1
 
@@ -612,7 +612,7 @@ class obs_sequence:
             f.seek(0)
 
             for _ in range(2):
-                record_length = obs_sequence.read_record_length(f)
+                record_length = ObsSequence.read_record_length(f)
                 if record_length is None:
                     break
 
@@ -620,7 +620,7 @@ class obs_sequence:
                 if not record:  # end of file
                     break
 
-                obs_sequence.check_trailing_record_length(f, record_length)
+                ObsSequence.check_trailing_record_length(f, record_length)
                 header.append(record.decode("utf-8").strip())
 
             header.append(str(obs_types_definitions))
@@ -628,7 +628,7 @@ class obs_sequence:
             # obs_types_definitions
             for _ in range(3, 4 + obs_types_definitions):
                 # Read the record length
-                record_length = obs_sequence.read_record_length(f)
+                record_length = ObsSequence.read_record_length(f)
                 if record_length is None:
                     break
 
@@ -637,7 +637,7 @@ class obs_sequence:
                 if not record:  # end of file
                     break
 
-                obs_sequence.check_trailing_record_length(f, record_length)
+                ObsSequence.check_trailing_record_length(f, record_length)
 
                 if _ == 3:
                     continue  # num obs_types_definitions
@@ -655,7 +655,7 @@ class obs_sequence:
                 5 + obs_types_definitions + num_copies + num_qcs + 1,
             ):
                 # Read the record length
-                record_length = obs_sequence.read_record_length(f)
+                record_length = ObsSequence.read_record_length(f)
                 if record_length is None:
                     break
 
@@ -664,7 +664,7 @@ class obs_sequence:
                 if not record:
                     break
 
-                obs_sequence.check_trailing_record_length(f, record_length)
+                ObsSequence.check_trailing_record_length(f, record_length)
 
                 if _ == 5 + obs_types_definitions:
                     continue
@@ -675,12 +675,12 @@ class obs_sequence:
 
             # first and last obs
             # Read the record length
-            record_length = obs_sequence.read_record_length(f)
+            record_length = ObsSequence.read_record_length(f)
 
             # Read the actual record
             record = f.read(record_length)
 
-            obs_sequence.check_trailing_record_length(f, record_length)
+            ObsSequence.check_trailing_record_length(f, record_length)
 
             # Read the whole record as a two integers
             first, last = struct.unpack("ii", record)[:8]
@@ -805,7 +805,7 @@ class obs_sequence:
             # Skip the first len(obs_seq.header) lines
             for _ in range(header_length - 1):
                 # Read the record length
-                record_length = obs_sequence.read_record_length(f)
+                record_length = ObsSequence.read_record_length(f)
                 if record_length is None:  # End of file
                     break
 
@@ -822,7 +822,7 @@ class obs_sequence:
                 obs.append(f"OBS        {obs_num}")
                 for _ in range(n):  # number of copies
                     # Read the record length
-                    record_length = obs_sequence.read_record_length(f)
+                    record_length = ObsSequence.read_record_length(f)
                     if record_length is None:
                         break
                     # Read the actual record (copie)
@@ -830,10 +830,10 @@ class obs_sequence:
                     obs.append(struct.unpack("d", record)[0])
 
                     # Read the trailing record length (should match the leading one)
-                    obs_sequence.check_trailing_record_length(f, record_length)
+                    ObsSequence.check_trailing_record_length(f, record_length)
 
                 # linked list info
-                record_length = obs_sequence.read_record_length(f)
+                record_length = ObsSequence.read_record_length(f)
                 if record_length is None:
                     break
 
@@ -842,17 +842,17 @@ class obs_sequence:
                 linked_list_string = f"{int1:<12} {int2:<10} {int3:<12}"
                 obs.append(linked_list_string)
 
-                obs_sequence.check_trailing_record_length(f, record_length)
+                ObsSequence.check_trailing_record_length(f, record_length)
 
                 # location (note no location header "loc3d" or "loc1d" for binary files)
                 obs.append("loc3d")
-                record_length = obs_sequence.read_record_length(f)
+                record_length = ObsSequence.read_record_length(f)
                 record = f.read(record_length)
                 x, y, z, vert = struct.unpack("dddi", record[:28])
                 location_string = f"{x} {y} {z} {vert}"
                 obs.append(location_string)
 
-                obs_sequence.check_trailing_record_length(f, record_length)
+                ObsSequence.check_trailing_record_length(f, record_length)
 
                 #   kind (type of observation) value
                 obs.append("kind")
@@ -862,23 +862,23 @@ class obs_sequence:
                 kind = f"{struct.unpack('i', record)[0]}"
                 obs.append(kind)
 
-                obs_sequence.check_trailing_record_length(f, record_length)
+                ObsSequence.check_trailing_record_length(f, record_length)
 
                 # time (seconds, days)
-                record_length = obs_sequence.read_record_length(f)
+                record_length = ObsSequence.read_record_length(f)
                 record = f.read(record_length)
                 seconds, days = struct.unpack("ii", record)[:8]
                 time_string = f"{seconds} {days}"
                 obs.append(time_string)
 
-                obs_sequence.check_trailing_record_length(f, record_length)
+                ObsSequence.check_trailing_record_length(f, record_length)
 
                 # obs error variance
-                record_length = obs_sequence.read_record_length(f)
+                record_length = ObsSequence.read_record_length(f)
                 record = f.read(record_length)
                 obs.append(struct.unpack("d", record)[0])
 
-                obs_sequence.check_trailing_record_length(f, record_length)
+                ObsSequence.check_trailing_record_length(f, record_length)
 
                 yield obs
 
@@ -933,40 +933,40 @@ class obs_sequence:
         return
 
     @classmethod
-    def join(cls, obs_sequences, copies=None):
+    def join(cls, ObsSequences, copies=None):
         """
         Join a list of observation sequences together.
 
-        This method combines the headers and observations from a list of obs_sequence objects
-        into a single obs_sequence object.
+        This method combines the headers and observations from a list of ObsSequence objects
+        into a single ObsSequence object.
 
         Args:
-            obs_sequences (list of obs_sequences): The list of observation sequences objects to join.
+            ObsSequences (list of ObsSequences): The list of observation sequences objects to join.
             copies (list of str, optional): A list of copy names to include in the combined data.
                     If not provided, all copies are included.
 
         Returns:
-            A new obs_sequence object containing the combined data.
+            A new ObsSequence object containing the combined data.
 
         Example:
             .. code-block:: python
 
-                obs_seq1 = obs_sequence(file='obs_seq1.final')
-                obs_seq2 = obs_sequence(file='obs_seq2.final')
-                obs_seq3 = obs_sequence(file='obs_seq3.final')
-                combined = obs_sequence.join([obs_seq1, obs_seq2, obs_seq3])
+                obs_seq1 = ObsSequence(file='obs_seq1.final')
+                obs_seq2 = ObsSequence(file='obs_seq2.final')
+                obs_seq3 = ObsSequence(file='obs_seq3.final')
+                combined = ObsSequence.join([obs_seq1, obs_seq2, obs_seq3])
         """
-        if not obs_sequences:
+        if not ObsSequences:
             raise ValueError("The list of observation sequences is empty.")
 
         # Create a new obs_sequnece object with the combined data
         combo = cls(file=None)
 
-        # Check if all obs_sequences have compatible attributes
-        first_loc_mod = obs_sequences[0].loc_mod
-        first_has_assimilation_info = obs_sequences[0].has_assimilation_info()
-        first_has_posterior = obs_sequences[0].has_posterior()
-        for obs_seq in obs_sequences:
+        # Check if all ObsSequences have compatible attributes
+        first_loc_mod = ObsSequences[0].loc_mod
+        first_has_assimilation_info = ObsSequences[0].has_assimilation_info()
+        first_has_posterior = ObsSequences[0].has_posterior()
+        for obs_seq in ObsSequences:
             if obs_seq.loc_mod != first_loc_mod:
                 raise ValueError(
                     "All observation sequences must have the same loc_mod."
@@ -1008,7 +1008,7 @@ class obs_sequence:
                 + end_required_columns
             )
 
-            for obs_seq in obs_sequences:
+            for obs_seq in ObsSequences:
                 if not set(requested_columns).issubset(obs_seq.df.columns):
                     raise ValueError(
                         "All observation sequences must have the selected copies."
@@ -1037,12 +1037,12 @@ class obs_sequence:
             combo.non_qc_copie_names = [
                 item
                 for item in combo.copie_names
-                if item in obs_sequences[0].non_qc_copie_names
+                if item in ObsSequences[0].non_qc_copie_names
             ]
             combo.qc_copie_names = [
                 item
                 for item in combo.copie_names
-                if item in obs_sequences[0].qc_copie_names
+                if item in ObsSequences[0].qc_copie_names
             ]
 
             combo.n_copies = len(combo.copie_names)
@@ -1050,15 +1050,15 @@ class obs_sequence:
             combo.n_non_qc = len(combo.non_qc_copie_names)
 
         else:
-            for obs_seq in obs_sequences:
-                if not obs_sequences[0].df.columns.isin(obs_seq.df.columns).all():
+            for obs_seq in ObsSequences:
+                if not ObsSequences[0].df.columns.isin(obs_seq.df.columns).all():
                     raise ValueError(
                         "All observation sequences must have the same copies."
                     )
-            combo.n_copies = obs_sequences[0].n_copies
-            combo.n_qc = obs_sequences[0].n_qc
-            combo.n_non_qc = obs_sequences[0].n_non_qc
-            combo.copie_names = obs_sequences[0].copie_names
+            combo.n_copies = ObsSequences[0].n_copies
+            combo.n_qc = ObsSequences[0].n_qc
+            combo.n_non_qc = ObsSequences[0].n_non_qc
+            combo.copie_names = ObsSequences[0].copie_names
 
         # todo HK @todo combine synonyms for obs?
 
@@ -1068,7 +1068,7 @@ class obs_sequence:
         combo.all_obs = None  # set to none to force writing from the dataframe if write_obs_seq is called
 
         # Iterate over the list of observation sequences and combine their data
-        for obs_seq in obs_sequences:
+        for obs_seq in ObsSequences:
             if copies:
                 combined_df = pd.concat(
                     [combined_df, obs_seq.df[requested_columns]], ignore_index=True
@@ -1084,7 +1084,7 @@ class obs_sequence:
 
         # create linked list for obs
         combo.df = combined_df.sort_values(by="time").reset_index(drop=True)
-        combo.df["linked_list"] = obs_sequence.generate_linked_list_pattern(
+        combo.df["linked_list"] = ObsSequence.generate_linked_list_pattern(
             len(combo.df)
         )
         combo.df["obs_num"] = combined_df.index + 1
@@ -1117,7 +1117,7 @@ class obs_sequence:
         )
 
     def create_header(self, n):
-        """Create a header for the obs_seq file from the obs_sequence object."""
+        """Create a header for the obs_seq file from the ObsSequence object."""
         assert (
             self.n_copies == self.n_non_qc + self.n_qc
         ), "n_copies must be equal to n_non_qc + n_qc"
