@@ -184,7 +184,7 @@ class ObsSequence:
         }
         self.df = self.df.rename(columns=rename_dict)
         # Replace MISSING_R8s with NaNs in posterior stats where DART_quality_control = 2
-        if ('DART_quality_control' and 'posterior_ensemble_mean') in self.df.columns:
+        if ("DART_quality_control" and "posterior_ensemble_mean") in self.df.columns:
             self.replace_qc2_r8s()
 
     def create_all_obs(self):
@@ -365,7 +365,9 @@ class ObsSequence:
                 df_copy = df_copy.drop(columns=["midpoint", "vlevels"])
 
             # Revert NaNs back to MISSING_R8s
-            if ('DART_quality_control' and 'posterior_ensemble_mean') in df_copy.columns:
+            if (
+                "DART_quality_control" and "posterior_ensemble_mean"
+            ) in df_copy.columns:
                 obs_sequence.revert_qc2_r8s(df_copy)
 
             # linked list for reading by dart programs
@@ -1145,17 +1147,28 @@ class ObsSequence:
         self.header.append(f"first: 1 last: {n}")
 
     def replace_qc2_r8s(self):
-        """  
+        """
         Replace MISSING_R8 values with NaNs in posterior columns for observations where
         DART_quality_control = 2 (posterior forward observation operators failed)
 
         This causes these observations to be ignored in the calculations of posterior statistics
         """
-        self.df.loc[self.df['DART_quality_control'] == 2.0, 'posterior_ensemble_mean'] = np.nan
-        self.df.loc[self.df['DART_quality_control'] == 2.0, 'posterior_ensemble_spread'] = np.nan
-        num_post_members = len(self.df.columns[self.df.columns.str.startswith('posterior_ensemble_member_')])
-        for i in range(1, num_post_members+1):
-            self.df.loc[self.df['DART_quality_control'] == 2.0, 'posterior_ensemble_member_' + str(i)] = np.nan
+        self.df.loc[
+            self.df["DART_quality_control"] == 2.0, "posterior_ensemble_mean"
+        ] = np.nan
+        self.df.loc[
+            self.df["DART_quality_control"] == 2.0, "posterior_ensemble_spread"
+        ] = np.nan
+        num_post_members = len(
+            self.df.columns[
+                self.df.columns.str.startswith("posterior_ensemble_member_")
+            ]
+        )
+        for i in range(1, num_post_members + 1):
+            self.df.loc[
+                self.df["DART_quality_control"] == 2.0,
+                "posterior_ensemble_member_" + str(i),
+            ] = np.nan
 
     @staticmethod
     def revert_qc2_r8s(df):
@@ -1163,11 +1176,20 @@ class ObsSequence:
         Revert NaNs back to MISSING_R8s for observations where DART_quality_control = 2
         (posterior forward observation operators failed)
         """
-        df.loc[df['DART_quality_control'] == 2.0, 'posterior_ensemble_mean'] = -888888.000000
-        df.loc[df['DART_quality_control'] == 2.0, 'posterior_ensemble_spread'] = -888888.000000
-        num_post_members = len(df.columns[df.columns.str.startswith('posterior_ensemble_member_')])
-        for i in range(1, num_post_members+1):
-            df.loc[df['DART_quality_control'] == 2.0, 'posterior_ensemble_member_' + str(i)] = -888888.000000
+        df.loc[df["DART_quality_control"] == 2.0, "posterior_ensemble_mean"] = (
+            -888888.000000
+        )
+        df.loc[df["DART_quality_control"] == 2.0, "posterior_ensemble_spread"] = (
+            -888888.000000
+        )
+        num_post_members = len(
+            df.columns[df.columns.str.startswith("posterior_ensemble_member_")]
+        )
+        for i in range(1, num_post_members + 1):
+            df.loc[
+                df["DART_quality_control"] == 2.0, "posterior_ensemble_member_" + str(i)
+            ] = -888888.000000
+
 
 def load_yaml_to_dict(file_path):
     """
@@ -1196,6 +1218,7 @@ def convert_dart_time(seconds, days):
     """
     time = dt.datetime(1601, 1, 1) + dt.timedelta(days=days, seconds=seconds)
     return time
+
 
 def construct_composit(df_comp, composite, components):
     """
