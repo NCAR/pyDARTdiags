@@ -1,0 +1,65 @@
+ obs_sequence
+obs_type_definitions
+           2         
+          16 ACARS_U_WIND_COMPONENT         
+          17 ACARS_V_WIND_COMPONENT                    
+  num_copies:           11  num_qc:            2
+  num_obs:           2  max_num_obs:           2
+observation                                           
+prior ensemble mean                                             
+posterior ensemble mean                                         
+prior ensemble spread                                           
+posterior ensemble spread                                       
+prior ensemble member      1                                    
+posterior ensemble member      1                                
+prior ensemble member      2                                    
+posterior ensemble member      2                                
+prior ensemble member      3                                    
+posterior ensemble member      3                                
+NCEP QC index                                                   
+DART quality control                                            
+  first:            1  last:           2
+ OBS            1
+   1.50000000000000     
+ -0.574012657518170     
+ -0.471611371626473     
+   1.52284410477687     
+  0.934316727399420     
+ -0.814360344461756     
+ -0.499301690123819     
+   1.05471311064476     
+  0.476242717876349     
+  -1.96239073873751     
+  -1.39177514263195     
+   1.00000000000000     
+  0.000000000000000E+000
+           -1           2          -1
+obdef
+loc3d
+     4.894000000000000        0.4570000000000000         47510.00000000000      2
+kind
+          16
+ 75610     148402
+   6.25000000000000     
+ OBS            2
+  0.300000000000000     
+  0.841432859774085     
+  -888888.000000000     
+  0.881966000044177     
+  -888888.000000000     
+ -0.143768816790340     
+  -888888.000000000     
+   1.55741066106929     
+   -888888.000000000     
+   1.11065673504330     
+   -888888.000000000    
+   1.00000000000000     
+  2.000000000000000E+000
+           1           -1          -1
+obdef
+loc3d
+     4.894000000000000        0.4570000000000000         47510.00000000000      2
+kind
+          17
+ 75610     148402
+   6.25000000000000     

@@ -165,6 +165,7 @@ class TestWriteAscii:
             ),
             os.path.join(os.path.dirname(__file__), "data", "obs_seq.1d.final"),
             os.path.join(os.path.dirname(__file__), "data", "obs_seq.out.GSI.small"),
+            os.path.join(os.path.dirname(__file__), "data", "obs_seq.final.qc2_2obs")
         ],
     )
     def test_write_ascii(self, ascii_obs_seq_file_path, temp_dir):
@@ -873,6 +874,50 @@ class TestCompositeTypes:
         # Test that load_yaml_to_dict raises an exception for the broken YAML file
         with pytest.raises(yaml.YAMLError):
             obsq.load_yaml_to_dict(broken_file)
+
+
+class TestQC2Replacement:
+    @pytest.fixture
+    def obs_seq(self):
+        # Create a sample DataFrame for testing
+        data = {
+            "DART_quality_control": [0, 2, 2, 0],
+            "posterior_ensemble_mean": [1.1, -888888.0, -888888.0, 2.2],
+            "posterior_ensemble_spread": [0.1, -888888.0, -888888.0, 0.2],
+            "posterior_ensemble_member_1": [1.0, -888888.0, -888888.0, 2.0],
+            "posterior_ensemble_member_2": [1.2, -888888.0, -888888.0, 2.3],
+        }
+        df = pd.DataFrame(data)
+
+        # Create an instance of obs_sequence with the sample DataFrame
+        obs_seq = obsq.obs_sequence(file=None)
+        obs_seq.df = df
+        return obs_seq
+
+    def test_replace_qc2_r8s(self, obs_seq):
+        # Call the replace_qc2_r8s method
+        obs_seq.replace_qc2_r8s()
+
+        print(obs_seq.df)
+
+        # Verify that NaNs are correctly replaced for QC2 rows
+        assert obs_seq.df.loc[obs_seq.df["DART_quality_control"] == 2.0, "posterior_ensemble_mean"].isnull().all()
+        assert obs_seq.df.loc[obs_seq.df["DART_quality_control"] == 2.0, "posterior_ensemble_spread"].isnull().all()
+        assert obs_seq.df.loc[obs_seq.df["DART_quality_control"] == 2.0, "posterior_ensemble_member_1"].isnull().all()
+        assert obs_seq.df.loc[obs_seq.df["DART_quality_control"] == 2.0, "posterior_ensemble_member_2"].isnull().all()
+
+    def test_revert_qc2_r8s(self, obs_seq):
+        # First replace QC2 values with NaNs
+        obs_seq.replace_qc2_r8s()
+
+        # Then revert NaNs back to MISSING_R8s
+        obs_seq.revert_qc2_r8s(obs_seq.df)
+
+        # Verify that MISSING_R8s (-888888.0) are correctly restored for QC2 rows
+        assert (obs_seq.df.loc[obs_seq.df["DART_quality_control"] == 2.0, "posterior_ensemble_mean"] == -888888.0).all()
+        assert (obs_seq.df.loc[obs_seq.df["DART_quality_control"] == 2.0, "posterior_ensemble_spread"] == -888888.0).all()
+        assert (obs_seq.df.loc[obs_seq.df["DART_quality_control"] == 2.0, "posterior_ensemble_member_1"] == -888888.0).all()
+        assert (obs_seq.df.loc[obs_seq.df["DART_quality_control"] == 2.0, "posterior_ensemble_member_2"] == -888888.0).all()
 
 
 if __name__ == "__main__":
