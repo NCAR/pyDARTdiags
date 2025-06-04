@@ -19,7 +19,7 @@ import pydartdiags.obs_sequence.obs_sequence as obsq
 data_dir = os.path.join(os.getcwd(), "../..", "data")
 data_file = os.path.join(data_dir, "NCEP+ACARS.201303_6H.obs_seq2013030306")
 
-obs_seq = obsq.obs_sequence(data_file)
+obs_seq = obsq.ObsSequence(data_file)
 
 ###########################################
 # How many observations are in the sequence?

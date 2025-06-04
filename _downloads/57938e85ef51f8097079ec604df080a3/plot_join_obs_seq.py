@@ -22,7 +22,7 @@ data_file1 = os.path.join(data_dir, "obs_seq.final.1000")
 
 ###########################################
 # Read the obs_seq file into an obs_seq object.
-obs_seq1 = obsq.obs_sequence(data_file1)
+obs_seq1 = obsq.ObsSequence(data_file1)
 
 print('obs_seq1 has assimilation info:', obs_seq1.has_assimilation_info())
 print('obs_seq1 has posterior:', obs_seq1.has_posterior())
@@ -31,7 +31,7 @@ print('obs_seq1 has posterior:', obs_seq1.has_posterior())
 # Chose the second obs_seq file to read.
 
 data_file2 = os.path.join(data_dir, "obs_seq.final.ascii.small")
-obs_seq2 = obsq.obs_sequence(data_file2)
+obs_seq2 = obsq.ObsSequence(data_file2)
 
 print('obs_seq2 has assimilation info:', obs_seq2.has_assimilation_info())
 print('obs_seq2 has posterior:', obs_seq2.has_posterior())
@@ -50,7 +50,7 @@ print('obs_seq1 has posterior:', obs_seq1.has_posterior())
 # on the obs_sequence class, which
 # we've imported as obsq. The method takes a list of obs_seq objects to join.
 
-obs_seq_mega = obsq.obs_sequence.join([obs_seq1, obs_seq2])
+obs_seq_mega = obsq.ObsSequence.join([obs_seq1, obs_seq2])
 
 print(f'length of obs_seq1: {len(obs_seq1.df)}'), print(f'length of obs_seq2: {len(obs_seq2.df)}')
 print(f'length of obs_seq_mega: {len(obs_seq_mega.df)}')
@@ -69,7 +69,7 @@ obs_seq_mega.df.columns
 # and discard the rest of the columns from the obs_seq objects,
 # you can do so like this:
 
-obs_seq_no_members = obsq.obs_sequence.join([obs_seq1, obs_seq2], 
+obs_seq_no_members = obsq.ObsSequence.join([obs_seq1, obs_seq2], 
                                             ['prior_ensemble_mean', 
                                              'prior_ensemble_spread'])
 

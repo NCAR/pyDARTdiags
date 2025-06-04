@@ -74,7 +74,7 @@ Read the obs_seq file into an obs_seq object.
 
 .. code-block:: Python
 
-    obs_seq = obsq.obs_sequence(data_file)
+    obs_seq = obsq.ObsSequence(data_file)
 
     # Select observations that were used in the assimilation.
     used_obs = obs_seq.select_used_qcs()
@@ -641,7 +641,7 @@ for each type of observation.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.055 seconds)
+   **Total running time of the script:** (0 minutes 0.097 seconds)
 
 
 .. _sphx_glr_download_examples_03_diagnostics_plot_grand_stats.py:

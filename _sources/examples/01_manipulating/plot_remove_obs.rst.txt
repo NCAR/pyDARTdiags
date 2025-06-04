@@ -71,7 +71,7 @@ Read the obs_seq file into an obs_seq object.
 
 .. code-block:: Python
 
-    obs_seq = obsq.obs_sequence(data_file)
+    obs_seq = obsq.ObsSequence(data_file)
 
 
 

@@ -55,7 +55,7 @@ This is 6 hours of observations from March 3, 2013.
     data_dir = os.path.join(os.getcwd(), "../..", "data")
     data_file = os.path.join(data_dir, "NCEP+ACARS.201303_6H.obs_seq2013030306")
 
-    obs_seq = obsq.obs_sequence(data_file)
+    obs_seq = obsq.ObsSequence(data_file)
 
 
 
@@ -515,7 +515,7 @@ The number of obs has been reduced by the number of duplicates
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 3.958 seconds)
+   **Total running time of the script:** (0 minutes 4.060 seconds)
 
 
 .. _sphx_glr_download_examples_01_manipulating_plot_duplicates.py:

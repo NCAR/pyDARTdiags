@@ -438,7 +438,7 @@ in the data directory, so we <code class="docutils literal notranslate"><span cl
 </pre></div>
 </div>
 <p>Read the obs_seq file into an obs_seq object.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq1</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">obs_sequence</span><span class="p">(</span><span class="n">data_file1</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq1</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">ObsSequence</span><span class="p">(</span><span class="n">data_file1</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;obs_seq1 has assimilation info:&#39;</span><span class="p">,</span> <span class="n">obs_seq1</span><span class="o">.</span><span class="n">has_assimilation_info</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;obs_seq1 has posterior:&#39;</span><span class="p">,</span> <span class="n">obs_seq1</span><span class="o">.</span><span class="n">has_posterior</span><span class="p">())</span>
@@ -450,7 +450,7 @@ obs_seq1 has posterior: True
 </div>
 <p>Chose the second obs_seq file to read.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">data_file2</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="s2">&quot;obs_seq.final.ascii.small&quot;</span><span class="p">)</span>
-<span class="n">obs_seq2</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">obs_sequence</span><span class="p">(</span><span class="n">data_file2</span><span class="p">)</span>
+<span class="n">obs_seq2</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">ObsSequence</span><span class="p">(</span><span class="n">data_file2</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;obs_seq2 has assimilation info:&#39;</span><span class="p">,</span> <span class="n">obs_seq2</span><span class="o">.</span><span class="n">has_assimilation_info</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;obs_seq2 has posterior:&#39;</span><span class="p">,</span> <span class="n">obs_seq2</span><span class="o">.</span><span class="n">has_posterior</span><span class="p">())</span>
@@ -471,10 +471,10 @@ So we will remove the posterior columns from obs_seq1 DataFrame, using the panda
 </pre></div>
 </div>
 <p>Now, let’s join the two obs_seq objects together using the join method.
-<a class="reference internal" href="../../api/obs_sequence.html#obs_sequence.obs_sequence.join" title="obs_sequence.obs_sequence.join"><code class="xref py py-meth docutils literal notranslate"><span class="pre">obs_sequence.obs_sequence.join()</span></code></a> is a class method, so it is called
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">obs_sequence.obs_sequence.join()</span></code> is a class method, so it is called
 on the obs_sequence class, which
 we’ve imported as obsq. The method takes a list of obs_seq objects to join.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq_mega</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">obs_sequence</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">obs_seq1</span><span class="p">,</span> <span class="n">obs_seq2</span><span class="p">])</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq_mega</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">ObsSequence</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">obs_seq1</span><span class="p">,</span> <span class="n">obs_seq2</span><span class="p">])</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;length of obs_seq1: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">obs_seq1</span><span class="o">.</span><span class="n">df</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">),</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;length of obs_seq2: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">obs_seq2</span><span class="o">.</span><span class="n">df</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;length of obs_seq_mega: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">obs_seq_mega</span><span class="o">.</span><span class="n">df</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
@@ -1072,7 +1072,7 @@ with the prior columns from both obs_seq DataFrames.</p>
 For example, if you only want to join the ‘prior_mean’ and ‘prior_spread’ columns,
 and discard the rest of the columns from the obs_seq objects,
 you can do so like this:</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq_no_members</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">obs_sequence</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">obs_seq1</span><span class="p">,</span> <span class="n">obs_seq2</span><span class="p">],</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq_no_members</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">ObsSequence</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">obs_seq1</span><span class="p">,</span> <span class="n">obs_seq2</span><span class="p">],</span>
                                             <span class="p">[</span><span class="s1">&#39;prior_ensemble_mean&#39;</span><span class="p">,</span>
                                              <span class="s1">&#39;prior_ensemble_spread&#39;</span><span class="p">])</span>
 </pre></div>
@@ -1088,7 +1088,7 @@ you can do so like this:</p>
       dtype=&#39;object&#39;)
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.097 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.098 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-01-manipulating-plot-join-obs-seq-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/59ec61044c62ea21e72b2a07e34c4636/plot_join_obs_seq.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_join_obs_seq.ipynb</span></code></a></p>
