@@ -933,7 +933,7 @@ class ObsSequence:
         return
 
     @classmethod
-    def join(cls, ObsSequences, copies=None):
+    def join(cls, obs_sequences, copies=None):
         """
         Join a list of observation sequences together.
 
@@ -941,7 +941,7 @@ class ObsSequence:
         into a single ObsSequence object.
 
         Args:
-            ObsSequences (list of ObsSequences): The list of observation sequences objects to join.
+            obs_sequences (list of ObsSequences): The list of observation sequences objects to join.
             copies (list of str, optional): A list of copy names to include in the combined data.
                     If not provided, all copies are included.
 
@@ -956,17 +956,17 @@ class ObsSequence:
                 obs_seq3 = ObsSequence(file='obs_seq3.final')
                 combined = ObsSequence.join([obs_seq1, obs_seq2, obs_seq3])
         """
-        if not ObsSequences:
+        if not obs_sequences:
             raise ValueError("The list of observation sequences is empty.")
 
-        # Create a new obs_sequnece object with the combined data
+        # Create a new ObsSequence object with the combined data
         combo = cls(file=None)
 
-        # Check if all ObsSequences have compatible attributes
-        first_loc_mod = ObsSequences[0].loc_mod
-        first_has_assimilation_info = ObsSequences[0].has_assimilation_info()
-        first_has_posterior = ObsSequences[0].has_posterior()
-        for obs_seq in ObsSequences:
+        # Check if all obs_sequences have compatible attributes
+        first_loc_mod = obs_sequences[0].loc_mod
+        first_has_assimilation_info = obs_sequences[0].has_assimilation_info()
+        first_has_posterior = obs_sequences[0].has_posterior()
+        for obs_seq in obs_sequences:
             if obs_seq.loc_mod != first_loc_mod:
                 raise ValueError(
                     "All observation sequences must have the same loc_mod."
@@ -1008,7 +1008,7 @@ class ObsSequence:
                 + end_required_columns
             )
 
-            for obs_seq in ObsSequences:
+            for obs_seq in obs_sequences:
                 if not set(requested_columns).issubset(obs_seq.df.columns):
                     raise ValueError(
                         "All observation sequences must have the selected copies."
@@ -1037,12 +1037,12 @@ class ObsSequence:
             combo.non_qc_copie_names = [
                 item
                 for item in combo.copie_names
-                if item in ObsSequences[0].non_qc_copie_names
+                if item in obs_sequences[0].non_qc_copie_names
             ]
             combo.qc_copie_names = [
                 item
                 for item in combo.copie_names
-                if item in ObsSequences[0].qc_copie_names
+                if item in obs_sequences[0].qc_copie_names
             ]
 
             combo.n_copies = len(combo.copie_names)
@@ -1050,15 +1050,15 @@ class ObsSequence:
             combo.n_non_qc = len(combo.non_qc_copie_names)
 
         else:
-            for obs_seq in ObsSequences:
-                if not ObsSequences[0].df.columns.isin(obs_seq.df.columns).all():
+            for obs_seq in obs_sequences:
+                if not obs_sequences[0].df.columns.isin(obs_seq.df.columns).all():
                     raise ValueError(
                         "All observation sequences must have the same copies."
                     )
-            combo.n_copies = ObsSequences[0].n_copies
-            combo.n_qc = ObsSequences[0].n_qc
-            combo.n_non_qc = ObsSequences[0].n_non_qc
-            combo.copie_names = ObsSequences[0].copie_names
+            combo.n_copies = obs_sequences[0].n_copies
+            combo.n_qc = obs_sequences[0].n_qc
+            combo.n_non_qc = obs_sequences[0].n_non_qc
+            combo.copie_names = obs_sequences[0].copie_names
 
         # todo HK @todo combine synonyms for obs?
 
@@ -1068,7 +1068,7 @@ class ObsSequence:
         combo.all_obs = None  # set to none to force writing from the dataframe if write_obs_seq is called
 
         # Iterate over the list of observation sequences and combine their data
-        for obs_seq in ObsSequences:
+        for obs_seq in obs_sequences:
             if copies:
                 combined_df = pd.concat(
                     [combined_df, obs_seq.df[requested_columns]], ignore_index=True
