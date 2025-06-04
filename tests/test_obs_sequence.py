@@ -894,6 +894,23 @@ class TestQC2Replacement:
         obs_seq.df = df
         return obs_seq
 
+    @pytest.fixture
+    def obs_seq_nan(self):
+        # Create a sample DataFrame for testing
+        data_nan = {
+            "DART_quality_control": [0, 2, 2, 0],
+            "posterior_ensemble_mean": [1.1, np.nan, np.nan, 2.2],
+            "posterior_ensemble_spread": [0.1, np.nan, np.nan, 0.2],
+            "posterior_ensemble_member_1": [1.0, np.nan, np.nan, 2.0],
+            "posterior_ensemble_member_2": [1.2, np.nan, np.nan, 2.3],
+        }
+        df = pd.DataFrame(data_nan)
+
+        # Create an instance of obs_sequence with the sample DataFrame
+        obs_seq_nan = obsq.ObsSequence(file=None)
+        obs_seq_nan.df = df
+        return obs_seq_nan
+    
     def test_replace_qc2_r8s(self, obs_seq):
         # Call the replace_qc2_r8s method
         obs_seq.replace_qc2_r8s()
@@ -930,35 +947,32 @@ class TestQC2Replacement:
             .all()
         )
 
-    def test_revert_qc2_r8s(self, obs_seq):
-        # First replace QC2 values with NaNs
-        obs_seq.replace_qc2_r8s()
-
-        # Then revert NaNs back to MISSING_R8s
-        obs_seq.revert_qc2_r8s(obs_seq.df)
+    def test_revert_qc2_r8s(self, obs_seq_nan):
+        # Revert NaNs back to MISSING_R8s
+        obs_seq_nan.revert_qc2_r8s(obs_seq_nan.df)
 
         # Verify that MISSING_R8s (-888888.0) are correctly restored for QC2 rows
         assert (
-            obs_seq.df.loc[
-                obs_seq.df["DART_quality_control"] == 2.0, "posterior_ensemble_mean"
+            obs_seq_nan.df.loc[
+                obs_seq_nan.df["DART_quality_control"] == 2.0, "posterior_ensemble_mean"
             ]
             == -888888.0
         ).all()
         assert (
-            obs_seq.df.loc[
-                obs_seq.df["DART_quality_control"] == 2.0, "posterior_ensemble_spread"
+            obs_seq_nan.df.loc[
+                obs_seq_nan.df["DART_quality_control"] == 2.0, "posterior_ensemble_spread"
             ]
             == -888888.0
         ).all()
         assert (
-            obs_seq.df.loc[
-                obs_seq.df["DART_quality_control"] == 2.0, "posterior_ensemble_member_1"
+            obs_seq_nan.df.loc[
+                obs_seq_nan.df["DART_quality_control"] == 2.0, "posterior_ensemble_member_1"
             ]
             == -888888.0
         ).all()
         assert (
-            obs_seq.df.loc[
-                obs_seq.df["DART_quality_control"] == 2.0, "posterior_ensemble_member_2"
+            obs_seq_nan.df.loc[
+                obs_seq_nan.df["DART_quality_control"] == 2.0, "posterior_ensemble_member_2"
             ]
             == -888888.0
         ).all()
