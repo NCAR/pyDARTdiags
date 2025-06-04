@@ -890,7 +890,7 @@ class TestQC2Replacement:
         df = pd.DataFrame(data)
 
         # Create an instance of obs_sequence with the sample DataFrame
-        obs_seq = obsq.obs_sequence(file=None)
+        obs_seq = obsq.ObsSequence(file=None)
         obs_seq.df = df
         return obs_seq
 

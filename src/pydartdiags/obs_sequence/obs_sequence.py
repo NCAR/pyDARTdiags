@@ -368,7 +368,7 @@ class ObsSequence:
             if (
                 "DART_quality_control" and "posterior_ensemble_mean"
             ) in df_copy.columns:
-                obs_sequence.revert_qc2_r8s(df_copy)
+                ObsSequence.revert_qc2_r8s(df_copy)
 
             # linked list for reading by dart programs
             df_copy = df_copy.sort_values(
