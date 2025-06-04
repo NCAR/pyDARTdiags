@@ -43,7 +43,7 @@ class TestSanitizeInput:
             ValueError,
             match="Neither 'loc3d' nor 'loc1d' could be found in the observation sequence.",
         ):
-            obj = obsq.obs_sequence(bad_loc_file_path)
+            obj = obsq.ObsSequence(bad_loc_file_path)
 
 
 class TestOneDimensional:
@@ -53,7 +53,7 @@ class TestOneDimensional:
         return os.path.join(test_dir, "data", "obs_seq.1d.final")
 
     def test_read1d(self, obs_seq_file_path):
-        obj = obsq.obs_sequence(obs_seq_file_path)
+        obj = obsq.ObsSequence(obs_seq_file_path)
         assert obj.loc_mod == "loc1d"
         assert len(obj.df) == 40  # 40 obs in the file
         assert (
@@ -69,11 +69,11 @@ class TestSynonyms:
         return os.path.join(test_dir, "data", "obs_seq.final.ascii.syn")
 
     def test_single(self, synonym_file_path):
-        obj1 = obsq.obs_sequence(synonym_file_path, synonyms="observationx")
+        obj1 = obsq.ObsSequence(synonym_file_path, synonyms="observationx")
         assert "observationx" in obj1.synonyms_for_obs
 
     def test_list(self, synonym_file_path):
-        obj2 = obsq.obs_sequence(
+        obj2 = obsq.ObsSequence(
             synonym_file_path, synonyms=["synonym1", "synonym2", "observationx"]
         )
         assert "synonym1" in obj2.synonyms_for_obs
@@ -87,7 +87,7 @@ class TestBinaryObsSequence:
         return os.path.join(test_dir, "data", "obs_seq.final.binary.small")
 
     def test_read_binary(self, binary_obs_seq_file_path):
-        obj = obsq.obs_sequence(binary_obs_seq_file_path)
+        obj = obsq.ObsSequence(binary_obs_seq_file_path)
         assert len(obj.df) > 0  # Ensure the DataFrame is not empty
 
 
@@ -172,7 +172,7 @@ class TestWriteAscii:
         temp_output_file_path = os.path.join(temp_dir, "obs_seq.final.ascii.write")
 
         # Create an instance of the obs_sequence class and write the output file
-        obj = obsq.obs_sequence(ascii_obs_seq_file_path)
+        obj = obsq.ObsSequence(ascii_obs_seq_file_path)
         obj.write_obs_seq(temp_output_file_path)
 
         # Ensure the output file exists
@@ -199,7 +199,7 @@ class TestWriteAscii:
         )
 
         # Create an instance of the obs_sequence class and write the output file
-        obj = obsq.obs_sequence(obs_seq_file_path)
+        obj = obsq.ObsSequence(obs_seq_file_path)
         stats.diag_stats(obj.df)  # add the stats columns
         obj.write_obs_seq(temp_output_file_path)
 
@@ -227,7 +227,7 @@ class TestWriteAscii:
         )
 
         # Create an instance of the obs_sequence class and write the output file
-        obj = obsq.obs_sequence(obs_seq_file_path)
+        obj = obsq.ObsSequence(obs_seq_file_path)
         hPalevels = [
             0.0,
             100.0,
@@ -264,7 +264,7 @@ class TestWriteAscii:
         obs_seq_file_path = os.path.join(
             os.path.dirname(__file__), "data", "obs_seq.final.ascii.small"
         )
-        obj = obsq.obs_sequence(obs_seq_file_path)
+        obj = obsq.ObsSequence(obs_seq_file_path)
 
         # Remove obs except ACARS_TEMPERATURE
         obj.df = obj.df[(obj.df["type"] == "ACARS_TEMPERATURE")]
@@ -297,7 +297,7 @@ class TestObsDataframe:
         df = pd.DataFrame(data)
 
         # Create an instance of ObsSequence with the sample DataFrame
-        obs_seq = obsq.obs_sequence(file=None)
+        obs_seq = obsq.ObsSequence(file=None)
         obs_seq.df = df
         return obs_seq
 
@@ -394,15 +394,15 @@ class TestJoin:
         with pytest.raises(
             ValueError, match="The list of observation sequences is empty."
         ):
-            obsq.obs_sequence.join([])
+            obsq.ObsSequence.join([])
 
     def test_join_diff_locs(self, obs_seq1d_file_path, binary_obs_seq_file_path):
-        obj1 = obsq.obs_sequence(obs_seq1d_file_path)
-        obj2 = obsq.obs_sequence(binary_obs_seq_file_path)
+        obj1 = obsq.ObsSequence(obs_seq1d_file_path)
+        obj2 = obsq.ObsSequence(binary_obs_seq_file_path)
         with pytest.raises(
             ValueError, match="All observation sequences must have the same loc_mod."
         ):
-            obsq.obs_sequence.join([obj1, obj2])
+            obsq.ObsSequence.join([obj1, obj2])
 
     def test_join_three_obs_seqs(
         self,
@@ -410,10 +410,10 @@ class TestJoin:
         ascii_obs_seq_file_path2,
         ascii_obs_seq_file_path3,
     ):
-        obj1 = obsq.obs_sequence(ascii_obs_seq_file_path1)
-        obj2 = obsq.obs_sequence(ascii_obs_seq_file_path2)
-        obj3 = obsq.obs_sequence(ascii_obs_seq_file_path3)
-        obs_seq_mega = obsq.obs_sequence.join([obj1, obj2, obj3])
+        obj1 = obsq.ObsSequence(ascii_obs_seq_file_path1)
+        obj2 = obsq.ObsSequence(ascii_obs_seq_file_path2)
+        obj3 = obsq.ObsSequence(ascii_obs_seq_file_path3)
+        obs_seq_mega = obsq.ObsSequence.join([obj1, obj2, obj3])
 
         assert obs_seq_mega.all_obs == None
         assert len(obs_seq_mega.df) == 16  # obs in the dataframe
@@ -457,9 +457,9 @@ class TestJoin:
     def test_join_list_sub_copies(
         self, ascii_obs_seq_file_path1, ascii_obs_seq_file_path3
     ):
-        obj1 = obsq.obs_sequence(ascii_obs_seq_file_path1)
-        obj3 = obsq.obs_sequence(ascii_obs_seq_file_path3)
-        obs_seq_mega = obsq.obs_sequence.join(
+        obj1 = obsq.ObsSequence(ascii_obs_seq_file_path1)
+        obj3 = obsq.ObsSequence(ascii_obs_seq_file_path3)
+        obs_seq_mega = obsq.ObsSequence.join(
             [obj1, obj3], ["prior_ensemble_mean", "observation", "Data_QC"]
         )
 
@@ -475,9 +475,9 @@ class TestJoin:
     def test_join_list_sub_copies_no_qc(
         self, ascii_obs_seq_file_path1, ascii_obs_seq_file_path3
     ):
-        obj1 = obsq.obs_sequence(ascii_obs_seq_file_path1)
-        obj3 = obsq.obs_sequence(ascii_obs_seq_file_path3)
-        obs_seq_mega = obsq.obs_sequence.join(
+        obj1 = obsq.ObsSequence(ascii_obs_seq_file_path1)
+        obj3 = obsq.ObsSequence(ascii_obs_seq_file_path3)
+        obs_seq_mega = obsq.ObsSequence.join(
             [obj1, obj3], ["observation", "prior_ensemble_spread"]
         )
 
@@ -489,29 +489,29 @@ class TestJoin:
     def test_join_copies_not_in_all(
         self, ascii_obs_seq_file_path1, ascii_obs_seq_file_path4
     ):
-        obj1 = obsq.obs_sequence(ascii_obs_seq_file_path1)
-        obj4 = obsq.obs_sequence(ascii_obs_seq_file_path4)
+        obj1 = obsq.ObsSequence(ascii_obs_seq_file_path1)
+        obj4 = obsq.ObsSequence(ascii_obs_seq_file_path4)
         with pytest.raises(
             ValueError, match="All observation sequences must have the same copies."
         ):
-            obsq.obs_sequence.join([obj1, obj4])
+            obsq.ObsSequence.join([obj1, obj4])
 
     def test_join_copies_not_all_have_subset(
         self, ascii_obs_seq_file_path1, ascii_obs_seq_file_path4
     ):
-        obj1 = obsq.obs_sequence(ascii_obs_seq_file_path1)
-        obj4 = obsq.obs_sequence(ascii_obs_seq_file_path4)
+        obj1 = obsq.ObsSequence(ascii_obs_seq_file_path1)
+        obj4 = obsq.ObsSequence(ascii_obs_seq_file_path4)
         with pytest.raises(
             ValueError, match="All observation sequences must have the selected copies."
         ):
-            obsq.obs_sequence.join([obj1, obj4], ["prior_ensemble_member_41"])
+            obsq.ObsSequence.join([obj1, obj4], ["prior_ensemble_member_41"])
 
     def test_join_list_sub_copies(
         self, ascii_obs_seq_file_path1, ascii_obs_seq_file_path3
     ):
-        obj1 = obsq.obs_sequence(ascii_obs_seq_file_path1)
-        obj3 = obsq.obs_sequence(ascii_obs_seq_file_path3)
-        obs_seq_mega = obsq.obs_sequence.join(
+        obj1 = obsq.ObsSequence(ascii_obs_seq_file_path1)
+        obj3 = obsq.ObsSequence(ascii_obs_seq_file_path3)
+        obs_seq_mega = obsq.ObsSequence.join(
             [obj1, obj3], ["prior_ensemble_mean", "observation", "Data_QC"]
         )
         assert obs_seq_mega.has_assimilation_info() == False
@@ -520,7 +520,7 @@ class TestJoin:
 
 class TestCreateHeader:
     def test_create_header(self):
-        obj = obsq.obs_sequence(file=None)
+        obj = obsq.ObsSequence(file=None)
 
         obj.types = {1: "ACARS_BELLYBUTTON", 2: "NCEP_TOES"}
         obj.n_non_qc = 2
@@ -551,7 +551,7 @@ class TestCreateHeader:
 class TestSplitMetadata:
     def test_split_metadata_with_external_FO(self):
         metadata = ["meta1", "meta2", "external_FO1", "meta3", "meta4"]
-        before_external_FO, after_external_FO = obsq.obs_sequence.split_metadata(
+        before_external_FO, after_external_FO = obsq.ObsSequence.split_metadata(
             metadata
         )
         assert before_external_FO == ["meta1", "meta2"]
@@ -559,7 +559,7 @@ class TestSplitMetadata:
 
     def test_split_metadata_without_external_FO(self):
         metadata = ["meta1", "meta2", "meta3", "meta4"]
-        before_external_FO, after_external_FO = obsq.obs_sequence.split_metadata(
+        before_external_FO, after_external_FO = obsq.ObsSequence.split_metadata(
             metadata
         )
         assert before_external_FO == ["meta1", "meta2", "meta3", "meta4"]
@@ -567,7 +567,7 @@ class TestSplitMetadata:
 
     def test_split_metadata_multiple_external_FO(self):
         metadata = ["meta1", "external_FO1", "meta2", "external_FO2", "meta3"]
-        before_external_FO, after_external_FO = obsq.obs_sequence.split_metadata(
+        before_external_FO, after_external_FO = obsq.ObsSequence.split_metadata(
             metadata
         )
         assert before_external_FO == ["meta1"]
@@ -575,7 +575,7 @@ class TestSplitMetadata:
 
     def test_split_metadata_empty_list(self):
         metadata = []
-        before_external_FO, after_external_FO = obsq.obs_sequence.split_metadata(
+        before_external_FO, after_external_FO = obsq.ObsSequence.split_metadata(
             metadata
         )
         assert before_external_FO == []
@@ -583,7 +583,7 @@ class TestSplitMetadata:
 
     def test_split_metadata_no_external_FO(self):
         metadata = ["meta1", "meta2", "meta3"]
-        before_external_FO, after_external_FO = obsq.obs_sequence.split_metadata(
+        before_external_FO, after_external_FO = obsq.ObsSequence.split_metadata(
             metadata
         )
         assert before_external_FO == ["meta1", "meta2", "meta3"]
@@ -591,7 +591,7 @@ class TestSplitMetadata:
 
     def test_split_metadata_external_FO_at_start(self):
         metadata = ["external_FO1", "meta1", "meta2"]
-        before_external_FO, after_external_FO = obsq.obs_sequence.split_metadata(
+        before_external_FO, after_external_FO = obsq.ObsSequence.split_metadata(
             metadata
         )
         assert before_external_FO == []
@@ -599,7 +599,7 @@ class TestSplitMetadata:
 
     def test_split_metadata_external_FO_at_end(self):
         metadata = ["meta1", "meta2", "external_FO1"]
-        before_external_FO, after_external_FO = obsq.obs_sequence.split_metadata(
+        before_external_FO, after_external_FO = obsq.ObsSequence.split_metadata(
             metadata
         )
         assert before_external_FO == ["meta1", "meta2"]
@@ -610,7 +610,7 @@ class TestGenerateLinkedListPattern:
     def test_generate_linked_list_pattern(self):
         n = 1
         expected_pattern = ["0           -1         -1"]
-        result = obsq.obs_sequence.generate_linked_list_pattern(n)
+        result = obsq.ObsSequence.generate_linked_list_pattern(n)
         assert result == expected_pattern
 
         n = 3
@@ -619,7 +619,7 @@ class TestGenerateLinkedListPattern:
             "1           3          -1",
             "2           -1         -1",
         ]
-        result = obsq.obs_sequence.generate_linked_list_pattern(n)
+        result = obsq.ObsSequence.generate_linked_list_pattern(n)
         assert result == expected_pattern
 
         n = 6
@@ -631,7 +631,7 @@ class TestGenerateLinkedListPattern:
             "4           6          -1",
             "5           -1         -1",
         ]
-        result = obsq.obs_sequence.generate_linked_list_pattern(n)
+        result = obsq.ObsSequence.generate_linked_list_pattern(n)
         assert result == expected_pattern
 
 
@@ -665,7 +665,7 @@ class TestCreateHeaderFromDataFrame:
         df = pd.DataFrame(data)
 
         # Create an instance of obs_sequence with the sample DataFrame
-        obs_seq = obsq.obs_sequence(file=None)
+        obs_seq = obsq.ObsSequence(file=None)
         obs_seq.df = df
         obs_seq.reverse_types = {
             "ACARS_TEMPERATURE": 1,
@@ -732,7 +732,7 @@ class TestUpdateTypesDicts:
             "52": "PINEAPPLE_COUNT",
         }
 
-        updated_reverse_types, types = obsq.obs_sequence.update_types_dicts(
+        updated_reverse_types, types = obsq.ObsSequence.update_types_dicts(
             sample_df, reverse_types
         )
 
@@ -747,7 +747,7 @@ class TestCompositeTypes:
         file_path = os.path.join(test_dir, "data", "three-obs.final")
 
         # Create an instance of obs_sequence with the 'three-obs.final' file
-        obs_seq = obsq.obs_sequence(file_path)
+        obs_seq = obsq.ObsSequence(file_path)
         return obs_seq
 
     @pytest.mark.parametrize(
@@ -850,7 +850,7 @@ class TestCompositeTypes:
         test_dir = os.path.dirname(__file__)
         file_path = os.path.join(test_dir, "data", "dups-obs.final")
 
-        dup = obsq.obs_sequence(file_path)
+        dup = obsq.ObsSequence(file_path)
         # Test that composite_types raises an error
         with pytest.raises(Exception, match="There are duplicates in the components."):
             dup.composite_types()

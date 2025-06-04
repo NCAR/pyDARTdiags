@@ -25,7 +25,7 @@ data_file = os.path.join(data_dir, "obs_seq.final.ascii.medium")
 
 ###########################################
 # Read the obs_seq file into an obs_seq object.
-obs_seq = obsq.obs_sequence(data_file)
+obs_seq = obsq.ObsSequence(data_file)
 
 # Select observations that were used in the assimilation.
 used_obs = obs_seq.select_used_qcs()

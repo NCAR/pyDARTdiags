@@ -26,7 +26,7 @@ import numpy as np
 # This file only has two observations. 
 data_dir = os.path.join(os.getcwd(), "../..", "data")
 data_file = os.path.join(data_dir, "obs_seq.out.tracer")
-obs_seq = obsq.obs_sequence(data_file)
+obs_seq = obsq.ObsSequence(data_file)
 
 ###########################################
 obs_seq.df

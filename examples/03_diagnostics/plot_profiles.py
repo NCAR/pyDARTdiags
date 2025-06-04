@@ -24,7 +24,7 @@ data_file = os.path.join(data_dir, "obs_seq.final.1000")
 
 ###########################################
 # Read the obs_seq file into an obs_seq object.
-obs_seq = obsq.obs_sequence(data_file)
+obs_seq = obsq.ObsSequence(data_file)
 
 ###########################################
 # Chose an observation type.

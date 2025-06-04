@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pydartdiags"
-version = "0.5.1"
+version = "0.6.0"
 authors = [
   { name="Helen Kershaw", email="hkershaw@ucar.edu" },
 ]
@@ -13,9 +13,9 @@ readme = "README.md"
 requires-python = ">=3.8"
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
 ]
+license = "Apache-2.0"
 dependencies = [
     "pandas>=2.2.0",
     "numpy>=1.26",
