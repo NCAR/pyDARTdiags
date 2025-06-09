@@ -915,9 +915,7 @@ class TestQC2Replacement:
         # Call the replace_qc2_r8s method
         obs_seq.replace_qc2_r8s()
 
-        print(obs_seq.df)
-
-        # Verify that NaNs are correctly replaced for QC2 rows
+         # Verify that NaNs are correctly replaced for QC2 rows
         assert (
             obs_seq.df.loc[
                 obs_seq.df["DART_quality_control"] == 2.0, "posterior_ensemble_mean"
