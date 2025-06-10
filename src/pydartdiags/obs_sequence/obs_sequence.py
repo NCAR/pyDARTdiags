@@ -150,7 +150,7 @@ class ObsSequence:
             self.header = self.read_header(file)
 
         self.types = self.collect_obs_types(self.header)
-        self.reverse_types = {v: k for k, v in self.types.items()}
+        self.reverse_types = {v: int(k) for k, v in self.types.items()}
         self.copie_names, self.n_copies = self.collect_copie_names(self.header)
         self.n_non_qc, self.n_qc = self.num_qc_non_qc(self.header)
         self.non_qc_copie_names = self.copie_names[: self.n_non_qc]
@@ -219,7 +219,7 @@ class ObsSequence:
                     "Neither 'loc3d' nor 'loc1d' could be found in the observation sequence."
                 )
         typeI = obs.index("kind")  # type of observation
-        type_value = obs[typeI + 1]
+        type_value = int(obs[typeI + 1])
         if not self.types:
             data.append("Identity")
         else:
@@ -395,8 +395,8 @@ class ObsSequence:
         # Ensure all unique types are in reverse_types
         for obs_type in unique_types:
             if obs_type not in reverse_types:
-                new_id = int(max(reverse_types.values(), default=0)) + 1
-                reverse_types[obs_type] = str(new_id)
+                new_id = max(reverse_types.values(), default=0) + 1
+                reverse_types[obs_type] = new_id
 
         not_sorted_types = {
             reverse_types[obs_type]: obs_type for obs_type in unique_types
@@ -692,7 +692,7 @@ class ObsSequence:
     def collect_obs_types(header):
         """Create a dictionary for the observation types in the obs_seq header"""
         num_obs_types = int(header[2])
-        types = dict([x.split() for x in header[3 : num_obs_types + 3]])
+        types = {int(x.split()[0]): x.split()[1] for x in header[3 : num_obs_types + 3]}
         return types
 
     @staticmethod
