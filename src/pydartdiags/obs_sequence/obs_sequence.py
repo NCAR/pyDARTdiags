@@ -150,7 +150,7 @@ class ObsSequence:
             self.header = self.read_header(file)
 
         self.types = self.collect_obs_types(self.header)
-        self.reverse_types = {v: int(k) for k, v in self.types.items()}
+        self.reverse_types = {v: k for k, v in self.types.items()}
         self.copie_names, self.n_copies = self.collect_copie_names(self.header)
         self.n_non_qc, self.n_qc = self.num_qc_non_qc(self.header)
         self.non_qc_copie_names = self.copie_names[: self.n_non_qc]
@@ -692,6 +692,7 @@ class ObsSequence:
     def collect_obs_types(header):
         """Create a dictionary for the observation types in the obs_seq header"""
         num_obs_types = int(header[2])
+        # The first line containing obs types is the 4th line in an obs_seq file.
         types = {int(x.split()[0]): x.split()[1] for x in header[3 : num_obs_types + 3]}
         return types
 
