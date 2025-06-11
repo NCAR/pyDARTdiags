@@ -1135,6 +1135,60 @@ class ObsSequence:
             self.header.append(copie)
         self.header.append(f"first: 1 last: {n}")
 
+    def update_attributes_from_df(self):
+        """
+        Update all internal data (fields/properties) of the ObsSequence object that 
+        depend on the DataFrame (self.df).
+        Call this after self.df is replaced or its structure changes.
+
+        Important: 
+
+         Assumes copies are all columns between 'obs_num' and 'linked_list' (if present)
+
+        """
+        # Update columns
+        self.columns = list(self.df.columns)
+
+        # Update all_obs (list of lists, each row) @todo HK do we need this?
+        self.all_obs = self.df.values.tolist() if not self.df.empty else []
+
+        # Update copie_names, non_qc_copie_names, qc_copie_names, n_copies, n_non_qc, n_qc
+        # Try to infer from columns if possible, else leave as is
+        # Assume copies are all columns between 'obs_num' and 'linked_list' (if present)
+        if "obs_num" in self.df.columns and "linked_list" in self.df.columns:
+            obs_num_idx = self.df.columns.get_loc("obs_num")
+            linked_list_idx = self.df.columns.get_loc("linked_list")
+            self.copie_names = list(self.df.columns[obs_num_idx + 1 : linked_list_idx])
+        else:
+            # Fallback: use previous value or empty
+            self.copie_names = getattr(self, "copie_names", [])
+        self.n_copies = len(self.copie_names)
+
+        # Try to infer non_qc and qc copies from previous names if possible
+        if hasattr(self, "non_qc_copie_names") and hasattr(self, "qc_copie_names"):
+            self.non_qc_copie_names = [c for c in self.copie_names if c in self.non_qc_copie_names]
+            self.qc_copie_names = [c for c in self.copie_names if c in self.qc_copie_names]
+        else:
+            # Fallback: treat all as non_qc
+            self.non_qc_copie_names = self.copie_names
+            self.qc_copie_names = []
+        self.n_non_qc = len(self.non_qc_copie_names)
+        self.n_qc = len(self.qc_copie_names)
+
+        # Update types and reverse_types
+        if "type" in self.df.columns:
+            # Use update_types_dicts to ensure all types are present
+            self.reverse_types, self.types = self.update_types_dicts(self.df, getattr(self, "reverse_types", {}))
+        else:
+            self.types = {}
+            self.reverse_types = {}
+
+        # Update header @todo HK this call also updates the types and reverse_types
+        self.create_header_from_dataframe()
+
+        # Update seq (generator should be empty or None if not from file)
+        self.seq = []
+
 
 def load_yaml_to_dict(file_path):
     """
