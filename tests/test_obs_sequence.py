@@ -720,16 +720,16 @@ class TestUpdateTypesDicts:
         return pd.DataFrame(data)
 
     def test_update_types_dicts(self, sample_df):
-        reverse_types = {"ACARS_TEMPERATURE": "32", "RADIOSONDE_U_WIND_COMPONENT": "51"}
+        reverse_types = {"ACARS_TEMPERATURE": 32, "RADIOSONDE_U_WIND_COMPONENT": 51}
         expected_reverse_types = {
-            "ACARS_TEMPERATURE": "32",
-            "RADIOSONDE_U_WIND_COMPONENT": "51",
-            "PINEAPPLE_COUNT": "52",
+            "ACARS_TEMPERATURE": 32,
+            "RADIOSONDE_U_WIND_COMPONENT": 51,
+            "PINEAPPLE_COUNT": 52,
         }
         expected_types = {
-            "32": "ACARS_TEMPERATURE",
-            "51": "RADIOSONDE_U_WIND_COMPONENT",
-            "52": "PINEAPPLE_COUNT",
+            32 : "ACARS_TEMPERATURE",
+            51 : "RADIOSONDE_U_WIND_COMPONENT",
+            52 : "PINEAPPLE_COUNT",
         }
 
         updated_reverse_types, types = obsq.ObsSequence.update_types_dicts(
