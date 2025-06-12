@@ -1060,28 +1060,34 @@ class ObsSequence:
         # todo HK @todo combine synonyms for obs?
 
         # Initialize combined data
-        combined_df = pd.DataFrame()
+        combo.df = pd.DataFrame()
 
         # Iterate over the list of observation sequences and combine their data
         for obs_seq in obs_sequences:
             if copies:
-                combined_df = pd.concat(
-                    [combined_df, obs_seq.df[requested_columns]], ignore_index=True
+                combo.df = pd.concat(
+                    [combo.df, obs_seq.df[requested_columns]], ignore_index=True
                 )
             else:
-                combined_df = pd.concat([combined_df, obs_seq.df], ignore_index=True)
-
-        # create linked list for obs
-        combo.df = combined_df.sort_values(by="time").reset_index(drop=True)
-        combo.df["linked_list"] = ObsSequence.generate_linked_list_pattern(
-            len(combo.df)
-        )
-        combo.df["obs_num"] = combined_df.index + 1
+                combo.df = pd.concat([combo.df, obs_seq.df], ignore_index=True)
 
         # update ObsSequence attributes from the combined DataFrame
         combo.update_attributes_from_df()
 
         return combo
+
+    @staticmethod
+    def update_linked_list(df):
+        """
+        Sorts the DataFrame by 'time', resets the index, and adds/updates 'linked_list'
+        and 'obs_num' columns in place.
+        Modifies the input DataFrame directly.
+        """
+        df.sort_values(by="time", inplace=True)
+        df.reset_index(drop=True, inplace=True)
+        df["linked_list"] = ObsSequence.generate_linked_list_pattern(len(df))
+        df["obs_num"] = df.index + 1
+        return None
 
     def has_assimilation_info(self):
         """
@@ -1184,6 +1190,9 @@ class ObsSequence:
 
         # Update seq (generator should be empty or None if not from file)
         self.seq = []
+
+        # update linked list for obs and obs_nums
+        ObsSequence.update_linked_list(self.df)
 
 
 def load_yaml_to_dict(file_path):
