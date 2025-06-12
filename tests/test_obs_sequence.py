@@ -875,5 +875,139 @@ class TestCompositeTypes:
             obsq.load_yaml_to_dict(broken_file)
 
 
+class TestUpdateAttributesFromDf:
+    def test_update_attributes_from_df(self):
+        obj = obsq.ObsSequence(file=None)
+        df1 = pd.DataFrame({
+            "obs_num": [1, 2],
+            "observation": [10.0, 20.0],
+            "linked_list": ["-1 2 -1", "1 -1 -1"],
+            "type": ["A", "B"]
+        })
+        obj.df = df1
+        obj.update_attributes_from_df()
+
+        # Check initial state
+        assert obj.columns == ["obs_num", "observation", "linked_list", "type"]
+        assert obj.all_obs == df1.values.tolist()
+        assert obj.copie_names == ["observation"]
+        assert obj.n_copies == 1
+
+        # Change the DataFrame
+        df2 = pd.DataFrame({
+            "obs_num": [3],
+            "observation": [30.0],
+            "prior_ensemble_mean": [15.0],
+            "linked_list": ["-1 -1 -1"],
+            "type": ["C"]
+        })
+        obj.df = df2
+        obj.update_attributes_from_df()
+
+        # Check updated state
+        assert obj.columns == ["obs_num", "observation", "prior_ensemble_mean", "linked_list", "type"]
+        assert obj.all_obs == df2.values.tolist()
+        assert "prior_ensemble_mean" in obj.copie_names
+        assert obj.n_copies == 2  # observation and prior_ensemble_mean
+
+    def test_update_attributes_from_df_drop_column(self):
+        obj = obsq.ObsSequence(file=None)
+        df = pd.DataFrame({
+            "obs_num": [1, 2],
+            "observation": [10.0, 20.0],
+            "prior_ensemble_mean": [1.5, 2.5],
+            "linked_list": ["-1 2 -1", "1 -1 -1"],
+            "type": ["A", "B"]
+        })
+        obj.df = df
+        obj.update_attributes_from_df()
+
+        # Initial state
+        assert "prior_ensemble_mean" in obj.copie_names
+        assert obj.n_copies == 2  # observation and prior_ensemble_mean
+
+        # Drop a column and update
+        obj.df = obj.df.drop(columns=["prior_ensemble_mean"])
+        obj.update_attributes_from_df()
+
+        # Check that the dropped column is no longer present
+        assert "prior_ensemble_mean" not in obj.copie_names
+        assert obj.n_copies == 1  # only observation left
+
+    def test_update_attributes_from_df_qc_counts(self):
+        obj = obsq.ObsSequence(file=None)
+        # Simulate initial state with one non-QC and one QC copy
+        df = pd.DataFrame({
+            "obs_num": [1, 2],
+            "observation": [10.0, 20.0],
+            "DART_QC": [0, 1],
+            "linked_list": ["-1 2 -1", "1 -1 -1"],
+            "type": ["A", "B"]
+        })
+        obj.df = df
+        # Manually set up initial copy name classification
+        obj.copie_names = ["observation", "DART_QC"]
+        obj.non_qc_copie_names = ["observation"]
+        obj.qc_copie_names = ["DART_QC"]
+        obj.n_non_qc = 1
+        obj.n_qc = 1
+
+        obj.update_attributes_from_df()
+
+        # Check initial QC/non-QC counts
+        assert obj.n_non_qc == 1
+        assert obj.n_qc == 1
+        assert obj.non_qc_copie_names == ["observation"]
+        assert obj.qc_copie_names == ["DART_QC"]
+
+        # Now drop the QC column and update
+        obj.df = obj.df.drop(columns=["DART_QC"])
+        obj.update_attributes_from_df()
+
+        # Check that n_qc is now 0 and n_non_qc is 1
+        assert obj.n_non_qc == 1
+        assert obj.n_qc == 0
+        assert obj.non_qc_copie_names == ["observation"]
+        assert obj.qc_copie_names == []
+
+    def test_update_attributes_from_df_drop_multiple_qc_copies(self):
+        obj = obsq.ObsSequence(file=None)
+        # Initial DataFrame with 1 non-QC and 3 QC copies
+        df = pd.DataFrame({
+            "obs_num": [1, 2],
+            "observation": [10.0, 20.0],
+            "QC1": [0, 1],
+            "QC2": [1, 0],
+            "QC3": [2, 2],
+            "linked_list": ["-1 2 -1", "1 -1 -1"],
+            "type": ["A", "B"]
+        })
+        obj.df = df
+        obj.copie_names = ["observation", "QC1", "QC2", "QC3"]
+        obj.non_qc_copie_names = ["observation"]
+        obj.qc_copie_names = ["QC1", "QC2", "QC3"]
+        obj.n_non_qc = 1
+        obj.n_qc = 3
+
+        obj.update_attributes_from_df()
+
+        # Check initial QC/non-QC counts
+        assert obj.n_non_qc == 1
+        assert obj.n_qc == 3
+        assert obj.non_qc_copie_names == ["observation"]
+        assert obj.qc_copie_names == ["QC1", "QC2", "QC3"]
+
+        # Drop two QC columns and update
+        obj.df = obj.df.drop(columns=["QC2", "QC3"])
+        obj.update_attributes_from_df()
+
+        # Check that only one QC copy remains
+        assert obj.n_non_qc == 1
+        assert obj.n_qc == 1
+        assert obj.non_qc_copie_names == ["observation"]
+        assert obj.qc_copie_names == ["QC1"]
+        assert obj.copie_names == ["observation", "QC1"]
+
+
 if __name__ == "__main__":
     pytest.main()
