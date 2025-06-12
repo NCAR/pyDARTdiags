@@ -1140,7 +1140,7 @@ class ObsSequence:
         self.columns = list(self.df.columns)
 
         # Update all_obs (list of lists, each row) @todo HK do we need this?
-        self.all_obs = self.df.values.tolist() if not self.df.empty else []
+        self.all_obs = None
 
         # Update copie_names, non_qc_copie_names, qc_copie_names, n_copies, n_non_qc, n_qc
         # Try to infer from columns if possible, else leave as is

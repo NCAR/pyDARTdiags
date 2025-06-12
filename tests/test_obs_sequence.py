@@ -889,7 +889,7 @@ class TestUpdateAttributesFromDf:
 
         # Check initial state
         assert obj.columns == ["obs_num", "observation", "linked_list", "type"]
-        assert obj.all_obs == df1.values.tolist()
+        assert obj.all_obs == None
         assert obj.copie_names == ["observation"]
         assert obj.n_copies == 1
 
@@ -906,7 +906,7 @@ class TestUpdateAttributesFromDf:
 
         # Check updated state
         assert obj.columns == ["obs_num", "observation", "prior_ensemble_mean", "linked_list", "type"]
-        assert obj.all_obs == df2.values.tolist()
+        assert obj.all_obs == None
         assert "prior_ensemble_mean" in obj.copie_names
         assert obj.n_copies == 2  # observation and prior_ensemble_mean
 
