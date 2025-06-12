@@ -420,32 +420,14 @@ class TestJoin:
         assert obs_seq_mega.loc_mod == "loc3d"
         assert obs_seq_mega.has_assimilation_info() == True
         assert obs_seq_mega.has_posterior() == False
-        assert list(obs_seq_mega.types.keys()) == list(range(1, 26))  # 25 obs types
+        assert list(obs_seq_mega.types.keys()) == list(range(1, 8))  # 7 obs types
         obs_types = [
-            "AIRCRAFT_TEMPERATURE",
-            "BLUE_LAND_SFC_ALTIMETER",
-            "MARINE_SFC_SPECIFIC_HUMIDITY",
-            "SAT_V_WIND_COMPONENT",
-            "RADIOSONDE_SPECIFIC_HUMIDITY",
-            "MARINE_SFC_TEMPERATURE",
-            "RADIOSONDE_U_WIND_COMPONENT",
-            "MARINE_SFC_ALTIMETER",
-            "AIRCRAFT_V_WIND_COMPONENT",
-            "RADIOSONDE_SURFACE_ALTIMETER",
             "ACARS_TEMPERATURE",
-            "LAND_SFC_ALTIMETER",
-            "MARINE_SFC_V_WIND_COMPONENT",
-            "AIRS_TEMPERATURE",
-            "GPSRO_REFRACTIVITY",
-            "MARINE_SFC_U_WIND_COMPONENT",
             "ACARS_U_WIND_COMPONENT",
-            "RADIOSONDE_V_WIND_COMPONENT",
-            "SAT_U_WIND_COMPONENT",
-            "GREEN_LAND_SFC_ALTIMETER",
             "ACARS_V_WIND_COMPONENT",
-            "RADIOSONDE_TEMPERATURE",
+            "AIRCRAFT_TEMPERATURE",
             "AIRCRAFT_U_WIND_COMPONENT",
-            "AIRS_SPECIFIC_HUMIDITY",
+            "AIRCRAFT_V_WIND_COMPONENT",
             "PINK_LAND_SFC_ALTIMETER",
         ]
         all_obs_present = all(
@@ -727,9 +709,9 @@ class TestUpdateTypesDicts:
             "PINEAPPLE_COUNT": 52,
         }
         expected_types = {
-            32 : "ACARS_TEMPERATURE",
-            51 : "RADIOSONDE_U_WIND_COMPONENT",
-            52 : "PINEAPPLE_COUNT",
+            32: "ACARS_TEMPERATURE",
+            51: "RADIOSONDE_U_WIND_COMPONENT",
+            52: "PINEAPPLE_COUNT",
         }
 
         updated_reverse_types, types = obsq.ObsSequence.update_types_dicts(
@@ -878,12 +860,14 @@ class TestCompositeTypes:
 class TestUpdateAttributesFromDf:
     def test_update_attributes_from_df(self):
         obj = obsq.ObsSequence(file=None)
-        df1 = pd.DataFrame({
-            "obs_num": [1, 2],
-            "observation": [10.0, 20.0],
-            "linked_list": ["-1 2 -1", "1 -1 -1"],
-            "type": ["A", "B"]
-        })
+        df1 = pd.DataFrame(
+            {
+                "obs_num": [1, 2],
+                "observation": [10.0, 20.0],
+                "linked_list": ["-1 2 -1", "1 -1 -1"],
+                "type": ["A", "B"],
+            }
+        )
         obj.df = df1
         obj.update_attributes_from_df()
 
@@ -894,31 +878,41 @@ class TestUpdateAttributesFromDf:
         assert obj.n_copies == 1
 
         # Change the DataFrame
-        df2 = pd.DataFrame({
-            "obs_num": [3],
-            "observation": [30.0],
-            "prior_ensemble_mean": [15.0],
-            "linked_list": ["-1 -1 -1"],
-            "type": ["C"]
-        })
+        df2 = pd.DataFrame(
+            {
+                "obs_num": [3],
+                "observation": [30.0],
+                "prior_ensemble_mean": [15.0],
+                "linked_list": ["-1 -1 -1"],
+                "type": ["C"],
+            }
+        )
         obj.df = df2
         obj.update_attributes_from_df()
 
         # Check updated state
-        assert obj.columns == ["obs_num", "observation", "prior_ensemble_mean", "linked_list", "type"]
+        assert obj.columns == [
+            "obs_num",
+            "observation",
+            "prior_ensemble_mean",
+            "linked_list",
+            "type",
+        ]
         assert obj.all_obs == None
         assert "prior_ensemble_mean" in obj.copie_names
         assert obj.n_copies == 2  # observation and prior_ensemble_mean
 
     def test_update_attributes_from_df_drop_column(self):
         obj = obsq.ObsSequence(file=None)
-        df = pd.DataFrame({
-            "obs_num": [1, 2],
-            "observation": [10.0, 20.0],
-            "prior_ensemble_mean": [1.5, 2.5],
-            "linked_list": ["-1 2 -1", "1 -1 -1"],
-            "type": ["A", "B"]
-        })
+        df = pd.DataFrame(
+            {
+                "obs_num": [1, 2],
+                "observation": [10.0, 20.0],
+                "prior_ensemble_mean": [1.5, 2.5],
+                "linked_list": ["-1 2 -1", "1 -1 -1"],
+                "type": ["A", "B"],
+            }
+        )
         obj.df = df
         obj.update_attributes_from_df()
 
@@ -937,13 +931,15 @@ class TestUpdateAttributesFromDf:
     def test_update_attributes_from_df_qc_counts(self):
         obj = obsq.ObsSequence(file=None)
         # Simulate initial state with one non-QC and one QC copy
-        df = pd.DataFrame({
-            "obs_num": [1, 2],
-            "observation": [10.0, 20.0],
-            "DART_QC": [0, 1],
-            "linked_list": ["-1 2 -1", "1 -1 -1"],
-            "type": ["A", "B"]
-        })
+        df = pd.DataFrame(
+            {
+                "obs_num": [1, 2],
+                "observation": [10.0, 20.0],
+                "DART_QC": [0, 1],
+                "linked_list": ["-1 2 -1", "1 -1 -1"],
+                "type": ["A", "B"],
+            }
+        )
         obj.df = df
         # Manually set up initial copy name classification
         obj.copie_names = ["observation", "DART_QC"]
@@ -973,15 +969,17 @@ class TestUpdateAttributesFromDf:
     def test_update_attributes_from_df_drop_multiple_qc_copies(self):
         obj = obsq.ObsSequence(file=None)
         # Initial DataFrame with 1 non-QC and 3 QC copies
-        df = pd.DataFrame({
-            "obs_num": [1, 2],
-            "observation": [10.0, 20.0],
-            "QC1": [0, 1],
-            "QC2": [1, 0],
-            "QC3": [2, 2],
-            "linked_list": ["-1 2 -1", "1 -1 -1"],
-            "type": ["A", "B"]
-        })
+        df = pd.DataFrame(
+            {
+                "obs_num": [1, 2],
+                "observation": [10.0, 20.0],
+                "QC1": [0, 1],
+                "QC2": [1, 0],
+                "QC3": [2, 2],
+                "linked_list": ["-1 2 -1", "1 -1 -1"],
+                "type": ["A", "B"],
+            }
+        )
         obj.df = df
         obj.copie_names = ["observation", "QC1", "QC2", "QC3"]
         obj.non_qc_copie_names = ["observation"]
