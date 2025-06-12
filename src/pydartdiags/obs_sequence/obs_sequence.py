@@ -1046,27 +1046,21 @@ class ObsSequence:
                 if item in obs_sequences[0].qc_copie_names
             ]
 
-            combo.n_copies = len(combo.copie_names)
-            combo.n_qc = len(combo.qc_copie_names)
-            combo.n_non_qc = len(combo.non_qc_copie_names)
-
         else:
             for obs_seq in obs_sequences:
                 if not obs_sequences[0].df.columns.isin(obs_seq.df.columns).all():
                     raise ValueError(
                         "All observation sequences must have the same copies."
                     )
-            combo.n_copies = obs_sequences[0].n_copies
-            combo.n_qc = obs_sequences[0].n_qc
-            combo.n_non_qc = obs_sequences[0].n_non_qc
             combo.copie_names = obs_sequences[0].copie_names
+            combo.non_qc_copie_names = obs_sequences[0].non_qc_copie_names
+            combo.qc_copie_names = obs_sequences[0].qc_copie_names
+            combo.n_copies = len(combo.copie_names)
 
         # todo HK @todo combine synonyms for obs?
 
         # Initialize combined data
-        combined_types = []
         combined_df = pd.DataFrame()
-        combo.all_obs = None  # set to none to force writing from the dataframe if write_obs_seq is called
 
         # Iterate over the list of observation sequences and combine their data
         for obs_seq in obs_sequences:
@@ -1076,12 +1070,6 @@ class ObsSequence:
                 )
             else:
                 combined_df = pd.concat([combined_df, obs_seq.df], ignore_index=True)
-            combined_types.extend(list(obs_seq.reverse_types.keys()))
-
-        # create dictionary of types
-        keys = set(combined_types)
-        combo.reverse_types = {item: i + 1 for i, item in enumerate(keys)}
-        combo.types = {v: k for k, v in combo.reverse_types.items()}
 
         # create linked list for obs
         combo.df = combined_df.sort_values(by="time").reset_index(drop=True)
@@ -1089,7 +1077,9 @@ class ObsSequence:
             len(combo.df)
         )
         combo.df["obs_num"] = combined_df.index + 1
-        combo.create_header(len(combo.df))
+
+        # update ObsSequence attributes from the combined DataFrame
+        combo.update_attributes_from_df()
 
         return combo
 
@@ -1137,11 +1127,11 @@ class ObsSequence:
 
     def update_attributes_from_df(self):
         """
-        Update all internal data (fields/properties) of the ObsSequence object that 
+        Update all internal data (fields/properties) of the ObsSequence object that
         depend on the DataFrame (self.df).
         Call this after self.df is replaced or its structure changes.
 
-        Important: 
+        Important:
 
          Assumes copies are all columns between 'obs_num' and 'linked_list' (if present)
 
@@ -1166,8 +1156,12 @@ class ObsSequence:
 
         # Try to infer non_qc and qc copies from previous names if possible
         if hasattr(self, "non_qc_copie_names") and hasattr(self, "qc_copie_names"):
-            self.non_qc_copie_names = [c for c in self.copie_names if c in self.non_qc_copie_names]
-            self.qc_copie_names = [c for c in self.copie_names if c in self.qc_copie_names]
+            self.non_qc_copie_names = [
+                c for c in self.copie_names if c in self.non_qc_copie_names
+            ]
+            self.qc_copie_names = [
+                c for c in self.copie_names if c in self.qc_copie_names
+            ]
         else:
             # Fallback: treat all as non_qc
             self.non_qc_copie_names = self.copie_names
@@ -1178,7 +1172,9 @@ class ObsSequence:
         # Update types and reverse_types
         if "type" in self.df.columns:
             # Use update_types_dicts to ensure all types are present
-            self.reverse_types, self.types = self.update_types_dicts(self.df, getattr(self, "reverse_types", {}))
+            self.reverse_types, self.types = self.update_types_dicts(
+                self.df, getattr(self, "reverse_types", {})
+            )
         else:
             self.types = {}
             self.reverse_types = {}
