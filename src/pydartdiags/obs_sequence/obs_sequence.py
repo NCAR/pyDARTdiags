@@ -1161,19 +1161,16 @@ class ObsSequence:
         self.n_copies = len(self.copie_names)
 
         # Try to infer non_qc and qc copies from previous names if possible
-        if hasattr(self, "non_qc_copie_names") and hasattr(self, "qc_copie_names"):
-            self.non_qc_copie_names = [
-                c for c in self.copie_names if c in self.non_qc_copie_names
-            ]
-            self.qc_copie_names = [
-                c for c in self.copie_names if c in self.qc_copie_names
-            ]
-        else:
-            # Fallback: treat all as non_qc
+        # Find qc copies first
+        self.qc_copie_names = [c for c in self.copie_names if c in self.qc_copie_names]
+        if self.qc_copie_names == []:  # If no qc copies found, assume all are non-qc
             self.non_qc_copie_names = self.copie_names
-            self.qc_copie_names = []
-        self.n_non_qc = len(self.non_qc_copie_names)
+        else:  # pull out non-qc copies from the copie_names
+            self.non_qc_copie_names = [
+                c for c in self.copie_names if c not in self.qc_copie_names
+            ]
         self.n_qc = len(self.qc_copie_names)
+        self.n_non_qc = len(self.non_qc_copie_names)
 
         # Update types and reverse_types
         if "type" in self.df.columns:
