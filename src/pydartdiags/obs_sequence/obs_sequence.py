@@ -334,7 +334,8 @@ class ObsSequence:
 
         """
 
-        self.create_header_from_dataframe()
+        # Update attributes, header, and linked list from dataframe
+        self.update_attributes_from_df()
 
         with open(file, "w") as f:
 
@@ -357,16 +358,6 @@ class ObsSequence:
                 )
             if "midpoint" in df_copy.columns:
                 df_copy = df_copy.drop(columns=["midpoint", "vlevels"])
-
-            # linked list for reading by dart programs
-            df_copy = df_copy.sort_values(
-                by=["time"], kind="stable"
-            )  # sort the DataFrame by time
-            df_copy.reset_index(drop=True, inplace=True)
-            df_copy["obs_num"] = df_copy.index + 1  # obs_num in time order
-            df_copy["linked_list"] = ObsSequence.generate_linked_list_pattern(
-                len(df_copy)
-            )  # linked list pattern
 
             def write_row(row):
                 ob_write = self.list_to_obs(row.tolist())
@@ -431,9 +422,7 @@ class ObsSequence:
         self.header.append(f"{len(self.types)}")
         for key, value in self.types.items():
             self.header.append(f"{key} {value}")
-        self.header.append(
-            f"num_copies: {self.n_non_qc}  num_qc: {self.n_qc}"
-        )  # @todo HK not keeping track if num_qc changes
+        self.header.append(f"num_copies: {self.n_non_qc}  num_qc: {self.n_qc}")
         self.header.append(f"num_obs: {num_obs:>10} max_num_obs: {num_obs:>10}")
         stats_cols = [
             "prior_bias",
@@ -1083,7 +1072,7 @@ class ObsSequence:
         and 'obs_num' columns in place.
         Modifies the input DataFrame directly.
         """
-        df.sort_values(by="time", inplace=True)
+        df.sort_values(by="time", inplace=True, kind="stable")
         df.reset_index(drop=True, inplace=True)
         df["linked_list"] = ObsSequence.generate_linked_list_pattern(len(df))
         df["obs_num"] = df.index + 1
@@ -1172,17 +1161,7 @@ class ObsSequence:
         self.n_qc = len(self.qc_copie_names)
         self.n_non_qc = len(self.non_qc_copie_names)
 
-        # Update types and reverse_types
-        if "type" in self.df.columns:
-            # Use update_types_dicts to ensure all types are present
-            self.reverse_types, self.types = self.update_types_dicts(
-                self.df, getattr(self, "reverse_types", {})
-            )
-        else:
-            self.types = {}
-            self.reverse_types = {}
-
-        # Update header @todo HK this call also updates the types and reverse_types
+        # Update header and types and reverse_types
         self.create_header_from_dataframe()
 
         # Update seq (generator should be empty or None if not from file)
