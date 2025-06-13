@@ -420,32 +420,14 @@ class TestJoin:
         assert obs_seq_mega.loc_mod == "loc3d"
         assert obs_seq_mega.has_assimilation_info() == True
         assert obs_seq_mega.has_posterior() == False
-        assert list(obs_seq_mega.types.keys()) == list(range(1, 26))  # 25 obs types
+        assert list(obs_seq_mega.types.keys()) == list(range(1, 8))  # 7 obs types
         obs_types = [
-            "AIRCRAFT_TEMPERATURE",
-            "BLUE_LAND_SFC_ALTIMETER",
-            "MARINE_SFC_SPECIFIC_HUMIDITY",
-            "SAT_V_WIND_COMPONENT",
-            "RADIOSONDE_SPECIFIC_HUMIDITY",
-            "MARINE_SFC_TEMPERATURE",
-            "RADIOSONDE_U_WIND_COMPONENT",
-            "MARINE_SFC_ALTIMETER",
-            "AIRCRAFT_V_WIND_COMPONENT",
-            "RADIOSONDE_SURFACE_ALTIMETER",
             "ACARS_TEMPERATURE",
-            "LAND_SFC_ALTIMETER",
-            "MARINE_SFC_V_WIND_COMPONENT",
-            "AIRS_TEMPERATURE",
-            "GPSRO_REFRACTIVITY",
-            "MARINE_SFC_U_WIND_COMPONENT",
             "ACARS_U_WIND_COMPONENT",
-            "RADIOSONDE_V_WIND_COMPONENT",
-            "SAT_U_WIND_COMPONENT",
-            "GREEN_LAND_SFC_ALTIMETER",
             "ACARS_V_WIND_COMPONENT",
-            "RADIOSONDE_TEMPERATURE",
+            "AIRCRAFT_TEMPERATURE",
             "AIRCRAFT_U_WIND_COMPONENT",
-            "AIRS_SPECIFIC_HUMIDITY",
+            "AIRCRAFT_V_WIND_COMPONENT",
             "PINK_LAND_SFC_ALTIMETER",
         ]
         all_obs_present = all(
@@ -727,9 +709,9 @@ class TestUpdateTypesDicts:
             "PINEAPPLE_COUNT": 52,
         }
         expected_types = {
-            32 : "ACARS_TEMPERATURE",
-            51 : "RADIOSONDE_U_WIND_COMPONENT",
-            52 : "PINEAPPLE_COUNT",
+            32: "ACARS_TEMPERATURE",
+            51: "RADIOSONDE_U_WIND_COMPONENT",
+            52: "PINEAPPLE_COUNT",
         }
 
         updated_reverse_types, types = obsq.ObsSequence.update_types_dicts(
@@ -873,6 +855,262 @@ class TestCompositeTypes:
         # Test that load_yaml_to_dict raises an exception for the broken YAML file
         with pytest.raises(yaml.YAMLError):
             obsq.load_yaml_to_dict(broken_file)
+
+
+class TestUpdateAttributesFromDf:
+    def test_update_attributes_from_df(self):
+        obj = obsq.ObsSequence(file=None)
+        df1 = pd.DataFrame(
+            {
+                "obs_num": [1, 2],
+                "observation": [10.0, 20.0],
+                "linked_list": ["-1 2 -1", "1 -1 -1"],
+                "type": ["A", "B"],
+                "time": [dt.datetime(2020, 1, 1), dt.datetime(2020, 1, 2)],
+            }
+        )
+        obj.df = df1
+        obj.update_attributes_from_df()
+
+        # Check initial state
+        assert obj.columns == ["obs_num", "observation", "linked_list", "type", "time"]
+        assert obj.all_obs == None
+        assert obj.copie_names == ["observation"]
+        assert obj.n_copies == 1
+        # Check linked_list and obs_num updated
+        assert list(obj.df["obs_num"]) == [1, 2]
+        assert list(
+            obj.df["linked_list"]
+        ) == obsq.ObsSequence.generate_linked_list_pattern(2)
+
+        # Change the DataFrame
+        df2 = pd.DataFrame(
+            {
+                "obs_num": [3],
+                "observation": [30.0],
+                "prior_ensemble_mean": [15.0],
+                "linked_list": ["-1 -1 -1"],
+                "type": ["C"],
+                "time": [dt.datetime(2020, 1, 3)],
+            }
+        )
+        obj.df = df2
+        obj.update_attributes_from_df()
+
+        # Check updated state
+        assert obj.columns == [
+            "obs_num",
+            "observation",
+            "prior_ensemble_mean",
+            "linked_list",
+            "type",
+            "time",
+        ]
+        assert obj.all_obs == None
+        assert "prior_ensemble_mean" in obj.copie_names
+        assert obj.n_copies == 2  # observation and prior_ensemble_mean
+        assert list(obj.df["obs_num"]) == [1]
+        assert list(
+            obj.df["linked_list"]
+        ) == obsq.ObsSequence.generate_linked_list_pattern(1)
+
+    def test_update_attributes_from_df_drop_column(self):
+        obj = obsq.ObsSequence(file=None)
+        df = pd.DataFrame(
+            {
+                "obs_num": [1, 2],
+                "observation": [10.0, 20.0],
+                "prior_ensemble_mean": [1.5, 2.5],
+                "linked_list": ["-1 2 -1", "1 -1 -1"],
+                "type": ["A", "B"],
+                "time": [dt.datetime(2020, 1, 1), dt.datetime(2020, 1, 2)],
+            }
+        )
+        obj.df = df
+        obj.update_attributes_from_df()
+
+        # Initial state
+        assert "prior_ensemble_mean" in obj.copie_names
+        assert obj.n_copies == 2  # observation and prior_ensemble_mean
+        assert list(obj.df["obs_num"]) == [1, 2]
+        assert list(
+            obj.df["linked_list"]
+        ) == obsq.ObsSequence.generate_linked_list_pattern(2)
+
+        # Drop a column and update
+        obj.df = obj.df.drop(columns=["prior_ensemble_mean"])
+        obj.update_attributes_from_df()
+
+        # Check that the dropped column is no longer present
+        assert "prior_ensemble_mean" not in obj.copie_names
+        assert obj.n_copies == 1  # only observation left
+        assert list(obj.df["obs_num"]) == [1, 2]
+        assert list(
+            obj.df["linked_list"]
+        ) == obsq.ObsSequence.generate_linked_list_pattern(2)
+
+    def test_update_attributes_from_df_qc_counts(self):
+        obj = obsq.ObsSequence(file=None)
+        df = pd.DataFrame(
+            {
+                "obs_num": [1, 2],
+                "observation": [10.0, 20.0],
+                "DART_QC": [0, 1],
+                "linked_list": ["-1 2 -1", "1 -1 -1"],
+                "type": ["A", "B"],
+                "time": [dt.datetime(2020, 1, 1), dt.datetime(2020, 1, 2)],
+            }
+        )
+        obj.df = df
+        obj.copie_names = ["observation", "DART_QC"]
+        obj.non_qc_copie_names = ["observation"]
+        obj.qc_copie_names = ["DART_QC"]
+        obj.n_non_qc = 1
+        obj.n_qc = 1
+        obj.update_attributes_from_df()
+
+        # Check initial QC/non-QC counts
+        assert obj.n_non_qc == 1
+        assert obj.n_qc == 1
+        assert obj.non_qc_copie_names == ["observation"]
+        assert obj.qc_copie_names == ["DART_QC"]
+        assert list(obj.df["obs_num"]) == [1, 2]
+        assert list(
+            obj.df["linked_list"]
+        ) == obsq.ObsSequence.generate_linked_list_pattern(2)
+
+        # Now drop the QC column and update
+        obj.df = obj.df.drop(columns=["DART_QC"])
+        obj.update_attributes_from_df()
+
+        # Check that n_qc is now 0 and n_non_qc is 1
+        assert obj.n_non_qc == 1
+        assert obj.n_qc == 0
+        assert obj.non_qc_copie_names == ["observation"]
+        assert obj.qc_copie_names == []
+        assert list(obj.df["obs_num"]) == [1, 2]
+        assert list(
+            obj.df["linked_list"]
+        ) == obsq.ObsSequence.generate_linked_list_pattern(2)
+
+    def test_update_attributes_from_df_drop_multiple_qc_copies(self):
+        obj = obsq.ObsSequence(file=None)
+        # Initial DataFrame with 1 non-QC and 3 QC copies
+        df = pd.DataFrame(
+            {
+                "obs_num": [1, 2],
+                "observation": [10.0, 20.0],
+                "QC1": [0, 1],
+                "QC2": [1, 0],
+                "QC3": [2, 2],
+                "linked_list": ["-1 2 -1", "1 -1 -1"],
+                "type": ["A", "B"],
+                "time": [dt.datetime(2020, 1, 1), dt.datetime(2020, 1, 2)],
+            }
+        )
+        obj.df = df
+        obj.copie_names = ["observation", "QC1", "QC2", "QC3"]
+        obj.non_qc_copie_names = ["observation"]
+        obj.qc_copie_names = ["QC1", "QC2", "QC3"]
+        obj.n_non_qc = 1
+        obj.n_qc = 3
+
+        obj.update_attributes_from_df()
+
+        # Check initial QC/non-QC counts
+        assert obj.n_non_qc == 1
+        assert obj.n_qc == 3
+        assert obj.non_qc_copie_names == ["observation"]
+        assert obj.qc_copie_names == ["QC1", "QC2", "QC3"]
+        assert list(obj.df["obs_num"]) == [1, 2]
+        assert list(
+            obj.df["linked_list"]
+        ) == obsq.ObsSequence.generate_linked_list_pattern(2)
+
+        # Drop two QC columns and update
+        obj.df = obj.df.drop(columns=["QC2", "QC3"])
+        obj.update_attributes_from_df()
+
+        # Check that only one QC copy remains
+        assert obj.n_non_qc == 1
+        assert obj.n_qc == 1
+        assert obj.non_qc_copie_names == ["observation"]
+        assert obj.qc_copie_names == ["QC1"]
+        assert obj.copie_names == ["observation", "QC1"]
+        assert list(obj.df["obs_num"]) == [1, 2]
+        assert list(
+            obj.df["linked_list"]
+        ) == obsq.ObsSequence.generate_linked_list_pattern(2)
+
+    def test_update_attributes_from_df_drop_row(self):
+        obj = obsq.ObsSequence(file=None)
+        df = pd.DataFrame(
+            {
+                "obs_num": [1, 2, 3],
+                "observation": [10.0, 20.0, 30.0],
+                "linked_list": ["-1 2 -1", "1 3 -1", "2 -1 -1"],
+                "type": ["A", "B", "C"],
+                "time": [
+                    dt.datetime(2020, 1, 1),
+                    dt.datetime(2020, 1, 2),
+                    dt.datetime(2020, 1, 3),
+                ],
+            }
+        )
+        obj.df = df
+        obj.update_attributes_from_df()
+
+        # Drop the middle row (index 1)
+        obj.df = obj.df.drop(index=1).reset_index(drop=True)
+        obj.update_attributes_from_df()
+
+        # After dropping, only rows with obs_num 1 and 3 remain, but obs_num should be renumbered
+        assert list(obj.df["obs_num"]) == [1, 2]
+        assert list(
+            obj.df["linked_list"]
+        ) == obsq.ObsSequence.generate_linked_list_pattern(2)
+        assert obj.n_copies == 1
+        assert obj.n_qc == 0
+        assert obj.n_non_qc == 1
+        assert obj.copie_names == ["observation"]
+        assert obj.columns == ["obs_num", "observation", "linked_list", "type", "time"]
+
+    def test_update_attributes_from_df_add_column(self):
+        obj = obsq.ObsSequence(file=None)
+        df = pd.DataFrame(
+            {
+                "obs_num": [1, 2],
+                "observation": [10.0, 20.0],
+                "linked_list": ["-1 2 -1", "1 -1 -1"],
+                "type": ["A", "B"],
+                "time": [dt.datetime(2020, 1, 1), dt.datetime(2020, 1, 2)],
+            }
+        )
+        obj.df = df
+        obj.update_attributes_from_df()
+
+        # Insert a new column between 'observation' and 'linked_list'
+        insert_at = obj.df.columns.get_loc("linked_list")
+        obj.df.insert(insert_at, "prior_ensemble_mean", [1.5, 2.5])
+        obj.update_attributes_from_df()
+
+        # Check that the new column is present and in the correct position
+        assert obj.df.columns.tolist() == [
+            "obs_num",
+            "observation",
+            "prior_ensemble_mean",
+            "linked_list",
+            "type",
+            "time",
+        ]
+        assert "prior_ensemble_mean" in obj.copie_names
+        assert obj.n_copies == 2  # observation and prior_ensemble_mean
+        assert obj.n_qc == 0  # no QC columns
+        assert obj.n_non_qc == 2
+        assert list(obj.df["obs_num"]) == [1, 2]
+        assert list(
+            obj.df["linked_list"]
+        ) == obsq.ObsSequence.generate_linked_list_pattern(2)
 
 
 if __name__ == "__main__":

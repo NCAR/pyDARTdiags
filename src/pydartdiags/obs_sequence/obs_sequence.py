@@ -334,7 +334,8 @@ class ObsSequence:
 
         """
 
-        self.create_header_from_dataframe()
+        # Update attributes, header, and linked list from dataframe
+        self.update_attributes_from_df()
 
         with open(file, "w") as f:
 
@@ -357,16 +358,6 @@ class ObsSequence:
                 )
             if "midpoint" in df_copy.columns:
                 df_copy = df_copy.drop(columns=["midpoint", "vlevels"])
-
-            # linked list for reading by dart programs
-            df_copy = df_copy.sort_values(
-                by=["time"], kind="stable"
-            )  # sort the DataFrame by time
-            df_copy.reset_index(drop=True, inplace=True)
-            df_copy["obs_num"] = df_copy.index + 1  # obs_num in time order
-            df_copy["linked_list"] = ObsSequence.generate_linked_list_pattern(
-                len(df_copy)
-            )  # linked list pattern
 
             def write_row(row):
                 ob_write = self.list_to_obs(row.tolist())
@@ -431,9 +422,7 @@ class ObsSequence:
         self.header.append(f"{len(self.types)}")
         for key, value in self.types.items():
             self.header.append(f"{key} {value}")
-        self.header.append(
-            f"num_copies: {self.n_non_qc}  num_qc: {self.n_qc}"
-        )  # @todo HK not keeping track if num_qc changes
+        self.header.append(f"num_copies: {self.n_non_qc}  num_qc: {self.n_qc}")
         self.header.append(f"num_obs: {num_obs:>10} max_num_obs: {num_obs:>10}")
         stats_cols = [
             "prior_bias",
@@ -1046,52 +1035,48 @@ class ObsSequence:
                 if item in obs_sequences[0].qc_copie_names
             ]
 
-            combo.n_copies = len(combo.copie_names)
-            combo.n_qc = len(combo.qc_copie_names)
-            combo.n_non_qc = len(combo.non_qc_copie_names)
-
         else:
             for obs_seq in obs_sequences:
                 if not obs_sequences[0].df.columns.isin(obs_seq.df.columns).all():
                     raise ValueError(
                         "All observation sequences must have the same copies."
                     )
-            combo.n_copies = obs_sequences[0].n_copies
-            combo.n_qc = obs_sequences[0].n_qc
-            combo.n_non_qc = obs_sequences[0].n_non_qc
             combo.copie_names = obs_sequences[0].copie_names
+            combo.non_qc_copie_names = obs_sequences[0].non_qc_copie_names
+            combo.qc_copie_names = obs_sequences[0].qc_copie_names
+            combo.n_copies = len(combo.copie_names)
 
         # todo HK @todo combine synonyms for obs?
 
         # Initialize combined data
-        combined_types = []
-        combined_df = pd.DataFrame()
-        combo.all_obs = None  # set to none to force writing from the dataframe if write_obs_seq is called
+        combo.df = pd.DataFrame()
 
         # Iterate over the list of observation sequences and combine their data
         for obs_seq in obs_sequences:
             if copies:
-                combined_df = pd.concat(
-                    [combined_df, obs_seq.df[requested_columns]], ignore_index=True
+                combo.df = pd.concat(
+                    [combo.df, obs_seq.df[requested_columns]], ignore_index=True
                 )
             else:
-                combined_df = pd.concat([combined_df, obs_seq.df], ignore_index=True)
-            combined_types.extend(list(obs_seq.reverse_types.keys()))
+                combo.df = pd.concat([combo.df, obs_seq.df], ignore_index=True)
 
-        # create dictionary of types
-        keys = set(combined_types)
-        combo.reverse_types = {item: i + 1 for i, item in enumerate(keys)}
-        combo.types = {v: k for k, v in combo.reverse_types.items()}
-
-        # create linked list for obs
-        combo.df = combined_df.sort_values(by="time").reset_index(drop=True)
-        combo.df["linked_list"] = ObsSequence.generate_linked_list_pattern(
-            len(combo.df)
-        )
-        combo.df["obs_num"] = combined_df.index + 1
-        combo.create_header(len(combo.df))
+        # update ObsSequence attributes from the combined DataFrame
+        combo.update_attributes_from_df()
 
         return combo
+
+    @staticmethod
+    def update_linked_list(df):
+        """
+        Sorts the DataFrame by 'time', resets the index, and adds/updates 'linked_list'
+        and 'obs_num' columns in place.
+        Modifies the input DataFrame directly.
+        """
+        df.sort_values(by="time", inplace=True, kind="stable")
+        df.reset_index(drop=True, inplace=True)
+        df["linked_list"] = ObsSequence.generate_linked_list_pattern(len(df))
+        df["obs_num"] = df.index + 1
+        return None
 
     def has_assimilation_info(self):
         """
@@ -1134,6 +1119,56 @@ class ObsSequence:
         for copie in self.copie_names:
             self.header.append(copie)
         self.header.append(f"first: 1 last: {n}")
+
+    def update_attributes_from_df(self):
+        """
+        Update all internal data (fields/properties) of the ObsSequence object that
+        depend on the DataFrame (self.df).
+        Call this after self.df is replaced or its structure changes.
+
+        Important:
+
+         Assumes copies are all columns between 'obs_num' and 'linked_list' (if present)
+
+        """
+        # Update columns
+        self.columns = list(self.df.columns)
+
+        # Update all_obs (list of lists, each row) @todo HK do we need this?
+        self.all_obs = None
+
+        # Update copie_names, non_qc_copie_names, qc_copie_names, n_copies, n_non_qc, n_qc
+        # Try to infer from columns if possible, else leave as is
+        # Assume copies are all columns between 'obs_num' and 'linked_list' (if present)
+        if "obs_num" in self.df.columns and "linked_list" in self.df.columns:
+            obs_num_idx = self.df.columns.get_loc("obs_num")
+            linked_list_idx = self.df.columns.get_loc("linked_list")
+            self.copie_names = list(self.df.columns[obs_num_idx + 1 : linked_list_idx])
+        else:
+            # Fallback: use previous value or empty
+            self.copie_names = getattr(self, "copie_names", [])
+        self.n_copies = len(self.copie_names)
+
+        # Try to infer non_qc and qc copies from previous names if possible
+        # Find qc copies first
+        self.qc_copie_names = [c for c in self.copie_names if c in self.qc_copie_names]
+        if self.qc_copie_names == []:  # If no qc copies found, assume all are non-qc
+            self.non_qc_copie_names = self.copie_names
+        else:  # pull out non-qc copies from the copie_names
+            self.non_qc_copie_names = [
+                c for c in self.copie_names if c not in self.qc_copie_names
+            ]
+        self.n_qc = len(self.qc_copie_names)
+        self.n_non_qc = len(self.non_qc_copie_names)
+
+        # Update header and types and reverse_types
+        self.create_header_from_dataframe()
+
+        # Update seq (generator should be empty or None if not from file)
+        self.seq = []
+
+        # update linked list for obs and obs_nums
+        ObsSequence.update_linked_list(self.df)
 
 
 def load_yaml_to_dict(file_path):
