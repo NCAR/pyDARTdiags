@@ -197,7 +197,7 @@ class ObsSequence:
     def obs_to_list(self, obs):
         """put single observation into a list"""
         data = []
-        data.append(obs[0].split()[1])  # obs_num
+        data.append(int(obs[0].split()[1]))  # obs_num
         data.extend(list(map(float, obs[1 : self.n_copies + 1])))  # all the copies
         data.append(obs[self.n_copies + 1])  # linked list info
         try:  # HK todo only have to check loc3d or loc1d for the first observation, the whole file is the same
