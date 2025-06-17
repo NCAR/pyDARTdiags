@@ -220,8 +220,8 @@ class ObsSequence:
                 )
         typeI = obs.index("kind")  # type of observation
         type_value = int(obs[typeI + 1])
-        if not self.types:
-            data.append("Identity")
+        if type_value < 0:
+            data.append(type_value)
         else:
             data.append(self.types[type_value])  # observation type
 
@@ -283,14 +283,22 @@ class ObsSequence:
                 + str(self.reversed_vert[data[self.n_copies + 5]])
             )  # location x, y, z, vert
             obs.append("kind")  # this is type of observation
-            obs.append(self.reverse_types[data[self.n_copies + 6]])  # observation type
+            obs_type = data[self.n_copies + 6]
+            if isinstance(obs_type, str):
+                obs.append(self.reverse_types[obs_type])  # observation type
+            else:
+                obs.append(obs_type)  # Identity obs negative integer
             # Convert metadata to a string and append !HK @todo you are not converting to string
             obs.extend(data[self.n_copies + 7])  # metadata
             obs.extend(data[self.n_copies + 8])  # external forward operator
         elif self.loc_mod == "loc1d":
             obs.append(data[self.n_copies + 2])  # 1d location
             obs.append("kind")  # this is type of observation
-            obs.append(self.reverse_types[data[self.n_copies + 3]])  # observation type
+            obs_type = data[self.n_copies + 3]
+            if isinstance(obs_type, str):
+                obs.append(self.reverse_types[obs_type])  # observation type
+            else:
+                obs.append(data[self.n_copies + 3])  # Identity obs negative integer
             obs.extend(data[self.n_copies + 4])  # metadata
             obs.extend(data[self.n_copies + 5])  # external forward operator
         obs.append(" ".join(map(str, data[-4:-2])))  # seconds, days
@@ -381,7 +389,10 @@ class ObsSequence:
             dict: The types dictionary with keys sorted in numerical order.
         """
         # Create a dictionary of observation types from the dataframe
-        unique_types = df["type"].unique()
+        # Ignore Identity obs (negative integers)
+        unique_types = df.loc[
+            df["type"].apply(lambda x: isinstance(x, str)), "type"
+        ].unique()
 
         # Ensure all unique types are in reverse_types
         for obs_type in unique_types:

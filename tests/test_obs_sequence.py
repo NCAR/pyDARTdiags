@@ -165,6 +165,9 @@ class TestWriteAscii:
             ),
             os.path.join(os.path.dirname(__file__), "data", "obs_seq.1d.final"),
             os.path.join(os.path.dirname(__file__), "data", "obs_seq.out.GSI.small"),
+            os.path.join(os.path.dirname(__file__), "data", "obs_seq.in.all-id"),
+            os.path.join(os.path.dirname(__file__), "data", "obs_seq.in.mix"),
+            os.path.join(os.path.dirname(__file__), "data", "obs_seq.final.wrfhydro"),
         ],
     )
     def test_write_ascii(self, ascii_obs_seq_file_path, temp_dir):
