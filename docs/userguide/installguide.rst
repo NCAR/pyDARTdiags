@@ -19,7 +19,6 @@ pyDARTdiags requires the following packages:
     "plotly>=5.22.0",
     "pyyaml>=6.0.2",
     "matplotlib>=3.9.4"
-    "plotly>=6.0.1"
 
 Installation
 ------------
