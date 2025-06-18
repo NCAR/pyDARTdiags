@@ -298,7 +298,7 @@ class ObsSequence:
             if isinstance(obs_type, str):
                 obs.append(self.reverse_types[obs_type])  # observation type
             else:
-                obs.append(data[self.n_copies + 3])  # Identity obs negative integer
+                obs.append(obs_type)  # Identity obs negative integer
             obs.extend(data[self.n_copies + 4])  # metadata
             obs.extend(data[self.n_copies + 5])  # external forward operator
         obs.append(" ".join(map(str, data[-4:-2])))  # seconds, days
