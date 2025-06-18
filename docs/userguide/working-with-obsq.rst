@@ -19,7 +19,7 @@ There are three types of observation sequence file:
   The assimilation data is the mean and standard deviation of the forward operator for 
   each observation, and optionally each ensemble members value of the forward operator.
   The prior assimilation data is always present in the observation sequence file after
-  assimilation, the posterior assimilation data is only present if the user choses to do
+  assimilation, the posterior assimilation data is only present if the user chooses to do
   posterior forward operator calculations.
 
 
