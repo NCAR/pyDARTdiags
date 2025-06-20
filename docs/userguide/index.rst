@@ -1,3 +1,5 @@
+.. _userguide:
+
 ==========
 User Guide
 ==========
@@ -7,11 +9,11 @@ User Guide
    :hidden:
    :caption: User Guide
 
-   quickstart
    installguide
+   quickstart
    working-with-obsq
    statistics
-
+ 
 Welcome to the pyDARTdiags User Guide!
 
 This guide is designed to help you get started with pyDARTdiags. It covers the installation process,
@@ -23,12 +25,12 @@ To get started straight away, see the :ref:`quickstart` guide.
 exploring your data.
 The :ref:`statistics` section contains the definitions of the statistics calculated by pyDARTdiags.
 
-For detailed information on all available modules and classes in pyDARTdiags, 
-refer to the :ref:`api`.
-
 There is an gallery of examples available in the :ref:`examples-index` section. 
 These examples demonstrate how to use pyDARTdiags to perform various tasks, 
 such as plotting observations on a map and computing grand statistics for an observation sequence.
+
+For detailed information on all available modules and classes in pyDARTdiags, 
+refer to the :ref:`api`.
 
 
 
