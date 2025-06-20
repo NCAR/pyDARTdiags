@@ -77,3 +77,13 @@ sphinx_gallery_conf = {
 }
 
 pio.renderers.default = 'sphinx_gallery' # for plotly output in examples
+
+from docutils import nodes
+from docutils.parsers.rst import roles
+
+def color_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
+    color, text = text.split(':', 1)
+    node = nodes.raw('', f'<span style="color: {color};">{text}</span>', format='html')
+    return [node], []
+
+roles.register_local_role('color', color_role)
