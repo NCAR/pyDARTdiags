@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Working with obs_sequence objects &#8212; pyDARTdiags</title>
+    <title>Observation Sequences &#8212; pyDARTdiags</title>
   
   
   
@@ -54,7 +54,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Statistics" href="statistics.html" />
-    <link rel="prev" title="Install Guide" href="installguide.html" />
+    <link rel="prev" title="Quickstart" href="quickstart.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -338,9 +338,9 @@
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">User Guide</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installguide.html">Install Guide</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Working with obs_sequence objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Observation Sequences</a></li>
 <li class="toctree-l1"><a class="reference internal" href="statistics.html">Statistics</a></li>
 </ul>
 </div>
@@ -385,7 +385,7 @@
     
     <li class="breadcrumb-item"><a href="index.html" class="nav-link">User Guide</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Working with obs_sequence objects</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Observation Sequences</span></li>
   </ul>
 </nav>
 </div>
@@ -402,30 +402,43 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="working-with-obs-sequence-objects">
-<span id="working-with-obsq"></span><h1>Working with obs_sequence objects<a class="headerlink" href="#working-with-obs-sequence-objects" title="Link to this heading">#</a></h1>
+  <section id="observation-sequences">
+<span id="working-with-obsq"></span><h1>Observation Sequences<a class="headerlink" href="#observation-sequences" title="Link to this heading">#</a></h1>
 <p>DART uses observation sequence files to store observations and their associated
-metadata. These files are used as input to the DART assimilation system, and after
-assimilation, the observation sequence files are updated with the assimilation data.</p>
-<p>The assimilation data is the mean and standard deviation of the forward operator for
+metadata. These files are used as input/output for the DART assimilation system.</p>
+<p>There are three types of observation sequence file:</p>
+<ul class="simple">
+<li><p><strong>obs_seq.in</strong>: A ‘blank’ observation sequence file which contains the locations of observations and their
+associated metadata, but no observation values. Typically this file is used as input for creating synthetic observations
+for a perfect-model or Observation System Simulation Experiment (OSSE) experiment.</p></li>
+<li><p><strong>obs_seq.out</strong>: A observation sequence file which contains observations and their associated metadata. This
+is used as input to filter, the DART assimilation program.</p></li>
+<li><p><strong>obs_seq.final</strong>: A observation sequence file which contains the observations and their
+associated metadata after assimilation. This file is created by filter, the DART assimilation program.
+The assimilation data is the mean and standard deviation of the forward operator for
 each observation, and optionally each ensemble members value of the forward operator.
-The prior assimilation data is always present in the observation sequence file, the
-posterior assimilation data is only present if the user choses to do posterior forward
-operator calculations.</p>
+The prior assimilation data is always present in the observation sequence file after
+assimilation, the posterior assimilation data is only present if the user chooses to do
+posterior forward operator calculations.</p></li>
+</ul>
+<section id="working-with-observation-sequence-objects">
+<h2>Working with Observation Sequence Objects<a class="headerlink" href="#working-with-observation-sequence-objects" title="Link to this heading">#</a></h2>
 <p>PyDARTdiags enables you to interact with DART observation sequence files
 using Python and <a class="reference external" href="https://pandas.pydata.org/">Pandas</a> - the Python Data Analysis Library.
-You read the observation sequence file into a obs_seq object, which contains the
-observation sequence data in a Pandas DataFrame.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">obs_sequence</span><span class="p">(</span><span class="s1">&#39;obs_seq.final&#39;</span><span class="p">)</span>
+You read the observation sequence file into a ObsSequence object, which contains all the
+information about the observation sequence together with a Pandas DataFrame containing the data for
+all the observations in the sequence.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">ObsSequence</span><span class="p">(</span><span class="s1">&#39;obs_seq.final&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>You can then examine, change, and visualize the observation sequence data,
-and write out new observation sequence files.</p>
-<p><code class="docutils literal notranslate"><span class="pre">obs_seq</span></code> is the obs_sequence object.</p>
+and write out new observation sequence files.  In this example our observation sequence file
+<code class="docutils literal notranslate"><span class="pre">obs_seq.final</span></code> has been read into <code class="docutils literal notranslate"><span class="pre">obs_seq</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">obs_seq</span></code> is the ObsSequence object.</p>
 <p><code class="docutils literal notranslate"><span class="pre">obs_seq.df</span></code> is the DataFrame containing all the observations.</p>
 <p>There are various modules in PyDARTdiags that are used to work with obs_sequence objects:</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="../api/obs_sequence.html#module-obs_sequence" title="obs_sequence"><code class="xref py py-mod docutils literal notranslate"><span class="pre">obs_sequence</span></code></a> - contains the obs_sequence class, which is used to read and write observation sequence files.</p></li>
+<li><p><a class="reference internal" href="../api/obs_sequence.html#module-obs_sequence" title="obs_sequence"><code class="xref py py-mod docutils literal notranslate"><span class="pre">obs_sequence</span></code></a> - contains the ObsSequence class, which is used to read and write observation sequence files.</p></li>
 <li><p><a class="reference internal" href="../api/stats.html#module-0" title="stats"><code class="xref py py-mod docutils literal notranslate"><span class="pre">stats</span></code></a> - contains functions to calculate statistics on the observation sequence data.</p></li>
 <li><p><a class="reference internal" href="../api/matplots.html#module-0" title="matplots"><code class="xref py py-mod docutils literal notranslate"><span class="pre">matplots</span></code></a> - contains functions to plot the observation sequence data using
 <a class="reference external" href="https://matplotlib.org/">Matplotlib</a>, to produce similar output to the DART
@@ -433,10 +446,41 @@ and write out new observation sequence files.</p>
 <li><p><a class="reference internal" href="../api/plots.html#module-0" title="plots"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plots</span></code></a> - contains functions to plot the observation sequence data using
 <a class="reference external" href="https://plotly.com/">Plotly</a> to produce interactive plots</p></li>
 </ul>
+<p>In addition, you can edit the observation sequence data directly using the Pandas DataFrame methods.
+You can use the Pandas DataFrame methods to filter, group, and aggregate the observation sequence data.
+For example, you can filter the observation sequence data to only include observations of a certain type,
+or filter by region by masking out lon-lat, or time period, or remove columns that you do not need.
+There are examples of editing observation sequences in the <a class="reference internal" href="../examples/01_manipulating/index.html#manip-examples-index"><span class="std std-ref">Manipulating Observation Sequences</span></a> gallery.</p>
+<p>To write your modified observation sequence data back to a file, you can use the
+<a class="reference internal" href="../api/obs_sequence.html#obs_sequence.ObsSequence.write_obs_seq" title="obs_sequence.ObsSequence.write_obs_seq"><code class="xref py py-func docutils literal notranslate"><span class="pre">obs_sequence.ObsSequence.write_obs_seq()</span></code></a> method:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">write_obs_seq</span><span class="p">(</span><span class="s1">&#39;modified_obs_seq.out&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The write_obs_seq method will update the attributes of the ObsSequence object. It updates the header
+with the number of observations, converts coordinates back to radians if necessary,
+sorts the DataFrame by time, and generates a linked list pattern for reading by DART programs.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>pyDARTdiags sorts by time and then creates a linked list pattern for reading by DART programs.
+The linked list is not used by pyDARTdiags, but is required for DART programs to read the observation sequence file.
+Do not edit the linked list column in the DataFrame as it will be overwritten when you call
+<a class="reference internal" href="../api/obs_sequence.html#obs_sequence.ObsSequence.write_obs_seq" title="obs_sequence.ObsSequence.write_obs_seq"><code class="xref py py-func docutils literal notranslate"><span class="pre">obs_sequence.ObsSequence.write_obs_seq()</span></code></a> or <a class="reference internal" href="../api/obs_sequence.html#obs_sequence.ObsSequence.update_attributes_from_df" title="obs_sequence.ObsSequence.update_attributes_from_df"><code class="xref py py-func docutils literal notranslate"><span class="pre">obs_sequence.ObsSequence.update_attributes_from_df()</span></code></a></p>
+</div>
+<p>You may want to synchronize the ObsSequence attributes with the DataFrame after making changes to the DataFrame.
+without calling write_obs_seq. You can do this by calling the <a class="reference internal" href="../api/obs_sequence.html#obs_sequence.ObsSequence.update_attributes_from_df" title="obs_sequence.ObsSequence.update_attributes_from_df"><code class="xref py py-func docutils literal notranslate"><span class="pre">obs_sequence.ObsSequence.update_attributes_from_df()</span></code></a> method:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">update_attributes_from_df</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
 <section id="calculating-statistics">
-<h2>Calculating statistics<a class="headerlink" href="#calculating-statistics" title="Link to this heading">#</a></h2>
-<p>The <a class="reference internal" href="../api/stats.html#module-0" title="stats"><code class="xref py py-mod docutils literal notranslate"><span class="pre">stats</span></code></a> module contains functions to calculate statistics on the given DataFrame.
-<a class="reference internal" href="../api/stats.html#stats.diag_stats" title="stats.diag_stats"><code class="xref py py-func docutils literal notranslate"><span class="pre">stats.diag_stats()</span></code></a> modifies the DataFrame in place by adding the following columns:</p>
+<h2>Calculating Statistics<a class="headerlink" href="#calculating-statistics" title="Link to this heading">#</a></h2>
+<p>The <a class="reference internal" href="../api/stats.html#module-0" title="stats"><code class="xref py py-mod docutils literal notranslate"><span class="pre">stats</span></code></a> module contains functions to calculate statistics on the given DataFrame.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Note statistics calculations only apply to data from obs_seq.final files, as they
+require assimilation information from DART</p>
+</div>
+<p><a class="reference internal" href="../api/stats.html#stats.diag_stats" title="stats.diag_stats"><code class="xref py py-func docutils literal notranslate"><span class="pre">stats.diag_stats()</span></code></a> modifies the DataFrame in place by adding the following columns:</p>
 <ul class="simple">
 <li><p>‘prior_sq_err’ and ‘posterior_sq_err’: The square error for the ‘prior’ and ‘posterior’ phases.</p></li>
 <li><p>‘prior_bias’ and ‘posterior_bias’: The bias for the ‘prior’ and ‘posterior’ phases.</p></li>
@@ -449,6 +493,26 @@ their midpoints:</p>
 <li><p>‘vlevels’: The categorized vertical levels. [bottom, top]</p></li>
 <li><p>‘midpoint’: The midpoint of each vertical level bin.</p></li>
 </ul>
+<p>Similarly, you may want to bin the observations by time. The <a class="reference internal" href="../api/stats.html#module-0" title="stats"><code class="xref py py-mod docutils literal notranslate"><span class="pre">stats</span></code></a> module function
+<a class="reference internal" href="../api/stats.html#stats.bin_by_time" title="stats.bin_by_time"><code class="xref py py-func docutils literal notranslate"><span class="pre">stats.bin_by_time()</span></code></a> will add two additional columns for the binned time and
+their midpoints:</p>
+<ul class="simple">
+<li><p>‘time_bin’: The categorized time bins. [start, end]</p></li>
+<li><p>‘time_bin_midpoint’: The midpoint of each time bin.</p></li>
+</ul>
+<p>A detailed description of the statistics calculated by pyDARTdiags can be found in the
+<a class="reference internal" href="statistics.html#statistics"><span class="std std-ref">Statistics</span></a> section of the user guide.</p>
+</section>
+<section id="diagnostic-plots">
+<h2>Diagnostic plots<a class="headerlink" href="#diagnostic-plots" title="Link to this heading">#</a></h2>
+<p>The module <a class="reference internal" href="../api/matplots.html#module-0" title="matplots"><code class="xref py py-mod docutils literal notranslate"><span class="pre">matplots</span></code></a> contains functions to plot the observation sequence data using
+<a class="reference external" href="https://matplotlib.org/">Matplotlib</a>. These functions produce plots similar to the
+DART <a class="reference external" href="https://docs.dart.ucar.edu/en/latest/guide/matlab-observation-space.html">Matlab diagnostics</a>,
+that is, time evolution and profiles of the statistics for a given observation type,
+and rank histograms for a given observation type. The <a class="reference internal" href="../examples/03_diagnostics/index.html#diag-examples-index"><span class="std std-ref">Diagnostics</span></a> Gallery shows examples of how to use
+these functions.</p>
+<p>Diagnostics plots require assimilation information from DART, so they only work with obs_seq.final files.
+For more general examples of visualization of observation sequences, see the the <a class="reference internal" href="../examples/02_visualizing/index.html#vis-examples-index"><span class="std std-ref">Visualizing Observation Sequences</span></a> Gallery.</p>
 </section>
 </section>
 
@@ -463,12 +527,12 @@ their midpoints:</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="installguide.html"
+       href="quickstart.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Install Guide</p>
+        <p class="prev-next-title">Quickstart</p>
       </div>
     </a>
     <a class="right-next"
@@ -499,7 +563,9 @@ their midpoints:</p>
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calculating-statistics">Calculating statistics</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#working-with-observation-sequence-objects">Working with Observation Sequence Objects</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calculating-statistics">Calculating Statistics</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#diagnostic-plots">Diagnostic plots</a></li>
 </ul>
   </nav></div>
 

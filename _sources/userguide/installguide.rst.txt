@@ -2,6 +2,10 @@
 Install Guide
 =============
 
+pyDARTdiags does not require that you have `DART <https://github.com/NCAR/DART>`__ installed, but it does assume that you have 
+some familiarity with DART. If you are new to DART or Data Assimilation, we recommend that you take a look at 
+`dart.ucar.edu <https://dart.ucar.edu/>`__ to learn more about DART and its capabilities.
+
 Requirements
 ------------
 

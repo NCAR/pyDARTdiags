@@ -4,26 +4,15 @@
 Quickstart
 ==========
 
-Installation
-------------
-
-pyDARTdiags can be installed through pip.  We recommend installing pydartdiags in a virtual environment:
-
-
-.. code-block :: text
-
-    python3 -m venv dartdiags
-    source dartdiags/bin/activate
-    pip install pydartdiags
-
-
-Import the obs_sequence and plots module
+Welcome to PyDARTdiags! This guide will help you get started with the library,
+showing you how to import the modules, read observation sequence files, and perform basic operations.
+For more detailed information, refer to the :ref:`userguide`.
 
 .. code-block :: python
 
-    from pydartdiags.obs_sequence import obs_sequence as obsq
+    import pydartdiags.obs_sequence.obs_sequence as obsq
     from pydartdiags.stats import stats
-    from pydartdiags.plots import plots
+    from pydartdiags.matplots import matplots as mp
 
 
 Read an obs_sequence file
@@ -33,11 +22,15 @@ Read an observation sequence file into a DataFrame
 
 .. code-block :: python
 
-    obs_seq = obsq.obs_sequence('obs_seq.final.ascii')
-    
+    obs_seq = obsq.ObsSequence('obs_seq.final.ascii')
+
 
 Examine the DataFrame
 ---------------------
+
+The ObsSequence object contains a Pandas DataFrame with all the observations and their associated metadata.
+You can access the DataFrame using the `df` attribute of the ObsSequence object.
+You can then use Pandas methods to explore the data, such as `head()` to view the first few rows.
 
 .. code-block :: python
 
@@ -353,32 +346,9 @@ Find the number of assimilated (used) observations vs. possible observations by 
     </table>
     <p>
 
+Examples
+--------
 
-Plot Profiles of RMSE and Bias and Total Spread
-------------------------------------------------
-
-* Choose levels
-* Select only observations that were assimilated (QC == 0)
-* Calculate the statistics
-* Bin by the selected levels
-* Plot the profiles
-
-.. code-block :: python
-
-    hPalevels = [0.0, 100.0,  150.0, 200.0, 250.0, 300.0, 400.0, 500.0, 700, 850, 925, 1000]  # hPa
-    plevels = [i * 100 for i in hPalevels]
-
-    qc0 = obs_seq.select_by_dart_qc(0)  # only qc 0
-    stats.diag_stats(qc0) # calculate statistics 
-    stats.bin_by_layer(qc0, plevels, verticalUnit="pressure (Pa)") # bin by plevels
-    figrmse, figbias, figts  = plots.plot_profile(qc0, "pressure (Pa)")
-
-.. image:: ../images/rmse.png
-   :alt: RMSE Plot
-
-.. image:: ../images/bias.png
-   :alt: Bias Plot
-
-.. image:: ../images/totalspread.png
-   :alt: Bias Plot
-
+The pyDARTdiags source comes with a set of examples in the ``examples`` directory.
+The examples are also available as notebooks in the :ref:`Examples Gallery<examples-index>`.
+The examples cover, :ref:`manip-examples-index`, :ref:`vis-examples-index`, and :ref:`diag-examples-index`.

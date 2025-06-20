@@ -55,7 +55,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Developer Guide" href="../devel/index.html" />
-    <link rel="prev" title="Working with obs_sequence objects" href="working-with-obsq.html" />
+    <link rel="prev" title="Observation Sequences" href="working-with-obsq.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -339,9 +339,9 @@
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">User Guide</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installguide.html">Install Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="working-with-obsq.html">Working with obs_sequence objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="working-with-obsq.html">Observation Sequences</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Statistics</a></li>
 </ul>
 </div>
@@ -529,9 +529,9 @@ The count <span class="math notranslate nohighlight">\(H\)</span> of observation
 <section id="trusted-observations">
 <h2>Trusted Observations<a class="headerlink" href="#trusted-observations" title="Link to this heading">#</a></h2>
 <p>The DART quality control (DART_QC) values indicate, for each observation, whether the observation
-was used in the assimilation, and if not, why. DART_QC 0 indicates that the observation was assimilated.
+was used in the assimilation, and if not, why. DART_QC 0 or 2 indicates that the observation was assimilated.
 You may choose to include trusted observations in your observation space diagnostics, in which case,
-include DART_QC 0 and DART_QQC 7 observations in the calculation of the statistics.</p>
+include DART_QC 7 observations in the calculation of the statistics.</p>
 <p>For reference, here is the DART QC values and their meaning.</p>
 <div class="pst-scrollable-table-container"><table class="table" id="id2">
 <caption><span class="caption-text">DART Quality Control (DART_QC) Values</span><a class="headerlink" href="#id2" title="Link to this table">#</a></caption>
@@ -574,6 +574,10 @@ include DART_QC 0 and DART_QQC 7 observations in the calculation of the statisti
 <p>For more detail on the DART QC values refer to the
 <a class="reference external" href="https://docs.dart.ucar.edu/en/latest/assimilation_code/modules/assimilation/quality_control_mod.html">DART documentation</a>.</p>
 </section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
+<p>The notation on this page follows <a class="reference external" href="https://doi.org/doi:10.1175/2010MWR3253.1">https://doi.org/doi:10.1175/2010MWR3253.1</a>.</p>
+</section>
 </section>
 
 
@@ -592,7 +596,7 @@ include DART_QC 0 and DART_QQC 7 observations in the calculation of the statisti
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Working with obs_sequence objects</p>
+        <p class="prev-next-title">Observation Sequences</p>
       </div>
     </a>
     <a class="right-next"
@@ -633,6 +637,7 @@ include DART_QC 0 and DART_QQC 7 observations in the calculation of the statisti
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-component-observations">Multi-component Observations</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rank-histogram">Rank Histogram</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#trusted-observations">Trusted Observations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
 </ul>
   </nav></div>
 

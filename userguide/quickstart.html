@@ -53,8 +53,8 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'userguide/quickstart';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Install Guide" href="installguide.html" />
-    <link rel="prev" title="User Guide" href="index.html" />
+    <link rel="next" title="Observation Sequences" href="working-with-obsq.html" />
+    <link rel="prev" title="Install Guide" href="installguide.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -338,9 +338,9 @@
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">User Guide</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installguide.html">Install Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="working-with-obsq.html">Working with obs_sequence objects</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="working-with-obsq.html">Observation Sequences</a></li>
 <li class="toctree-l1"><a class="reference internal" href="statistics.html">Statistics</a></li>
 </ul>
 </div>
@@ -404,30 +404,26 @@
                   
   <section id="quickstart">
 <span id="id1"></span><h1>Quickstart<a class="headerlink" href="#quickstart" title="Link to this heading">#</a></h1>
-<section id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h2>
-<p>pyDARTdiags can be installed through pip.  We recommend installing pydartdiags in a virtual environment:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>python3 -m venv dartdiags
-source dartdiags/bin/activate
-pip install pydartdiags
-</pre></div>
-</div>
-<p>Import the obs_sequence and plots module</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pydartdiags.obs_sequence</span><span class="w"> </span><span class="kn">import</span> <span class="n">obs_sequence</span> <span class="k">as</span> <span class="n">obsq</span>
+<p>Welcome to PyDARTdiags! This guide will help you get started with the library,
+showing you how to import the modules, read observation sequence files, and perform basic operations.
+For more detailed information, refer to the <a class="reference internal" href="index.html#userguide"><span class="std std-ref">User Guide</span></a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pydartdiags.obs_sequence.obs_sequence</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">obsq</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pydartdiags.stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">stats</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pydartdiags.plots</span><span class="w"> </span><span class="kn">import</span> <span class="n">plots</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydartdiags.matplots</span><span class="w"> </span><span class="kn">import</span> <span class="n">matplots</span> <span class="k">as</span> <span class="n">mp</span>
 </pre></div>
 </div>
-</section>
 <section id="read-an-obs-sequence-file">
 <h2>Read an obs_sequence file<a class="headerlink" href="#read-an-obs-sequence-file" title="Link to this heading">#</a></h2>
 <p>Read an observation sequence file into a DataFrame</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">obs_sequence</span><span class="p">(</span><span class="s1">&#39;obs_seq.final.ascii&#39;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">ObsSequence</span><span class="p">(</span><span class="s1">&#39;obs_seq.final.ascii&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
 <section id="examine-the-dataframe">
 <h2>Examine the DataFrame<a class="headerlink" href="#examine-the-dataframe" title="Link to this heading">#</a></h2>
+<p>The ObsSequence object contains a Pandas DataFrame with all the observations and their associated metadata.
+You can access the DataFrame using the <cite>df</cite> attribute of the ObsSequence object.
+You can then use Pandas methods to explore the data, such as <cite>head()</cite> to view the first few rows.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -730,27 +726,11 @@ pip install pydartdiags
 </tbody>
 </table>
 <p></section>
-<section id="plot-profiles-of-rmse-and-bias-and-total-spread">
-<h2>Plot Profiles of RMSE and Bias and Total Spread<a class="headerlink" href="#plot-profiles-of-rmse-and-bias-and-total-spread" title="Link to this heading">#</a></h2>
-<ul class="simple">
-<li><p>Choose levels</p></li>
-<li><p>Select only observations that were assimilated (QC == 0)</p></li>
-<li><p>Calculate the statistics</p></li>
-<li><p>Bin by the selected levels</p></li>
-<li><p>Plot the profiles</p></li>
-</ul>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">hPalevels</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">,</span>  <span class="mf">150.0</span><span class="p">,</span> <span class="mf">200.0</span><span class="p">,</span> <span class="mf">250.0</span><span class="p">,</span> <span class="mf">300.0</span><span class="p">,</span> <span class="mf">400.0</span><span class="p">,</span> <span class="mf">500.0</span><span class="p">,</span> <span class="mi">700</span><span class="p">,</span> <span class="mi">850</span><span class="p">,</span> <span class="mi">925</span><span class="p">,</span> <span class="mi">1000</span><span class="p">]</span>  <span class="c1"># hPa</span>
-<span class="n">plevels</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">100</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">hPalevels</span><span class="p">]</span>
-
-<span class="n">qc0</span> <span class="o">=</span> <span class="n">obs_seq</span><span class="o">.</span><span class="n">select_by_dart_qc</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># only qc 0</span>
-<span class="n">stats</span><span class="o">.</span><span class="n">diag_stats</span><span class="p">(</span><span class="n">qc0</span><span class="p">)</span> <span class="c1"># calculate statistics</span>
-<span class="n">stats</span><span class="o">.</span><span class="n">bin_by_layer</span><span class="p">(</span><span class="n">qc0</span><span class="p">,</span> <span class="n">plevels</span><span class="p">,</span> <span class="n">verticalUnit</span><span class="o">=</span><span class="s2">&quot;pressure (Pa)&quot;</span><span class="p">)</span> <span class="c1"># bin by plevels</span>
-<span class="n">figrmse</span><span class="p">,</span> <span class="n">figbias</span><span class="p">,</span> <span class="n">figts</span>  <span class="o">=</span> <span class="n">plots</span><span class="o">.</span><span class="n">plot_profile</span><span class="p">(</span><span class="n">qc0</span><span class="p">,</span> <span class="s2">&quot;pressure (Pa)&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-<img alt="RMSE Plot" src="../_images/rmse.png" />
-<img alt="Bias Plot" src="../_images/bias.png" />
-<img alt="Bias Plot" src="../_images/totalspread.png" />
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h2>
+<p>The pyDARTdiags source comes with a set of examples in the <code class="docutils literal notranslate"><span class="pre">examples</span></code> directory.
+The examples are also available as notebooks in the <a class="reference internal" href="../examples/index.html#examples-index"><span class="std std-ref">Examples Gallery</span></a>.
+The examples cover, <a class="reference internal" href="../examples/01_manipulating/index.html#manip-examples-index"><span class="std std-ref">Manipulating Observation Sequences</span></a>, <a class="reference internal" href="../examples/02_visualizing/index.html#vis-examples-index"><span class="std std-ref">Visualizing Observation Sequences</span></a>, and <a class="reference internal" href="../examples/03_diagnostics/index.html#diag-examples-index"><span class="std std-ref">Diagnostics</span></a>.</p>
 </section>
 </section>
 
@@ -765,20 +745,20 @@ pip install pydartdiags
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="index.html"
+       href="installguide.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">User Guide</p>
+        <p class="prev-next-title">Install Guide</p>
       </div>
     </a>
     <a class="right-next"
-       href="installguide.html"
+       href="working-with-obsq.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Install Guide</p>
+        <p class="prev-next-title">Observation Sequences</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -801,10 +781,9 @@ pip install pydartdiags
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">Installation</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#read-an-obs-sequence-file">Read an obs_sequence file</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examine-the-dataframe">Examine the DataFrame</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-profiles-of-rmse-and-bias-and-total-spread">Plot Profiles of RMSE and Bias and Total Spread</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a></li>
 </ul>
   </nav></div>
 
