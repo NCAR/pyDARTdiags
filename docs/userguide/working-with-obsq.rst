@@ -222,6 +222,42 @@ In the ObsSequence DataFrame, the type of identity observations is stored as thi
 integer of the index in the DART state vector.
 
 
+Multi-component Observations
+------------------------------
+
+:ref:`stats-multi-comp` are a observations constructed from component observation.
+For example, U and V wind components can be combined into a single observation of horizontal wind speed.
+
+You can create composite observations in your workflow as follows:
+
+.. code-block:: python
+
+    import pydartdiags.obs_sequence.obs_sequence as obsq
+    obs_seq = obsq.ObsSequence('obs_seq.final')
+    obs_seq.composite_types()
+
+The default list of composite observation types is defined in 
+`composite_types.yaml <https://github.com/NCAR/pyDARTdiags/blob/main/src/pydartdiags/obs_sequence/composite_types.yaml>`__
+file. You can give a custom list of composite observation types by passing the path to a YAML file
+to the `composite_types` method:  
+
+.. code-block:: python
+
+    obs_seq.composite_types(composite_types='my_composite_types.yaml')
+
+.. Important::
+
+    By default, duplicate composite observations treated as distinct observations
+    because this is the behavior of the Fortran obs_diag code, which does not look 
+    for nor identify duplicate observations. You can raise an exception if duplicate
+    composite observations are found by passing the `raise_on_duplicate` argument: 
+
+    .. code-block:: python
+
+        obs_seq.composite_types(raise_on_duplicate=True)
+
+    This will raise an exception if duplicate composite observations are found in the observation sequence.
+
 Calculating Statistics
 =======================
 

@@ -838,7 +838,7 @@ class TestCompositeTypes:
         dup = obsq.ObsSequence(file_path)
         # Test that composite_types raises an error
         with pytest.raises(Exception, match="There are duplicates in the components."):
-            dup.composite_types(pair_up_duplicates=False)
+            dup.composite_types(raise_on_duplicate=True)
 
     def test_no_yaml_file(self):
         with pytest.raises(Exception):

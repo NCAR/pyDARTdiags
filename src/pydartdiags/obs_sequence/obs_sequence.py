@@ -883,7 +883,7 @@ class ObsSequence:
 
                 yield obs
 
-    def composite_types(self, composite_types="use_default", pair_up_duplicates=True):
+    def composite_types(self, composite_types="use_default", raise_on_duplicate=False):
         """
         Set up and construct composite observation types for the DataFrame.
 
@@ -895,15 +895,15 @@ class ObsSequence:
             composite_types (str, optional): The YAML configuration for composite types.
                 If 'use_default', the default configuration is used. Otherwise, a custom YAML
                 configuration can be provided.
-            pair_up_duplicates (bool, optional): If False, raises an exception if there are
-                duplicates in the components. otherwise default True, deals with duplicates as though
+            raise_on_duplicate (bool, optional): If True, raises an exception if there are
+                duplicates in the components. otherwise default False, deals with duplicates as though
                 they are distinct observations.
 
         Returns:
             pd.DataFrame: The updated DataFrame with the new composite rows added.
 
         Raises:
-            Exception: If there are repeat values in the components and pair_up_duplicates = False
+            Exception: If there are repeat values in the components and raise_on_duplicate = True
         """
 
         if composite_types == "use_default":
@@ -932,7 +932,7 @@ class ObsSequence:
                 df_comp,
                 key,
                 self.composite_types_dict[key]["components"],
-                pair_up_duplicates,
+                raise_on_duplicate,
             )
             df = pd.concat([df, df_new], axis=0)
 
@@ -1218,9 +1218,9 @@ def convert_dart_time(seconds, days):
     return time
 
 
-def construct_composit(df_comp, composite, components, pair_up_duplicates):
+def construct_composit(df_comp, composite, components, raise_on_duplicate):
     """
-    creates a new DataFrame by combining pairs of rows from two specified component
+    Creates a new DataFrame by combining pairs of rows from two specified component
     types in an observation DataFrame. It matches rows based on location and time,
     and then combines certain columns using the square root of the sum of squares
     of the components.
@@ -1229,7 +1229,7 @@ def construct_composit(df_comp, composite, components, pair_up_duplicates):
         df_comp (pd.DataFrame): The DataFrame containing the component rows to be combined.
         composite (str): The type name for the new composite rows.
         components (list of str): A list containing the type names of the two components to be combined.
-        pair_up_duplicates (bool): If False, raises an exception if there are duplicates in the components.
+        raise_on_duplicate (bool): If False, raises an exception if there are duplicates in the components.
         otherwise deals with duplicates as though they are distinct observations.
 
 
@@ -1264,15 +1264,7 @@ def construct_composit(df_comp, composite, components, pair_up_duplicates):
         or selected_rows_v[same_obs_columns].duplicated().sum() > 0
     ):
 
-        if pair_up_duplicates:
-            selected_rows["dup_num"] = selected_rows.groupby(
-                same_obs_columns
-            ).cumcount()
-            selected_rows_v["dup_num"] = selected_rows_v.groupby(
-                same_obs_columns
-            ).cumcount()
-
-        else:
+        if raise_on_duplicate:
             print(
                 f"{selected_rows[same_obs_columns].duplicated().sum()} duplicates in {composite} component {components[0]}: "
             )
@@ -1282,6 +1274,14 @@ def construct_composit(df_comp, composite, components, pair_up_duplicates):
             )
             print(f"{selected_rows_v[same_obs_columns]}")
             raise Exception("There are duplicates in the components.")
+
+        else:
+            selected_rows["dup_num"] = selected_rows.groupby(
+                same_obs_columns
+            ).cumcount()
+            selected_rows_v["dup_num"] = selected_rows_v.groupby(
+                same_obs_columns
+            ).cumcount()
 
     # Merge the two DataFrames on location and time columns
     merged_df = pd.merge(
