@@ -183,6 +183,9 @@ class ObsSequence:
             if old in self.df.columns
         }
         self.df = self.df.rename(columns=rename_dict)
+        if self.is_binary(file):
+            # binary files do not have "OBS      X" in, so set linked list from df.
+            self.update_attributes_from_df()
 
     def create_all_obs(self):
         """steps through the generator to create a
@@ -857,18 +860,45 @@ class ObsSequence:
 
                 #   kind (type of observation) value
                 obs.append("kind")
-                record_length_bytes = f.read(4)
-                record_length = struct.unpack("i", record_length_bytes)[0]
+                record_length = ObsSequence.read_record_length(f)
                 record = f.read(record_length)
                 kind = f"{struct.unpack('i', record)[0]}"
                 obs.append(kind)
 
                 ObsSequence.check_trailing_record_length(f, record_length)
 
+                # Skip metadata (obs_def) and go directly to the time record
+                while True:
+                    pos = f.tell()
+                    record_length = ObsSequence.read_record_length(f)
+                    if record_length is None:
+                        break  # End of file
+
+                    record = f.read(record_length)
+                    # Check if this record is likely the "time" record (8 bytes, can be unpacked as two ints)
+                    if record_length == 8:
+                        try:
+                            seconds, days = struct.unpack("ii", record)
+                            # If unpack succeeds, this is the time record
+                            f.seek(pos)  # Seek back so the main loop can process it
+                            break
+                        except struct.error:
+                            pass  # Not the time record, keep skipping
+
+                    ObsSequence.check_trailing_record_length(f, record_length)
+
                 # time (seconds, days)
                 record_length = ObsSequence.read_record_length(f)
                 record = f.read(record_length)
-                seconds, days = struct.unpack("ii", record)[:8]
+                try:  # This is incase the record is not the time record because of metadata funkyness
+                    seconds, days = struct.unpack("ii", record)
+                except struct.error as e:
+                    print(
+                        f"Reading observation {obs_num}... record length: {record_length} kind {kind}"
+                    )
+                    print(f"")
+                    print(f"Error unpacking seconds and days: {e}")
+                    raise
                 time_string = f"{seconds} {days}"
                 obs.append(time_string)
 
