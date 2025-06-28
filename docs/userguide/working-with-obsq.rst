@@ -56,7 +56,7 @@ World Ocean Database (WOD) observations:
     </code></pre>
 
 The header starts with the keyword `obs_sequence`, then the keyword `obs_type_definitions`
-then on the next line, a number indicating the number of different types of 
+then on the next line, a number indicating the number of different types (kinds) of 
 observations in the file. In this header there are  :color:`red:13` observation types defined. 
 The list of observation type follows, each observation type is defined by a unique integer.
 
@@ -173,7 +173,7 @@ channel, platform, and sensor information. In this example, the observation defi
 The keyword `loc3d` indicates the start of the 3D location of the observation, which is followed by
 the observation's longitude, latitude in radians, and the vertical value and vertical coordinate 
 (e.g. meters, pressure). The keyword `kind` indicates the type of observation, which is an integer that corresponds to the
-observation kind defined in the header.  In this example, observation number 1 is a 16, which is 
+observation type (kind) defined in the header.  In this example, observation number 1 is a 16, which is 
 a FLOAT_TEMPERATURE observation, and observation number 2 is 15 which is a FLOAT_SALINITY observation.
 
 The next line is observation time in :color:`orange: seconds`, :color:`orange: days` since a reference time (usually 1601 01 01 00:00:00 for DART),
