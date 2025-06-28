@@ -824,18 +824,20 @@ self.create_header_from_dataframe()</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="obs_sequence.ObsSequence.composite_types">
-<span class="sig-name descname"><span class="pre">composite_types</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">composite_types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'use_default'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.ObsSequence.composite_types" title="Link to this definition">#</a></dt>
-<dd><p>Set up and construct composite types for the DataFrame.</p>
-<p>This function sets up composite types based on a provided YAML configuration or
+<span class="sig-name descname"><span class="pre">composite_types</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">composite_types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'use_default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raise_on_duplicate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.ObsSequence.composite_types" title="Link to this definition">#</a></dt>
+<dd><p>Set up and construct composite observation types for the DataFrame.</p>
+<p>This function sets up composite observation types based on a provided YAML configuration or
 a default configuration. It constructs new composite rows by combining specified
-components and adds them to the DataFrame.</p>
+components and adds them to the DataFrame in place.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>composite_types</strong> (<em>str</em><em>, </em><em>optional</em>) – The YAML configuration for composite types.</p></li>
-<li><p><strong>'use_default'</strong> (<em>If</em>)</p></li>
-<li><p><strong>Otherwise</strong> (<em>the default configuration is used.</em>)</p></li>
-<li><p><strong>provided.</strong> (<em>a custom YAML configuration can be</em>)</p></li>
+<li><p><strong>composite_types</strong> (<em>str</em><em>, </em><em>optional</em>) – The YAML configuration for composite types.
+If ‘use_default’, the default configuration is used. Otherwise, a custom YAML
+configuration can be provided.</p></li>
+<li><p><strong>raise_on_duplicate</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, raises an exception if there are
+duplicates in the components. otherwise default False, deals with duplicates as though
+they are distinct observations.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -845,7 +847,7 @@ components and adds them to the DataFrame.</p>
 <dd class="field-odd"><p>pd.DataFrame</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>Exception</strong> – If there are repeat values in the components.</p>
+<dd class="field-even"><p><strong>Exception</strong> – If there are repeat values in the components and raise_on_duplicate = True</p>
 </dd>
 </dl>
 </dd></dl>
@@ -965,17 +967,19 @@ Call this after self.df is replaced or its structure changes.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="obs_sequence.construct_composit">
-<span class="sig-prename descclassname"><span class="pre">obs_sequence.</span></span><span class="sig-name descname"><span class="pre">construct_composit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df_comp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">composite</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">components</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.construct_composit" title="Link to this definition">#</a></dt>
-<dd><p>Construct a composite DataFrame by combining rows from two components.</p>
-<p>This function takes two DataFrames and combines rows from them based on matching
-location and time. It creates a new row with a composite type by combining
-specified columns using the square root of the sum of squares method.</p>
+<span class="sig-prename descclassname"><span class="pre">obs_sequence.</span></span><span class="sig-name descname"><span class="pre">construct_composit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df_comp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">composite</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">components</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raise_on_duplicate</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.construct_composit" title="Link to this definition">#</a></dt>
+<dd><p>Creates a new DataFrame by combining pairs of rows from two specified component
+types in an observation DataFrame. It matches rows based on location and time,
+and then combines certain columns using the square root of the sum of squares
+of the components.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>df_comp</strong> (<em>pd.DataFrame</em>) – The DataFrame containing the component rows to be combined.</p></li>
 <li><p><strong>composite</strong> (<em>str</em>) – The type name for the new composite rows.</p></li>
 <li><p><strong>components</strong> (<em>list</em><em> of </em><em>str</em>) – A list containing the type names of the two components to be combined.</p></li>
+<li><p><strong>raise_on_duplicate</strong> (<em>bool</em>) – If False, raises an exception if there are duplicates in the components.</p></li>
+<li><p><strong>observations.</strong> (<em>otherwise deals with duplicates as though they are distinct</em>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>

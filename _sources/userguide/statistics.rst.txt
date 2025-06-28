@@ -82,6 +82,8 @@ Bias is the average difference between the ensemble mean and the observations
    \text{bias} \equiv \frac{1}{N} \sum_{n=1}^{N} ( \mu_n - y_n)
 
 
+.. _stats-multi-comp:
+
 Multi-component Observations
 -----------------------------
 

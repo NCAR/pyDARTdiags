@@ -579,6 +579,35 @@ the index in the DART state vector that the observation corresponds to.</p>
 <p>In the ObsSequence DataFrame, the type of identity observations is stored as this negative
 integer of the index in the DART state vector.</p>
 </section>
+<section id="multi-component-observations">
+<h3>Multi-component Observations<a class="headerlink" href="#multi-component-observations" title="Link to this heading">#</a></h3>
+<p><a class="reference internal" href="statistics.html#stats-multi-comp"><span class="std std-ref">Multi-component Observations</span></a> are a observations constructed from component observations.
+For example, U and V wind components can be combined into a single observation of horizontal wind speed.</p>
+<p>You can create composite observations in your workflow as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pydartdiags.obs_sequence.obs_sequence</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">obsq</span>
+<span class="n">obs_seq</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">ObsSequence</span><span class="p">(</span><span class="s1">&#39;obs_seq.final&#39;</span><span class="p">)</span>
+<span class="n">obs_seq</span><span class="o">.</span><span class="n">composite_types</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The default list of composite observation types is defined in
+<a class="reference external" href="https://github.com/NCAR/pyDARTdiags/blob/main/src/pydartdiags/obs_sequence/composite_types.yaml">composite_types.yaml</a>
+file. You can give a custom list of composite observation types by passing the path to a YAML file
+to the <cite>composite_types</cite> method:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">composite_types</span><span class="p">(</span><span class="n">composite_types</span><span class="o">=</span><span class="s1">&#39;my_composite_types.yaml&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>By default, duplicate composite observations treated as distinct observations
+because this is the behavior of the Fortran obs_diag code, which does not look
+for nor identify duplicate observations. You can raise an exception if duplicate
+composite observations are found by passing the <cite>raise_on_duplicate</cite> argument:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">composite_types</span><span class="p">(</span><span class="n">raise_on_duplicate</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This will raise an exception if duplicate composite observations are found in the observation sequence.</p>
+</div>
+</section>
 </section>
 <section id="calculating-statistics">
 <h2>Calculating Statistics<a class="headerlink" href="#calculating-statistics" title="Link to this heading">#</a></h2>
@@ -673,6 +702,7 @@ For more general examples of visualization of observation sequences, see the the
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#working-with-observation-sequence-objects">Working with Observation Sequence Objects</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-note-on-identity-observations">A Note on Identity Observations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-component-observations">Multi-component Observations</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calculating-statistics">Calculating Statistics</a></li>
