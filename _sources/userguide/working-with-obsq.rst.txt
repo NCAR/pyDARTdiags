@@ -16,8 +16,10 @@ There are three types of observation sequence file:
   is used as input to filter, the DART assimilation program.
 - **obs_seq.final**: A observation sequence file which contains the observations and their
   associated metadata after assimilation. This file is created by filter, the DART assimilation program.
-  The assimilation data is the mean and standard deviation of the forward operator for 
+  The assimilation data is the mean and spread of the forward operator for 
   each observation, and optionally each ensemble members value of the forward operator.
+  For detail on how the assimilation statistics are calculated, see the
+  :ref:`statistics` section of the user guide.
   The prior assimilation data is always present in the observation sequence file after
   assimilation, the posterior assimilation data is only present if the user chooses to do
   posterior forward operator calculations.
@@ -31,7 +33,7 @@ World Ocean Database (WOD) observations:
 
    <pre style="background-color: #f8f8f8; color: #000000;"><code>
       obs_sequence
-    obs_kind_definitions
+    obs_type_definitions
               <span style="color: red;">13</span>
               15 FLOAT_SALINITY                 
               16 FLOAT_TEMPERATURE              
@@ -53,9 +55,9 @@ World Ocean Database (WOD) observations:
       first:            1  last:        48982
     </code></pre>
 
-The header starts with the keyword `obs_sequence`, then the keyword `obs_kind_definitions`
+The header starts with the keyword `obs_sequence`, then the keyword `obs_type_definitions`
 then on the next line, a number indicating the number of different types (kinds) of 
-observations in the file. In this header there are  :color:`red:13` observation types (kinds) defined. 
+observations in the file. In this header there are  :color:`red:13` observation types defined. 
 The list of observation type follows, each observation type is defined by a unique integer.
 
 .. Note::
@@ -71,7 +73,7 @@ number of observations, `max_num_obs`.
 The names of the copies are listed one per line, the copies followed by the qc copies.
 The order of these copies is the same for each observation. In this example, there is one copy 
 :color:`blue:WOD observation` and one quality control copy, :color:`green:WOD QC`.
-Every observation in the sequence has each of the copies and each of the quality control copies.
+Each observation in the observation sequence has all the copies listed in the header.
 
 The last line of the header contains the first and last observation numbers. This is used to 
 indicate the start and end of the linked list of observations in the file. In this example,
@@ -79,7 +81,49 @@ the first observation is OBS 1 and the last observation is OBS 48982. Note that 
 is a linked list the order of observations in the file is not not necessarily the same as the order of the 
 observations in time.
 
-Here is the format of the observation sequence file after the header, showing the first two observations:
+A header for an obs_seq.final file is similar, but it will also include the assimilation information
+for each observation, such as the prior and posterior forward operator mean and spread, and DART_QC.
+
+.. raw:: html
+
+   <pre style="background-color: #f8f8f8; color: #000000;"><code>
+      obs_sequence
+    obs_type_definitions
+                <span style="color: red;">13</span>
+                  15 FLOAT_SALINITY                 
+                  16 FLOAT_TEMPERATURE              
+                  23 GLIDER_SALINITY                
+                  24 GLIDER_TEMPERATURE             
+                  27 MOORING_SALINITY               
+                  28 MOORING_TEMPERATURE            
+                  32 CTD_SALINITY                   
+                  33 CTD_TEMPERATURE                
+                  38 XCTD_SALINITY                  
+                  39 XCTD_TEMPERATURE               
+                  43 XBT_TEMPERATURE                
+                  46 APB_SALINITY                   
+                  47 APB_TEMPERATURE      
+      num_copies:           11  num_qc:            2
+      num_obs:        48982  max_num_obs:        48982
+    <span style="color: blue;">WOD observation</span>                                              
+    prior ensemble mean                                             
+    posterior ensemble mean                                         
+    prior ensemble spread                                           
+    posterior ensemble spread                                       
+    prior ensemble member      1                                    
+    posterior ensemble member      1                                
+    prior ensemble member      2                                    
+    posterior ensemble member      2                                
+    prior ensemble member      3                                    
+    posterior ensemble member      3                                
+    <span style="color: green;">WOD QC</span>                                                         
+    DART quality control                                            
+      first:            1  last:        48982
+    </code></pre>
+
+
+Here is the format of the obs_seq.out observation sequence file after the header, 
+showing the first two observations:
 
 .. raw:: html
 
@@ -97,7 +141,7 @@ Here is the format of the observation sequence file after the header, showing th
       0.250000000000000    
     OBS            2
       <span style="color: blue;">3.379800033569336E-002</span> 
-      0.000000000000000E+000
+      <span style="color: green;">0.000000000000000E+000</span> 
               1           3          -1
     obdef
     loc3d
@@ -112,8 +156,14 @@ Here is the format of the observation sequence file after the header, showing th
 Each observation in the sequence starts with the keyword `OBS`, followed by the observation number
 on the same line.  The copies for each observation are listed on the next lines, following 
 the pattern of the header. In this example, the first copy is the 
-:color:`blue:WOD observation` and second copy is :color:`green:WOD QC`.  The line after the copies
-is the linked list information, which contains the previous observation number,
+:color:`blue:WOD observation` and second copy is :color:`green:WOD QC`. Each observation has all
+the copies listed in the header. 
+In obs_seq.out files the copies are typically the observation value and the quality control values.
+In obs_seq.final files, there will be additional copies for the prior and (optionally) posterior 
+forward operator mean and spread, and optionally the prior and posterior forward operator values 
+for each ensemble member.
+
+The line after the copies is the linked list information, which contains the previous observation number,
 the next observation number, a third number (-1) which is reserved for use in DART.
 
 The keyword `obdef` indicates the start of the observation definition. This is where any 
@@ -123,7 +173,7 @@ channel, platform, and sensor information. In this example, the observation defi
 The keyword `loc3d` indicates the start of the 3D location of the observation, which is followed by
 the observation's longitude, latitude in radians, and the vertical value and vertical coordinate 
 (e.g. meters, pressure). The keyword `kind` indicates the type of observation, which is an integer that corresponds to the
-observation kind defined in the header.  In this example, observation number 1 is a 16, which is 
+observation type (kind) defined in the header.  In this example, observation number 1 is a 16, which is 
 a FLOAT_TEMPERATURE observation, and observation number 2 is 15 which is a FLOAT_SALINITY observation.
 
 The next line is observation time in :color:`orange: seconds`, :color:`orange: days` since a reference time (usually 1601 01 01 00:00:00 for DART),
@@ -262,6 +312,7 @@ Calculating Statistics
 =======================
 
 The :mod:`stats` module contains functions to calculate statistics on the given DataFrame.
+For definitions of the statistics calculated, see the :ref:`statistics` section of the user guide.
 
 .. Note::
 
