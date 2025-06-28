@@ -166,15 +166,16 @@ for each ensemble member.
 The line after the copies is the linked list information, which contains the previous observation number,
 the next observation number, a third number (-1) which is reserved for use in DART.
 
-The keyword `obdef` indicates the start of the observation definition. This is where any 
-additional metadata for the observation is stored, for example a satellite observations may have
-channel, platform, and sensor information. In this example, the observation definition is empty.
+The keyword `obdef` indicates the start of the observation definition. 
 
-The keyword `loc3d` indicates the start of the 3D location of the observation, which is followed by
-the observation's longitude, latitude in radians, and the vertical value and vertical coordinate 
-(e.g. meters, pressure). The keyword `kind` indicates the type of observation, which is an integer that corresponds to the
+The next line, in this example, `loc3d` indicates a 3D or 1D location. 
+For 3D observations the observation's longitude, latitude in radians, and the vertical value and 
+vertical coordinate (e.g. meters, pressure) is next. For 1D, location is a single number.
+The keyword `kind` indicates the type of observation, which is an integer that corresponds to the
 observation type (kind) defined in the header.  In this example, observation number 1 is a 16, which is 
 a FLOAT_TEMPERATURE observation, and observation number 2 is 15 which is a FLOAT_SALINITY observation.
+Any additional metadata for the observation is stored after the type, for example a satellite observations may have
+channel, platform, and sensor information. In this example, there is no extra metadata.
 
 The next line is observation time in :color:`orange: seconds`, :color:`orange: days` since a reference time (usually 1601 01 01 00:00:00 for DART),
 the last line of the observation is the observation error variance.
