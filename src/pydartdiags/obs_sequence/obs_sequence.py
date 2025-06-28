@@ -883,23 +883,27 @@ class ObsSequence:
 
                 yield obs
 
-    def composite_types(self, composite_types="use_default"):
+    def composite_types(self, composite_types="use_default", raise_on_duplicate=False):
         """
-        Set up and construct composite types for the DataFrame.
+        Set up and construct composite observation types for the DataFrame.
 
-        This function sets up composite types based on a provided YAML configuration or
+        This function sets up composite observation types based on a provided YAML configuration or
         a default configuration. It constructs new composite rows by combining specified
-        components and adds them to the DataFrame.
+        components and adds them to the DataFrame in place.
 
         Args:
             composite_types (str, optional): The YAML configuration for composite types.
-            If 'use_default', the default configuration is used. Otherwise, a custom YAML configuration can be provided.
+                If 'use_default', the default configuration is used. Otherwise, a custom YAML
+                configuration can be provided.
+            raise_on_duplicate (bool, optional): If True, raises an exception if there are
+                duplicates in the components. otherwise default False, deals with duplicates as though
+                they are distinct observations.
 
         Returns:
             pd.DataFrame: The updated DataFrame with the new composite rows added.
 
         Raises:
-            Exception: If there are repeat values in the components.
+            Exception: If there are repeat values in the components and raise_on_duplicate = True
         """
 
         if composite_types == "use_default":
@@ -925,7 +929,10 @@ class ObsSequence:
         df = pd.DataFrame()
         for key in self.composite_types_dict:
             df_new = construct_composit(
-                df_comp, key, self.composite_types_dict[key]["components"]
+                df_comp,
+                key,
+                self.composite_types_dict[key]["components"],
+                raise_on_duplicate,
             )
             df = pd.concat([df, df_new], axis=0)
 
@@ -1211,24 +1218,31 @@ def convert_dart_time(seconds, days):
     return time
 
 
-def construct_composit(df_comp, composite, components):
+def construct_composit(df_comp, composite, components, raise_on_duplicate):
     """
-    Construct a composite DataFrame by combining rows from two components.
-
-    This function takes two DataFrames and combines rows from them based on matching
-    location and time. It creates a new row with a composite type by combining
-    specified columns using the square root of the sum of squares method.
+    Creates a new DataFrame by combining pairs of rows from two specified component
+    types in an observation DataFrame. It matches rows based on location and time,
+    and then combines certain columns using the square root of the sum of squares
+    of the components.
 
     Args:
         df_comp (pd.DataFrame): The DataFrame containing the component rows to be combined.
         composite (str): The type name for the new composite rows.
         components (list of str): A list containing the type names of the two components to be combined.
+        raise_on_duplicate (bool): If False, raises an exception if there are duplicates in the components.
+        otherwise deals with duplicates as though they are distinct observations.
+
 
     Returns:
         merged_df (pd.DataFrame): A DataFrame containing the new composite rows.
     """
+    # select rows for the two components
+    if len(components) != 2:
+        raise ValueError("components must be a list of two component types.")
     selected_rows = df_comp[df_comp["type"] == components[0].upper()]
     selected_rows_v = df_comp[df_comp["type"] == components[1].upper()]
+    selected_rows = selected_rows.copy()
+    selected_rows_v = selected_rows_v.copy()
 
     prior_columns_to_combine = df_comp.filter(regex="prior_ensemble").columns.tolist()
     posterior_columns_to_combine = df_comp.filter(
@@ -1239,7 +1253,7 @@ def construct_composit(df_comp, composite, components):
         + posterior_columns_to_combine
         + ["observation", "obs_err_var"]
     )
-    merge_columns = ["latitude", "longitude", "vertical", "time"]
+    merge_columns = ["latitude", "longitude", "vertical", "time"]  # @todo HK 1d or 3d
     same_obs_columns = merge_columns + [
         "observation",
         "obs_err_var",
@@ -1249,15 +1263,25 @@ def construct_composit(df_comp, composite, components):
         selected_rows[same_obs_columns].duplicated().sum() > 0
         or selected_rows_v[same_obs_columns].duplicated().sum() > 0
     ):
-        print(
-            f"{selected_rows[same_obs_columns].duplicated().sum()} duplicates in {composite} component {components[0]}: "
-        )
-        print(f"{selected_rows[same_obs_columns]}")
-        print(
-            f"{selected_rows_v[same_obs_columns].duplicated().sum()} duplicates in {composite} component {components[0]}: "
-        )
-        print(f"{selected_rows_v[same_obs_columns]}")
-        raise Exception("There are duplicates in the components.")
+
+        if raise_on_duplicate:
+            print(
+                f"{selected_rows[same_obs_columns].duplicated().sum()} duplicates in {composite} component {components[0]}: "
+            )
+            print(f"{selected_rows[same_obs_columns]}")
+            print(
+                f"{selected_rows_v[same_obs_columns].duplicated().sum()} duplicates in {composite} component {components[0]}: "
+            )
+            print(f"{selected_rows_v[same_obs_columns]}")
+            raise Exception("There are duplicates in the components.")
+
+        else:
+            selected_rows["dup_num"] = selected_rows.groupby(
+                same_obs_columns
+            ).cumcount()
+            selected_rows_v["dup_num"] = selected_rows_v.groupby(
+                same_obs_columns
+            ).cumcount()
 
     # Merge the two DataFrames on location and time columns
     merged_df = pd.merge(
@@ -1273,5 +1297,8 @@ def construct_composit(df_comp, composite, components):
     merged_df = merged_df.drop(
         columns=[col for col in merged_df.columns if col.endswith("_v")]
     )
+
+    if "dup_num" in merged_df.columns:
+        merged_df = merged_df.drop(columns=["dup_num"])
 
     return merged_df
