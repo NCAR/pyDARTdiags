@@ -943,6 +943,25 @@ class TestCompositeTypes:
         with pytest.raises(yaml.YAMLError):
             obsq.load_yaml_to_dict(broken_file)
 
+    def test_composite_types_more_than_two_components(self, tmpdir):
+        # Create a YAML file with a composite type with more than 2 components
+        composite_yaml = """
+        acars_super_wind:
+            components: [ACARS_U_WIND_COMPONENT, ACARS_V_WIND_COMPONENT, ACARS_TEMPERATURE]
+        """
+        composite_file = tmpdir.join("composite_more_than_two.yaml")
+        with open(composite_file, "w") as f:
+            f.write(composite_yaml)
+
+        test_dir = os.path.dirname(__file__)
+        file_path = os.path.join(test_dir, "data", "three-obs.final")
+        obs_seq = obsq.ObsSequence(file_path)
+        # Should raise an exception due to >2 components
+        with pytest.raises(
+            Exception, match="components must be a list of two component types."
+        ):
+            obs_seq.composite_types(composite_types=str(composite_file))
+
 
 class TestUpdateAttributesFromDf:
     def test_update_attributes_from_df(self):
