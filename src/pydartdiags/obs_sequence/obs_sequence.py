@@ -1214,6 +1214,11 @@ class ObsSequence:
 
         # Update seq (generator should be empty or None if not from file)
         self.seq = []
+        # Update loc_mod
+        if "vertical" in self.df.columns:
+            self.loc_mod = "loc3d"
+        else:
+            self.loc_mod = "loc1d"
 
         # update linked list for obs and obs_nums
         ObsSequence.update_linked_list(self.df)
