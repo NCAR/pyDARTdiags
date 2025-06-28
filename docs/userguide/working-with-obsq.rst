@@ -225,7 +225,7 @@ integer of the index in the DART state vector.
 Multi-component Observations
 ------------------------------
 
-:ref:`stats-multi-comp` are a observations constructed from component observation.
+:ref:`stats-multi-comp` are a observations constructed from component observations.
 For example, U and V wind components can be combined into a single observation of horizontal wind speed.
 
 You can create composite observations in your workflow as follows:
