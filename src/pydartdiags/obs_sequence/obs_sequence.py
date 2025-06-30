@@ -189,7 +189,7 @@ class ObsSequence:
             self.update_attributes_from_df()
             
         # Replace MISSING_R8s with NaNs in posterior stats where DART_quality_control = 2
-        if ("DART_quality_control" in self.df.columns) and self.has_posterior:
+        if self.has_posterior():
             ObsSequence.replace_qc2_nan(self.df)
 
     def create_all_obs(self):
@@ -379,7 +379,7 @@ class ObsSequence:
                 df_copy = df_copy.drop(columns=["midpoint", "vlevels"])
 
             # Revert NaNs back to MISSING_R8s
-            if ("DART_quality_control" in self.df.columns) and self.has_posterior:
+            if self.has_posterior():
                 ObsSequence.revert_qc2_nan(df_copy)
 
             # linked list for reading by dart programs
@@ -1190,6 +1190,7 @@ class ObsSequence:
             self.header.append(copie)
         self.header.append(f"first: 1 last: {n}")
 
+    @staticmethod
     def replace_qc2_nan(df):
         """
         Replace MISSING_R8 values with NaNs in posterior columns for observations where
@@ -1214,6 +1215,7 @@ class ObsSequence:
                 "posterior_ensemble_member_" + str(i),
             ] = np.nan
 
+    @staticmethod
     def revert_qc2_nan(df):
         """
         Revert NaNs back to MISSING_R8s for observations where DART_quality_control = 2
