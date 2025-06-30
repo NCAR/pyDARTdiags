@@ -184,8 +184,8 @@ class ObsSequence:
         }
         self.df = self.df.rename(columns=rename_dict)
         # Replace MISSING_R8s with NaNs in posterior stats where DART_quality_control = 2
-        if ("DART_quality_control" and "posterior_ensemble_mean") in self.df.columns:
-            self.replace_qc2_r8s()
+        if ("DART_quality_control" in self.df.columns) and self.has_posterior:
+            ObsSequence.replace_qc2_nan(self.df)
 
     def create_all_obs(self):
         """steps through the generator to create a
@@ -319,9 +319,9 @@ class ObsSequence:
 
         This function writes the observation sequence stored in the obs_seq.DataFrame to a specified file.
         It updates the header with the number of observations, converts coordinates back to radians
-        if necessary, reverts the replacement MISSING_R8 values with NaNs for any obs that failed the
-        posterior forward observation operators (QC2), drops unnecessary columns, sorts the
-        DataFrame by time, and generates a linked list pattern for reading by DART programs.
+        if necessary, reverts NaNs back to MISSING_R8 for observations with QC=2, drops unnecessary
+        columns, sorts the DataFrame by time, and generates a linked list pattern for reading by DART
+        programs.
 
         Args:
             file (str): The path to the file where the observation sequence will be written.
@@ -365,10 +365,8 @@ class ObsSequence:
                 df_copy = df_copy.drop(columns=["midpoint", "vlevels"])
 
             # Revert NaNs back to MISSING_R8s
-            if (
-                "DART_quality_control" and "posterior_ensemble_mean"
-            ) in df_copy.columns:
-                ObsSequence.revert_qc2_r8s(df_copy)
+            if ("DART_quality_control" in self.df.columns) and self.has_posterior:
+                ObsSequence.revert_qc2_nan(df_copy)
 
             # linked list for reading by dart programs
             df_copy = df_copy.sort_values(
@@ -1146,32 +1144,31 @@ class ObsSequence:
             self.header.append(copie)
         self.header.append(f"first: 1 last: {n}")
 
-    def replace_qc2_r8s(self):
+    def replace_qc2_nan(df):
         """
         Replace MISSING_R8 values with NaNs in posterior columns for observations where
         DART_quality_control = 2 (posterior forward observation operators failed)
 
         This causes these observations to be ignored in the calculations of posterior statistics
         """
-        self.df.loc[
-            self.df["DART_quality_control"] == 2.0, "posterior_ensemble_mean"
+        df.loc[
+            df["DART_quality_control"] == 2.0, "posterior_ensemble_mean"
         ] = np.nan
-        self.df.loc[
-            self.df["DART_quality_control"] == 2.0, "posterior_ensemble_spread"
+        df.loc[
+            df["DART_quality_control"] == 2.0, "posterior_ensemble_spread"
         ] = np.nan
         num_post_members = len(
-            self.df.columns[
-                self.df.columns.str.startswith("posterior_ensemble_member_")
+            df.columns[
+                df.columns.str.startswith("posterior_ensemble_member_")
             ]
         )
         for i in range(1, num_post_members + 1):
-            self.df.loc[
-                self.df["DART_quality_control"] == 2.0,
+            df.loc[
+                df["DART_quality_control"] == 2.0,
                 "posterior_ensemble_member_" + str(i),
             ] = np.nan
 
-    @staticmethod
-    def revert_qc2_r8s(df):
+    def revert_qc2_nan(df):
         """
         Revert NaNs back to MISSING_R8s for observations where DART_quality_control = 2
         (posterior forward observation operators failed)

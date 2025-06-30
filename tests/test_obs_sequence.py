@@ -911,9 +911,9 @@ class TestQC2Replacement:
         obs_seq_nan.df = df
         return obs_seq_nan
     
-    def test_replace_qc2_r8s(self, obs_seq):
+    def test_replace_qc2_nan(self, obs_seq):
         # Call the replace_qc2_r8s method
-        obs_seq.replace_qc2_r8s()
+        obsq.replace_qc2_nan(obs_seq.df)
 
          # Verify that NaNs are correctly replaced for QC2 rows
         assert (
@@ -947,7 +947,7 @@ class TestQC2Replacement:
 
     def test_revert_qc2_r8s(self, obs_seq_nan):
         # Revert NaNs back to MISSING_R8s
-        obs_seq_nan.revert_qc2_r8s(obs_seq_nan.df)
+        obsq.revert_qc2_nan(obs_seq_nan.df)
 
         # Verify that MISSING_R8s (-888888.0) are correctly restored for QC2 rows
         assert (
