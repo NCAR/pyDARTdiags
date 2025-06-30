@@ -1254,12 +1254,12 @@ class TestQC2Replacement:
         obs_seq_nan = obsq.ObsSequence(file=None)
         obs_seq_nan.df = df
         return obs_seq_nan
-    
+
     def test_replace_qc2_nan(self, obs_seq):
         # Call the replace_qc2_r8s method
         obsq.ObsSequence.replace_qc2_nan(obs_seq.df)
 
-         # Verify that NaNs are correctly replaced for QC2 rows
+        # Verify that NaNs are correctly replaced for QC2 rows
         assert (
             obs_seq.df.loc[
                 obs_seq.df["DART_quality_control"] == 2.0, "posterior_ensemble_mean"
@@ -1302,19 +1302,22 @@ class TestQC2Replacement:
         ).all()
         assert (
             obs_seq_nan.df.loc[
-                obs_seq_nan.df["DART_quality_control"] == 2.0, "posterior_ensemble_spread"
+                obs_seq_nan.df["DART_quality_control"] == 2.0,
+                "posterior_ensemble_spread",
             ]
             == -888888.0
         ).all()
         assert (
             obs_seq_nan.df.loc[
-                obs_seq_nan.df["DART_quality_control"] == 2.0, "posterior_ensemble_member_1"
+                obs_seq_nan.df["DART_quality_control"] == 2.0,
+                "posterior_ensemble_member_1",
             ]
             == -888888.0
         ).all()
         assert (
             obs_seq_nan.df.loc[
-                obs_seq_nan.df["DART_quality_control"] == 2.0, "posterior_ensemble_member_2"
+                obs_seq_nan.df["DART_quality_control"] == 2.0,
+                "posterior_ensemble_member_2",
             ]
             == -888888.0
         ).all()

@@ -187,7 +187,7 @@ class ObsSequence:
         if self.is_binary(file):
             # binary files do not have "OBS      X" in, so set linked list from df.
             self.update_attributes_from_df()
-            
+
         # Replace MISSING_R8s with NaNs in posterior stats where DART_quality_control = 2
         if self.has_posterior():
             ObsSequence.replace_qc2_nan(self.df)
@@ -1198,16 +1198,10 @@ class ObsSequence:
 
         This causes these observations to be ignored in the calculations of posterior statistics
         """
-        df.loc[
-            df["DART_quality_control"] == 2.0, "posterior_ensemble_mean"
-        ] = np.nan
-        df.loc[
-            df["DART_quality_control"] == 2.0, "posterior_ensemble_spread"
-        ] = np.nan
+        df.loc[df["DART_quality_control"] == 2.0, "posterior_ensemble_mean"] = np.nan
+        df.loc[df["DART_quality_control"] == 2.0, "posterior_ensemble_spread"] = np.nan
         num_post_members = len(
-            df.columns[
-                df.columns.str.startswith("posterior_ensemble_member_")
-            ]
+            df.columns[df.columns.str.startswith("posterior_ensemble_member_")]
         )
         for i in range(1, num_post_members + 1):
             df.loc[
@@ -1289,6 +1283,7 @@ class ObsSequence:
 
         # update linked list for obs and obs_nums
         ObsSequence.update_linked_list(self.df)
+
 
 def load_yaml_to_dict(file_path):
     """
