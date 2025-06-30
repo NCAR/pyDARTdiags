@@ -652,6 +652,17 @@ composite observations are found by passing the <cite>raise_on_duplicate</cite> 
 <p>This will raise an exception if duplicate composite observations are found in the observation sequence.</p>
 </div>
 </section>
+<section id="a-note-on-binary-observation-sequence-files">
+<h3>A Note on Binary Observation Sequence Files<a class="headerlink" href="#a-note-on-binary-observation-sequence-files" title="Link to this heading">#</a></h3>
+<p>DART can read and write observation sequence files in binary format. PyDARTdiags can read DART binary observation
+sequence files for diagnostics, but any extra observation metadata is skipped on read, keeping only standard location, type,
+value, and error variance information. This is because the binary format is not a standard format and does not contain the
+same information as the text format observation sequence.  We recommend either converting the binary observation sequence file
+to text format using DART’s
+<a class="reference external" href="https://docs.dart.ucar.edu/en/latest/assimilation_code/programs/obs_sequence_tool/obs_sequence_tool.html#binary-to-ascii-and-back">observation_sequence_tool</a>
+utility, or reaching out to the pyDARTdiags team to add support for reading
+binary observation sequence files with additional metadata.</p>
+</section>
 </section>
 <section id="calculating-statistics">
 <h2>Calculating Statistics<a class="headerlink" href="#calculating-statistics" title="Link to this heading">#</a></h2>
@@ -748,6 +759,7 @@ For more general examples of visualization of observation sequences, see the the
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#working-with-observation-sequence-objects">Working with Observation Sequence Objects</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-note-on-identity-observations">A Note on Identity Observations</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-component-observations">Multi-component Observations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-note-on-binary-observation-sequence-files">A Note on Binary Observation Sequence Files</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calculating-statistics">Calculating Statistics</a></li>
