@@ -309,6 +309,19 @@ to the `composite_types` method:
 
     This will raise an exception if duplicate composite observations are found in the observation sequence.
 
+A Note on Binary Observation Sequence Files
+-------------------------------------------
+
+DART can read and write observation sequence files in binary format. PyDARTdiags can read DART binary observation
+sequence files for diagnostics, but any extra observation metadata is skipped on read, keeping only standard location, type, 
+value, and error variance information. This is because the binary format is not a standard format and does not contain the
+same information as the text format observation sequence.  We recommend either converting the binary observation sequence file
+to text format using DART's 
+`observation_sequence_tool <https://docs.dart.ucar.edu/en/latest/assimilation_code/programs/obs_sequence_tool/obs_sequence_tool.html#binary-to-ascii-and-back>`__
+utility, or reaching out to the pyDARTdiags team to add support for reading
+binary observation sequence files with additional metadata.
+
+
 Calculating Statistics
 =======================
 
