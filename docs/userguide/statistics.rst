@@ -82,6 +82,8 @@ Bias is the average difference between the ensemble mean and the observations
    \text{bias} \equiv \frac{1}{N} \sum_{n=1}^{N} ( \mu_n - y_n)
 
 
+.. _stats-multi-comp:
+
 Multi-component Observations
 -----------------------------
 
@@ -160,9 +162,9 @@ Trusted Observations
 --------------------
 
 The DART quality control (DART_QC) values indicate, for each observation, whether the observation
-was used in the assimilation, and if not, why. DART_QC 0 indicates that the observation was assimilated.
+was used in the assimilation, and if not, why. DART_QC 0 or 2 indicates that the observation was assimilated.
 You may choose to include trusted observations in your observation space diagnostics, in which case,
-include DART_QC 0 and DART_QQC 7 observations in the calculation of the statistics.
+include DART_QC 7 observations in the calculation of the statistics.
 
 For reference, here is the DART QC values and their meaning. 
 
@@ -195,7 +197,12 @@ For more detail on the DART QC values refer to the
 `DART documentation <https://docs.dart.ucar.edu/en/latest/assimilation_code/modules/assimilation/quality_control_mod.html>`_.
 
 
+References
+----------
 
-.. The notation used here is taken from `https://doi.org/doi:10.1175/2010MWR3253.1`.
-   See also `https://doi.org/doi:10.1175/MWR-D-15-0052.1`.
+The notation on this page follows `<https://doi.org/doi:10.1175/2010MWR3253.1>`__.
+
+
+.. See also `<https://doi.org/doi:10.1175/MWR-D-15-0052.1>`__.
+
 

@@ -183,6 +183,11 @@ class ObsSequence:
             if old in self.df.columns
         }
         self.df = self.df.rename(columns=rename_dict)
+
+        if self.is_binary(file):
+            # binary files do not have "OBS      X" in, so set linked list from df.
+            self.update_attributes_from_df()
+            
         # Replace MISSING_R8s with NaNs in posterior stats where DART_quality_control = 2
         if ("DART_quality_control" in self.df.columns) and self.has_posterior:
             ObsSequence.replace_qc2_nan(self.df)
@@ -200,7 +205,7 @@ class ObsSequence:
     def obs_to_list(self, obs):
         """put single observation into a list"""
         data = []
-        data.append(obs[0].split()[1])  # obs_num
+        data.append(int(obs[0].split()[1]))  # obs_num
         data.extend(list(map(float, obs[1 : self.n_copies + 1])))  # all the copies
         data.append(obs[self.n_copies + 1])  # linked list info
         try:  # HK todo only have to check loc3d or loc1d for the first observation, the whole file is the same
@@ -222,9 +227,9 @@ class ObsSequence:
                     "Neither 'loc3d' nor 'loc1d' could be found in the observation sequence."
                 )
         typeI = obs.index("kind")  # type of observation
-        type_value = obs[typeI + 1]
-        if not self.types:
-            data.append("Identity")
+        type_value = int(obs[typeI + 1])
+        if type_value < 0:
+            data.append(type_value)
         else:
             data.append(self.types[type_value])  # observation type
 
@@ -286,14 +291,22 @@ class ObsSequence:
                 + str(self.reversed_vert[data[self.n_copies + 5]])
             )  # location x, y, z, vert
             obs.append("kind")  # this is type of observation
-            obs.append(self.reverse_types[data[self.n_copies + 6]])  # observation type
+            obs_type = data[self.n_copies + 6]
+            if isinstance(obs_type, str):
+                obs.append(self.reverse_types[obs_type])  # observation type
+            else:
+                obs.append(obs_type)  # Identity obs negative integer
             # Convert metadata to a string and append !HK @todo you are not converting to string
             obs.extend(data[self.n_copies + 7])  # metadata
             obs.extend(data[self.n_copies + 8])  # external forward operator
         elif self.loc_mod == "loc1d":
             obs.append(data[self.n_copies + 2])  # 1d location
             obs.append("kind")  # this is type of observation
-            obs.append(self.reverse_types[data[self.n_copies + 3]])  # observation type
+            obs_type = data[self.n_copies + 3]
+            if isinstance(obs_type, str):
+                obs.append(self.reverse_types[obs_type])  # observation type
+            else:
+                obs.append(obs_type)  # Identity obs negative integer
             obs.extend(data[self.n_copies + 4])  # metadata
             obs.extend(data[self.n_copies + 5])  # external forward operator
         obs.append(" ".join(map(str, data[-4:-2])))  # seconds, days
@@ -340,7 +353,8 @@ class ObsSequence:
 
         """
 
-        self.create_header_from_dataframe()
+        # Update attributes, header, and linked list from dataframe
+        self.update_attributes_from_df()
 
         with open(file, "w") as f:
 
@@ -400,13 +414,16 @@ class ObsSequence:
             dict: The types dictionary with keys sorted in numerical order.
         """
         # Create a dictionary of observation types from the dataframe
-        unique_types = df["type"].unique()
+        # Ignore Identity obs (negative integers)
+        unique_types = df.loc[
+            df["type"].apply(lambda x: isinstance(x, str)), "type"
+        ].unique()
 
         # Ensure all unique types are in reverse_types
         for obs_type in unique_types:
             if obs_type not in reverse_types:
-                new_id = int(max(reverse_types.values(), default=0)) + 1
-                reverse_types[obs_type] = str(new_id)
+                new_id = max(reverse_types.values(), default=0) + 1
+                reverse_types[obs_type] = new_id
 
         not_sorted_types = {
             reverse_types[obs_type]: obs_type for obs_type in unique_types
@@ -441,9 +458,7 @@ class ObsSequence:
         self.header.append(f"{len(self.types)}")
         for key, value in self.types.items():
             self.header.append(f"{key} {value}")
-        self.header.append(
-            f"num_copies: {self.n_non_qc}  num_qc: {self.n_qc}"
-        )  # @todo HK not keeping track if num_qc changes
+        self.header.append(f"num_copies: {self.n_non_qc}  num_qc: {self.n_qc}")
         self.header.append(f"num_obs: {num_obs:>10} max_num_obs: {num_obs:>10}")
         stats_cols = [
             "prior_bias",
@@ -702,7 +717,8 @@ class ObsSequence:
     def collect_obs_types(header):
         """Create a dictionary for the observation types in the obs_seq header"""
         num_obs_types = int(header[2])
-        types = dict([x.split() for x in header[3 : num_obs_types + 3]])
+        # The first line containing obs types is the 4th line in an obs_seq file.
+        types = {int(x.split()[0]): x.split()[1] for x in header[3 : num_obs_types + 3]}
         return types
 
     @staticmethod
@@ -866,18 +882,45 @@ class ObsSequence:
 
                 #   kind (type of observation) value
                 obs.append("kind")
-                record_length_bytes = f.read(4)
-                record_length = struct.unpack("i", record_length_bytes)[0]
+                record_length = ObsSequence.read_record_length(f)
                 record = f.read(record_length)
                 kind = f"{struct.unpack('i', record)[0]}"
                 obs.append(kind)
 
                 ObsSequence.check_trailing_record_length(f, record_length)
 
+                # Skip metadata (obs_def) and go directly to the time record
+                while True:
+                    pos = f.tell()
+                    record_length = ObsSequence.read_record_length(f)
+                    if record_length is None:
+                        break  # End of file
+
+                    record = f.read(record_length)
+                    # Check if this record is likely the "time" record (8 bytes, can be unpacked as two ints)
+                    if record_length == 8:
+                        try:
+                            seconds, days = struct.unpack("ii", record)
+                            # If unpack succeeds, this is the time record
+                            f.seek(pos)  # Seek back so the main loop can process it
+                            break
+                        except struct.error:
+                            pass  # Not the time record, keep skipping
+
+                    ObsSequence.check_trailing_record_length(f, record_length)
+
                 # time (seconds, days)
                 record_length = ObsSequence.read_record_length(f)
                 record = f.read(record_length)
-                seconds, days = struct.unpack("ii", record)[:8]
+                try:  # This is incase the record is not the time record because of metadata funkyness
+                    seconds, days = struct.unpack("ii", record)
+                except struct.error as e:
+                    print(
+                        f"Reading observation {obs_num}... record length: {record_length} kind {kind}"
+                    )
+                    print(f"")
+                    print(f"Error unpacking seconds and days: {e}")
+                    raise
                 time_string = f"{seconds} {days}"
                 obs.append(time_string)
 
@@ -892,23 +935,27 @@ class ObsSequence:
 
                 yield obs
 
-    def composite_types(self, composite_types="use_default"):
+    def composite_types(self, composite_types="use_default", raise_on_duplicate=False):
         """
-        Set up and construct composite types for the DataFrame.
+        Set up and construct composite observation types for the DataFrame.
 
-        This function sets up composite types based on a provided YAML configuration or
+        This function sets up composite observation types based on a provided YAML configuration or
         a default configuration. It constructs new composite rows by combining specified
-        components and adds them to the DataFrame.
+        components and adds them to the DataFrame in place.
 
         Args:
             composite_types (str, optional): The YAML configuration for composite types.
-            If 'use_default', the default configuration is used. Otherwise, a custom YAML configuration can be provided.
+                If 'use_default', the default configuration is used. Otherwise, a custom YAML
+                configuration can be provided.
+            raise_on_duplicate (bool, optional): If True, raises an exception if there are
+                duplicates in the components. otherwise default False, deals with duplicates as though
+                they are distinct observations.
 
         Returns:
             pd.DataFrame: The updated DataFrame with the new composite rows added.
 
         Raises:
-            Exception: If there are repeat values in the components.
+            Exception: If there are repeat values in the components and raise_on_duplicate = True
         """
 
         if composite_types == "use_default":
@@ -934,7 +981,10 @@ class ObsSequence:
         df = pd.DataFrame()
         for key in self.composite_types_dict:
             df_new = construct_composit(
-                df_comp, key, self.composite_types_dict[key]["components"]
+                df_comp,
+                key,
+                self.composite_types_dict[key]["components"],
+                raise_on_duplicate,
             )
             df = pd.concat([df, df_new], axis=0)
 
@@ -1055,52 +1105,48 @@ class ObsSequence:
                 if item in obs_sequences[0].qc_copie_names
             ]
 
-            combo.n_copies = len(combo.copie_names)
-            combo.n_qc = len(combo.qc_copie_names)
-            combo.n_non_qc = len(combo.non_qc_copie_names)
-
         else:
             for obs_seq in obs_sequences:
                 if not obs_sequences[0].df.columns.isin(obs_seq.df.columns).all():
                     raise ValueError(
                         "All observation sequences must have the same copies."
                     )
-            combo.n_copies = obs_sequences[0].n_copies
-            combo.n_qc = obs_sequences[0].n_qc
-            combo.n_non_qc = obs_sequences[0].n_non_qc
             combo.copie_names = obs_sequences[0].copie_names
+            combo.non_qc_copie_names = obs_sequences[0].non_qc_copie_names
+            combo.qc_copie_names = obs_sequences[0].qc_copie_names
+            combo.n_copies = len(combo.copie_names)
 
         # todo HK @todo combine synonyms for obs?
 
         # Initialize combined data
-        combined_types = []
-        combined_df = pd.DataFrame()
-        combo.all_obs = None  # set to none to force writing from the dataframe if write_obs_seq is called
+        combo.df = pd.DataFrame()
 
         # Iterate over the list of observation sequences and combine their data
         for obs_seq in obs_sequences:
             if copies:
-                combined_df = pd.concat(
-                    [combined_df, obs_seq.df[requested_columns]], ignore_index=True
+                combo.df = pd.concat(
+                    [combo.df, obs_seq.df[requested_columns]], ignore_index=True
                 )
             else:
-                combined_df = pd.concat([combined_df, obs_seq.df], ignore_index=True)
-            combined_types.extend(list(obs_seq.reverse_types.keys()))
+                combo.df = pd.concat([combo.df, obs_seq.df], ignore_index=True)
 
-        # create dictionary of types
-        keys = set(combined_types)
-        combo.reverse_types = {item: i + 1 for i, item in enumerate(keys)}
-        combo.types = {v: k for k, v in combo.reverse_types.items()}
-
-        # create linked list for obs
-        combo.df = combined_df.sort_values(by="time").reset_index(drop=True)
-        combo.df["linked_list"] = ObsSequence.generate_linked_list_pattern(
-            len(combo.df)
-        )
-        combo.df["obs_num"] = combined_df.index + 1
-        combo.create_header(len(combo.df))
+        # update ObsSequence attributes from the combined DataFrame
+        combo.update_attributes_from_df()
 
         return combo
+
+    @staticmethod
+    def update_linked_list(df):
+        """
+        Sorts the DataFrame by 'time', resets the index, and adds/updates 'linked_list'
+        and 'obs_num' columns in place.
+        Modifies the input DataFrame directly.
+        """
+        df.sort_values(by="time", inplace=True, kind="stable")
+        df.reset_index(drop=True, inplace=True)
+        df["linked_list"] = ObsSequence.generate_linked_list_pattern(len(df))
+        df["obs_num"] = df.index + 1
+        return None
 
     def has_assimilation_info(self):
         """
@@ -1187,6 +1233,60 @@ class ObsSequence:
                 df["DART_quality_control"] == 2.0, "posterior_ensemble_member_" + str(i)
             ] = -888888.000000
 
+    def update_attributes_from_df(self):
+        """
+        Update all internal data (fields/properties) of the ObsSequence object that
+        depend on the DataFrame (self.df).
+        Call this after self.df is replaced or its structure changes.
+
+        Important:
+
+         Assumes copies are all columns between 'obs_num' and 'linked_list' (if present)
+
+        """
+        # Update columns
+        self.columns = list(self.df.columns)
+
+        # Update all_obs (list of lists, each row) @todo HK do we need this?
+        self.all_obs = None
+
+        # Update copie_names, non_qc_copie_names, qc_copie_names, n_copies, n_non_qc, n_qc
+        # Try to infer from columns if possible, else leave as is
+        # Assume copies are all columns between 'obs_num' and 'linked_list' (if present)
+        if "obs_num" in self.df.columns and "linked_list" in self.df.columns:
+            obs_num_idx = self.df.columns.get_loc("obs_num")
+            linked_list_idx = self.df.columns.get_loc("linked_list")
+            self.copie_names = list(self.df.columns[obs_num_idx + 1 : linked_list_idx])
+        else:
+            # Fallback: use previous value or empty
+            self.copie_names = getattr(self, "copie_names", [])
+        self.n_copies = len(self.copie_names)
+
+        # Try to infer non_qc and qc copies from previous names if possible
+        # Find qc copies first
+        self.qc_copie_names = [c for c in self.copie_names if c in self.qc_copie_names]
+        if self.qc_copie_names == []:  # If no qc copies found, assume all are non-qc
+            self.non_qc_copie_names = self.copie_names
+        else:  # pull out non-qc copies from the copie_names
+            self.non_qc_copie_names = [
+                c for c in self.copie_names if c not in self.qc_copie_names
+            ]
+        self.n_qc = len(self.qc_copie_names)
+        self.n_non_qc = len(self.non_qc_copie_names)
+
+        # Update header and types and reverse_types
+        self.create_header_from_dataframe()
+
+        # Update seq (generator should be empty or None if not from file)
+        self.seq = []
+        # Update loc_mod
+        if "vertical" in self.df.columns:
+            self.loc_mod = "loc3d"
+        else:
+            self.loc_mod = "loc1d"
+
+        # update linked list for obs and obs_nums
+        ObsSequence.update_linked_list(self.df)
 
 def load_yaml_to_dict(file_path):
     """
@@ -1217,24 +1317,31 @@ def convert_dart_time(seconds, days):
     return time
 
 
-def construct_composit(df_comp, composite, components):
+def construct_composit(df_comp, composite, components, raise_on_duplicate):
     """
-    Construct a composite DataFrame by combining rows from two components.
-
-    This function takes two DataFrames and combines rows from them based on matching
-    location and time. It creates a new row with a composite type by combining
-    specified columns using the square root of the sum of squares method.
+    Creates a new DataFrame by combining pairs of rows from two specified component
+    types in an observation DataFrame. It matches rows based on location and time,
+    and then combines certain columns using the square root of the sum of squares
+    of the components.
 
     Args:
         df_comp (pd.DataFrame): The DataFrame containing the component rows to be combined.
         composite (str): The type name for the new composite rows.
         components (list of str): A list containing the type names of the two components to be combined.
+        raise_on_duplicate (bool): If False, raises an exception if there are duplicates in the components.
+        otherwise deals with duplicates as though they are distinct observations.
+
 
     Returns:
         merged_df (pd.DataFrame): A DataFrame containing the new composite rows.
     """
+    # select rows for the two components
+    if len(components) != 2:
+        raise ValueError("components must be a list of two component types.")
     selected_rows = df_comp[df_comp["type"] == components[0].upper()]
     selected_rows_v = df_comp[df_comp["type"] == components[1].upper()]
+    selected_rows = selected_rows.copy()
+    selected_rows_v = selected_rows_v.copy()
 
     prior_columns_to_combine = df_comp.filter(regex="prior_ensemble").columns.tolist()
     posterior_columns_to_combine = df_comp.filter(
@@ -1245,7 +1352,7 @@ def construct_composit(df_comp, composite, components):
         + posterior_columns_to_combine
         + ["observation", "obs_err_var"]
     )
-    merge_columns = ["latitude", "longitude", "vertical", "time"]
+    merge_columns = ["latitude", "longitude", "vertical", "time"]  # @todo HK 1d or 3d
     same_obs_columns = merge_columns + [
         "observation",
         "obs_err_var",
@@ -1255,15 +1362,25 @@ def construct_composit(df_comp, composite, components):
         selected_rows[same_obs_columns].duplicated().sum() > 0
         or selected_rows_v[same_obs_columns].duplicated().sum() > 0
     ):
-        print(
-            f"{selected_rows[same_obs_columns].duplicated().sum()} duplicates in {composite} component {components[0]}: "
-        )
-        print(f"{selected_rows[same_obs_columns]}")
-        print(
-            f"{selected_rows_v[same_obs_columns].duplicated().sum()} duplicates in {composite} component {components[0]}: "
-        )
-        print(f"{selected_rows_v[same_obs_columns]}")
-        raise Exception("There are duplicates in the components.")
+
+        if raise_on_duplicate:
+            print(
+                f"{selected_rows[same_obs_columns].duplicated().sum()} duplicates in {composite} component {components[0]}: "
+            )
+            print(f"{selected_rows[same_obs_columns]}")
+            print(
+                f"{selected_rows_v[same_obs_columns].duplicated().sum()} duplicates in {composite} component {components[0]}: "
+            )
+            print(f"{selected_rows_v[same_obs_columns]}")
+            raise Exception("There are duplicates in the components.")
+
+        else:
+            selected_rows["dup_num"] = selected_rows.groupby(
+                same_obs_columns
+            ).cumcount()
+            selected_rows_v["dup_num"] = selected_rows_v.groupby(
+                same_obs_columns
+            ).cumcount()
 
     # Merge the two DataFrames on location and time columns
     merged_df = pd.merge(
@@ -1279,5 +1396,8 @@ def construct_composit(df_comp, composite, components):
     merged_df = merged_df.drop(
         columns=[col for col in merged_df.columns if col.endswith("_v")]
     )
+
+    if "dup_num" in merged_df.columns:
+        merged_df = merged_df.drop(columns=["dup_num"])
 
     return merged_df
