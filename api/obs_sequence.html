@@ -679,8 +679,9 @@ the first sublist contains the entire metadata list, and the second is empty.</p
 <dd><p>Write the observation sequence to a file.</p>
 <p>This function writes the observation sequence stored in the obs_seq.DataFrame to a specified file.
 It updates the header with the number of observations, converts coordinates back to radians
-if necessary, drops unnecessary columns, sorts the DataFrame by time, and generates a linked
-list pattern for reading by DART programs.</p>
+if necessary, reverts NaNs back to MISSING_R8 for observations with QC=2, drops unnecessary
+columns, sorts the DataFrame by time, and generates a linked list pattern for reading by DART
+programs.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>file</strong> (<em>str</em>) – The path to the file where the observation sequence will be written.</p>
@@ -689,6 +690,8 @@ list pattern for reading by DART programs.</p>
 <p class="rubric">Notes</p>
 <ul class="simple">
 <li><p>Longitude and latitude are converted back to radians if the location model is ‘loc3d’.</p></li>
+<li><p>The replacement of MISSING_R8 values with NaNs for any obs that failed the posterior
+forward observation operators (QC2) is reverted.</p></li>
 <li><p>The ‘bias’ and ‘sq_err’ columns are dropped if they exist in the DataFrame.</p></li>
 <li><p>The DataFrame is sorted by the ‘time’ column.</p></li>
 <li><p>An ‘obs_num’ column is added to the DataFrame to number the observations in time order.</p></li>
@@ -922,6 +925,21 @@ Modifies the input DataFrame directly.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="obs_sequence.ObsSequence.replace_qc2_nan">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">replace_qc2_nan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.ObsSequence.replace_qc2_nan" title="Link to this definition">#</a></dt>
+<dd><p>Replace MISSING_R8 values with NaNs in posterior columns for observations where
+DART_quality_control = 2 (posterior forward observation operators failed)</p>
+<p>This causes these observations to be ignored in the calculations of posterior statistics</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="obs_sequence.ObsSequence.revert_qc2_nan">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">revert_qc2_nan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.ObsSequence.revert_qc2_nan" title="Link to this definition">#</a></dt>
+<dd><p>Revert NaNs back to MISSING_R8s for observations where DART_quality_control = 2
+(posterior forward observation operators failed)</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="obs_sequence.ObsSequence.update_attributes_from_df">
 <span class="sig-name descname"><span class="pre">update_attributes_from_df</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#obs_sequence.ObsSequence.update_attributes_from_df" title="Link to this definition">#</a></dt>
 <dd><p>Update all internal data (fields/properties) of the ObsSequence object that
@@ -1081,6 +1099,8 @@ of the components.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#obs_sequence.ObsSequence.has_assimilation_info"><code class="docutils literal notranslate"><span class="pre">ObsSequence.has_assimilation_info()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#obs_sequence.ObsSequence.has_posterior"><code class="docutils literal notranslate"><span class="pre">ObsSequence.has_posterior()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#obs_sequence.ObsSequence.create_header"><code class="docutils literal notranslate"><span class="pre">ObsSequence.create_header()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#obs_sequence.ObsSequence.replace_qc2_nan"><code class="docutils literal notranslate"><span class="pre">ObsSequence.replace_qc2_nan()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#obs_sequence.ObsSequence.revert_qc2_nan"><code class="docutils literal notranslate"><span class="pre">ObsSequence.revert_qc2_nan()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#obs_sequence.ObsSequence.update_attributes_from_df"><code class="docutils literal notranslate"><span class="pre">ObsSequence.update_attributes_from_df()</span></code></a></li>
 </ul>
 </li>
