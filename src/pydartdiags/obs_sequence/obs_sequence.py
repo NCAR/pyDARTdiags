@@ -382,16 +382,6 @@ class ObsSequence:
             if self.has_posterior():
                 ObsSequence.revert_qc2_nan(df_copy)
 
-            # linked list for reading by dart programs
-            df_copy = df_copy.sort_values(
-                by=["time"], kind="stable"
-            )  # sort the DataFrame by time
-            df_copy.reset_index(drop=True, inplace=True)
-            df_copy["obs_num"] = df_copy.index + 1  # obs_num in time order
-            df_copy["linked_list"] = ObsSequence.generate_linked_list_pattern(
-                len(df_copy)
-            )  # linked list pattern
-
             def write_row(row):
                 ob_write = self.list_to_obs(row.tolist())
                 for line in ob_write:
