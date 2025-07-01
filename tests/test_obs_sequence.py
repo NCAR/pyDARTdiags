@@ -165,6 +165,7 @@ class TestWriteAscii:
             ),
             os.path.join(os.path.dirname(__file__), "data", "obs_seq.1d.final"),
             os.path.join(os.path.dirname(__file__), "data", "obs_seq.out.GSI.small"),
+            os.path.join(os.path.dirname(__file__), "data", "obs_seq.final.qc2_2obs"),
             os.path.join(os.path.dirname(__file__), "data", "obs_seq.in.all-id"),
             os.path.join(os.path.dirname(__file__), "data", "obs_seq.in.mix"),
             os.path.join(os.path.dirname(__file__), "data", "obs_seq.final.wrfhydro"),
@@ -1217,6 +1218,109 @@ class TestUpdateAttributesFromDf:
         assert list(
             obj.df["linked_list"]
         ) == obsq.ObsSequence.generate_linked_list_pattern(2)
+
+
+class TestQC2Replacement:
+    @pytest.fixture
+    def obs_seq(self):
+        # Create a sample DataFrame for testing
+        data = {
+            "DART_quality_control": [0, 2, 2, 0],
+            "posterior_ensemble_mean": [1.1, -888888.0, -888888.0, 2.2],
+            "posterior_ensemble_spread": [0.1, -888888.0, -888888.0, 0.2],
+            "posterior_ensemble_member_1": [1.0, -888888.0, -888888.0, 2.0],
+            "posterior_ensemble_member_2": [1.2, -888888.0, -888888.0, 2.3],
+        }
+        df = pd.DataFrame(data)
+
+        # Create an instance of obs_sequence with the sample DataFrame
+        obs_seq = obsq.ObsSequence(file=None)
+        obs_seq.df = df
+        return obs_seq
+
+    @pytest.fixture
+    def obs_seq_nan(self):
+        # Create a sample DataFrame for testing
+        data_nan = {
+            "DART_quality_control": [0, 2, 2, 0],
+            "posterior_ensemble_mean": [1.1, np.nan, np.nan, 2.2],
+            "posterior_ensemble_spread": [0.1, np.nan, np.nan, 0.2],
+            "posterior_ensemble_member_1": [1.0, np.nan, np.nan, 2.0],
+            "posterior_ensemble_member_2": [1.2, np.nan, np.nan, 2.3],
+        }
+        df = pd.DataFrame(data_nan)
+
+        # Create an instance of obs_sequence with the sample DataFrame
+        obs_seq_nan = obsq.ObsSequence(file=None)
+        obs_seq_nan.df = df
+        return obs_seq_nan
+
+    def test_replace_qc2_nan(self, obs_seq):
+        # Call the replace_qc2_r8s method
+        obsq.ObsSequence.replace_qc2_nan(obs_seq.df)
+
+        # Verify that NaNs are correctly replaced for QC2 rows
+        assert (
+            obs_seq.df.loc[
+                obs_seq.df["DART_quality_control"] == 2.0, "posterior_ensemble_mean"
+            ]
+            .isnull()
+            .all()
+        )
+        assert (
+            obs_seq.df.loc[
+                obs_seq.df["DART_quality_control"] == 2.0, "posterior_ensemble_spread"
+            ]
+            .isnull()
+            .all()
+        )
+        assert (
+            obs_seq.df.loc[
+                obs_seq.df["DART_quality_control"] == 2.0, "posterior_ensemble_member_1"
+            ]
+            .isnull()
+            .all()
+        )
+        assert (
+            obs_seq.df.loc[
+                obs_seq.df["DART_quality_control"] == 2.0, "posterior_ensemble_member_2"
+            ]
+            .isnull()
+            .all()
+        )
+
+    def test_revert_qc2_nan(self, obs_seq_nan):
+        # Revert NaNs back to MISSING_R8s
+        obsq.ObsSequence.revert_qc2_nan(obs_seq_nan.df)
+
+        # Verify that MISSING_R8s (-888888.0) are correctly restored for QC2 rows
+        assert (
+            obs_seq_nan.df.loc[
+                obs_seq_nan.df["DART_quality_control"] == 2.0, "posterior_ensemble_mean"
+            ]
+            == -888888.0
+        ).all()
+        assert (
+            obs_seq_nan.df.loc[
+                obs_seq_nan.df["DART_quality_control"] == 2.0,
+                "posterior_ensemble_spread",
+            ]
+            == -888888.0
+        ).all()
+        assert (
+            obs_seq_nan.df.loc[
+                obs_seq_nan.df["DART_quality_control"] == 2.0,
+                "posterior_ensemble_member_1",
+            ]
+            == -888888.0
+        ).all()
+        assert (
+            obs_seq_nan.df.loc[
+                obs_seq_nan.df["DART_quality_control"] == 2.0,
+                "posterior_ensemble_member_2",
+            ]
+            == -888888.0
+        ).all()
 
 
 if __name__ == "__main__":
