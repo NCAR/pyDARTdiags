@@ -21,12 +21,6 @@ and calculating observation-space diagnostics for the Data Assimilation Research
 (`DART <https://github.com/NCAR/DART>`_).
 
 
-.. caution::
-
-    pyDARTdiags is under initial development, so please use caution.
-    The MATLAB `observation space diagnostics <https://docs.dart.ucar.edu/en/latest/guide/matlab-observation-space.html>`_ 
-    are available through `DART <https://github.com/NCAR/DART>`_.
-
 .. grid:: 1 2 2 2
     :gutter: 2
 
@@ -68,6 +62,13 @@ and calculating observation-space diagnostics for the Data Assimilation Research
         **Examples**
 
         Check out examples of pyDARTdiags in action.
+
+.. admonition:: About pyDARTdiags
+
+    pyDARTdiags is under active development. DART itself is available on GitHub `@NCAR/DART <https://github.com/NCAR/DART>`_.
+    The MATLAB `observation space diagnostics <https://docs.dart.ucar.edu/en/latest/guide/matlab-observation-space.html>`_ 
+    are available through `DART <https://github.com/NCAR/DART>`_.
+
 
 Contributing
 ============

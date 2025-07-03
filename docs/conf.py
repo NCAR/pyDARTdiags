@@ -19,7 +19,7 @@ for root, dirs, files in os.walk(src_path):
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'pyDARTdiags'
-copyright = '2024, University Corporation for Atmospheric Research'
+copyright = '2025, University Corporation for Atmospheric Research'
 author = 'Helen Kershaw'
 #release = '0.0.42'
 
@@ -52,7 +52,7 @@ html_theme_options = {
     'navbar_center': ['navbar-nav'],
     'header_links_before_dropdown': 6,
     'navbar_end': ['navbar-icon-links', 'theme-switcher'],
-    "announcement": "WARNING: pyDARTdiags is currently in alpha stage of development - expect bugs and changes", 
+    "announcement": "Welcome to the pyDARTdiags documentation! 🚀",
 }
 html_show_sourcelink = False
 html_title = project
