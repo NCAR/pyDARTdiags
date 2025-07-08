@@ -16,19 +16,35 @@ dash_styles = {
 
 def geo_plot(obs_seq):
 
-    fig = px.scatter_geo(
+    # Check if 'DART_quality_control' is a column in the dataframe
+    if 'DART_quality_control' not in obs_seq.df.columns:
+        print("'DART_quality_control' is not used in this obs sequence" \
+                        "file. Color mapping will not be applied.")
+        fig = px.scatter_geo(
         obs_seq.df,
         lat='latitude',
         lon='longitude',
-        color='DART_quality_control',
-        hover_data={'DART_quality_control':True,
-                    'type': True,
+        hover_data={'type': True,
                     'observation': True,
                     'obs_num': True
         },
         width=1400,
         height=850,
     )
+    else:
+        fig = px.scatter_geo(
+            obs_seq.df,
+            lat='latitude',
+            lon='longitude',
+            color='DART_quality_control',
+            hover_data={'DART_quality_control':True,
+                        'type': True,
+                        'observation': True,
+                        'obs_num': True
+            },
+            width=1400,
+            height=850,
+        )
 
     fig.update_layout(clickmode='event+select')
     # If the obs_seq has more than 10,000 observations, do not show hover info
