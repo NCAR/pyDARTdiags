@@ -11,3 +11,4 @@ matplotlib
 black
 pytest
 pytest-cov
+dash
