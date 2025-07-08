@@ -29,8 +29,8 @@ data_file = os.path.join(data_dir, "obs_seq.final.ascii.medium")
 # Read the obs_seq file into an obs_seq object.
 # We also create a second obs_seq object to be mainuplated through
 # map selection
-obs_seq = obsq.obs_sequence(data_file)
-obs_seq_selected = obsq.obs_sequence(data_file)
+obs_seq = obsq.ObsSequence(data_file)
+obs_seq_selected = obsq.ObsSequence(data_file)
 
 ###########################################
 # Examine the dataframe.
