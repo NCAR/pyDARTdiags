@@ -22,6 +22,7 @@ import pydartdiags.obs_sequence.obs_sequence as obsq
 # that comes with the pyDARTdiags package in the data directory, so we
 # ``import os`` to get the path to the file.
 import os
+
 data_dir = os.path.join(os.getcwd(), "../..", "data")
 data_file = os.path.join(data_dir, "obs_seq.final.ascii.medium")
 
@@ -44,5 +45,5 @@ fig = ip.geo_plot(obs_seq)
 app = ip.include_only_selected_obs_dash_app(fig, obs_seq_selected)
 
 # Run the app
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True, use_reloader=True)

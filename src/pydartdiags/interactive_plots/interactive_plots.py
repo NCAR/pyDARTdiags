@@ -3,67 +3,64 @@ import pandas as pd
 import plotly.express as px
 import json
 
-dash_styles = { 
-    'pre': {
-        'border': 'thin lightgrey solid',
-        'overflowX': 'scroll',
-        'color': 'black'
-    },
-    'txt': {
-        'color': 'black'
-    } 
+dash_styles = {
+    "pre": {"border": "thin lightgrey solid", "overflowX": "scroll", "color": "black"},
+    "txt": {"color": "black"},
 }
+
 
 def geo_plot(obs_seq):
 
     # Check if 'DART_quality_control' is a column in the dataframe
-    if 'DART_quality_control' not in obs_seq.df.columns:
-        print("'DART_quality_control' is not used in this obs sequence" \
-                        "file. Color mapping will not be applied.")
+    if "DART_quality_control" not in obs_seq.df.columns:
+        print(
+            "'DART_quality_control' is not used in this obs sequence"
+            "file. Color mapping will not be applied."
+        )
         fig = px.scatter_geo(
-        obs_seq.df,
-        lat='latitude',
-        lon='longitude',
-        hover_data={'type': True,
-                    'observation': True,
-                    'obs_num': True
-        },
-        width=1400,
-        height=850,
-    )
+            obs_seq.df,
+            lat="latitude",
+            lon="longitude",
+            hover_data={"type": True, "observation": True, "obs_num": True},
+            width=1400,
+            height=850,
+        )
     else:
         fig = px.scatter_geo(
             obs_seq.df,
-            lat='latitude',
-            lon='longitude',
-            color='DART_quality_control',
-            hover_data={'DART_quality_control':True,
-                        'type': True,
-                        'observation': True,
-                        'obs_num': True
+            lat="latitude",
+            lon="longitude",
+            color="DART_quality_control",
+            hover_data={
+                "DART_quality_control": True,
+                "type": True,
+                "observation": True,
+                "obs_num": True,
             },
             width=1400,
             height=850,
         )
 
-    fig.update_layout(clickmode='event+select')
+    fig.update_layout(clickmode="event+select")
     # If the obs_seq has more than 10,000 observations, do not show hover info
     # to reduce strain on the Dash app
     if len(obs_seq.df) > 10000:
-        fig.update_traces(hoverinfo='skip', hovertemplate=None)
+        fig.update_traces(hoverinfo="skip", hovertemplate=None)
 
     return fig
+
 
 # Creates Dash app to create a new obs_seq file including only
 # the selected obs
 def include_only_selected_obs_dash_app(fig, obs_seq_selected):
 
-    #Initialize the Dash app
+    # Initialize the Dash app
     app = Dash()
 
     # App layout
     app.layout = [
-        dcc.Markdown("""
+        dcc.Markdown(
+            """
             ## **Select observations to add them to a new obs sequence**
 
             Choose the lasso or rectangle tool in the graph's menu
@@ -78,30 +75,27 @@ def include_only_selected_obs_dash_app(fig, obs_seq_selected):
             that contains only the selected observations.
 
             To reset the Dash app, simply refresh the page.
-        """, style=dash_styles['txt']),
-
-        dcc.Graph(id='select-obs', figure=fig),
-
-        html.Button('Submit', id='submit-val', n_clicks=0),
-
-        html.Pre(id='confirmation', style=dash_styles['pre']),
-
-        html.Pre(id='selected-data', style=dash_styles['pre']),
-
-        dcc.Store(id="store")
+        """,
+            style=dash_styles["txt"],
+        ),
+        dcc.Graph(id="select-obs", figure=fig),
+        html.Button("Submit", id="submit-val", n_clicks=0),
+        html.Pre(id="confirmation", style=dash_styles["pre"]),
+        html.Pre(id="selected-data", style=dash_styles["pre"]),
+        dcc.Store(id="store"),
     ]
 
     customdata_list = []
     unique_obs_types = []
 
     @callback(
-        Output('selected-data', 'children'),
-        Output('store', 'data'),
-        Input('select-obs', 'selectedData'),
-        prevent_initial_call=True
+        Output("selected-data", "children"),
+        Output("store", "data"),
+        Input("select-obs", "selectedData"),
+        prevent_initial_call=True,
     )
     def get_selected_data(selectedData):
-        selected_list = [point['customdata'] for point in selectedData['points']]
+        selected_list = [point["customdata"] for point in selectedData["points"]]
         for item in selected_list:
             if item not in customdata_list:
                 customdata_list.append(item)
@@ -120,40 +114,55 @@ def include_only_selected_obs_dash_app(fig, obs_seq_selected):
         obs_types_json = json.dumps(unique_obs_types, indent=2)
 
         # Display info on the selected data in the Dash app
-        return ('Total number of observations selected: ', len(obs_numbers),
-                '\n\nTypes of observations selected: ', obs_types_json,
-                '\n\nSelected observations (obs_num): ', obs_numbers_json), obs_numbers
+        return (
+            "Total number of observations selected: ",
+            len(obs_numbers),
+            "\n\nTypes of observations selected: ",
+            obs_types_json,
+            "\n\nSelected observations (obs_num): ",
+            obs_numbers_json,
+        ), obs_numbers
 
     @callback(
-        Output('confirmation', 'children'),
-        Input('submit-val', 'n_clicks'),
-        Input('store', 'data'),
-        prevent_initial_call=True
+        Output("confirmation", "children"),
+        Input("submit-val", "n_clicks"),
+        Input("store", "data"),
+        prevent_initial_call=True,
     )
     def update_output(n_clicks, data):
-        if n_clicks >=1:
+        if n_clicks >= 1:
 
             # Update the obs_seq_selected dataframe to only include the selected observations
-            obs_seq_selected.df = obs_seq_selected.df[obs_seq_selected.df['obs_num'].isin(data)]
+            obs_seq_selected.df = obs_seq_selected.df[
+                obs_seq_selected.df["obs_num"].isin(data)
+            ]
 
             # Write the updated  observation sequence to a file
-            obs_seq_selected.write_obs_seq('./obs_seq.final.'+str(len(data))+'_selected_obs')
+            obs_seq_selected.write_obs_seq(
+                "./obs_seq.final." + str(len(data)) + "_selected_obs"
+            )
 
             # Display confirmation message in Dash app
-            return 'New observation sequence created with the '+str(len(data))+' selected observations.'
+            return (
+                "New observation sequence created with the "
+                + str(len(data))
+                + " selected observations."
+            )
 
     return app
+
 
 # Builds a Dash app to create a new obs_seq file excluding
 # the selected obs
 def exclude_selected_obs_dash_app(fig, obs_seq_selected):
 
-    #Initialize the Dash app
+    # Initialize the Dash app
     app = Dash()
 
     # App layout
     app.layout = [
-        dcc.Markdown("""
+        dcc.Markdown(
+            """
             ## **Select observations to remove them from the obs sequence**
 
             Choose the lasso or rectangle tool in the graph's menu
@@ -168,30 +177,27 @@ def exclude_selected_obs_dash_app(fig, obs_seq_selected):
             that excludes the selected observations.
 
             To reset the Dash app, simply refresh the page.
-        """, style=dash_styles['txt']),
-
-        dcc.Graph(id='select-obs', figure=fig),
-
-        html.Button('Submit', id='submit-val', n_clicks=0),
-
-        html.Pre(id='confirmation', style=dash_styles['pre']),
-
-        html.Pre(id='selected-data', style=dash_styles['pre']),
-
-        dcc.Store(id="store")
+        """,
+            style=dash_styles["txt"],
+        ),
+        dcc.Graph(id="select-obs", figure=fig),
+        html.Button("Submit", id="submit-val", n_clicks=0),
+        html.Pre(id="confirmation", style=dash_styles["pre"]),
+        html.Pre(id="selected-data", style=dash_styles["pre"]),
+        dcc.Store(id="store"),
     ]
 
     customdata_list = []
     unique_obs_types = []
 
     @callback(
-        Output('selected-data', 'children'),
-        Output('store', 'data'),
-        Input('select-obs', 'selectedData'),
-        prevent_initial_call=True
+        Output("selected-data", "children"),
+        Output("store", "data"),
+        Input("select-obs", "selectedData"),
+        prevent_initial_call=True,
     )
     def get_selected_data(selectedData):
-        selected_list = [point['customdata'] for point in selectedData['points']]
+        selected_list = [point["customdata"] for point in selectedData["points"]]
         for item in selected_list:
             if item not in customdata_list:
                 customdata_list.append(item)
@@ -210,26 +216,39 @@ def exclude_selected_obs_dash_app(fig, obs_seq_selected):
         obs_types_json = json.dumps(unique_obs_types, indent=2)
 
         # Display info on the selected data in the Dash app
-        return ('Total number of observations selected: ', len(obs_numbers),
-                '\n\nTypes of observations selected: ', obs_types_json,
-                '\n\nSelected observations (obs_num): ', obs_numbers_json), obs_numbers
+        return (
+            "Total number of observations selected: ",
+            len(obs_numbers),
+            "\n\nTypes of observations selected: ",
+            obs_types_json,
+            "\n\nSelected observations (obs_num): ",
+            obs_numbers_json,
+        ), obs_numbers
 
     @callback(
-        Output('confirmation', 'children'),
-        Input('submit-val', 'n_clicks'),
-        Input('store', 'data'),
-        prevent_initial_call=True
+        Output("confirmation", "children"),
+        Input("submit-val", "n_clicks"),
+        Input("store", "data"),
+        prevent_initial_call=True,
     )
     def update_output(n_clicks, data):
-        if n_clicks >=1:
+        if n_clicks >= 1:
 
             # Update the obs_seq_selected dataframe to only include the selected observations
-            obs_seq_selected.df = obs_seq_selected.df[~obs_seq_selected.df['obs_num'].isin(data)]
+            obs_seq_selected.df = obs_seq_selected.df[
+                ~obs_seq_selected.df["obs_num"].isin(data)
+            ]
 
             # Write the updated  observation sequence to a file
-            obs_seq_selected.write_obs_seq('./obs_seq.final.excluding_'+str(len(data))+'_selected_obs')
+            obs_seq_selected.write_obs_seq(
+                "./obs_seq.final.excluding_" + str(len(data)) + "_selected_obs"
+            )
 
             # Display confirmation message in Dash app
-            return 'New observation sequence created with the '+str(len(data))+' selected observations removed.'
+            return (
+                "New observation sequence created with the "
+                + str(len(data))
+                + " selected observations removed."
+            )
 
     return app
