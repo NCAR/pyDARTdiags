@@ -28,7 +28,7 @@ data_file = os.path.join(data_dir, "obs_seq.final.ascii.medium")
 
 ###########################################
 # Read the obs_seq file into an obs_seq object.
-# We also create a second obs_seq object to be mainuplated through
+# We also create a second obs_seq object to be manipulated through
 # map selection
 obs_seq = obsq.ObsSequence(data_file)
 obs_seq_selected = obsq.ObsSequence(data_file)
@@ -40,7 +40,7 @@ obs_seq.df.head()
 ###########################################
 # Create and run the interactive Dash app
 # that creates new obs sequence file with
-# observations selcted on geographic plot
+# observations selected on geographic plot
 fig = ip.geo_plot(obs_seq)
 app = ip.include_only_selected_obs_dash_app(fig, obs_seq_selected)
 
