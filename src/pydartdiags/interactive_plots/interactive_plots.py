@@ -88,7 +88,7 @@ def include_only_selected_obs_dash_app(fig, obs_seq_selected):
     customdata_list = []
     unique_obs_types = []
 
-    @callback(
+    @app.callback(
         Output("selected-data", "children"),
         Output("store", "data"),
         Input("select-obs", "selectedData"),
@@ -123,7 +123,7 @@ def include_only_selected_obs_dash_app(fig, obs_seq_selected):
             obs_numbers_json,
         ), obs_numbers
 
-    @callback(
+    @app.callback(
         Output("confirmation", "children"),
         Input("submit-val", "n_clicks"),
         Input("store", "data"),
@@ -190,7 +190,7 @@ def exclude_selected_obs_dash_app(fig, obs_seq_selected):
     customdata_list = []
     unique_obs_types = []
 
-    @callback(
+    @app.callback(
         Output("selected-data", "children"),
         Output("store", "data"),
         Input("select-obs", "selectedData"),
@@ -225,7 +225,7 @@ def exclude_selected_obs_dash_app(fig, obs_seq_selected):
             obs_numbers_json,
         ), obs_numbers
 
-    @callback(
+    @app.callback(
         Output("confirmation", "children"),
         Input("submit-val", "n_clicks"),
         Input("store", "data"),
