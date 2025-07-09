@@ -10,6 +10,7 @@ import plotly.io as pio
 # Add the path to modules and all subdirectories recursively
 src_path = os.path.abspath('../src')
 sys.path.insert(0, src_path)
+sys.path.insert(0, os.path.abspath('.'))
 
 for root, dirs, files in os.walk(src_path):
     for dir in dirs:
@@ -64,8 +65,10 @@ extensions = [
     'sphinx.ext.todo',
     'myst_parser',
     'sphinx_design',
-    'sphinx_gallery.gen_gallery'
+    'sphinx_gallery.gen_gallery',
+    'youtube'
 ]
+#    'sphinxcontrib.youtube'
 default_thumb_file = os.path.abspath(os.path.join(os.path.dirname(__file__), '_static', 'py-dart-logo-thumb.png'))
 
 sphinx_gallery_conf = {
