@@ -13,7 +13,11 @@ class TestGeoPlot:
         data = {
             "latitude": [10.0, 20.0, 30.0],
             "longitude": [40.0, 50.0, 60.0],
-            "type": ["ACARS_TEMPERATURE", "RADIOSONDE_U_WIND_COMPONENT", "ACARS_TEMPERATURE"],
+            "type": [
+                "ACARS_TEMPERATURE",
+                "RADIOSONDE_U_WIND_COMPONENT",
+                "ACARS_TEMPERATURE",
+            ],
             "observation": [1.0, 2.0, 3.0],
             "obs_num": [1001, 1002, 1003],
             "DART_quality_control": [0, 1, 2],
@@ -31,7 +35,11 @@ class TestGeoPlot:
         data = {
             "latitude": [10.0, 20.0, 30.0],
             "longitude": [40.0, 50.0, 60.0],
-            "type": ["ACARS_TEMPERATURE", "RADIOSONDE_U_WIND_COMPONENT", "ACARS_TEMPERATURE"],
+            "type": [
+                "ACARS_TEMPERATURE",
+                "RADIOSONDE_U_WIND_COMPONENT",
+                "ACARS_TEMPERATURE",
+            ],
             "observation": [1.0, 2.0, 3.0],
             "obs_num": [1001, 1002, 1003],
         }
@@ -60,6 +68,7 @@ class TestGeoPlot:
         # Check that the figure has data
         assert len(fig.data) > 0
 
+
 class TestDashApps:
     @pytest.fixture
     def obs_seq(self):
@@ -67,10 +76,14 @@ class TestDashApps:
         data = {
             "latitude": [10.0, 20.0, 30.0],
             "longitude": [40.0, 50.0, 60.0],
-            "type": ["ACARS_TEMPERATURE", "RADIOSONDE_U_WIND_COMPONENT", "ACARS_TEMPERATURE"],
+            "type": [
+                "ACARS_TEMPERATURE",
+                "RADIOSONDE_U_WIND_COMPONENT",
+                "ACARS_TEMPERATURE",
+            ],
             "observation": [1.0, 2.0, 3.0],
             "obs_num": [1001, 1002, 1003],
-            "DART_quality_control": [0, 1, 2]
+            "DART_quality_control": [0, 1, 2],
         }
         df = pd.DataFrame(data)
 
@@ -95,21 +108,29 @@ class TestDashApps:
             "Total number of observations selected: ",
             1,
             "\n\nTypes of observations selected: ",
-            "[\n  \"ACARS_TEMPERATURE\"\n]",
+            '[\n  "ACARS_TEMPERATURE"\n]',
             "\n\nSelected observations (obs_num): ",
-            "[\n  1001\n]"
-            ]
+            "[\n  1001\n]",
+        ]
         predetermined_output_store = [1001]
 
         # Use the callback map to get the output from get_selected_data
-        callback = app.callback_map["..selected-data.children...store.data.."]["callback"]
-        outputs_list = [{"id": "selected-data", "property": "children"}, {"id": "store", "property": "data"}]
+        callback = app.callback_map["..selected-data.children...store.data.."][
+            "callback"
+        ]
+        outputs_list = [
+            {"id": "selected-data", "property": "children"},
+            {"id": "store", "property": "data"},
+        ]
         full_output = callback(selected_data, outputs_list=outputs_list)
         output_json = json.loads(full_output)
 
         # Verify selected-data and store outputs
-        assert(output_json["response"]["selected-data"]["children"] == predetermined_output_selected_data)
-        assert(output_json["response"]["store"]["data"] == predetermined_output_store)
+        assert (
+            output_json["response"]["selected-data"]["children"]
+            == predetermined_output_selected_data
+        )
+        assert output_json["response"]["store"]["data"] == predetermined_output_store
 
     def test_exclude_selected_obs_dash_app(self, obs_seq):
         # Create a copy of the obs_seq for selection
@@ -127,18 +148,26 @@ class TestDashApps:
             "Total number of observations selected: ",
             1,
             "\n\nTypes of observations selected: ",
-            "[\n  \"ACARS_TEMPERATURE\"\n]",
+            '[\n  "ACARS_TEMPERATURE"\n]',
             "\n\nSelected observations (obs_num): ",
-            "[\n  1001\n]"
-            ]
+            "[\n  1001\n]",
+        ]
         predetermined_output_store = [1001]
 
         # Use the callback map to get the output from get_selected_data
-        callback = app.callback_map["..selected-data.children...store.data.."]["callback"]
-        outputs_list = [{"id": "selected-data", "property": "children"}, {"id": "store", "property": "data"}]
+        callback = app.callback_map["..selected-data.children...store.data.."][
+            "callback"
+        ]
+        outputs_list = [
+            {"id": "selected-data", "property": "children"},
+            {"id": "store", "property": "data"},
+        ]
         full_output = callback(selected_data, outputs_list=outputs_list)
         output_json = json.loads(full_output)
 
         # Verify selected-data and store outputs
-        assert(output_json["response"]["selected-data"]["children"] == predetermined_output_selected_data)
-        assert(output_json["response"]["store"]["data"] == predetermined_output_store)
+        assert (
+            output_json["response"]["selected-data"]["children"]
+            == predetermined_output_selected_data
+        )
+        assert output_json["response"]["store"]["data"] == predetermined_output_store
