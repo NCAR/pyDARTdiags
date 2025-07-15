@@ -12,7 +12,7 @@ authors:
     affiliation: 1
     corresponding: true
   - name: Marlee Smith
-    orcid: 0009-0008-7616-9060X
+    orcid: 0009-0008-7616-9060
     affiliation: 1
   - name: Isaac Arseneau
     orcid: 0000-0003-4170-7734
