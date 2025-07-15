@@ -97,9 +97,10 @@ The pyDARTdiags source code is available at [https://github.com/NCAR/pyDARTdiags
 We thank the DART team, Enrico Milanese (Woods Hole Oceanographic Institution), and the broader data 
 assimilation community for their feedback and contributions.
 
-This material is based upon work supported by the National Science Foundation under Grant No. 2311382, 
+This material is based upon work supported by the U.S. National Science Foundation under Grant No. 2311382, 
 "Collaborative Research: Frameworks: A community platform for accelerating observationally-constrained 
-regional oceanographic modeling."
+regional oceanographic modeling", and by the NSF National Center for Atmospheric Research, which is 
+a major facility sponsored by the U.S. National Science Foundation under Cooperative Agreement No. 1852977.
 
 # References
 
