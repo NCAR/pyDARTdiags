@@ -9,6 +9,9 @@ You can then select observations on the map to add them to a
 new observation sequence file. Further instructions on usage
 are provided in the Dash app.
 
+Launch the Dash app by executing the 'python3 select_to_pick_obs.py'
+command in your terminal in the /pyDARTdiags/examples/04_interacting
+directory.
 """
 
 ###########################################
