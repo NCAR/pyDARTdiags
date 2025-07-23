@@ -74,7 +74,9 @@ def include_only_selected_obs_dash_app(fig, obs_seq_selected):
             the select button to create a new observation sequence file
             that contains only the selected observations.
 
-            To reset the Dash app, simply refresh the page.
+            To reset the Dash app, quit the app by pressing Ctrl+C and
+            restart it by executing the command 'python3 select_to_pick_obs.py'
+            in your terminal.
         """,
             style=dash_styles["txt"],
         ),
@@ -176,7 +178,9 @@ def exclude_selected_obs_dash_app(fig, obs_seq_selected):
             the select button to create a new observation sequence file
             that excludes the selected observations.
 
-            To reset the Dash app, simply refresh the page.
+            To reset the Dash app, quit the app by pressing Ctrl+C and
+            restart it by executing the command 'python3 select_to_remove_obs.py'
+            in your terminal.
         """,
             style=dash_styles["txt"],
         ),
