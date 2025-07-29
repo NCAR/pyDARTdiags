@@ -238,7 +238,7 @@ def exclude_selected_obs_dash_app(fig, obs_seq_selected):
     def update_output(n_clicks, data):
         if n_clicks >= 1:
 
-            # Update the obs_seq_selected dataframe to only include the selected observations
+            # Update the obs_seq_selected dataframe to remove the selected observations
             obs_seq_selected.df = obs_seq_selected.df[
                 ~obs_seq_selected.df["obs_num"].isin(data)
             ]
