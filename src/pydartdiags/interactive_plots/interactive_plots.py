@@ -22,8 +22,8 @@ def geo_plot(obs_seq):
             lat="latitude",
             lon="longitude",
             hover_data={"type": True, "observation": True, "obs_num": True},
-            width=1400,
-            height=850,
+            width=1600,
+            height=1300,
         )
     else:
         fig = px.scatter_geo(
@@ -40,6 +40,7 @@ def geo_plot(obs_seq):
             width=1400,
             height=850,
         )
+        fig.update_layout(coloraxis_colorbar=dict(len=.8))
 
     fig.update_layout(clickmode="event+select")
     # If the obs_seq has more than 10,000 observations, do not show hover info
