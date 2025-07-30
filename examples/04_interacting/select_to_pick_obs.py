@@ -27,6 +27,7 @@ import pydartdiags.obs_sequence.obs_sequence as obsq
 # that comes with the pyDARTdiags package in the data directory, so we
 # ``import os`` to get the path to the file.
 import os
+
 data_dir = os.path.join(os.getcwd(), "../..", "data")
 data_file = os.path.join(data_dir, "obs_seq.final.ascii.medium")
 

@@ -40,7 +40,7 @@ def geo_plot(obs_seq):
             width=1400,
             height=850,
         )
-        fig.update_layout(coloraxis_colorbar=dict(len=.8))
+        fig.update_layout(coloraxis_colorbar=dict(len=0.8))
 
     fig.update_layout(clickmode="event+select")
     # If the obs_seq has more than 10,000 observations, do not show hover info
