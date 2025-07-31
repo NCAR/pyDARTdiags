@@ -47,12 +47,12 @@ oceanography, hydrology, and environmental science.
 
 In Data Assimilation, observation space diagnostics are statistical analyses and visualizations
 performed on the differences between model predictions and real-world observations, evaluated in
-the space of the observations themselves (rather than in the model’s state space).
+the space of the observations themselves. The model state is transformed into observation space by interpolating the model state to each observation location. These diagnostics are key tools in model evaluation and prediction tasks.
 
 The Data Assimilation Research Testbed (DART) [@DARTcode],[@DART2009] is a widely used community software
-facility for ensemble data assimilation. DART’s observation sequence files are central to its workflow, 
+facility for ensemble data assimilation. DART merges diverse and complex observations into an internal data format called "observation sequence" files, which inherit metadata from each observation. Observation sequence files including the model states are also generated, wherein the model states have been transformed into the observation space for direct comparisons and analysis. The transformation of each model state into observation space is a simple interpolation of the model state to the location of each observation. DART’s observation sequence files are central to its workflow, 
 but their format and complexity can make them challenging to manipulate and analyze outside of the DART 
-ecosystem. 
+ecosystem. To manipulate and analyze the data using open-source tools a converter/interface is required.
 
 pyDARTdiags is a Python package created to address this challenge. It provides tools to read, manipulate,
 and analyze DART observation sequence files using familiar, modern Python libraries. With pyDARTdiags,
@@ -68,12 +68,13 @@ visualization in MATLAB, which may not be freely accessible to all users. pyDART
 package to process and visualize observation space diagnostics. 
 
 PyDARTdiags ingests observation sequences into an ObsSequence object which contains the metadata about
-an observation sequence, and a DataFrame containing all the data for the observations. 
+an observation sequence and a DataFrame containing all the data for the observations. 
 
 This provides several advantages over the exiting Fortran+MATLAB DART software: 
 
-- Providing Python routines for reading and writing DART observation sequence files allows the manipulation
+- Providing Python routines for reading and writing DART observation sequence files allows for the interactive manipulation
   of observation sequences interactively via DataFrames using standard data science libraries. 
+  - Synthesizing the manipulation, analysis, and visualization of observation sequence files into a single Python workflow improves portability and flexibility over the fractured Fortran/MATLAB workflow.
 - Enabling calculation of observation-space statistics (e.g., RMSE, bias, total spread) on a DataFrame enables
   Data Assimilation researchers and users to write custom diagnostics based on DataFrames. The divide 
   between observation sequence file format and DataFrame allows updates and improvements to the DART observation
