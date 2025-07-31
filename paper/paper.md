@@ -57,8 +57,7 @@ The Data Assimilation Research Testbed (DART) [@DART2009;@DARTcode] is a widely 
 facility for ensemble data assimilation. DART merges diverse and complex observations into an internal data 
 format called "observation sequence" files, which inherit metadata from each observation. Observation sequence
 files including the model states are also generated, wherein the model states have been transformed into the 
-observation space for direct comparisons and analysis. The transformation of each model state into observation 
-space is a simple interpolation of the model state to the location of each observation. DART’s observation 
+observation space for direct comparisons and analysis. DART’s observation 
 sequence files are central to its workflow, but their format and complexity can make them challenging to 
 manipulate and analyze outside of the DART ecosystem. To manipulate and analyze the data using open-source 
 tools a converter/interface is required.
@@ -94,7 +93,8 @@ This provides several advantages over the existing Fortran+MATLAB DART software:
   or other (technical) anomalies.
 - Facilitating reproducible, scriptable workflows for observation-space diagnostics enables the inclusion in
   Jupyter notebook workflows. A concrete use case is its integration into the the CESM Regional Ocean and Carbon
-  Configurator with Data Assimilation and Embedding (CROCODILE) project, which is a community platform for accelerating observationally-constrained regional ocean modeling. pyDARTdiags is used for observation space diagnostics 
+  Configurator with Data Assimilation and Embedding (CROCODILE) project, which is a community platform for accelerating
+  sobservationally-constrained regional ocean modeling. pyDARTdiags is used for observation space diagnostics 
   and model-to-observation comparison in the Jupyter notebook workflows for this project.
 
 Examples for manipulating observation sequences, visualizing observational data, and generating diagnostic plots can be 
