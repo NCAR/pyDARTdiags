@@ -87,7 +87,7 @@ This provides several advantages over the existing Fortran+MATLAB DART software:
 - Enabling calculation of observation-space statistics (e.g., RMSE, bias, total spread) on a DataFrame enables
   Data Assimilation researchers and users to write custom diagnostics based on DataFrames. By decoupling the 
   observation sequence file format from the DataFrame-based analysis, pyDARTdiags ensures that updates to the 
-  DART file format do not disrupt user-created diagnostic routines.  
+  DART file format do not disrupt user-created diagnostic routines.
 - Supporting both static and interactive plotting (via Matplotlib and Plotly), facilities the processing of 
   observational datasets, quality control, and gaining insights about the spatial distribution of outliers 
   or other (technical) anomalies.
