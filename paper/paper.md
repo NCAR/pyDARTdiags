@@ -46,14 +46,21 @@ weather satellites, buoys, radar, or other sensors) with predictions from numeri
 an improved estimate of the state of a system. It is widely used in fields like meteorology, 
 oceanography, hydrology, and environmental science.
 
-In Data Assimilation, observation space diagnostics are statistical analyses and visualizations
-performed on the differences between model predictions and real-world observations, evaluated in
-the space of the observations themselves. The model state is transformed into observation space by interpolating the model state to each observation location. These diagnostics are key tools in model evaluation and prediction tasks.
+During assimilation, the model state is transformed into observation space by interpolating the model 
+state to each observation location. Observation space diagnostics are used
+to visualize observations and model predictions (in observation space), and compare their statistical 
+properties both before and after assimilation. Thereby, these diagnostics are key tools to model 
+evaluation and prediction tasks.
 
 The Data Assimilation Research Testbed (DART) [@DARTcode],[@DART2009] is a widely used community software
-facility for ensemble data assimilation. DART merges diverse and complex observations into an internal data format called "observation sequence" files, which inherit metadata from each observation. Observation sequence files including the model states are also generated, wherein the model states have been transformed into the observation space for direct comparisons and analysis. The transformation of each model state into observation space is a simple interpolation of the model state to the location of each observation. DART’s observation sequence files are central to its workflow, 
-but their format and complexity can make them challenging to manipulate and analyze outside of the DART 
-ecosystem. To manipulate and analyze the data using open-source tools a converter/interface is required.
+facility for ensemble data assimilation. DART merges diverse and complex observations into an internal data 
+format called "observation sequence" files, which inherit metadata from each observation. Observation sequence
+files including the model states are also generated, wherein the model states have been transformed into the 
+observation space for direct comparisons and analysis. The transformation of each model state into observation 
+space is a simple interpolation of the model state to the location of each observation. DART’s observation 
+sequence files are central to its workflow, but their format and complexity can make them challenging to 
+manipulate and analyze outside of the DART ecosystem. To manipulate and analyze the data using open-source 
+tools a converter/interface is required.
 
 pyDARTdiags is a Python package created to address this challenge. It provides tools to read, manipulate,
 and analyze DART observation sequence files using familiar, modern Python libraries. With pyDARTdiags,
@@ -71,21 +78,23 @@ package to process and visualize observation space diagnostics.
 PyDARTdiags ingests observation sequences into an ObsSequence object which contains the metadata about
 an observation sequence and a DataFrame containing all the data for the observations. 
 
-This provides several advantages over the exiting Fortran+MATLAB DART software: 
+This provides several advantages over the existing Fortran+MATLAB DART software: 
 
-- Providing Python routines for reading and writing DART observation sequence files allows for the interactive manipulation
-  of observation sequences interactively via DataFrames using standard data science libraries. 
-  - Synthesizing the manipulation, analysis, and visualization of observation sequence files into a single Python workflow improves portability and flexibility over the fractured Fortran/MATLAB workflow.
+- Providing Python routines for reading and writing DART observation sequence files allows for the manipulation
+  of observation sequences interactively via DataFrames using popular, open-source data science libraries. 
+- Synthesizing the manipulation, analysis, and visualization of observation sequence files into a single Python 
+  workflow improves portability and flexibility over the fractured Fortran/MATLAB workflow.
 - Enabling calculation of observation-space statistics (e.g., RMSE, bias, total spread) on a DataFrame enables
-  Data Assimilation researchers and users to write custom diagnostics based on DataFrames. The divide 
-  between observation sequence file format and DataFrame allows updates and improvements to the DART observation
-  sequence file format without breaking user created diagnostic routines. 
-- Supports both static and interactive plotting (via Matplotlib and Plotly).
-- Facilitates reproducible, scriptable workflows for observation-space diagnostics. A concrete use case is its 
-  integration into the the CESM Regional Ocean and Carbon Configurator with Data Assimilation and Embedding 
-  (CROCODILE) project, which is a community platform for accelerating observationally-constrained regional ocean
-  modeling. pyDARTdiags is used for observation space diagnostics and model to observation comparison in the 
-  Jupyter notebook workflows for this project.
+  Data Assimilation researchers and users to write custom diagnostics based on DataFrames. By decoupling the 
+  observation sequence file format from the DataFrame-based analysis, pyDARTdiags ensures that updates to the 
+  DART file format do not disrupt user-created diagnostic routines.  
+- Supporting both static and interactive plotting (via Matplotlib and Plotly), facilities the processing of 
+  observational datasets, quality control, and gaining insights about the spatial distribution of outliers 
+  or other (technical) anomalies.
+- Facilitating reproducible, scriptable workflows for observation-space diagnostics enables the inclusion in
+  Jupyter notebook workflows. A concrete use case is its integration into the the CESM Regional Ocean and Carbon
+  Configurator with Data Assimilation and Embedding (CROCODILE) project, which is a community platform for accelerating observationally-constrained regional ocean modeling. pyDARTdiags is used for observation space diagnostics 
+  and model-to-observation comparison in the Jupyter notebook workflows for this project.
 
 Examples for manipulating observation sequences, visualizing observational data, and generating diagnostic plots can be 
 found in the [pyDARTdiags examples gallery](https://ncar.github.io/pyDARTdiags/examples/index.html).
