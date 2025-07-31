@@ -33,7 +33,8 @@ affiliations:
     index: 3
     ror: 03prydq77
 
-date: 14 July 2025
+date: 31 July 2025
+bibliography: paper.bib
 ---
 
 # Summary
@@ -52,7 +53,7 @@ to visualize observations and model predictions (in observation space), and comp
 properties both before and after assimilation. Thereby, these diagnostics are key tools to model 
 evaluation and prediction tasks.
 
-The Data Assimilation Research Testbed (DART) [@DARTcode],[@DART2009] is a widely used community software
+The Data Assimilation Research Testbed (DART) [@DART2009;@DARTcode] is a widely used community software
 facility for ensemble data assimilation. DART merges diverse and complex observations into an internal data 
 format called "observation sequence" files, which inherit metadata from each observation. Observation sequence
 files including the model states are also generated, wherein the model states have been transformed into the 
