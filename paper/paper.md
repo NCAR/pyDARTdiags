@@ -5,6 +5,7 @@ tags:
   - data assimilation
   - diagnostics
   - atmospheric science
+  - observational data
 
 authors:
   - name: Helen Kershaw
