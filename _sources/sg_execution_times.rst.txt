@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:08.783** total execution time for 10 files **from all galleries**:
+**00:08.494** total execution time for 10 files **from all galleries**:
 
 .. container::
 
@@ -33,28 +33,28 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_examples_01_manipulating_plot_duplicates.py` (``../examples/01_manipulating/plot_duplicates.py``)
-     - 00:04.156
+     - 00:04.104
      - 0.0
    * - :ref:`sphx_glr_examples_03_diagnostics_plot_rank_histogram.py` (``../examples/03_diagnostics/plot_rank_histogram.py``)
-     - 00:02.611
+     - 00:02.489
      - 0.0
    * - :ref:`sphx_glr_examples_03_diagnostics_plot_evolution.py` (``../examples/03_diagnostics/plot_evolution.py``)
-     - 00:00.887
+     - 00:00.859
      - 0.0
    * - :ref:`sphx_glr_examples_03_diagnostics_plot_profiles.py` (``../examples/03_diagnostics/plot_profiles.py``)
-     - 00:00.591
+     - 00:00.575
      - 0.0
    * - :ref:`sphx_glr_examples_02_visualizing_plot_qc_hover.py` (``../examples/02_visualizing/plot_qc_hover.py``)
-     - 00:00.214
+     - 00:00.198
      - 0.0
    * - :ref:`sphx_glr_examples_01_manipulating_plot_join_obs_seq.py` (``../examples/01_manipulating/plot_join_obs_seq.py``)
-     - 00:00.130
+     - 00:00.127
      - 0.0
    * - :ref:`sphx_glr_examples_03_diagnostics_plot_grand_stats.py` (``../examples/03_diagnostics/plot_grand_stats.py``)
-     - 00:00.129
+     - 00:00.076
      - 0.0
    * - :ref:`sphx_glr_examples_01_manipulating_plot_remove_obs.py` (``../examples/01_manipulating/plot_remove_obs.py``)
-     - 00:00.034
+     - 00:00.032
      - 0.0
    * - :ref:`sphx_glr_examples_03_diagnostics_plot_qc_poss_vs_used.py` (``../examples/03_diagnostics/plot_qc_poss_vs_used.py``)
      - 00:00.024
