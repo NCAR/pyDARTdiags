@@ -94,7 +94,7 @@ This provides several advantages over the existing Fortran+MATLAB DART software:
 - Facilitating reproducible, scriptable workflows for observation-space diagnostics enables the inclusion in
   Jupyter notebook workflows. A concrete use case is its integration into the the CESM Regional Ocean and Carbon
   Configurator with Data Assimilation and Embedding (CROCODILE) project, which is a community platform for accelerating
-  sobservationally-constrained regional ocean modeling. pyDARTdiags is used for observation space diagnostics 
+  observationally-constrained regional ocean modeling. pyDARTdiags is used for observation space diagnostics 
   and model-to-observation comparison in the Jupyter notebook workflows for this project.
 
 Examples for manipulating observation sequences, visualizing observational data, and generating diagnostic plots can be 
