@@ -6,15 +6,21 @@ import matplotlib.pyplot as plt
 dacolors = ["green", "magenta", "orange", "red"]
 
 
-def plot_profile(obs_seq, levels, type, bias=True, rmse=True, totalspread=True):
+def plot_profile(
+    obs_seq, levels, type, bias=True, rmse=True, totalspread=True, depth=False
+):
     """
     plot_profile on the levels for prior and  posterior if present
        - bias
        - rmse
        - totalspread
 
+    For observations in pressure (Pa), the levels are assumed to be in hPa and
+    the y-axis is in hPa and inverted.
+    For ocean observations, which are height (m), set depth=True to invert y-axis.
+
     Args:
-        obs_seq, levels, type, bias=True, rmse=True, totalspread=True
+        obs_seq, levels, type, bias=True, rmse=True, totalspread=True, depth=False
 
     Example:
 
@@ -45,10 +51,7 @@ def plot_profile(obs_seq, levels, type, bias=True, rmse=True, totalspread=True):
         return None
 
     vert_unit = all_df.iloc[0]["vert_unit"]
-    if vert_unit == "pressure (Pa)":
-        conversion = 0.01  # from Pa to hPa
-    else:
-        conversion = 1.0  # no conversion needed
+    conversion, unit = _get_plot_unit(vert_unit)  # multiplier and unit for y-axis
 
     # grand statistics
     grand = stats.grand_statistics(qc0)
@@ -68,7 +71,7 @@ def plot_profile(obs_seq, levels, type, bias=True, rmse=True, totalspread=True):
 
     fig, ax1 = plt.subplots(figsize=(8, 8))
 
-    # convert to hPa HK @todo only for Pressure (Pa)
+    # convert to hPa for Pressure (Pa)
     df["midpoint"] = df["midpoint"].astype(float)
     df["midpoint"] = df["midpoint"] * conversion
 
@@ -144,7 +147,7 @@ def plot_profile(obs_seq, levels, type, bias=True, rmse=True, totalspread=True):
                 label="posterior totalspread",
             )
 
-    ax1.set_ylabel("hPa")
+    ax1.set_ylabel(unit)
     ax1.tick_params(axis="y")
     ax1.set_yticks(df["midpoint"])
     # ax1.set_yticklabels(df['midpoint'])
@@ -171,7 +174,7 @@ def plot_profile(obs_seq, levels, type, bias=True, rmse=True, totalspread=True):
     )
     ax3.set_xlim(left=0)
 
-    if vert_unit == "pressure (Pa)":
+    if vert_unit == "pressure (Pa)" or depth:
         ax1.invert_yaxis()
     ax1.set_title(type)
     # Build the datalabel string
@@ -228,13 +231,29 @@ def plot_rank_histogram(obs_seq, levels, type, ens_size):
 
     qc0 = stats.select_used_qcs(obs_seq.df)  # filter only qc=0, qc=2
     qc0 = qc0[qc0["type"] == type]  # filter by type
-    stats.bin_by_layer(qc0, levels)  # bin by level
+    if qc0.empty:
+        print(f"No rows found for type: {type}")
+        return None
+
+    if qc0["vert_unit"].nunique() > 1:
+        print(
+            f"Multiple vertical units found in the data: {qc0['vert_unit'].unique()} for type: {type}"
+        )
+        return None
+
+    vert_unit = qc0.iloc[0]["vert_unit"]
+    conversion, unit = _get_plot_unit(vert_unit)  # multiplier and unit for y-axis
+
+    stats.bin_by_layer(qc0, levels, verticalUnit=vert_unit)  # bin by level
 
     midpoints = qc0["midpoint"].unique()
 
     for level in sorted(midpoints):
 
         df = qc0[qc0["midpoint"] == level]
+        # convert to hPa only for Pressure (Pa)
+        df["midpoint"] = df["midpoint"].astype(float)
+        df["midpoint"] = df["midpoint"] * conversion
 
         df = stats.calculate_rank(qc0)
 
@@ -265,7 +284,7 @@ def plot_rank_histogram(obs_seq, levels, type, ens_size):
             ax2.set_xlabel("Observation Rank (among ensemble members)")
             ax2.set_ylabel("Count")
 
-        fig.suptitle(f"{type} at Level {level}", fontsize=14)
+        fig.suptitle(f"{type} at Level {round(level, 1)} {unit}", fontsize=14)
 
         plt.tight_layout(rect=[0, 0.03, 1, 0.95])
         plt.show()
@@ -421,3 +440,12 @@ def plot_time_evolution(
     plt.tight_layout()
 
     return fig
+
+
+def _get_plot_unit(vert_unit):
+    if vert_unit == "pressure (Pa)":
+        return 0.01, "hPa"
+    elif vert_unit in ("height (m)", "surface (m)"):
+        return 1.0, "m"
+    else:
+        return 1.0, vert_unit

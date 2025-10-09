@@ -44,7 +44,6 @@ class TestRankCalculation:
 
         # Call the function
         df_hist = stats.calculate_rank(df)
-        print(df_hist.columns)
 
         # HK @todo need a random number test to check the rank calculation
         assert "prior_rank" in df_hist.columns
@@ -438,7 +437,7 @@ class TestPossibleVsUsed:
         df = pd.DataFrame(data)
 
         # Define the layers
-        layers = [0, 100, 200, 300]  # midpoints are 50, 150, 250
+        layers = [0, 100, 200, 300]  # midpoints are 49.999, 150, 250
         stats.bin_by_layer(df, layers)
 
         # Call the function
@@ -450,8 +449,8 @@ class TestPossibleVsUsed:
 
         # Check the values of the new columns
         expected_midpoints = pd.Categorical(
-            [50.0, 150.0, 250.0, 50.0, 150.0, 250.0],
-            categories=[50.0, 150.0, 250.0],
+            [49.9995, 150.0, 250.0, 49.9995, 150.0, 250.0],
+            categories=[49.9995, 150.0, 250.0],
             ordered=True,
         )
         expected_data = {
@@ -544,23 +543,23 @@ class TestLayers:
         # Check the values of the new columns: vlevels and midpoint
         expected_vlevels = pd.Categorical(
             [
-                pd.Interval(left=0, right=100, closed="right"),
-                pd.Interval(left=200, right=300, closed="right"),
-                pd.Interval(left=100, right=200, closed="right"),
-                pd.Interval(left=200, right=300, closed="right"),
-                pd.Interval(left=200, right=300, closed="right"),
+                pd.Interval(left=-0.001, right=100.0, closed="right"),
+                pd.Interval(left=200.0, right=300.0, closed="right"),
+                pd.Interval(left=100.0, right=200.0, closed="right"),
+                pd.Interval(left=200.0, right=300.0, closed="right"),
+                pd.Interval(left=200.0, right=300.0, closed="right"),
             ],
             categories=[
-                pd.Interval(left=0, right=100, closed="right"),
-                pd.Interval(left=100, right=200, closed="right"),
-                pd.Interval(left=200, right=300, closed="right"),
+                pd.Interval(left=-0.001, right=100.0, closed="right"),
+                pd.Interval(left=100.0, right=200.0, closed="right"),
+                pd.Interval(left=200.0, right=300.0, closed="right"),
             ],
             ordered=True,
         )
 
         expected_midpoints = pd.Categorical(
-            [50.0, 250.0, 150.0, 250.0, 250.0],
-            categories=[50.0, 150.0, 250.0],
+            [49.9995, 250.0, 150.0, 250.0, 250.0],
+            categories=[49.9995, 150.0, 250.0],
             ordered=True,
         )
         data_result = {
@@ -619,23 +618,23 @@ class TestLayers:
         # Check the values of the new columns: vlelvels and midpoint
         expected_vlevels = pd.Categorical(
             [
-                pd.Interval(left=0, right=100, closed="right"),
-                pd.Interval(left=200, right=300, closed="right"),
-                pd.Interval(left=100, right=200, closed="right"),
-                pd.Interval(left=200, right=300, closed="right"),
-                pd.Interval(left=200, right=300, closed="right"),
+                pd.Interval(left=-0.001, right=100.0, closed="right"),
+                pd.Interval(left=200.0, right=300.0, closed="right"),
+                pd.Interval(left=100.0, right=200.0, closed="right"),
+                pd.Interval(left=200.0, right=300.0, closed="right"),
+                pd.Interval(left=200.0, right=300.0, closed="right"),
             ],
             categories=[
-                pd.Interval(left=0, right=100, closed="right"),
-                pd.Interval(left=100, right=200, closed="right"),
-                pd.Interval(left=200, right=300, closed="right"),
+                pd.Interval(left=-0.001, right=100.0, closed="right"),
+                pd.Interval(left=100.0, right=200.0, closed="right"),
+                pd.Interval(left=200.0, right=300.0, closed="right"),
             ],
             ordered=True,
         )
 
         expected_midpoints = pd.Categorical(
-            [50.0, 250.0, 150.0, 250.0, 250.0],
-            categories=[50.0, 150.0, 250.0],
+            [49.9995, 250.0, 150.0, 250.0, 250.0],
+            categories=[49.9995, 150.0, 250.0],
             ordered=True,
         )
         data_result = {
