@@ -1,0 +1,20 @@
+cff-version: 0.6.1
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Kershaw"
+  given-names: "Helen"
+  orcid: "https://orcid.org/0009-0002-3755-9978"
+- family-names: "Marlee"
+  given-names: "Smith"
+  orcid: "https://orcid.org/0009-0008-7616-9060"
+- family-names: "Isaac"
+  given-names: "Arseneau"
+  orcid: "https://orcid.org/0000-0003-4170-7734"
+- family-names: "Lukas"
+  given-names: "Kugler"
+  orcid: "https://orcid.org/0000-0002-4537-3164"
+title: "pyDARTdiags"
+version: 0.6.1
+doi: 10.5281/zenodo.17315697
+date-released: 2025-07-03
+url: "https://github.com/NCAR/pyDARTdiags"
