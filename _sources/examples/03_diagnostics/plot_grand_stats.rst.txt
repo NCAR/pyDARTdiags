@@ -641,7 +641,7 @@ for each type of observation.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.076 seconds)
+   **Total running time of the script:** (0 minutes 0.105 seconds)
 
 
 .. _sphx_glr_download_examples_03_diagnostics_plot_grand_stats.py:
