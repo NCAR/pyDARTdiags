@@ -230,7 +230,7 @@ def bin_by_layer(df, levels, verticalUnit="pressure (Pa)"):
     """
     pd.options.mode.copy_on_write = True
     df.loc[df["vert_unit"] == verticalUnit, "vlevels"] = pd.cut(
-        df.loc[df["vert_unit"] == verticalUnit, "vertical"], levels
+        df.loc[df["vert_unit"] == verticalUnit, "vertical"], levels, include_lowest=True
     )
     df.loc[:, "midpoint"] = df["vlevels"].apply(lambda x: x.mid)
 
