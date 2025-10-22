@@ -406,7 +406,7 @@
 <span id="module-matplots"></span><span id="matplots"></span><h1>module: matplots<a class="headerlink" href="#module-0" title="Link to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="matplots.plot_profile">
-<span class="sig-prename descclassname"><span class="pre">matplots.</span></span><span class="sig-name descname"><span class="pre">plot_profile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obs_seq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">levels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rmse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">totalspread</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#matplots.plot_profile" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">matplots.</span></span><span class="sig-name descname"><span class="pre">plot_profile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obs_seq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">levels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rmse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">totalspread</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#matplots.plot_profile" title="Link to this definition">#</a></dt>
 <dd><dl class="simple">
 <dt>plot_profile on the levels for prior and  posterior if present</dt><dd><ul class="simple">
 <li><p>bias</p></li>
@@ -415,6 +415,9 @@
 </ul>
 </dd>
 </dl>
+<p>For observations in pressure (Pa), the levels are assumed to be in hPa and
+the y-axis is in hPa and inverted.
+For ocean observations, which are height (m), set depth=True to invert y-axis.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -424,6 +427,7 @@
 <li><p><strong>bias=True</strong></p></li>
 <li><p><strong>rmse=True</strong></p></li>
 <li><p><strong>totalspread=True</strong></p></li>
+<li><p><strong>depth=False</strong></p></li>
 </ul>
 </dd>
 </dl>
