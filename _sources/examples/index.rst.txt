@@ -52,7 +52,7 @@ Here are some examples of how to use pyDARTdiags to read, modify, and write obse
   .. image:: /examples/01_manipulating/images/thumb/sphx_glr_plot_duplicates_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_01_manipulating_plot_duplicates.py`
+  :doc:`/examples/01_manipulating/plot_duplicates`
 
 .. raw:: html
 
@@ -69,7 +69,7 @@ Here are some examples of how to use pyDARTdiags to read, modify, and write obse
   .. image:: /examples/01_manipulating/images/thumb/sphx_glr_plot_external_fo_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_01_manipulating_plot_external_fo.py`
+  :doc:`/examples/01_manipulating/plot_external_fo`
 
 .. raw:: html
 
@@ -86,7 +86,7 @@ Here are some examples of how to use pyDARTdiags to read, modify, and write obse
   .. image:: /examples/01_manipulating/images/thumb/sphx_glr_plot_join_obs_seq_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_01_manipulating_plot_join_obs_seq.py`
+  :doc:`/examples/01_manipulating/plot_join_obs_seq`
 
 .. raw:: html
 
@@ -103,7 +103,7 @@ Here are some examples of how to use pyDARTdiags to read, modify, and write obse
   .. image:: /examples/01_manipulating/images/thumb/sphx_glr_plot_remove_obs_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_01_manipulating_plot_remove_obs.py`
+  :doc:`/examples/01_manipulating/plot_remove_obs`
 
 .. raw:: html
 
@@ -139,7 +139,7 @@ Examples of visualizing observation sequence data.
   .. image:: /examples/02_visualizing/images/thumb/sphx_glr_plot_qc_hover_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_02_visualizing_plot_qc_hover.py`
+  :doc:`/examples/02_visualizing/plot_qc_hover`
 
 .. raw:: html
 
@@ -179,7 +179,7 @@ Examples of the diagnostic tools available in the library.
   .. image:: /examples/03_diagnostics/images/thumb/sphx_glr_plot_evolution_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_03_diagnostics_plot_evolution.py`
+  :doc:`/examples/03_diagnostics/plot_evolution`
 
 .. raw:: html
 
@@ -196,7 +196,7 @@ Examples of the diagnostic tools available in the library.
   .. image:: /examples/03_diagnostics/images/thumb/sphx_glr_plot_grand_stats_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_03_diagnostics_plot_grand_stats.py`
+  :doc:`/examples/03_diagnostics/plot_grand_stats`
 
 .. raw:: html
 
@@ -213,7 +213,7 @@ Examples of the diagnostic tools available in the library.
   .. image:: /examples/03_diagnostics/images/thumb/sphx_glr_plot_profiles_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_03_diagnostics_plot_profiles.py`
+  :doc:`/examples/03_diagnostics/plot_profiles`
 
 .. raw:: html
 
@@ -230,7 +230,7 @@ Examples of the diagnostic tools available in the library.
   .. image:: /examples/03_diagnostics/images/thumb/sphx_glr_plot_qc_poss_vs_used_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_03_diagnostics_plot_qc_poss_vs_used.py`
+  :doc:`/examples/03_diagnostics/plot_qc_poss_vs_used`
 
 .. raw:: html
 
@@ -247,7 +247,7 @@ Examples of the diagnostic tools available in the library.
   .. image:: /examples/03_diagnostics/images/thumb/sphx_glr_plot_rank_histogram_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_03_diagnostics_plot_rank_histogram.py`
+  :doc:`/examples/03_diagnostics/plot_rank_histogram`
 
 .. raw:: html
 

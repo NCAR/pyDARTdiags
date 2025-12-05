@@ -29,7 +29,7 @@ Examples of the diagnostic tools available in the library.
   .. image:: /examples/03_diagnostics/images/thumb/sphx_glr_plot_evolution_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_03_diagnostics_plot_evolution.py`
+  :doc:`/examples/03_diagnostics/plot_evolution`
 
 .. raw:: html
 
@@ -46,7 +46,7 @@ Examples of the diagnostic tools available in the library.
   .. image:: /examples/03_diagnostics/images/thumb/sphx_glr_plot_grand_stats_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_03_diagnostics_plot_grand_stats.py`
+  :doc:`/examples/03_diagnostics/plot_grand_stats`
 
 .. raw:: html
 
@@ -63,7 +63,7 @@ Examples of the diagnostic tools available in the library.
   .. image:: /examples/03_diagnostics/images/thumb/sphx_glr_plot_profiles_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_03_diagnostics_plot_profiles.py`
+  :doc:`/examples/03_diagnostics/plot_profiles`
 
 .. raw:: html
 
@@ -80,7 +80,7 @@ Examples of the diagnostic tools available in the library.
   .. image:: /examples/03_diagnostics/images/thumb/sphx_glr_plot_qc_poss_vs_used_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_03_diagnostics_plot_qc_poss_vs_used.py`
+  :doc:`/examples/03_diagnostics/plot_qc_poss_vs_used`
 
 .. raw:: html
 
@@ -97,7 +97,7 @@ Examples of the diagnostic tools available in the library.
   .. image:: /examples/03_diagnostics/images/thumb/sphx_glr_plot_rank_histogram_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_03_diagnostics_plot_rank_histogram.py`
+  :doc:`/examples/03_diagnostics/plot_rank_histogram`
 
 .. raw:: html
 

@@ -27,7 +27,7 @@ Here are some examples of how to use pyDARTdiags to read, modify, and write obse
   .. image:: /examples/01_manipulating/images/thumb/sphx_glr_plot_duplicates_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_01_manipulating_plot_duplicates.py`
+  :doc:`/examples/01_manipulating/plot_duplicates`
 
 .. raw:: html
 
@@ -44,7 +44,7 @@ Here are some examples of how to use pyDARTdiags to read, modify, and write obse
   .. image:: /examples/01_manipulating/images/thumb/sphx_glr_plot_external_fo_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_01_manipulating_plot_external_fo.py`
+  :doc:`/examples/01_manipulating/plot_external_fo`
 
 .. raw:: html
 
@@ -61,7 +61,7 @@ Here are some examples of how to use pyDARTdiags to read, modify, and write obse
   .. image:: /examples/01_manipulating/images/thumb/sphx_glr_plot_join_obs_seq_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_01_manipulating_plot_join_obs_seq.py`
+  :doc:`/examples/01_manipulating/plot_join_obs_seq`
 
 .. raw:: html
 
@@ -78,7 +78,7 @@ Here are some examples of how to use pyDARTdiags to read, modify, and write obse
   .. image:: /examples/01_manipulating/images/thumb/sphx_glr_plot_remove_obs_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_01_manipulating_plot_remove_obs.py`
+  :doc:`/examples/01_manipulating/plot_remove_obs`
 
 .. raw:: html
 
