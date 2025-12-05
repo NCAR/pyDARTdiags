@@ -53,27 +53,29 @@ to visualize observations and model predictions (in observation space), and comp
 properties both before and after assimilation. Thereby, these diagnostics are key tools to model 
 evaluation and prediction tasks.
 
-The Data Assimilation Research Testbed (DART) is a widely used community software
-facility for ensemble data assimilation. DART merges diverse and complex observations into an internal data 
-format called "observation sequence" files, which inherit metadata from each observation. Observation sequence
-files including the model states are also generated, wherein the model states have been transformed into the 
-observation space for direct comparisons and analysis. DART’s observation 
-sequence files are central to its workflow, but their format and complexity can make them challenging to 
-manipulate and analyze outside of the DART ecosystem. To manipulate and analyze the data using open-source 
-tools a converter/interface is required.
-
-pyDARTdiags is a Python package created to address this challenge. It provides tools to read, manipulate,
-and analyze DART observation sequence files using familiar, modern Python libraries. With pyDARTdiags,
-users can extract data, compute diagnostics, and create visualizations, all within reproducible Python 
-workflows that integrate seamlessly with the broader scientific ecosystem.
+The Data Assimilation Research Testbed (DART) is a widely used community software facility for ensemble 
+data assimilation. pyDARTdiags is a Python package for manipulating observation sequences and calculating 
+observation-space diagnostics for DART. It provides tools to read, manipulate,and analyze DART observation 
+sequence files using familiar, modern Python libraries. With pyDARTdiags, users can extract data, compute 
+diagnostics, and create visualizations, all within reproducible Python workflows that integrate seamlessly 
+with the broader scientific ecosystem.
 
 # Statement of need
 
-While DART provides robust tools for data assimilation, its observation sequence files are not easily
-accessible for users wishing to perform custom diagnostics or integrate with Python-based workflows.
-Existing DART tools for calculation of observation-space diagnostics are written in Fortran with 
-visualization in MATLAB, which may not be freely accessible to all users. pyDARTdiags provides a single 
-package to process and visualize observation space diagnostics. 
+
+DART merges diverse and complex observations into an internal data format called "observation sequence" 
+files, which inherit metadata from each observation. Observation sequence files including the model states
+are also generated, wherein the model states have been transformed into the observation space for direct 
+comparisons and analysis. While DART provides robust tools for data assimilation, its observation sequence 
+files are not easily accessible for users wishing to perform custom diagnostics or integrate with Python-based
+ workflows.
+
+DART’s observation sequence files are central to its workflow, but their format and complexity can make them 
+challenging to manipulate and analyze outside of the DART ecosystem. Existing DART tools for calculation of 
+observation-space diagnostics are written in Fortran with visualization in MATLAB, which may not be freely
+accessible to all users. To manipulate and analyze the data using open-source tools a converter/interface is required.
+pyDARTdiags is a Python package created to address this need by providing a single package to process and 
+visualize observation space diagnostics. 
 
 PyDARTdiags ingests observation sequences into an ObsSequence object which contains the metadata about
 an observation sequence and a pandas DataFrame[@pandas] containing all the data for the observations. 
