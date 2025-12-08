@@ -5,9 +5,11 @@ import numpy as np
 import os
 import yaml
 import struct
+import functools
 
 
 def _requires_assimilation_info(func):
+    @functools.wraps(func)
     def wrapper(self, *args, **kwargs):
         if self.has_assimilation_info():
             return func(self, *args, **kwargs)
@@ -400,7 +402,7 @@ class ObsSequence:
 
         Example:
             .. code-block:: python
-        
+
                 self.create_header_from_dataframe()
 
         """
@@ -513,8 +515,7 @@ class ObsSequence:
         """
         Calculates the count of possible vs. used observations by type.
 
-        This function takes a DataFrame containing observation data, including a 'type' column for the observation
-        type and an 'observation' column. The number of used observations ('used'), is the total number
+        The number of used observations ('used'), is the total number
         of assimilated observations (as determined by the `select_used_qcs` function).
         The result is a DataFrame with each observation type, the count of possible observations, and the count of
         used observations.
