@@ -12,22 +12,22 @@ import yaml
 
 class TestConvertDartTime:
     def test_case1(self):
-        result = obsq.convert_dart_time(0, 0)
+        result = obsq._convert_dart_time(0, 0)
         expected = dt.datetime(1601, 1, 1)
         assert result == expected
 
     def test_case2(self):
-        result = obsq.convert_dart_time(86400, 0)
+        result = obsq._convert_dart_time(86400, 0)
         expected = dt.datetime(1601, 1, 2)
         assert result == expected
 
     def test_case3(self):
-        result = obsq.convert_dart_time(0, 1)
+        result = obsq._convert_dart_time(0, 1)
         expected = dt.datetime(1601, 1, 2)
         assert result == expected
 
     def test_case4(self):
-        result = obsq.convert_dart_time(2164, 151240)
+        result = obsq._convert_dart_time(2164, 151240)
         expected = dt.datetime(2015, 1, 31, 0, 36, 4)
         assert result == expected
 
@@ -537,7 +537,7 @@ class TestCreateHeader:
 class TestSplitMetadata:
     def test_split_metadata_with_external_FO(self):
         metadata = ["meta1", "meta2", "external_FO1", "meta3", "meta4"]
-        before_external_FO, after_external_FO = obsq.ObsSequence.split_metadata(
+        before_external_FO, after_external_FO = obsq.ObsSequence._split_metadata(
             metadata
         )
         assert before_external_FO == ["meta1", "meta2"]
@@ -545,7 +545,7 @@ class TestSplitMetadata:
 
     def test_split_metadata_without_external_FO(self):
         metadata = ["meta1", "meta2", "meta3", "meta4"]
-        before_external_FO, after_external_FO = obsq.ObsSequence.split_metadata(
+        before_external_FO, after_external_FO = obsq.ObsSequence._split_metadata(
             metadata
         )
         assert before_external_FO == ["meta1", "meta2", "meta3", "meta4"]
@@ -553,7 +553,7 @@ class TestSplitMetadata:
 
     def test_split_metadata_multiple_external_FO(self):
         metadata = ["meta1", "external_FO1", "meta2", "external_FO2", "meta3"]
-        before_external_FO, after_external_FO = obsq.ObsSequence.split_metadata(
+        before_external_FO, after_external_FO = obsq.ObsSequence._split_metadata(
             metadata
         )
         assert before_external_FO == ["meta1"]
@@ -561,7 +561,7 @@ class TestSplitMetadata:
 
     def test_split_metadata_empty_list(self):
         metadata = []
-        before_external_FO, after_external_FO = obsq.ObsSequence.split_metadata(
+        before_external_FO, after_external_FO = obsq.ObsSequence._split_metadata(
             metadata
         )
         assert before_external_FO == []
@@ -569,7 +569,7 @@ class TestSplitMetadata:
 
     def test_split_metadata_no_external_FO(self):
         metadata = ["meta1", "meta2", "meta3"]
-        before_external_FO, after_external_FO = obsq.ObsSequence.split_metadata(
+        before_external_FO, after_external_FO = obsq.ObsSequence._split_metadata(
             metadata
         )
         assert before_external_FO == ["meta1", "meta2", "meta3"]
@@ -577,7 +577,7 @@ class TestSplitMetadata:
 
     def test_split_metadata_external_FO_at_start(self):
         metadata = ["external_FO1", "meta1", "meta2"]
-        before_external_FO, after_external_FO = obsq.ObsSequence.split_metadata(
+        before_external_FO, after_external_FO = obsq.ObsSequence._split_metadata(
             metadata
         )
         assert before_external_FO == []
@@ -585,7 +585,7 @@ class TestSplitMetadata:
 
     def test_split_metadata_external_FO_at_end(self):
         metadata = ["meta1", "meta2", "external_FO1"]
-        before_external_FO, after_external_FO = obsq.ObsSequence.split_metadata(
+        before_external_FO, after_external_FO = obsq.ObsSequence._split_metadata(
             metadata
         )
         assert before_external_FO == ["meta1", "meta2"]
@@ -596,7 +596,7 @@ class TestGenerateLinkedListPattern:
     def test_generate_linked_list_pattern(self):
         n = 1
         expected_pattern = ["0           -1         -1"]
-        result = obsq.ObsSequence.generate_linked_list_pattern(n)
+        result = obsq.ObsSequence._generate_linked_list_pattern(n)
         assert result == expected_pattern
 
         n = 3
@@ -605,7 +605,7 @@ class TestGenerateLinkedListPattern:
             "1           3          -1",
             "2           -1         -1",
         ]
-        result = obsq.ObsSequence.generate_linked_list_pattern(n)
+        result = obsq.ObsSequence._generate_linked_list_pattern(n)
         assert result == expected_pattern
 
         n = 6
@@ -617,7 +617,7 @@ class TestGenerateLinkedListPattern:
             "4           6          -1",
             "5           -1         -1",
         ]
-        result = obsq.ObsSequence.generate_linked_list_pattern(n)
+        result = obsq.ObsSequence._generate_linked_list_pattern(n)
         assert result == expected_pattern
 
 
@@ -718,7 +718,7 @@ class TestUpdateTypesDicts:
             52: "PINEAPPLE_COUNT",
         }
 
-        updated_reverse_types, types = obsq.ObsSequence.update_types_dicts(
+        updated_reverse_types, types = obsq.ObsSequence._update_types_dicts(
             sample_df, reverse_types
         )
 
@@ -927,7 +927,7 @@ class TestCompositeTypes:
 
     def test_no_yaml_file(self):
         with pytest.raises(Exception):
-            obsq.load_yaml_to_dict("nonexistent.yaml")
+            obsq._load_yaml_to_dict("nonexistent.yaml")
 
     def test_load_yaml_to_dict_broken_file(self, tmpdir):
         # Create a broken YAML file
@@ -942,7 +942,7 @@ class TestCompositeTypes:
 
         # Test that load_yaml_to_dict raises an exception for the broken YAML file
         with pytest.raises(yaml.YAMLError):
-            obsq.load_yaml_to_dict(broken_file)
+            obsq._load_yaml_to_dict(broken_file)
 
     def test_composite_types_more_than_two_components(self, tmpdir):
         # Create a YAML file with a composite type with more than 2 components
@@ -988,7 +988,7 @@ class TestUpdateAttributesFromDf:
         assert list(obj.df["obs_num"]) == [1, 2]
         assert list(
             obj.df["linked_list"]
-        ) == obsq.ObsSequence.generate_linked_list_pattern(2)
+        ) == obsq.ObsSequence._generate_linked_list_pattern(2)
 
         # Change the DataFrame
         df2 = pd.DataFrame(
@@ -1019,7 +1019,7 @@ class TestUpdateAttributesFromDf:
         assert list(obj.df["obs_num"]) == [1]
         assert list(
             obj.df["linked_list"]
-        ) == obsq.ObsSequence.generate_linked_list_pattern(1)
+        ) == obsq.ObsSequence._generate_linked_list_pattern(1)
 
     def test_update_attributes_from_df_drop_column(self):
         obj = obsq.ObsSequence(file=None)
@@ -1042,7 +1042,7 @@ class TestUpdateAttributesFromDf:
         assert list(obj.df["obs_num"]) == [1, 2]
         assert list(
             obj.df["linked_list"]
-        ) == obsq.ObsSequence.generate_linked_list_pattern(2)
+        ) == obsq.ObsSequence._generate_linked_list_pattern(2)
 
         # Drop a column and update
         obj.df = obj.df.drop(columns=["prior_ensemble_mean"])
@@ -1054,7 +1054,7 @@ class TestUpdateAttributesFromDf:
         assert list(obj.df["obs_num"]) == [1, 2]
         assert list(
             obj.df["linked_list"]
-        ) == obsq.ObsSequence.generate_linked_list_pattern(2)
+        ) == obsq.ObsSequence._generate_linked_list_pattern(2)
 
     def test_update_attributes_from_df_qc_counts(self):
         obj = obsq.ObsSequence(file=None)
@@ -1084,7 +1084,7 @@ class TestUpdateAttributesFromDf:
         assert list(obj.df["obs_num"]) == [1, 2]
         assert list(
             obj.df["linked_list"]
-        ) == obsq.ObsSequence.generate_linked_list_pattern(2)
+        ) == obsq.ObsSequence._generate_linked_list_pattern(2)
 
         # Now drop the QC column and update
         obj.df = obj.df.drop(columns=["DART_QC"])
@@ -1098,7 +1098,7 @@ class TestUpdateAttributesFromDf:
         assert list(obj.df["obs_num"]) == [1, 2]
         assert list(
             obj.df["linked_list"]
-        ) == obsq.ObsSequence.generate_linked_list_pattern(2)
+        ) == obsq.ObsSequence._generate_linked_list_pattern(2)
 
     def test_update_attributes_from_df_drop_multiple_qc_copies(self):
         obj = obsq.ObsSequence(file=None)
@@ -1132,7 +1132,7 @@ class TestUpdateAttributesFromDf:
         assert list(obj.df["obs_num"]) == [1, 2]
         assert list(
             obj.df["linked_list"]
-        ) == obsq.ObsSequence.generate_linked_list_pattern(2)
+        ) == obsq.ObsSequence._generate_linked_list_pattern(2)
 
         # Drop two QC columns and update
         obj.df = obj.df.drop(columns=["QC2", "QC3"])
@@ -1147,7 +1147,7 @@ class TestUpdateAttributesFromDf:
         assert list(obj.df["obs_num"]) == [1, 2]
         assert list(
             obj.df["linked_list"]
-        ) == obsq.ObsSequence.generate_linked_list_pattern(2)
+        ) == obsq.ObsSequence._generate_linked_list_pattern(2)
 
     def test_update_attributes_from_df_drop_row(self):
         obj = obsq.ObsSequence(file=None)
@@ -1175,7 +1175,7 @@ class TestUpdateAttributesFromDf:
         assert list(obj.df["obs_num"]) == [1, 2]
         assert list(
             obj.df["linked_list"]
-        ) == obsq.ObsSequence.generate_linked_list_pattern(2)
+        ) == obsq.ObsSequence._generate_linked_list_pattern(2)
         assert obj.n_copies == 1
         assert obj.n_qc == 0
         assert obj.n_non_qc == 1
@@ -1217,7 +1217,7 @@ class TestUpdateAttributesFromDf:
         assert list(obj.df["obs_num"]) == [1, 2]
         assert list(
             obj.df["linked_list"]
-        ) == obsq.ObsSequence.generate_linked_list_pattern(2)
+        ) == obsq.ObsSequence._generate_linked_list_pattern(2)
 
 
 class TestQC2Replacement:
@@ -1257,7 +1257,7 @@ class TestQC2Replacement:
 
     def test_replace_qc2_nan(self, obs_seq):
         # Call the replace_qc2_r8s method
-        obsq.ObsSequence.replace_qc2_nan(obs_seq.df)
+        obsq.ObsSequence._replace_qc2_nan(obs_seq.df)
 
         # Verify that NaNs are correctly replaced for QC2 rows
         assert (
@@ -1291,7 +1291,7 @@ class TestQC2Replacement:
 
     def test_revert_qc2_nan(self, obs_seq_nan):
         # Revert NaNs back to MISSING_R8s
-        obsq.ObsSequence.revert_qc2_nan(obs_seq_nan.df)
+        obsq.ObsSequence._revert_qc2_nan(obs_seq_nan.df)
 
         # Verify that MISSING_R8s (-888888.0) are correctly restored for QC2 rows
         assert (
