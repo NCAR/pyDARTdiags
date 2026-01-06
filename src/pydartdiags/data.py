@@ -16,7 +16,7 @@ import shutil
 
 # Zenodo DOI/URL for the data archive
 ZENODO_RECORD_ID = "18135062"
-ZENODO_RECORD_URL = f"https://zenodo.org/records/{ZENODO_RECORD_ID}/files-archive"
+ZENODO_RECORD_URL = f"https://zenodo.org/api/records/{ZENODO_RECORD_ID}/files-archive"
 ZENODO_DOI = f"https://doi.org/10.5281/zenodo.{ZENODO_RECORD_ID}"
 
 
