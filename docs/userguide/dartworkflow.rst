@@ -11,10 +11,11 @@ This page will give you basic instructions to create an observation sequence fil
 use pyDARTdiags to perform some basic manipulations on the observation sequence, and set up
 and run data assimilation with DART using the Lorenz 63 model, which is a simple ODE model
 with only three variables. You will then analyze the results with pyDARTdiags and observe how
-the changes made to the observation sequence effected the data assimilation outcome.
+the changes made to the observation sequence affected the data assimilation outcome.
 
 This guide will go through the following steps:
 
+* Download DART
 * Set up a DART experiment with the Lorenz 63 model
 * Create an observation sequence file to be used in the assimilation
 * Run the assimilation with the original observation sequence
@@ -22,17 +23,10 @@ This guide will go through the following steps:
 * Run the assimilation with the modified observation sequence
 * Analyze and compare the results with pyDARTdiags
 
-The instructions on this page are a condensed version from what can be found in the `DART documentation <https://dart.ucar.edu/documentation/>`__.
-Specifically, the DART documentation contains:
-
-* Instructions to download DART: `Downloading DART <https://docs.dart.ucar.edu/en/latest/guide/downloading-dart.html>`__.
-* Instructions to compile DART: `Compiling DART <https://docs.dart.ucar.edu/en/latest/guide/compiling-dart.html>`__.
-* A full guide to generating DART observation files and performing DART data assimilation with the Lorenz 63 model: `Using DART with the Lorenz 63 Model <https://dart.ucar.edu/documentation/using-dart-with-the-lorenz-63-model/>`__.
-* A detailed description of the Lorenz 63 model and its relevance to data assimilation: `Lorenz 63 Model <https://dart.ucar.edu/documentation/models/lorenz-63-model/>`__.
-
-The DART documentation also provides complete tutorials and comprehensive information on data
-assimilation and setting up and running DART experiments DART with various models and configurations,
-including complete tutorials.
+The instructions on this page are a condensed version from what can be found in the
+`DART documentation <https://docs.dart.ucar.edu/en/latest/index.html>`__. The DART documentation
+also provides complete tutorials and comprehensive information on ensemble data assimilation,
+how DART works, and how to use DART with various models and configurations.
 
 
 Downloading DART
@@ -46,98 +40,35 @@ Checkout the latest release of DART:
 
 If you have forked the DART repository, replace ``NCAR`` with your Github username.
 
+See the `Downloading DART <https://docs.dart.ucar.edu/en/latest/guide/downloading-dart.html>`__
+documentation page for more information.
+
 
 Compiling DART
 --------------
 
-To build DART executables you will need to:
+To build the DART executables for Lorenz 63, follow the steps detailed in the
+`Compiling DART <https://docs.dart.ucar.edu/en/latest/guide/compiling-dart.html>`__
+documentation page.
 
-#. Create an mkmf.template with appropriate compiler and library flags.
-
-   mkmf.templates for different compilers/architectures can be found
-   in the ``DART/build_templates`` directory and have names with
-   extensions that identify the compiler, the architecture, or both. This
-   is how you inform the build process of the specifics of your system.
-
-   Copy the template that is most similar to your system into ``DART/build_templates/mkmf.template``.
-   
-   Then open ``DART/build_templates/mkmf.template`` and customize it as needed by
-   editing the lines of code shown in the following example. 
-   
-   This example uses the template ``DART/build_templates/mkmf.template.intel.linux``.
-   Note that only the relevant lines of the file are shown here. The
-   first portion of the file is a large comment block that provides
-   further advice on how to customize the *mkmf* template file if needed.
-
-   .. code-block:: text
-   
-        MPIFC = mpif90
-        MPILD = mpif90
-        FC = ifort
-        LD = ifort
-        NETCDF = /usr/local
-        INCS = -I$(NETCDF)/include
-        LIBS = -L$(NETCDF)/lib -lnetcdf -lnetcdff
-        FFLAGS = -O2 $(INCS)
-        LDFLAGS = $(FFLAGS) $(LIBS)
-
-
-+---------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| FC      | the Fortran compiler                                                                                                                                                                                                             |
-+=========+==================================================================================================================================================================================================================================+
-| LD      | the name of the loader; typically, the same as the Fortran compiler                                                                                                                                                              |
-+---------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| MPIFC   | the MPI Fortran compiler; see the :doc:`DART MPI introduction <mpi_intro>` for more info                                                                                                                                         |
-+---------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| MPILD   | the MPI loader; see the :doc:`DART MPI introduction <mpi_intro>` for more info                                                                                                                                                   |
-+---------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| NETCDF  | the location of your root netCDF installation, which is assumed to contain netcdf.mod and typesizes.mod in the include subdirectory. Note that the value of the NETCDF variable will be used by the “INCS” and “LIBS” variables. |
-+---------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| INCS    | the includes passed to the compiler during compilation. Note you may need to change this if your netCDF includes netcdf.mod and typesizes.mod are not in the standard location under the include subdirectory of NETCDF.         |
-+---------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| LIBS    | the libraries passed to “FC” (or “MPIFC”) during compilation. Note you may need to change this if the netCDF libraries libnetcdf and libnetcdff are not in the standard location under the “lib” subdirectory of NETCDF.         |
-+---------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| FFLAGS  | the Fortran flags passed to “FC” (or “MPIFC”) during compilation. There are often flags used for optimized code versus debugging code. See your particular compiler’s documentation for more information.                        |
-+---------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| LDFLAGS | the linker flags passed to LD during compilation. See your particular linker’s documentation for more information.                                                                                                               |
-+---------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-
-#. Choose which model you want to use with DART, and cd into that work directory. 
-
-   For the lorenz_63 model, ``cd DART/models/lorenz_63/work``
-
-#. Build the DART executables with ``./quickbuild.sh``.
-
-   ``./quickbuild.sh nompi`` will build DART without MPI, for those who do not have MPI
-   installed or prefer not to use it.
-
-   If you are using gfortran as your Fortran compiler, use ``./quickbuild.sh mpif08``.
-
-The DART executables are built in the ``work`` directory.
-If the build is successful, you will see the following seven programs
-in your lorenz_63 work directory.
-
-+--------------------------------------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Program                                                                                                                  | Purpose                                                                                                                                                                                                                                                                                                         |
-+==========================================================================================================================+=================================================================================================================================================================================================================================================================================================================+
-|`preprocess   <../assimilation_code/programs/preprocess/preprocess.html>`__                                               | creates custom source code for just the observations of interest                                                                                                                                                                                                                                                |
-+--------------------------------------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-|`create_obs_sequence <../assimilation_code/programs/create_obs_sequence/create_obs_sequence.html>`__                      | specify a (set) of observation characteristics taken by a particular (set of) instruments                                                                                                                                                                                                                       |
-+--------------------------------------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-|`create_fixed_network_seq <../assimilation_code/programs/create_fixed_network_seq/create_fixed_network_seq.html>`__       | specify the temporal attributes of the observation sets                                                                                                                                                                                                                                                         |
-+--------------------------------------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-|`perfect_model_obs <../assimilation_code/programs/perfect_model_obs/perfect_model_obs.html>`__                            | spinup and generate “true state” for synthetic observation experiments                                                                                                                                                                                                                                          |
-+--------------------------------------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-|`filter <../assimilation_code/programs/filter/filter.html>`__                                                             | perform data assimilation analysis                                                                                                                                                                                                                                                                              |
-+--------------------------------------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-|`obs_diag <../assimilation_code/programs/obs_diag/threed_sphere/obs_diag.html>`__                                         | creates observation-space diagnostic files in netCDF format to support visualization and quantification.                                                                                                                                                                                                        |
-+--------------------------------------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-|`obs_sequence_tool <../assimilation_code/programs/obs_sequence_tool/obs_sequence_tool.html>`__                            | manipulates observation sequence files. This tool is not generally required (particularly for low-order models) but can be used to combine observation sequences or convert from ASCII to binary or vice-versa. Since this is a rather specialized routine, we will not cover its use further in this document. |
-+--------------------------------------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+When you have completed this process, the DART executables will have been built
+in the ``DART/models/lorenz_63/work`` directory.
+If the build is successful, you will see seven executable programs
+in your lorenz_63 work directory. You can find descriptions of each program
+at the bottom of the Compiling DART documentation page linked above.
 
 
 Creating an Observation Sequence File
 -------------------------------------
+
+To create an observation sequence file for the Lorenz 63 model, follow the instructions on
+the `Creating an obs_seq file of synthetic observations <https://docs.dart.ucar.edu/en/latest/guide/creating-obs-seq-synthetic.html>`__
+DART documentation page. This page will guide you through the process of generating an observation
+sequence with synthetic observations for the Lorenz 63 model using DART Fortran programs.
+
+The resulting observation sequence will be found in the ``DART/models/lorenz_63/work`` directory.
+If you use the default value for the output file name (provided in the DART documentation), the
+resulting observation sequence file will be named ``obs_seq.out``.
 
 
 Running DART data assimilation with the Lorenz 63 Model
@@ -145,19 +76,36 @@ Running DART data assimilation with the Lorenz 63 Model
 
 To perform the actual data assimilation with DART, you will run the ``filter`` program.
 
-The ``DART/models/lorenz_63/work/input.nml`` file is the DART namelist for the Lorenz 63 model, which is a
-standard Fortran method for passing parameters from a text file into a program without
-needing to recompile. There are many sections within this file that drive the behavior
-of DART while using the Lorenz 63 model for assimilation.
-
-Note that the filter section of the default Lorenz 63 ``input.nml`` namelist, which is included in
-the DART repository and located in the ``DART/models/lorenz_63/work`` will already have all the
+The filter section of the default Lorenz 63 ``input.nml`` namelist, which is included in
+the DART repository and located in the ``DART/models/lorenz_63/work``, will already have all the
 necessary namelist parameters correctly set for this assimilation experiment.
+
+However, if you used a name other than the default (obs_seq.out) when creating the observation
+sequence file in the previous step, you will need take the following steps to edit the ``input.nml``
+namelist file by changing the ``obs_sequence_in_name`` parameter in the filter namelist:
+
+Open the ``DART/models/lorenz_63/work/input.nml`` file in a text editor. Locate the filter
+section of the namelist and edit the ``obs_sequence_in_name`` parameter. Set it to the path
+of the new observation sequence file you created. See the example below.
+.. code-block:: fortran
+
+    &filter_nml
+       ...
+       obs_sequence_in_name = 'obs_seq_with_non_default_name.out',
+       ...
+    /
+
+Save the changes to the ``input.nml`` file.
 
 From the same ``DART/models/lorenz_63/work`` directory, run one of the following commands:
 
 ``./filter``  (for non-MPI version)
+
 ``mpirun -n 4 ./filter``  (for MPI version with 4 processes)
+
+For more information, you can refer to the
+`Running the filter <https://docs.dart.ucar.edu/en/latest/guide/da-in-dart-with-lorenz-63.html#running-the-filter>`__
+section of "Data assimilation in DART using the Lorenz 63 model" documentation page.
 
 
 Manipulating Observation Sequences with pyDARTdiags
@@ -174,53 +122,58 @@ remove columns that you do not need. You can also read in two observation
 sequences and join them together, remove observations from an observation
 sequence, or modify observation values or errors.
 
-You can see various examples of editing observation
-sequences in the :ref:`Manipulating Observation Sequences Gallery <examples-manipulating-obsq>`.
-Manipulating Observation Sequences gallery.
+You can see examples of various ways to edit observation sequences in the
+:ref:`Manipulating Observation Sequences Gallery <sphx_glr_examples_01_manipulating>`.
 
-You will follow the Change Observation Error Variance example (LINK HERE). This example will
-provide you with a Python progran to to read in the observation sequence file, modify the
+This section will guide you through the process of writing your own Python program thats uses
+pyDARTdiags functions to read in the observation sequence file, modify the
 observation error variances, and write out a new observation sequence file with the altered data.
 
 First, ensure you have pyDARTdiags installed in your Python environment. If you haven't
 installed it yet, follow the instructions in the :ref:`installguide`.
 
-Then, navigate to the directory that contains the example script ``plot_change_error_variance.py``
-in the pyDARTdiags repository: ``pyDARTdiags/examples/01_manipulating/``. 
+Create a new python file and open it in a text editor. Name the file
+``change_error_variance.py``.
 
-Follow these steps to edit the script to use the observation sequence file you created for the Lorenz 63
-data assimilation experiment instead of the sample observation sequence file provided with pyDARTdiags:
+Add the following blocks of code to the file. You can copy and paste the code below, making
+sure to adjust the path to your observation sequence file and file name as needed:
 
-#. Copy your observation sequence file created for the Lorenz 63 data assimilation experiment
-   into the ``pyDARTdiags/data/`` directory.
-#. Open the ``plot_change_error_variance.py`` script in a text editor.
-#. Locate the section of the code where the observation sequence file is specified. It should look something like this:
+#. Import the necessary modules.
+    .. code-block:: python
 
-   .. code-block:: python
+        import pydartdiags.obs_sequence.obs_sequence as obsq
 
-       import os
-        data_dir = os.path.join(os.getcwd(), "../..", "data")
-        file_name = "obs_seq.final.ascii.small"
-        data_file = os.path.join(data_dir, file_name)
+#. Specify the path to and name of your observation sequence file.
+    .. code-block:: python
 
-#. Modify the ``file_name`` variable to the name of the observation sequence file you created for the Lorenz 63 data
-   assimilation experiment.
-   For example, if your observation sequence file is named ``obs_seq.out``, you would change the line to:
-   .. code-block:: python
-    
-         file_name = os.path.join(data_dir, "obs_seq.out")
+        file_name = "/path_to_your_obs_sequence_file/name_of_your_obs_sequence_file"
 
-#. Save the changes to the script.
+#. Read the obs_seq file into an obs_seq object.
+    .. code-block:: python
 
-Now, run the modified script using Python:
+        obs_seq = obsq.ObsSequence(file_name)
+
+#. Halve the observation error variances.
+    .. code-block:: python
+
+        obs_seq.df['error_variance'] = obs_seq.df['error_variance'] / 2.0
+
+#. Write out the modified observation sequence to a new file.
+    .. code-block:: python
+
+        output_file = file_name + ".half_error_variance"
+        obs_seq.write_obs_sequence(output_file)
+
+        ########################## End of script ##############################
+
+Save your Python script and run it.
 .. code-block:: bash
 
-   python3 plot_change_error_variance.py
+    python3 plot_change_error_variance.py
 
-This will create a new observation sequence file with the modified error variances in the
-``pyDARTdiags/examples/01_manipulating/`` directory. The new file will have be the name of
-the observation sequence file inputted with the you specified with ``.half_error_variance``
-appended to the end.
+This will create a new observation sequence file with the modified error variances in your
+current directory. The new file will have be the name of the observation sequence file you
+specified with ``.half_error_variance`` appended to the end.
 
 
 Running DART data assimilation with the Updated Observation Sequence
@@ -231,30 +184,114 @@ you can use this file to run a new DART data assimilation experiment with the Lo
 63 model.
 
 To perform the data assimilation with the updated observation sequence file, you will
-need to modify the ``input.nml`` namelist file to point to the new observation sequence
-file you just created.
+need to modify the ``input.nml`` namelist file to use the new input observation sequence
+file you just created. You will also need to specify a different output observation sequence
+file name for the to avoid overwriting the previous assimilation results.
 
 Open the ``DART/models/lorenz_63/work/input.nml`` file in a text editor. Locate the filter
-section of the namelist and edit the ``obs_sequence_in_name`` parameter. Set it to the path
-of the new observation sequence file you created with pyDARTdiags. For example:
+section of the namelist and edit the ``obs_sequence_in_name`` and ``obs_sequence_out_name``
+parameters. Set ``obs_sequence_in_name`` to the new observation sequence file you created
+with pyDARTdiags and set ``obs_sequence_out_name`` to an analogous output file name. See
+the example below.
 .. code-block:: fortran
 
     &filter_nml
       ...
-      obs_sequence_in_name = 'path/to/your/obs_seq.out.half_error_variance',
+      obs_sequence_in_name = 'obs_seq.out.half_error_variance',
+      obs_sequence_out_name = 'obs_seq.final.half_error_variance',
       ...
     /
 
 Save the changes to the ``input.nml`` file.
 
+Run the filter program again with the updated observation sequence:
+
+``./filter``  (for non-MPI version)
+
+``mpirun -n 4 ./filter`` (for MPI version with 4 processes)
+
 
 Analyzing DART Results with pyDARTdiags
 ---------------------------------------
 
-You will now use the pyDARTdiags library to analyze the observation space results of your DART
-assimilation experiment.
+You have now completed two DART data assimilation experiments, each producing an
+final observation sequence file, or ``obs_seq.final``. This file contains the actual
+observations as assimilated as well as the ensemble forward-operator expected values
+and any quality-control values.
 
-This will be done investigating the rank histograms of the assimilation results by following the
-Rank Histogram Example (LINK HERE). This example will provide you with a Python program to read in
-the output observation sequence files created by DART during the assimilation, and plot rank histograms
-located in the :ref:`Observation Space Diagnostics Gallery <examples-obs-diags>`.
+You can now use the pyDARTdiags library to easily read in and analyze the observation
+space results of your DART assimilation experiment. This will be done plotting the rank
+histograms of the assimilation results.
+
+pyDARTdiags includes a program to do this titled ``plot_rank_histogram.py``. To run this
+program with the final observation sequence files from your Lorenz 63 assimilation experiments,
+follow the instructions listed below:
+
+#. Navigate to the directory ``pyDARTdiags/examples/03_diagnostics/``.
+#. Open the ``plot_rank_histogram.py`` script in a text editor.
+#. Read through the script to learn how to use pyDARTdiags to read in observation sequences,
+   investigate them, and perform diagnostic plotting.
+#. Locate the section of the code where the observation sequence file is specified as is shown
+   in the code below.
+   .. code-block:: python
+
+       obs_seq = obsq.ObsSequence("obs_seq.final.ascii.medium")
+
+   Modify the file name in the ``ObsSequence`` constructor to point to the final observation sequence
+   file created by your first DART assimilation experiment (the one you originally created). For
+   example, if your final observation sequence file is named ``obs_seq.final``, you would change the
+   line to what is shown below.
+   .. code-block:: python
+
+       obs_seq = obsq.ObsSequence("obs_seq.final")
+
+#. Locate the section where the observation type is specified, as shown below.
+   .. code-block:: python
+
+       obs_type = 'RAW_STATE_VARIABLE'
+
+   Change the obs_type to 'RAW_STATE_VARIABLE'.
+
+#. Save the changes to the script.
+#. Run the modified script using Python.
+   .. code-block:: bash
+
+       python3 plot_rank_histogram.py
+
+   This will generate and display the rank histogram for the specified observation type
+   from your first DART assimilation experiment.
+#. Save the rank histogram plot. 
+#. Repeat steps 4-8, but this time modify the script to point to the final observation
+   sequence file created by your second DART assimilation experiment (the one with the modified
+   observation error variances). The obs_type will remain ``RAW_STATE_VARIABLE``. For example,
+   if your final observation sequence file is named ``obs_seq.final.half_error_variance``, you
+   would change the line to what is shown below.
+   .. code-block:: python
+
+       obs_seq = obsq.ObsSequence("obs_seq.final.half_error_variance")
+
+#. Save the changes to the script.
+#. Run the modified script using Python.
+   .. code-block:: bash
+
+       python3 plot_rank_histogram.py
+
+   This will generate and display the rank histogram for the specified observation type
+   from your second DART assimilation experiment where the input observation sequence had the 
+   observation error variance halved.
+
+#. Save the rank histogram plot.
+
+You can now compare the two rank histogram plots to see how the change in observation error
+variances affected the results of your data assimilation experiments. Look for differences
+in the shape of the histograms, which supply information on the model bias.
+
+The rank histogram for the initial experiment should be generally flatter and more evenly spread
+across the ranks, indicating a more reliable forecast (the observed distribution is well represented
+by the ensemble and all ensemble members represent equally likely scenarios).
+
+By following this workflow, you have learned how pyDARTdiags can be easily integrated into your
+DART data assimilation experiments, allowing you to effectively manipulate observation sequences
+and analyze assimilation results. Please refer to the :ref:`userguide` and
+:ref:`examples-index` sections of the documentation for more detailed information and additional
+examples of using pyDARTdiags.
