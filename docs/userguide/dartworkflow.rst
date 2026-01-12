@@ -349,7 +349,21 @@ histograms. Follow the steps below.
 You should now have rank histogram plots for both experiments and can now compare the two 
 to see how the change in observation error variances affected the results of your data
 assimilation experiments. Look for differences in the shape of the histograms, which supply
-information on the model bias.
+information on the model bias. The results should look like similar to the images below.
+
+Rank Histogram for First Lorenz 63 Experiment:
+
+.. image:: ../images/rh_l63.png
+   :alt: Rank Histogram for First Lorenz 63 Experiment
+   :width: 800px
+   :align: center
+
+Rank Histogram for Second Lorenz 63 Experiment with Halved Error Variance:
+
+.. image:: ../images/rh_l63_halfev.png
+   :alt: Rank Histogram for Second Lorenz 63 Experiment with Halved Error Variance
+   :width: 800px
+   :align: center
 
 The rank histogram for the initial experiment should be generally flatter and more evenly spread
 across the ranks, indicating a more reliable forecast (the observed distribution is well represented
