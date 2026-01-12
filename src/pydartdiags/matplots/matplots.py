@@ -229,7 +229,6 @@ def plot_profile(
 
 def plot_rank_histogram(obs_seq, type, ens_size, levels=None):
     qc0 = stats.select_used_qcs(obs_seq.df)  # filter only qc=0, qc=2
-    print("type: ", type)
 
     if (isinstance(type, int) and type < 0) or (type == "IDENTITY_OBS"):
         print("Observation type is for identity observations.") # No filtering by type for identity obs
