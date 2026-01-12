@@ -236,7 +236,7 @@ This section will guide you through the process of writing a Python script that 
 pyDARTdiags functions to read in the final observation sequence files and plot the rank
 histograms for the identity observations.
 
-The observation sequence files you created for Lorenx 63 contain only identity
+The observation sequence files you created for Lorenz 63 contain only identity
 observations. An identity observation means that the physical variable being observed is 
 identical to the variable in the model state. Essentially, the observation directly measures
 the model's state variable without requiring a complex transformation or a separate observation
