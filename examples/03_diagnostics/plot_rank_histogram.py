@@ -51,4 +51,4 @@ levels = [i * 100 for i in hPalevels] # convert hPa to Pa
 # The dataframe has prior and posterior information so both the prior
 # and posterior rank histograms are plotted.
 ens_size = 80
-fig = mp.plot_rank_histogram(obs_seq, levels, obs_type, ens_size)
+fig = mp.plot_rank_histogram(obs_seq, obs_type, ens_size, levels)
