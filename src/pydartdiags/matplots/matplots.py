@@ -231,7 +231,9 @@ def plot_rank_histogram(obs_seq, type, ens_size, levels=None):
     qc0 = stats.select_used_qcs(obs_seq.df)  # filter only qc=0, qc=2
 
     if (isinstance(type, int) and type < 0) or (type == "IDENTITY_OBS"):
-        print("Observation type is for identity observations.") # No filtering by type for identity obs
+        print(
+            "Observation type is for identity observations."
+        )  # No filtering by type for identity obs
         if qc0.empty:
             print(f"No rows found for type: {type}")
             return None
@@ -245,7 +247,9 @@ def plot_rank_histogram(obs_seq, type, ens_size, levels=None):
             return None
 
     if levels is None:
-        print(f"Observation sequence does not use vertical coordinate. Proceeding without level binning.")
+        print(
+            f"Observation sequence does not use vertical coordinate. Proceeding without level binning."
+        )
 
         df = stats.calculate_rank(qc0)
 
