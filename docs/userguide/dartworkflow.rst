@@ -228,7 +228,7 @@ final observation sequence file, or ``obs_seq.final``. This file contains the ac
 observations as assimilated as well as the ensemble forward-operator expected values
 and any quality-control values.
 
-You can now use the pyDARTdiags library to easily read in and analyze the observation
+You can now use the pyDARTdiags library to read in and analyze the observation
 space results of your DART assimilation experiment. This will be done plotting the rank
 histograms of the assimilation results.
 
