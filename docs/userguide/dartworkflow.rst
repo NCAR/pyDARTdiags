@@ -1,7 +1,7 @@
 .. _dartworkflow:
 
 ===========================
-Using pyDARTdiags with DART
+An example of using pyDARTdiags with DART and the Lorenz 63 model
 ===========================
 
 This page will introduce you to the Data Assimilation Research Testbed (DART) workflow
