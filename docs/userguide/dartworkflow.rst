@@ -20,9 +20,10 @@ In this guide, we'll step through:
 Manipulating Observation Sequences with pyDARTdiags
 ---------------------------------------------------
 
-This section will guide you through the process of writing your own Python program thats uses
-pyDARTdiags functions to read in the observation sequence file, modify the
-observation error variances, and write out a new observation sequence file with the altered data.
+This section focuses on how pyDARTdiags fits into a DART workflow, guiding you through the process
+of writing your own Python program thats uses pyDARTdiags functions to read in the observation
+sequence file, modify the observation error variances, and write out a new observation sequence
+file with the altered data.
 
 First, ensure you have pyDARTdiags installed in your Python environment. If you haven't
 installed it yet, follow the instructions in the :ref:`installguide`.
