@@ -5,16 +5,16 @@ An example of using pyDARTdiags with DART and the Lorenz 63 model
 =================================================================
 
 This page will demonstrate how to use pyDARTdiags to enhance your data assimilation projects
-with DART.
+with DART by showing you how to manipulate DART observation sequences and analyze DART results.
 
 We assume you have downloaded and built DART and successfully run the 
 `Lorenz 63 model <https://docs.dart.ucar.edu/en/latest/guide/da-in-dart-with-lorenz-63.html>`__.
 
 In this guide, we'll step through:
 
-* Using pyDARTdiags to plot a rank histogram of the DART Lorenz 63 obs_seq.final
-* Using pyDARTdiags to change the observations input to filter
-* Using pyDARTdiags to plot the rank histogram for the modified observations
+* Using pyDARTdiags to change the observations input to DART's filter program
+* Using pyDARTdiags to plot rank histograms of the DART Lorenz 63 obs_seq.final files, 
+  both for the original run of filter and for the run with the modified observations
 
 
 Manipulating Observation Sequences with pyDARTdiags
@@ -28,10 +28,10 @@ file with the altered data.
 First, ensure you have pyDARTdiags installed in your Python environment. If you haven't
 installed it yet, follow the instructions in the :ref:`installguide`.
 
-Create a new Python file and open it in a text editor. Name the file
-``change_error_variance.py``.
+Start an interactive Python session by entering the command ``python`` or ``python3``
+in your terminal.
 
-Add the following blocks of code to the file. You can copy and paste the code below, making
+Enter the following lines of code one by one. You can copy and paste the code lines below, making
 sure to adjust the path to your observation sequence file and file name as needed:
 
 #. Import the necessary modules.
@@ -58,22 +58,27 @@ sure to adjust the path to your observation sequence file and file name as neede
 
        obs_seq.df['error_variance'] = obs_seq.df['error_variance'] / 2.0
 
-#. Write out the modified observation sequence to a new file.
+#. Create a new file name for the modified observation sequence.
 
    .. code-block:: python
 
        output_file = file_name + ".half_error_variance"
+
+#. Write out the modified observation sequence to a new file.
+
+   .. code-block:: python
+
        obs_seq.write_obs_sequence(output_file)
 
        ########################## End of script ##############################
 
-Save your Python script and run it.
+#. Exit the interactive session.
 
-.. code-block:: bash
+   .. code-block:: bash
 
-   python3 plot_change_error_variance.py
+       exit()
 
-This will create a new observation sequence file with the modified error variances in your
+A new observation sequence file with the modified error variances should be saved in your
 current directory. The new file will have be the name of the observation sequence file you
 specified with ``.half_error_variance`` appended to the end.
 
@@ -97,7 +102,7 @@ histograms of the assimilation results.
 
 This section will guide you through the process of writing a Python script that uses
 pyDARTdiags functions to read in the final observation sequence files and plot the rank
-histograms for the identity observations.
+histograms of the DART Lorenz 63 obs_seq.final files.
 
 The observation sequence files you created for Lorenz 63 contain only identity
 observations. An identity observation means that the physical variable being observed is 
@@ -118,18 +123,22 @@ DART recognizes a negative integer as the type code for identity observations. T
 writing the program to create the rank histograms, you will need to specify the observation type
 as a negative integer, such as ``-1``.
 
-The instructions below will now guide you through creating this program.
+Start an interactive Python session by entering the command ``python`` or ``python3``
+in your terminal.
 
-Create a new python file and open it in a text editor. Name the file ``rank_histogram.py``.
-
-Add the following blocks of code to the file. You can copy and paste the code below, making
+Enter the following lines of code one by one. You can copy and paste the code lines below, making
 sure to adjust the path to your observation sequence file and file name as needed:
 
-#. Import the necessary modules.
+#. Import the obs_sequence module.
 
    .. code-block:: python
 
        import pydartdiags.obs_sequence.obs_sequence as obsq
+
+#. Import the matplots module.
+
+   .. code-block:: python
+
        import pydartdiags.matplots.matplots as mp
 
 #. Specify the path to and name of the final observation sequence file from
@@ -137,13 +146,27 @@ sure to adjust the path to your observation sequence file and file name as neede
 
    .. code-block:: python
 
-       file_name = "/path_to_your_obs_sequence_file/name_of_your_obs_sequence_file"
+       file_name = "/path_to_your_DART_dir/DART/models/lorenz_63/work/obs_seq.final"
 
-#. Read the obs_seq file into an obs_seq object.
+#. Specify the path to and name of the final observation sequence file from
+   your second DART data assimilation experiment.
+
+   .. code-block:: python
+
+       file_name2 = "/path_to_your_DART_dir/DART/models/lorenz_63/work/obs_seq.final.half_error_variance"
+       
+
+#. Read the first observation sequence file into an obs_seq object.
 
    .. code-block:: python
 
        obs_seq = obsq.ObsSequence(file_name)
+
+#. Read the second observation sequence file into an obs_seq object.
+
+   .. code-block:: python
+
+       obs_seq_half_ev = obsq.ObsSequence(file_name2)
 
 #. Choose an observation type to plot on the rank histograms. Remember that for
    identity observations, the observation type is represented by a negative integer.
@@ -159,55 +182,29 @@ sure to adjust the path to your observation sequence file and file name as neede
 
        ens_size = 20
 
-#. Plot the rank histogram.
+#. Plot the rank histograms for the first obs_seq.final.
    The dataframe has prior and posterior information so both the prior and posterior rank
    histograms are plotted.
+
+   Once plotted, save the figure and close it. 
 
    .. code-block:: python
 
        fig = mp.plot_rank_histogram(obs_seq, obs_type, ens_size)
 
-       ########################## End of script ##############################
+#. Plot the rank histograms for the second obs_seq.final with halved error variance.
 
-Save your Python script and run it. 
-
-.. code-block:: bash
-
-    python3 rank_histogram.py
-
-This will generate and display the rank histogram for the Lorenz 63 identity observations
-from your first DART assimilation experiment.
-
-Save the rank histogram plot.
-
-You will now edit your script to use the observation sequence from your second DART assimilation
-experiment (the one with modified observation error variances) and plot a second set of rank
-histograms. Follow the steps below.
-
-#. Open the ``rank_histogram.py`` script in a text editor.
-
-#. Locate the section of the code where the observation sequence file name is specified as is shown
-   in the code below. Modify the file name in the ``ObsSequence`` constructor to point final observation
-   sequence file created with your second DART assimilation experiment (the one with the modified
-   observation error variances). For example, if your final observation sequence file is named
-   ``obs_seq.final.half_error_variance``, you would change the line to what is shown below.
+   Once plotted, save the figure and close it. 
 
    .. code-block:: python
 
-       obs_seq = obsq.ObsSequence("obs_seq.final.half_error_variance")
+       fig2 = mp.plot_rank_histogram(obs_seq_half_ev, obs_type, ens_size)
 
-#. Save the changes to the script.
-#. Run the modified script using Python.
+#. Exit the interactive session.
 
    .. code-block:: bash
 
-       python3 rank_histogram.py
-
-   This will generate and display the rank histogram for the specified observation type
-   from your second DART assimilation experiment where the input observation sequence had the 
-   observation error variance halved.
-
-#. Save the rank histogram plot.
+       exit()
 
 You should now have rank histogram plots for both experiments and can now compare the two 
 to see how the change in observation error variances affected the results of your data
