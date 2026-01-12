@@ -70,8 +70,6 @@ sure to adjust the path to your observation sequence file and file name as neede
 
        obs_seq.write_obs_sequence(output_file)
 
-       ########################## End of script ##############################
-
 #. Exit the interactive session.
 
    .. code-block:: bash
@@ -84,8 +82,10 @@ specified with ``.half_error_variance`` appended to the end.
 
 You can now use this new observation sequence file as input to a new DART data assimilation
 experiment with Lorenz 63. Ensure you have made the necessary changes to the &filter_nml
-section of the DART ``input.nml`` namelist file to point to this new input observation sequence
-file and rerun the filter program.
+section of the DART ``input.nml`` namelist file to point the ``obs_sequence_in_name`` namelist item
+to this new input observation sequence file and give a corresponding name for the output
+observation sequence file (i.e ``obs_seq.final.half_error_variance``) in the ``obs_sequence_out_name``
+item. Rerun the filter program.
 
 
 Analyzing DART Results with pyDARTdiags
@@ -105,23 +105,19 @@ pyDARTdiags functions to read in the final observation sequence files and plot t
 histograms of the DART Lorenz 63 obs_seq.final files.
 
 The observation sequence files you created for Lorenz 63 contain only identity
-observations. An identity observation means that the physical variable being observed is 
-identical to the variable in the model state. Essentially, the observation directly measures
-the model's state variable without requiring a complex transformation or a separate observation
-model.
+observations. You can read about identity observations in
+`this section <https://ncar.github.io/pyDARTdiags/userguide/working-with-obsq.html#a-note-on-identity-observations>`__
+of the pyDARTdiags documentation.
 
-Identity observations are often used in data assimilation experiments with simple models like
-Lorenz 63 because they allow for straightforward comparisons between the observed values and
-the model state variables. This simplifies the assimilation process and helps to isolate the
-effects of the assimilation algorithm itself.
+Identity observations do not get listed in the header of the observation sequence file; they
+are instead given a special value for the observation type (kind) in the observation sequence
+to indicate that they are identity observations. They are denoted in a given observation by an
+observation type of -x where x is the index in the DART state vector that the observation
+corresponds to.
 
-DART observation sequences are designed so that each observation type is assigned a specific
-type code. This observation type is then mapped to the corresponding model variable using
-this type code. 
-
-DART recognizes a negative integer as the type code for identity observations. Therefore, when
-writing the program to create the rank histograms, you will need to specify the observation type
-as a negative integer, such as ``-1``.
+In the ObsSequence DataFrame, the type of identity observations is stored as this negative integer
+of the index in the DART state vector. Therefore, when writing the program to plot the rank
+histograms, you will specify the observation type as ``IDENTITY_OBS``.
 
 Start an interactive Python session by entering the command ``python`` or ``python3``
 in your terminal.
@@ -168,12 +164,11 @@ sure to adjust the path to your observation sequence file and file name as neede
 
        obs_seq_half_ev = obsq.ObsSequence(file_name2)
 
-#. Choose an observation type to plot on the rank histograms. Remember that for
-   identity observations, the observation type is represented by a negative integer.
+#. Choose an observation type to plot on the rank histograms.
 
    .. code-block:: python
 
-       obs_type = -1
+       obs_type = "IDENTITY_OBS"
 
 #. Set the ensemble size used in your DART experiments.
    For the Lorenz 63 model, the default ensemble size is 20.
