@@ -21,9 +21,9 @@ Manipulating Observation Sequences with pyDARTdiags
 ---------------------------------------------------
 
 This section focuses on how pyDARTdiags fits into a DART workflow, guiding you through the process
-of writing your own Python program thats uses pyDARTdiags functions to read in the observation
-sequence file, modify the observation error variances, and write out a new observation sequence
-file with the altered data.
+of running a Python program in an interactive session thats uses pyDARTdiags functions to read in
+the observation sequence file, modify the observation error variances, and write out a new
+observation sequence file with the altered data.
 
 First, ensure you have pyDARTdiags installed in your Python environment. If you haven't
 installed it yet, follow the instructions in the :ref:`installguide`.
@@ -56,7 +56,7 @@ sure to adjust the path to your observation sequence file and file name as neede
 
    .. code-block:: python
 
-       obs_seq.df['error_variance'] = obs_seq.df['error_variance'] / 2.0
+       obs_seq.df['obs_err_var'] = obs_seq.df['obs_err_var'] / 2.0
 
 #. Create a new file name for the modified observation sequence.
 
@@ -68,7 +68,7 @@ sure to adjust the path to your observation sequence file and file name as neede
 
    .. code-block:: python
 
-       obs_seq.write_obs_sequence(output_file)
+       obs_seq.write_obs_seq(output_file)
 
 #. Exit the interactive session.
 
