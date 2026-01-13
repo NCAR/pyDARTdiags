@@ -248,7 +248,7 @@ def plot_rank_histogram(obs_seq, type, ens_size, levels=None):
 
     if levels is None:
         print(
-            f"Observation sequence does not use vertical coordinate. Proceeding without level binning."
+            f"No levels given. Proceeding without level binning."
         )
 
         df = stats.calculate_rank(qc0)
