@@ -97,12 +97,8 @@ observations as assimilated as well as the ensemble forward-operator expected va
 and any quality-control values.
 
 You can now use the pyDARTdiags library to read in and analyze the observation
-space results of your DART assimilation experiment. In this example, we'll plot the rank
-histograms of the assimilation results.
-
-This section will guide you through the process of writing a Python script that uses
-pyDARTdiags functions to read in the final observation sequence files and plot the rank
-histograms of the DART Lorenz 63 obs_seq.final files.
+space results of your DART assimilation experiment. In this example, we'll plot the
+ :ref:`stats-rank-hist` of the DART Lorenz 63 obs_seq.final files.
 
 The observation sequence files you created for Lorenz 63 contain only identity
 observations. You can read about identity observations in
