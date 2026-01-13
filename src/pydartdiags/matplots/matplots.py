@@ -247,9 +247,7 @@ def plot_rank_histogram(obs_seq, type, ens_size, levels=None):
             return None
 
     if levels is None:
-        print(
-            f"No levels given. Proceeding without level binning."
-        )
+        print(f"No levels given. Proceeding without level binning.")
 
         df = stats.calculate_rank(qc0)
 
