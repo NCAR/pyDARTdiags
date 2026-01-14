@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: Apache-2.0
 from pydartdiags.stats import stats
 import matplotlib.pyplot as plt
+import pandas as pd
 
 # HK @todo color scheme class
 dacolors = ["green", "magenta", "orange", "red"]
@@ -250,7 +251,11 @@ def plot_rank_histogram(obs_seq, type, ens_size, levels=None):
         type = "IDENTITY_OBS"
         print(
             "Observation type is for identity observations."
-        )  # No filtering by type for identity obs
+        )  # Filter on types < 0 to get identity observations
+
+        # Only keep rows where 'type' is numeric before comparing
+        qc0 = qc0[pd.to_numeric(qc0["type"], errors="coerce").notnull()]
+        qc0 = qc0[qc0["type"].astype(int) < 0]
         if qc0.empty:
             print(f"No rows found for IDENTITY_OBS")
             return None
