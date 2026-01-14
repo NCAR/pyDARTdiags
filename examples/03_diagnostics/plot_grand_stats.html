@@ -429,15 +429,16 @@ the <a class="reference internal" href="../../userguide/statistics.html#statisti
 and the statistics module.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pydartdiags.obs_sequence.obs_sequence</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">obsq</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pydartdiags.stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">stats</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydartdiags.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_example_data</span>
 </pre></div>
 </div>
 <p>Chose an obs_seq file to read.
-This is a small obs_seq file “obs_seq.final.ascii.medium”
-that comes with the pyDARTdiags package
-in the data directory, so we <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">os</span></code> to get the path to the file</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-<span class="n">data_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="s2">&quot;../..&quot;</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">)</span>
-<span class="n">data_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="s2">&quot;obs_seq.final.ascii.medium&quot;</span><span class="p">)</span>
+This is a small obs_seq file “obs_seq.final.ascii.medium”.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">data_file</span> <span class="o">=</span> <span class="n">get_example_data</span><span class="p">(</span><span class="s2">&quot;obs_seq.final.ascii.medium&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>package_dir: /home/runner/work/pyDARTdiags/pyDARTdiags
+Using development data file: /home/runner/work/pyDARTdiags/pyDARTdiags/data/obs_seq.final.ascii.medium
 </pre></div>
 </div>
 <p>Read the obs_seq file into an obs_seq object.</p>
@@ -917,7 +918,7 @@ for each type of observation.</p>
 </div>
 </div>
 <br />
-<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.187 seconds)</p>
+<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.165 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-03-diagnostics-plot-grand-stats-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/ce101c761d274087ecac0cbfd4585183/plot_grand_stats.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_grand_stats.ipynb</span></code></a></p>

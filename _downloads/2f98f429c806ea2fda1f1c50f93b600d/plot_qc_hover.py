@@ -13,20 +13,17 @@ indicating the QC value.
 
 ###########################################
 # Import the modules
-import os
 import plotly.express as px
 import pydartdiags.obs_sequence.obs_sequence as obsq
+from pydartdiags.data import get_example_data
 
 # sphinx_gallery_thumbnail_path = '_static/geo_thumb.png'
 
 
 ###########################################
 # Read the obs_seq file into an obs_seq object.
-# In this example, we use a small obs_seq file "obs_seq.final.ascii.medium"
-# that comes with the pyDARTdiags package 
-# in the data directory, so we use ``os`` to get the path to the file
-data_dir = os.path.join(os.getcwd(), "../..", "data")
-data_file = os.path.join(data_dir, "obs_seq.final.ascii.medium")
+# In this example, we use a small obs_seq file "obs_seq.final.ascii.medium".
+data_file = get_example_data("obs_seq.final.ascii.medium")
 
 obs_seq = obsq.ObsSequence(data_file)
 

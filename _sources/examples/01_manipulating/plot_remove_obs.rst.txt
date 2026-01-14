@@ -28,11 +28,12 @@ observation sequence and write a new observation sequence file.
 
 Import the obs_sequence module
 
-.. GENERATED FROM PYTHON SOURCE LINES 12-14
+.. GENERATED FROM PYTHON SOURCE LINES 12-15
 
 .. code-block:: Python
 
     import pydartdiags.obs_sequence.obs_sequence as obsq
+    from pydartdiags.data import get_example_data
 
 
 
@@ -41,33 +42,36 @@ Import the obs_sequence module
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 15-19
+.. GENERATED FROM PYTHON SOURCE LINES 16-18
 
 Chose an obs_seq file to read.
-In this example, we are using a small obs_seq file "obs_seq.final.medium"
-that comes with the pyDARTdiags package 
-in the data directory, so we ``import os`` to get the path to the file.
+In this example, we are using a small obs_seq file "obs_seq.final.medium".
 
-.. GENERATED FROM PYTHON SOURCE LINES 19-23
+.. GENERATED FROM PYTHON SOURCE LINES 18-20
 
 .. code-block:: Python
 
-    import os
-    data_dir = os.path.join(os.getcwd(), "../..", "data")
-    data_file = os.path.join(data_dir, "obs_seq.final.ascii.medium")
+    data_file = get_example_data("obs_seq.final.ascii.medium")
 
 
 
 
 
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    package_dir: /home/runner/work/pyDARTdiags/pyDARTdiags
+    Using development data file: /home/runner/work/pyDARTdiags/pyDARTdiags/data/obs_seq.final.ascii.medium
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 24-25
+
+.. GENERATED FROM PYTHON SOURCE LINES 21-22
 
 Read the obs_seq file into an obs_seq object.
 
-.. GENERATED FROM PYTHON SOURCE LINES 25-27
+.. GENERATED FROM PYTHON SOURCE LINES 22-24
 
 .. code-block:: Python
 
@@ -80,11 +84,11 @@ Read the obs_seq file into an obs_seq object.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 28-29
+.. GENERATED FROM PYTHON SOURCE LINES 25-26
 
 Take a look at the observation sequence.
 
-.. GENERATED FROM PYTHON SOURCE LINES 29-31
+.. GENERATED FROM PYTHON SOURCE LINES 26-28
 
 .. code-block:: Python
 
@@ -249,11 +253,11 @@ Take a look at the observation sequence.
     <br />
     <br />
 
-.. GENERATED FROM PYTHON SOURCE LINES 32-33
+.. GENERATED FROM PYTHON SOURCE LINES 29-30
 
 To count of the number of observations by type, use the groupby method.
 
-.. GENERATED FROM PYTHON SOURCE LINES 33-35
+.. GENERATED FROM PYTHON SOURCE LINES 30-32
 
 .. code-block:: Python
 
@@ -282,12 +286,12 @@ To count of the number of observations by type, use the groupby method.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 36-38
+.. GENERATED FROM PYTHON SOURCE LINES 33-35
 
 Let's remove the 'GPSRO_REFRACTIVITY' observations.
 Remove rows where ``'type' == 'GPSRO_REFRACTIVITY'``
 
-.. GENERATED FROM PYTHON SOURCE LINES 38-40
+.. GENERATED FROM PYTHON SOURCE LINES 35-37
 
 .. code-block:: Python
 
@@ -300,12 +304,12 @@ Remove rows where ``'type' == 'GPSRO_REFRACTIVITY'``
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 41-43
+.. GENERATED FROM PYTHON SOURCE LINES 38-40
 
 Now let's check the number of observations by type again.
 For only the 'GPSRO_REFRACTIVITY' observations:
 
-.. GENERATED FROM PYTHON SOURCE LINES 43-46
+.. GENERATED FROM PYTHON SOURCE LINES 40-43
 
 .. code-block:: Python
 
@@ -325,12 +329,12 @@ For only the 'GPSRO_REFRACTIVITY' observations:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 47-49
+.. GENERATED FROM PYTHON SOURCE LINES 44-46
 
 Count the observations by type again. You'll see that the 'GPSRO_REFRACTIVITY' 
 observations have been removed from the dataFrame
 
-.. GENERATED FROM PYTHON SOURCE LINES 49-51
+.. GENERATED FROM PYTHON SOURCE LINES 46-48
 
 .. code-block:: Python
 
@@ -358,11 +362,11 @@ observations have been removed from the dataFrame
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 52-53
+.. GENERATED FROM PYTHON SOURCE LINES 49-50
 
 Write the new observation sequence to a file.
 
-.. GENERATED FROM PYTHON SOURCE LINES 53-55
+.. GENERATED FROM PYTHON SOURCE LINES 50-52
 
 .. code-block:: Python
 
@@ -375,7 +379,7 @@ Write the new observation sequence to a file.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 56-56
+.. GENERATED FROM PYTHON SOURCE LINES 53-53
 
 The new file will not have the 'GPSRO_REFRACTIVITY' observations.
 

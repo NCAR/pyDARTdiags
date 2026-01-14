@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>module: matplots &#8212; pyDARTdiags</title>
+    <title>module: data &#8212; pyDARTdiags</title>
   
   
   
@@ -50,11 +50,10 @@
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'api/matplots';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/example_data';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="module: plots" href="plots.html" />
-    <link rel="prev" title="module: stats" href="stats.html" />
+    <link rel="prev" title="module: plots" href="plots.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -342,9 +341,9 @@
 
 
 <li class="toctree-l1"><a class="reference internal" href="stats.html">module: stats</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">module: matplots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matplots.html">module: matplots</a></li>
 <li class="toctree-l1"><a class="reference internal" href="plots.html">module: plots</a></li>
-<li class="toctree-l1"><a class="reference internal" href="example_data.html">module: data</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">module: data</a></li>
 </ul>
 </div>
 </nav></div>
@@ -388,7 +387,7 @@
     
     <li class="breadcrumb-item"><a href="index.html" class="nav-link">API Guide</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">module: matplots</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">module: data</span></li>
   </ul>
 </nav>
 </div>
@@ -406,116 +405,102 @@
                 <article class="bd-article">
                   
   <section id="module-0">
-<span id="module-matplots"></span><span id="matplots"></span><h1>module: matplots<a class="headerlink" href="#module-0" title="Link to this heading">#</a></h1>
+<span id="module-data"></span><h1>module: data<a class="headerlink" href="#module-0" title="Link to this heading">#</a></h1>
+<p>Data file utilities for pyDARTdiags examples.</p>
+<p>This module provides functions to locate, download,
+and cache example files used in pyDARTdiags examples.
+The data files are cached in the users home directory
+under ~/.pydartdiags/data.</p>
 <dl class="py function">
-<dt class="sig sig-object py" id="matplots.plot_profile">
-<span class="sig-prename descclassname"><span class="pre">matplots.</span></span><span class="sig-name descname"><span class="pre">plot_profile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obs_seq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">levels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rmse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">totalspread</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#matplots.plot_profile" title="Link to this definition">#</a></dt>
-<dd><dl class="simple">
-<dt>plot_profile on the levels for prior and posterior if present</dt><dd><ul class="simple">
-<li><p>bias</p></li>
-<li><p>rmse</p></li>
-<li><p>totalspread</p></li>
-</ul>
-</dd>
-</dl>
-<p>For observations in pressure (Pa), the levels are assumed to be in hPa and
-the y-axis is in hPa and inverted.
-For ocean observations, which are height (m), set depth=True to invert y-axis.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>obs_seq</strong></p></li>
-<li><p><strong>levels</strong></p></li>
-<li><p><strong>type</strong></p></li>
-<li><p><strong>bias=True</strong></p></li>
-<li><p><strong>rmse=True</strong></p></li>
-<li><p><strong>totalspread=True</strong></p></li>
-<li><p><strong>depth=False</strong></p></li>
-</ul>
-</dd>
-</dl>
-<p class="rubric">Example</p>
-<p>type = ‘RADIOSONDE_U_WIND_COMPONENT’
-hPalevels = [0.0, 100.0,  150.0, 200.0, 250.0, 300.0, 400.0, 500.0, 700, 850, 925, 1000]
-levels = [i * 100 for i in hPalevels]</p>
-<p>plot_profile(obs_seq, levels, type, bias=True, rmse=True, totalspread=True)</p>
+<dt class="sig sig-object py" id="data.get_data_cache_dir">
+<span class="sig-prename descclassname"><span class="pre">data.</span></span><span class="sig-name descname"><span class="pre">get_data_cache_dir</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data.get_data_cache_dir" title="Link to this definition">#</a></dt>
+<dd><p>Get the cache directory for downloaded data files.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="matplots.plot_rank_histogram">
-<span class="sig-prename descclassname"><span class="pre">matplots.</span></span><span class="sig-name descname"><span class="pre">plot_rank_histogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obs_seq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ens_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">levels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#matplots.plot_rank_histogram" title="Link to this definition">#</a></dt>
-<dd><p>Plot the rank histograms of the requested observation type, ensemble
-size, and levels (if applicable). Rank histograms are plotted for prior
-and posterior if present.</p>
+<dt class="sig sig-object py" id="data.get_example_data">
+<span class="sig-prename descclassname"><span class="pre">data.</span></span><span class="sig-name descname"><span class="pre">get_example_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_download</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data.get_example_data" title="Link to this definition">#</a></dt>
+<dd><p>Get path to a data file, checking multiple locations.</p>
+<dl class="simple">
+<dt>Searches for data files in the following order:</dt><dd><ol class="arabic simple">
+<li><p>Development location (../../data from package GitHub repo)</p></li>
+<li><p>Environment variable PYDARTDIAGS_DATA</p></li>
+<li><p>User cache directory (~/.pydartdiags/data)</p></li>
+<li><p>Downloads from Zenodo if auto_download=True</p></li>
+</ol>
+</dd>
+</dl>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>obs_seq</strong> – The observation sequence object.</p></li>
-<li><p><strong>type</strong> (<em>str</em>) – The type of observation to filter by. For identity
-observations, use “IDENTITY_OBS” or a negative integer</p></li>
-<li><p><strong>ens_size</strong> (<em>int</em>) – The ensemble size.</p></li>
-<li><p><strong>levels</strong> (<em>list</em><em>, </em><em>optional</em>) – The levels to bin by. If None, no binning by level.</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – Name of the data file to locate</p></li>
+<li><p><strong>auto_download</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, automatically download from Zenodo if not found locally.
+Default is True.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The matplotlib figure object.</p>
+<dd class="field-even"><p>Absolute path to the data file</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>fig</p>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>FileNotFoundError</strong> – If the file is not found and auto_download=False</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data_file</span> <span class="o">=</span> <span class="n">get_example_data</span><span class="p">(</span><span class="s2">&quot;obs_seq.final.lorenz_96&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="matplots.plot_evolution">
-<span class="sig-prename descclassname"><span class="pre">matplots.</span></span><span class="sig-name descname"><span class="pre">plot_evolution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obs_seq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_bin_width</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">levels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tick_interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'%m-%d'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_pvu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#matplots.plot_evolution" title="Link to this definition">#</a></dt>
-<dd><p>Plot the time evolution of the requested statistics and optionally used vs possible observations.</p>
+<dt class="sig sig-object py" id="data.download_all_data">
+<span class="sig-prename descclassname"><span class="pre">data.</span></span><span class="sig-name descname"><span class="pre">download_all_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data.download_all_data" title="Link to this definition">#</a></dt>
+<dd><p>Download all example data files from Zenodo.</p>
+<p>Downloads and extracts the complete data archive to the user’s
+cache directory (~/.pydartdiags/data).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>obs_seq</strong> – The observation sequence object.</p></li>
-<li><p><strong>type</strong> (<em>str</em>) – The type of observation to filter by.</p></li>
-<li><p><strong>time_bin_width</strong> (<em>str</em>) – The width of each time bin (e.g., ‘3600s’ for 1 hour).</p></li>
-<li><p><strong>stat</strong> (<em>str</em>) – The statistic to plot. Default is “prior_rmse”.</p></li>
-<li><p><strong>levels</strong> (<em>list</em><em>, </em><em>optional</em>) – The levels to bin by. If None, no binning by level.</p></li>
-<li><p><strong>tick_interval</strong> (<em>int</em>) – Interval for x-axis ticks (default is 2).</p></li>
-<li><p><strong>time_format</strong> (<em>str</em>) – Format string for time labels on the x-axis (default is ‘%m-%d’).</p></li>
-<li><p><strong>plot_pvu</strong> (<em>bool</em>) – Whether to plot possible vs used observations (default is True).</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The matplotlib figure object.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>fig</p>
+<dd class="field-odd"><p><strong>force</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, re-download even if data already exists. Default is False.</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pydartdiags.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">download_all_data</span>
+<span class="n">download_all_data</span><span class="p">()</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="matplots.plot_time_evolution">
-<span class="sig-prename descclassname"><span class="pre">matplots.</span></span><span class="sig-name descname"><span class="pre">plot_time_evolution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df_pvu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tick_interval</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_format</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_pvu</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#matplots.plot_time_evolution" title="Link to this definition">#</a></dt>
-<dd><p>Plot the time evolution of the requested statistics and optionally used vs possible observations.</p>
+<dt class="sig sig-object py" id="data.list_available_data">
+<span class="sig-prename descclassname"><span class="pre">data.</span></span><span class="sig-name descname"><span class="pre">list_available_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data.list_available_data" title="Link to this definition">#</a></dt>
+<dd><p>List all available data files.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – The aggregated DataFrame for statistics.</p></li>
-<li><p><strong>df_pvu</strong> (<em>pd.DataFrame</em>) – The DataFrame for possible vs used observations (if plot_pvu is True).</p></li>
-<li><p><strong>stat</strong> (<em>str</em>) – The statistic to plot.</p></li>
-<li><p><strong>type</strong> (<em>str</em>) – The type of observation.</p></li>
-<li><p><strong>level</strong> (<em>float</em><em> or </em><em>None</em>) – The vertical level (if applicable).</p></li>
-<li><p><strong>tick_interval</strong> (<em>int</em>) – Interval for x-axis ticks (default is 2).</p></li>
-<li><p><strong>time_format</strong> (<em>str</em>) – Format string for time labels on the x-axis.</p></li>
-<li><p><strong>plot_pvu</strong> (<em>bool</em>) – Whether to plot possible vs used observations (default is True).</p></li>
-</ul>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List of available data file names</p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The matplotlib figure object.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>fig</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of str</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pydartdiags.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">list_available_data</span>
+<span class="n">files</span> <span class="o">=</span> <span class="n">list_available_data</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data.clear_cache">
+<span class="sig-prename descclassname"><span class="pre">data.</span></span><span class="sig-name descname"><span class="pre">clear_cache</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data.clear_cache" title="Link to this definition">#</a></dt>
+<dd><p>Remove all downloaded data from the cache directory.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pydartdiags.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">clear_cache</span>
+<span class="n">clear_cache</span><span class="p">()</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </section>
@@ -531,22 +516,13 @@ observations, use “IDENTITY_OBS” or a negative integer</p></li>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="stats.html"
+       href="plots.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">module: stats</p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="plots.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
         <p class="prev-next-title">module: plots</p>
       </div>
-      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
                 </footer>
@@ -567,10 +543,11 @@ observations, use “IDENTITY_OBS” or a negative integer</p></li>
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#matplots.plot_profile"><code class="docutils literal notranslate"><span class="pre">plot_profile()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#matplots.plot_rank_histogram"><code class="docutils literal notranslate"><span class="pre">plot_rank_histogram()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#matplots.plot_evolution"><code class="docutils literal notranslate"><span class="pre">plot_evolution()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#matplots.plot_time_evolution"><code class="docutils literal notranslate"><span class="pre">plot_time_evolution()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data.get_data_cache_dir"><code class="docutils literal notranslate"><span class="pre">get_data_cache_dir()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data.get_example_data"><code class="docutils literal notranslate"><span class="pre">get_example_data()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data.download_all_data"><code class="docutils literal notranslate"><span class="pre">download_all_data()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data.list_available_data"><code class="docutils literal notranslate"><span class="pre">list_available_data()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data.clear_cache"><code class="docutils literal notranslate"><span class="pre">clear_cache()</span></code></a></li>
 </ul>
   </nav></div>
 

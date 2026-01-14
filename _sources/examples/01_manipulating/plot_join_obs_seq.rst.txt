@@ -28,11 +28,12 @@ and join them together.
 
 Import the obs_sequence module.
 
-.. GENERATED FROM PYTHON SOURCE LINES 12-14
+.. GENERATED FROM PYTHON SOURCE LINES 12-15
 
 .. code-block:: Python
 
     import pydartdiags.obs_sequence.obs_sequence as obsq
+    from pydartdiags.data import get_example_data
 
 
 
@@ -41,33 +42,36 @@ Import the obs_sequence module.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 15-19
+.. GENERATED FROM PYTHON SOURCE LINES 16-18
 
 Chose the first obs_seq file to read.
-In this example, we are using a small obs_seq file "obs_seq.final.1000"
-that comes with the pyDARTdiags package 
-in the data directory, so we ``import os`` to get the path to the file.
+In this example, we are using a small obs_seq file "obs_seq.final.1000".
 
-.. GENERATED FROM PYTHON SOURCE LINES 19-23
+.. GENERATED FROM PYTHON SOURCE LINES 18-20
 
 .. code-block:: Python
 
-    import os
-    data_dir = os.path.join(os.getcwd(), "../..", "data")
-    data_file1 = os.path.join(data_dir, "obs_seq.final.1000")
+    data_file1 = get_example_data("obs_seq.final.1000")
 
 
 
 
 
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    package_dir: /home/runner/work/pyDARTdiags/pyDARTdiags
+    Using development data file: /home/runner/work/pyDARTdiags/pyDARTdiags/data/obs_seq.final.1000
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 24-25
+
+.. GENERATED FROM PYTHON SOURCE LINES 21-22
 
 Read the obs_seq file into an obs_seq object.
 
-.. GENERATED FROM PYTHON SOURCE LINES 25-30
+.. GENERATED FROM PYTHON SOURCE LINES 22-27
 
 .. code-block:: Python
 
@@ -90,16 +94,16 @@ Read the obs_seq file into an obs_seq object.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 31-32
+.. GENERATED FROM PYTHON SOURCE LINES 28-29
 
 Chose the second obs_seq file to read.
 
-.. GENERATED FROM PYTHON SOURCE LINES 32-39
+.. GENERATED FROM PYTHON SOURCE LINES 29-36
 
 .. code-block:: Python
 
 
-    data_file2 = os.path.join(data_dir, "obs_seq.final.ascii.small")
+    data_file2 = get_example_data("obs_seq.final.ascii.small")
     obs_seq2 = obsq.ObsSequence(data_file2)
 
     print('obs_seq2 has assimilation info:', obs_seq2.has_assimilation_info())
@@ -113,19 +117,21 @@ Chose the second obs_seq file to read.
 
  .. code-block:: none
 
+    package_dir: /home/runner/work/pyDARTdiags/pyDARTdiags
+    Using development data file: /home/runner/work/pyDARTdiags/pyDARTdiags/data/obs_seq.final.ascii.small
     obs_seq2 has assimilation info: True
     obs_seq2 has posterior: False
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 40-43
+.. GENERATED FROM PYTHON SOURCE LINES 37-40
 
 obs_seq1 has posterior information, but obs_seq2 does not.
 So we will remove the posterior columns from obs_seq1 DataFrame, using the pandas
 `drop` method before joining the two obs_seq objects together.
 
-.. GENERATED FROM PYTHON SOURCE LINES 43-47
+.. GENERATED FROM PYTHON SOURCE LINES 40-44
 
 .. code-block:: Python
 
@@ -146,14 +152,14 @@ So we will remove the posterior columns from obs_seq1 DataFrame, using the panda
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 48-52
+.. GENERATED FROM PYTHON SOURCE LINES 45-49
 
 Now, let's join the two obs_seq objects together using the join method.
 :meth:`obs_sequence.obs_sequence.join` is a class method, so it is called
 on the obs_sequence class, which
 we've imported as obsq. The method takes a list of obs_seq objects to join.
 
-.. GENERATED FROM PYTHON SOURCE LINES 52-60
+.. GENERATED FROM PYTHON SOURCE LINES 49-57
 
 .. code-block:: Python
 
@@ -711,12 +717,12 @@ we've imported as obsq. The method takes a list of obs_seq objects to join.
     <br />
     <br />
 
-.. GENERATED FROM PYTHON SOURCE LINES 61-63
+.. GENERATED FROM PYTHON SOURCE LINES 58-60
 
 Now, the obs_seq_mega object has the observations from both obs_seq1 and obs_seq2.
 with the prior columns from both obs_seq DataFrames.
 
-.. GENERATED FROM PYTHON SOURCE LINES 63-66
+.. GENERATED FROM PYTHON SOURCE LINES 60-63
 
 .. code-block:: Python
 
@@ -780,14 +786,14 @@ with the prior columns from both obs_seq DataFrames.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 67-71
+.. GENERATED FROM PYTHON SOURCE LINES 64-68
 
 You can pass a list of columns to the join method to only join the columns you want.
 For example, if you only want to join the 'prior_mean' and 'prior_spread' columns, 
 and discard the rest of the columns from the obs_seq objects,
 you can do so like this:
 
-.. GENERATED FROM PYTHON SOURCE LINES 71-76
+.. GENERATED FROM PYTHON SOURCE LINES 68-73
 
 .. code-block:: Python
 
@@ -803,11 +809,11 @@ you can do so like this:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 77-78
+.. GENERATED FROM PYTHON SOURCE LINES 74-75
 
 Note, the join method will still include the required columns for the obs_seq object to function properly.
 
-.. GENERATED FROM PYTHON SOURCE LINES 78-80
+.. GENERATED FROM PYTHON SOURCE LINES 75-77
 
 .. code-block:: Python
 
@@ -833,7 +839,7 @@ Note, the join method will still include the required columns for the obs_seq ob
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.151 seconds)
+   **Total running time of the script:** (0 minutes 0.153 seconds)
 
 
 .. _sphx_glr_download_examples_01_manipulating_plot_join_obs_seq.py:

@@ -427,15 +427,16 @@ to download the full example code.</p>
 and the matplots module for plotting.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pydartdiags.obs_sequence.obs_sequence</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">obsq</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pydartdiags.matplots</span><span class="w"> </span><span class="kn">import</span> <span class="n">matplots</span> <span class="k">as</span> <span class="n">mp</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydartdiags.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_example_data</span>
 </pre></div>
 </div>
 <p>Chose an obs_seq file to read.
-In this example, we are using a small obs_seq file “obs_seq.final.1000”
-that comes with the pyDARTdiags package
-in the data directory, so we <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">os</span></code> to get the path to the file.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-<span class="n">data_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="s2">&quot;../..&quot;</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">)</span>
-<span class="n">data_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="s2">&quot;obs_seq.final.1000&quot;</span><span class="p">)</span>
+In this example, we are using a small obs_seq file “obs_seq.final.1000”.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">data_file</span> <span class="o">=</span> <span class="n">get_example_data</span><span class="p">(</span><span class="s2">&quot;obs_seq.final.1000&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>package_dir: /home/runner/work/pyDARTdiags/pyDARTdiags
+Using development data file: /home/runner/work/pyDARTdiags/pyDARTdiags/data/obs_seq.final.1000
 </pre></div>
 </div>
 <p>Read the obs_seq file into an obs_seq object.</p>
@@ -484,7 +485,7 @@ and posterior rank histograms are plotted.</p>
 <li><img src="../../_images/sphx_glr_plot_rank_histogram_006.png" srcset="../../_images/sphx_glr_plot_rank_histogram_006.png" alt="Prior Rank Histogram, Posterior Rank Histogram" class = "sphx-glr-multi-img"/></li>
 <li><img src="../../_images/sphx_glr_plot_rank_histogram_007.png" srcset="../../_images/sphx_glr_plot_rank_histogram_007.png" alt="ACARS_TEMPERATURE at Level 77500.0 hPa, Prior Rank Histogram, Posterior Rank Histogram" class = "sphx-glr-multi-img"/></li>
 </ul>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 1.801 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 1.886 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-03-diagnostics-plot-rank-histogram-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/57f04f4b48ecf7be9b1367cccc55b5cf/plot_rank_histogram.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_rank_histogram.ipynb</span></code></a></p>

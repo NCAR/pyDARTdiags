@@ -425,17 +425,20 @@ to download the full example code.</p>
 <p>This example shows how to find duplicates in an observation sequence,
 and how to remove them.</p>
 <p>Import the obs_sequence module</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">pydartdiags.obs_sequence.obs_sequence</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">obsq</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pydartdiags.obs_sequence.obs_sequence</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">obsq</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydartdiags.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_example_data</span>
 </pre></div>
 </div>
 <p>Read in the observation sequence file. In this example we’ll use a real obs_seq file,
-the NCEP+ACARS.201303_6H.obs_seq2013030306 file that comes with the pyDARTdiags package.
+the NCEP+ACARS.201303_6H.obs_seq2013030306 file.
 This is 6 hours of observations from March 3, 2013.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">data_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="s2">&quot;../..&quot;</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">)</span>
-<span class="n">data_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="s2">&quot;NCEP+ACARS.201303_6H.obs_seq2013030306&quot;</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">data_file</span> <span class="o">=</span> <span class="n">get_example_data</span><span class="p">(</span><span class="s2">&quot;NCEP+ACARS.201303_6H.obs_seq2013030306&quot;</span><span class="p">)</span>
 
 <span class="n">obs_seq</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">ObsSequence</span><span class="p">(</span><span class="n">data_file</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>package_dir: /home/runner/work/pyDARTdiags/pyDARTdiags
+Using development data file: /home/runner/work/pyDARTdiags/pyDARTdiags/data/NCEP+ACARS.201303_6H.obs_seq2013030306
 </pre></div>
 </div>
 <p>How many observations are in the sequence?</p>
@@ -777,7 +780,7 @@ Number of duplicate observations: 1933
 Number of observations after removing duplicates: 315105
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 3.978 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 4.009 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-01-manipulating-plot-duplicates-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/25e8be5ac3e7fb5340f4187d73e81dd4/plot_duplicates.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_duplicates.ipynb</span></code></a></p>

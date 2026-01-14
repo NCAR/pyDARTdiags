@@ -30,12 +30,13 @@ the :ref:`statistics` guide.
 Import the obs_sequence module
 and the matplots module for plotting.
 
-.. GENERATED FROM PYTHON SOURCE LINES 13-16
+.. GENERATED FROM PYTHON SOURCE LINES 13-17
 
 .. code-block:: Python
 
     import pydartdiags.obs_sequence.obs_sequence as obsq
     from pydartdiags.matplots import matplots as mp
+    from pydartdiags.data import get_example_data
 
 
 
@@ -44,33 +45,36 @@ and the matplots module for plotting.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 17-21
+.. GENERATED FROM PYTHON SOURCE LINES 18-20
 
 Chose an obs_seq file to read.
-In this example, we are using a small obs_seq file "obs_seq.final.1000"
-that comes with the pyDARTdiags package 
-in the data directory, so we ``import os`` to get the path to the file.
+In this example, we are using a small obs_seq file "obs_seq.final.1000".
 
-.. GENERATED FROM PYTHON SOURCE LINES 21-25
+.. GENERATED FROM PYTHON SOURCE LINES 20-22
 
 .. code-block:: Python
 
-    import os
-    data_dir = os.path.join(os.getcwd(), "../..", "data")
-    data_file = os.path.join(data_dir, "obs_seq.final.1000")
+    data_file = get_example_data("obs_seq.final.1000")
 
 
 
 
 
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    package_dir: /home/runner/work/pyDARTdiags/pyDARTdiags
+    Using development data file: /home/runner/work/pyDARTdiags/pyDARTdiags/data/obs_seq.final.1000
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 26-27
+
+.. GENERATED FROM PYTHON SOURCE LINES 23-24
 
 Read the obs_seq file into an obs_seq object.
 
-.. GENERATED FROM PYTHON SOURCE LINES 27-29
+.. GENERATED FROM PYTHON SOURCE LINES 24-26
 
 .. code-block:: Python
 
@@ -83,13 +87,13 @@ Read the obs_seq file into an obs_seq object.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 30-33
+.. GENERATED FROM PYTHON SOURCE LINES 27-30
 
 Chose an observation type.
 The observation types are stored in the 'type' column.
 To see which observation types are in the dataframe, use the unique method:
 
-.. GENERATED FROM PYTHON SOURCE LINES 33-35
+.. GENERATED FROM PYTHON SOURCE LINES 30-32
 
 .. code-block:: Python
 
@@ -111,12 +115,12 @@ To see which observation types are in the dataframe, use the unique method:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 36-38
+.. GENERATED FROM PYTHON SOURCE LINES 33-35
 
 For this example, we are going to look at the profile for 
 ACARS_TEMPERATURE observations.
 
-.. GENERATED FROM PYTHON SOURCE LINES 38-44
+.. GENERATED FROM PYTHON SOURCE LINES 35-41
 
 .. code-block:: Python
 
@@ -138,11 +142,11 @@ ACARS_TEMPERATURE observations.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 45-46
+.. GENERATED FROM PYTHON SOURCE LINES 42-43
 
 To plot only the bias, set rmse=False and totalspread=False.
 
-.. GENERATED FROM PYTHON SOURCE LINES 46-46
+.. GENERATED FROM PYTHON SOURCE LINES 43-43
 
 .. code-block:: Python
 
@@ -161,7 +165,7 @@ To plot only the bias, set rmse=False and totalspread=False.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.616 seconds)
+   **Total running time of the script:** (0 minutes 0.621 seconds)
 
 
 .. _sphx_glr_download_examples_03_diagnostics_plot_profiles.py:

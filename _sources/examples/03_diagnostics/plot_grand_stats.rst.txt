@@ -30,12 +30,13 @@ the :ref:`statistics` guide.
 Import the obs_sequence module 
 and the statistics module.
 
-.. GENERATED FROM PYTHON SOURCE LINES 14-16
+.. GENERATED FROM PYTHON SOURCE LINES 14-18
 
 .. code-block:: Python
 
     import pydartdiags.obs_sequence.obs_sequence as obsq
     from pydartdiags.stats import stats
+    from pydartdiags.data import get_example_data
 
 
 
@@ -43,34 +44,38 @@ and the statistics module.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 17-21
+
+.. GENERATED FROM PYTHON SOURCE LINES 19-21
 
 Chose an obs_seq file to read.
-This is a small obs_seq file "obs_seq.final.ascii.medium"
-that comes with the pyDARTdiags package 
-in the data directory, so we ``import os`` to get the path to the file
+This is a small obs_seq file "obs_seq.final.ascii.medium".
 
-.. GENERATED FROM PYTHON SOURCE LINES 21-26
+.. GENERATED FROM PYTHON SOURCE LINES 21-24
 
 .. code-block:: Python
 
-    import os
-    data_dir = os.path.join(os.getcwd(), "../..", "data")
-    data_file = os.path.join(data_dir, "obs_seq.final.ascii.medium")
+    data_file = get_example_data("obs_seq.final.ascii.medium")
 
 
 
 
 
 
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    package_dir: /home/runner/work/pyDARTdiags/pyDARTdiags
+    Using development data file: /home/runner/work/pyDARTdiags/pyDARTdiags/data/obs_seq.final.ascii.medium
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 27-28
+
+.. GENERATED FROM PYTHON SOURCE LINES 25-26
 
 Read the obs_seq file into an obs_seq object.
 
-.. GENERATED FROM PYTHON SOURCE LINES 28-33
+.. GENERATED FROM PYTHON SOURCE LINES 26-31
 
 .. code-block:: Python
 
@@ -86,13 +91,13 @@ Read the obs_seq file into an obs_seq object.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 34-37
+.. GENERATED FROM PYTHON SOURCE LINES 32-35
 
 `used_obs` is a dataframe with only the observations with QC value of 0.
 
 The columns of the dataframe are the same as the original obs_seq dataframe.
 
-.. GENERATED FROM PYTHON SOURCE LINES 37-39
+.. GENERATED FROM PYTHON SOURCE LINES 35-37
 
 .. code-block:: Python
 
@@ -115,11 +120,11 @@ The columns of the dataframe are the same as the original obs_seq dataframe.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 40-41
+.. GENERATED FROM PYTHON SOURCE LINES 38-39
 
 Now we calculate the statistics required for DART diagnostics.
 
-.. GENERATED FROM PYTHON SOURCE LINES 41-44
+.. GENERATED FROM PYTHON SOURCE LINES 39-42
 
 .. code-block:: Python
 
@@ -448,12 +453,12 @@ Now we calculate the statistics required for DART diagnostics.
     <br />
     <br />
 
-.. GENERATED FROM PYTHON SOURCE LINES 45-47
+.. GENERATED FROM PYTHON SOURCE LINES 43-45
 
 The statistics are calculated for each row in the dataframe, 
 and the results are stored in new columns.
 
-.. GENERATED FROM PYTHON SOURCE LINES 47-50
+.. GENERATED FROM PYTHON SOURCE LINES 45-48
 
 .. code-block:: Python
 
@@ -478,12 +483,12 @@ and the results are stored in new columns.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 51-53
+.. GENERATED FROM PYTHON SOURCE LINES 49-51
 
 The help function can be used to find out more about the diag_stats function
 including what statistics are calculated.
 
-.. GENERATED FROM PYTHON SOURCE LINES 53-56
+.. GENERATED FROM PYTHON SOURCE LINES 51-54
 
 .. code-block:: Python
 
@@ -532,12 +537,12 @@ including what statistics are calculated.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 57-59
+.. GENERATED FROM PYTHON SOURCE LINES 55-57
 
 Summarize the grand statistics, which are the statistics aggregated over all the observations
 for each type of observation.
 
-.. GENERATED FROM PYTHON SOURCE LINES 59-60
+.. GENERATED FROM PYTHON SOURCE LINES 57-58
 
 .. code-block:: Python
 
@@ -641,7 +646,7 @@ for each type of observation.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.187 seconds)
+   **Total running time of the script:** (0 minutes 0.165 seconds)
 
 
 .. _sphx_glr_download_examples_03_diagnostics_plot_grand_stats.py:

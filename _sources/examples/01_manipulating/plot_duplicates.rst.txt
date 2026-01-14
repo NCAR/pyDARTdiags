@@ -32,8 +32,8 @@ Import the obs_sequence module
 
 .. code-block:: Python
 
-    import os
     import pydartdiags.obs_sequence.obs_sequence as obsq
+    from pydartdiags.data import get_example_data
 
 
 
@@ -45,15 +45,14 @@ Import the obs_sequence module
 .. GENERATED FROM PYTHON SOURCE LINES 16-19
 
 Read in the observation sequence file. In this example we'll use a real obs_seq file,
-the NCEP+ACARS.201303_6H.obs_seq2013030306 file that comes with the pyDARTdiags package.
+the NCEP+ACARS.201303_6H.obs_seq2013030306 file.
 This is 6 hours of observations from March 3, 2013.
 
-.. GENERATED FROM PYTHON SOURCE LINES 19-24
+.. GENERATED FROM PYTHON SOURCE LINES 19-23
 
 .. code-block:: Python
 
-    data_dir = os.path.join(os.getcwd(), "../..", "data")
-    data_file = os.path.join(data_dir, "NCEP+ACARS.201303_6H.obs_seq2013030306")
+    data_file = get_example_data("NCEP+ACARS.201303_6H.obs_seq2013030306")
 
     obs_seq = obsq.ObsSequence(data_file)
 
@@ -61,14 +60,21 @@ This is 6 hours of observations from March 3, 2013.
 
 
 
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    package_dir: /home/runner/work/pyDARTdiags/pyDARTdiags
+    Using development data file: /home/runner/work/pyDARTdiags/pyDARTdiags/data/NCEP+ACARS.201303_6H.obs_seq2013030306
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 25-26
+
+.. GENERATED FROM PYTHON SOURCE LINES 24-25
 
 How many observations are in the sequence?
 
-.. GENERATED FROM PYTHON SOURCE LINES 26-29
+.. GENERATED FROM PYTHON SOURCE LINES 25-28
 
 .. code-block:: Python
 
@@ -88,11 +94,11 @@ How many observations are in the sequence?
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 30-31
+.. GENERATED FROM PYTHON SOURCE LINES 29-30
 
 How many of each type of observation are in the sequence?
 
-.. GENERATED FROM PYTHON SOURCE LINES 31-33
+.. GENERATED FROM PYTHON SOURCE LINES 30-32
 
 .. code-block:: Python
 
@@ -131,13 +137,13 @@ How many of each type of observation are in the sequence?
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 34-37
+.. GENERATED FROM PYTHON SOURCE LINES 33-36
 
 How many duplicates are there in the sequence? Lets pick the columns that we want to compare
 to determine if an observation is a duplicate. In this case we'll use latitude, longitude, vertical,
 time, observation, and type. We'll use the 'duplicated' method to find the duplicates.
 
-.. GENERATED FROM PYTHON SOURCE LINES 37-42
+.. GENERATED FROM PYTHON SOURCE LINES 36-41
 
 .. code-block:: Python
 
@@ -159,12 +165,12 @@ time, observation, and type. We'll use the 'duplicated' method to find the dupli
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 43-45
+.. GENERATED FROM PYTHON SOURCE LINES 42-44
 
 Lets see how many duplicates there are for each type of observation.
 We'll use the 'duplicated' method to find the duplicates.
 
-.. GENERATED FROM PYTHON SOURCE LINES 45-49
+.. GENERATED FROM PYTHON SOURCE LINES 44-48
 
 .. code-block:: Python
 
@@ -203,12 +209,12 @@ We'll use the 'duplicated' method to find the duplicates.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 50-52
+.. GENERATED FROM PYTHON SOURCE LINES 49-51
 
 Let's look at the duplicates in the 'LAND_SFC_ALTIMETER' type.
 We're sorting by latitude to make it easier to see the duplicates.
 
-.. GENERATED FROM PYTHON SOURCE LINES 52-59
+.. GENERATED FROM PYTHON SOURCE LINES 51-58
 
 .. code-block:: Python
 
@@ -469,11 +475,11 @@ We're sorting by latitude to make it easier to see the duplicates.
     <br />
     <br />
 
-.. GENERATED FROM PYTHON SOURCE LINES 60-61
+.. GENERATED FROM PYTHON SOURCE LINES 59-60
 
 Lets remove all the duplicates from the dataFrame
 
-.. GENERATED FROM PYTHON SOURCE LINES 61-63
+.. GENERATED FROM PYTHON SOURCE LINES 60-62
 
 .. code-block:: Python
 
@@ -486,11 +492,11 @@ Lets remove all the duplicates from the dataFrame
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 64-65
+.. GENERATED FROM PYTHON SOURCE LINES 63-64
 
 The number of obs has been reduced by the number of duplicates
 
-.. GENERATED FROM PYTHON SOURCE LINES 65-68
+.. GENERATED FROM PYTHON SOURCE LINES 64-67
 
 .. code-block:: Python
 
@@ -515,7 +521,7 @@ The number of obs has been reduced by the number of duplicates
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 3.978 seconds)
+   **Total running time of the script:** (0 minutes 4.009 seconds)
 
 
 .. _sphx_glr_download_examples_01_manipulating_plot_duplicates.py:

@@ -426,15 +426,16 @@ to download the full example code.</p>
 and join them together.</p>
 <p>Import the obs_sequence module.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pydartdiags.obs_sequence.obs_sequence</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">obsq</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydartdiags.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_example_data</span>
 </pre></div>
 </div>
 <p>Chose the first obs_seq file to read.
-In this example, we are using a small obs_seq file “obs_seq.final.1000”
-that comes with the pyDARTdiags package
-in the data directory, so we <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">os</span></code> to get the path to the file.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-<span class="n">data_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="s2">&quot;../..&quot;</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">)</span>
-<span class="n">data_file1</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="s2">&quot;obs_seq.final.1000&quot;</span><span class="p">)</span>
+In this example, we are using a small obs_seq file “obs_seq.final.1000”.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">data_file1</span> <span class="o">=</span> <span class="n">get_example_data</span><span class="p">(</span><span class="s2">&quot;obs_seq.final.1000&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>package_dir: /home/runner/work/pyDARTdiags/pyDARTdiags
+Using development data file: /home/runner/work/pyDARTdiags/pyDARTdiags/data/obs_seq.final.1000
 </pre></div>
 </div>
 <p>Read the obs_seq file into an obs_seq object.</p>
@@ -449,14 +450,16 @@ obs_seq1 has posterior: True
 </pre></div>
 </div>
 <p>Chose the second obs_seq file to read.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">data_file2</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="s2">&quot;obs_seq.final.ascii.small&quot;</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">data_file2</span> <span class="o">=</span> <span class="n">get_example_data</span><span class="p">(</span><span class="s2">&quot;obs_seq.final.ascii.small&quot;</span><span class="p">)</span>
 <span class="n">obs_seq2</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">ObsSequence</span><span class="p">(</span><span class="n">data_file2</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;obs_seq2 has assimilation info:&#39;</span><span class="p">,</span> <span class="n">obs_seq2</span><span class="o">.</span><span class="n">has_assimilation_info</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;obs_seq2 has posterior:&#39;</span><span class="p">,</span> <span class="n">obs_seq2</span><span class="o">.</span><span class="n">has_posterior</span><span class="p">())</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>obs_seq2 has assimilation info: True
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>package_dir: /home/runner/work/pyDARTdiags/pyDARTdiags
+Using development data file: /home/runner/work/pyDARTdiags/pyDARTdiags/data/obs_seq.final.ascii.small
+obs_seq2 has assimilation info: True
 obs_seq2 has posterior: False
 </pre></div>
 </div>
@@ -1088,7 +1091,7 @@ you can do so like this:</p>
       dtype=&#39;object&#39;)
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.151 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.153 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-01-manipulating-plot-join-obs-seq-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/59ec61044c62ea21e72b2a07e34c4636/plot_join_obs_seq.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_join_obs_seq.ipynb</span></code></a></p>

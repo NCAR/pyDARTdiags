@@ -29,12 +29,13 @@ For an explanation of the statistics calculations see the :ref:`statistics` guid
 Import the obs_sequence module
 and the matplots module for plotting.
 
-.. GENERATED FROM PYTHON SOURCE LINES 12-15
+.. GENERATED FROM PYTHON SOURCE LINES 12-16
 
 .. code-block:: Python
 
     import pydartdiags.obs_sequence.obs_sequence as obsq
     from pydartdiags.matplots import matplots as mp
+    from pydartdiags.data import get_example_data
 
 
 
@@ -43,34 +44,37 @@ and the matplots module for plotting.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 16-21
+.. GENERATED FROM PYTHON SOURCE LINES 17-20
 
 Chose an obs_seq file to read.
 In this example, we are using "obs_seq.final.lorenz_96" which is from
 a Lorenz 96 model run with the DART assimilation system.
-The obs_seq.final.lorenz_96 file comes with the pyDARTdiags package
-in the data directory, so we ``import os`` to get the path to the file.
 
-.. GENERATED FROM PYTHON SOURCE LINES 21-25
+.. GENERATED FROM PYTHON SOURCE LINES 20-22
 
 .. code-block:: Python
 
-    import os
-    data_dir = os.path.join(os.getcwd(), "../..", "data")
-    data_file = os.path.join(data_dir, "obs_seq.final.lorenz_96")
+    data_file = get_example_data("obs_seq.final.lorenz_96")
 
 
 
 
 
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    package_dir: /home/runner/work/pyDARTdiags/pyDARTdiags
+    Using development data file: /home/runner/work/pyDARTdiags/pyDARTdiags/data/obs_seq.final.lorenz_96
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 26-27
+
+.. GENERATED FROM PYTHON SOURCE LINES 23-24
 
 Read the obs_seq file into an obs_seq object.
 
-.. GENERATED FROM PYTHON SOURCE LINES 27-29
+.. GENERATED FROM PYTHON SOURCE LINES 24-26
 
 .. code-block:: Python
 
@@ -83,7 +87,7 @@ Read the obs_seq file into an obs_seq object.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 30-40
+.. GENERATED FROM PYTHON SOURCE LINES 27-37
 
 .. code-block:: Python
 
@@ -109,12 +113,12 @@ Read the obs_seq file into an obs_seq object.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 41-43
+.. GENERATED FROM PYTHON SOURCE LINES 38-40
 
 To plot the bias, set stat="bias". Let's also plot the 
 possible vs used observations.
 
-.. GENERATED FROM PYTHON SOURCE LINES 43-53
+.. GENERATED FROM PYTHON SOURCE LINES 40-50
 
 .. code-block:: Python
 
@@ -140,14 +144,14 @@ possible vs used observations.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 54-58
+.. GENERATED FROM PYTHON SOURCE LINES 51-55
 
 The legend is being covered by the 'used vs. assimilated' observation count,
 so let's move the legend to the lower right corner.
 We can do this by accessing the `matplotlib <https://matplotlib.org/stable/>`_
 axes object from the figure and using the `legend` method to move the legend. 
 
-.. GENERATED FROM PYTHON SOURCE LINES 58-75
+.. GENERATED FROM PYTHON SOURCE LINES 55-72
 
 .. code-block:: Python
 
@@ -183,7 +187,7 @@ axes object from the figure and using the `legend` method to move the legend.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.892 seconds)
+   **Total running time of the script:** (0 minutes 0.875 seconds)
 
 
 .. _sphx_glr_download_examples_03_diagnostics_plot_evolution.py:
