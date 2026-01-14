@@ -13,6 +13,7 @@ User Guide
    quickstart
    working-with-obsq
    statistics
+   dartworkflow
  
 Welcome to the pyDARTdiags User Guide!
 

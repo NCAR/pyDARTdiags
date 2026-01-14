@@ -110,6 +110,9 @@ are calculated as follows:
 .. math::
    \sigma_{T,s} \equiv \sqrt{\frac{1}{N} \sum_{n=1}^{N} (\sigma^2_u + \sigma^2_v + \epsilon^2_u + \epsilon^2_v )}
 
+
+.. _stats-rank-hist:
+
 Rank Histogram
 --------------
 

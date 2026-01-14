@@ -410,7 +410,7 @@
 <dt class="sig sig-object py" id="matplots.plot_profile">
 <span class="sig-prename descclassname"><span class="pre">matplots.</span></span><span class="sig-name descname"><span class="pre">plot_profile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obs_seq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">levels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rmse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">totalspread</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#matplots.plot_profile" title="Link to this definition">#</a></dt>
 <dd><dl class="simple">
-<dt>plot_profile on the levels for prior and  posterior if present</dt><dd><ul class="simple">
+<dt>plot_profile on the levels for prior and posterior if present</dt><dd><ul class="simple">
 <li><p>bias</p></li>
 <li><p>rmse</p></li>
 <li><p>totalspread</p></li>
@@ -438,6 +438,31 @@ For ocean observations, which are height (m), set depth=True to invert y-axis.</
 hPalevels = [0.0, 100.0,  150.0, 200.0, 250.0, 300.0, 400.0, 500.0, 700, 850, 925, 1000]
 levels = [i * 100 for i in hPalevels]</p>
 <p>plot_profile(obs_seq, levels, type, bias=True, rmse=True, totalspread=True)</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="matplots.plot_rank_histogram">
+<span class="sig-prename descclassname"><span class="pre">matplots.</span></span><span class="sig-name descname"><span class="pre">plot_rank_histogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obs_seq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ens_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">levels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#matplots.plot_rank_histogram" title="Link to this definition">#</a></dt>
+<dd><p>Plot the rank histograms of the requested observation type, ensemble
+size, and levels (if applicable). Rank histograms are plotted for prior
+and posterior if present.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obs_seq</strong> – The observation sequence object.</p></li>
+<li><p><strong>type</strong> (<em>str</em>) – The type of observation to filter by. For identity
+observations, use “IDENTITY_OBS” or a negative integer</p></li>
+<li><p><strong>ens_size</strong> (<em>int</em>) – The ensemble size.</p></li>
+<li><p><strong>levels</strong> (<em>list</em><em>, </em><em>optional</em>) – The levels to bin by. If None, no binning by level.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The matplotlib figure object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>fig</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -542,6 +567,7 @@ levels = [i * 100 for i in hPalevels]</p>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#matplots.plot_profile"><code class="docutils literal notranslate"><span class="pre">plot_profile()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#matplots.plot_rank_histogram"><code class="docutils literal notranslate"><span class="pre">plot_rank_histogram()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#matplots.plot_evolution"><code class="docutils literal notranslate"><span class="pre">plot_evolution()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#matplots.plot_time_evolution"><code class="docutils literal notranslate"><span class="pre">plot_time_evolution()</span></code></a></li>
 </ul>

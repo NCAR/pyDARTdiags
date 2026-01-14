@@ -54,7 +54,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'userguide/statistics';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Developer Guide" href="../devel/index.html" />
+    <link rel="next" title="An example of using pyDARTdiags with DART and the Lorenz 63 model" href="dartworkflow.html" />
     <link rel="prev" title="Observation Sequences" href="working-with-obsq.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -343,6 +343,7 @@
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="working-with-obsq.html">Observation Sequences</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Statistics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dartworkflow.html">An example of using pyDARTdiags with DART and the Lorenz 63 model</a></li>
 </ul>
 </div>
 </nav></div>
@@ -489,7 +490,7 @@ are calculated as follows:</p>
 \[\sigma_{T,s} \equiv \sqrt{\frac{1}{N} \sum_{n=1}^{N} (\sigma^2_u + \sigma^2_v + \epsilon^2_u + \epsilon^2_v )}\]</div>
 </section>
 <section id="rank-histogram">
-<h2>Rank Histogram<a class="headerlink" href="#rank-histogram" title="Link to this heading">#</a></h2>
+<span id="stats-rank-hist"></span><h2>Rank Histogram<a class="headerlink" href="#rank-histogram" title="Link to this heading">#</a></h2>
 <p>The rank histogram requires the full ensemble of forward operator values for each observation.
 Sampling noise is added to each member of the forward operator ensemble.:</p>
 <div class="math notranslate nohighlight">
@@ -600,11 +601,11 @@ include DART_QC 7 observations in the calculation of the statistics.</p>
       </div>
     </a>
     <a class="right-next"
-       href="../devel/index.html"
+       href="dartworkflow.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Developer Guide</p>
+        <p class="prev-next-title">An example of using pyDARTdiags with DART and the Lorenz 63 model</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

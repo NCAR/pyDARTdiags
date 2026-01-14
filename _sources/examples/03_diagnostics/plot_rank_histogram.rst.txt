@@ -160,7 +160,7 @@ and posterior rank histograms are plotted.
 .. code-block:: Python
 
     ens_size = 80
-    fig = mp.plot_rank_histogram(obs_seq, levels, obs_type, ens_size)
+    fig = mp.plot_rank_histogram(obs_seq, obs_type, ens_size, levels)
 
 
 
@@ -170,42 +170,42 @@ and posterior rank histograms are plotted.
     *
 
       .. image-sg:: /examples/03_diagnostics/images/sphx_glr_plot_rank_histogram_001.png
-         :alt: ACARS_TEMPERATURE at Level 17500.0 hPa, Prior Rank Histogram, Posterior Rank Histogram
+         :alt: Prior Rank Histogram, Posterior Rank Histogram
          :srcset: /examples/03_diagnostics/images/sphx_glr_plot_rank_histogram_001.png
          :class: sphx-glr-multi-img
 
     *
 
       .. image-sg:: /examples/03_diagnostics/images/sphx_glr_plot_rank_histogram_002.png
-         :alt: ACARS_TEMPERATURE at Level 22500.0 hPa, Prior Rank Histogram, Posterior Rank Histogram
+         :alt: Prior Rank Histogram, Posterior Rank Histogram
          :srcset: /examples/03_diagnostics/images/sphx_glr_plot_rank_histogram_002.png
          :class: sphx-glr-multi-img
 
     *
 
       .. image-sg:: /examples/03_diagnostics/images/sphx_glr_plot_rank_histogram_003.png
-         :alt: ACARS_TEMPERATURE at Level 27500.0 hPa, Prior Rank Histogram, Posterior Rank Histogram
+         :alt: Prior Rank Histogram, Posterior Rank Histogram
          :srcset: /examples/03_diagnostics/images/sphx_glr_plot_rank_histogram_003.png
          :class: sphx-glr-multi-img
 
     *
 
       .. image-sg:: /examples/03_diagnostics/images/sphx_glr_plot_rank_histogram_004.png
-         :alt: ACARS_TEMPERATURE at Level 35000.0 hPa, Prior Rank Histogram, Posterior Rank Histogram
+         :alt: Prior Rank Histogram, Posterior Rank Histogram
          :srcset: /examples/03_diagnostics/images/sphx_glr_plot_rank_histogram_004.png
          :class: sphx-glr-multi-img
 
     *
 
       .. image-sg:: /examples/03_diagnostics/images/sphx_glr_plot_rank_histogram_005.png
-         :alt: ACARS_TEMPERATURE at Level 45000.0 hPa, Prior Rank Histogram, Posterior Rank Histogram
+         :alt: Prior Rank Histogram, Posterior Rank Histogram
          :srcset: /examples/03_diagnostics/images/sphx_glr_plot_rank_histogram_005.png
          :class: sphx-glr-multi-img
 
     *
 
       .. image-sg:: /examples/03_diagnostics/images/sphx_glr_plot_rank_histogram_006.png
-         :alt: ACARS_TEMPERATURE at Level 60000.0 hPa, Prior Rank Histogram, Posterior Rank Histogram
+         :alt: Prior Rank Histogram, Posterior Rank Histogram
          :srcset: /examples/03_diagnostics/images/sphx_glr_plot_rank_histogram_006.png
          :class: sphx-glr-multi-img
 
@@ -223,7 +223,7 @@ and posterior rank histograms are plotted.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 2.585 seconds)
+   **Total running time of the script:** (0 minutes 1.801 seconds)
 
 
 .. _sphx_glr_download_examples_03_diagnostics_plot_rank_histogram.py:
