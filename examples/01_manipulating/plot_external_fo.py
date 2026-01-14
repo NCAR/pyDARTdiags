@@ -16,16 +16,15 @@ RAW_TRACER_CONCENTRATION forward operators.
 
 ###########################################
 # Import the obs_sequence module, and numpy
-import os
 import pydartdiags.obs_sequence.obs_sequence as obsq
+from pydartdiags.data import get_example_data
 import numpy as np
 
 ###########################################
 # Read in the observation sequence file. In this example we'll use the
-# obs_seq.out.tracer file that comes with the pyDARTdiags package.
-# This file only has two observations. 
-data_dir = os.path.join(os.getcwd(), "../..", "data")
-data_file = os.path.join(data_dir, "obs_seq.out.tracer")
+# obs_seq.out.tracer file.
+# This file only has two observations.
+data_file = get_example_data("obs_seq.out.tracer")
 obs_seq = obsq.ObsSequence(data_file)
 
 ###########################################

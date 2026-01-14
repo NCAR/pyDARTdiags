@@ -9,15 +9,14 @@ and how to remove them.
 
 ###########################################
 # Import the obs_sequence module
-import os
 import pydartdiags.obs_sequence.obs_sequence as obsq
+from pydartdiags.data import get_example_data
 
 ###########################################
 # Read in the observation sequence file. In this example we'll use a real obs_seq file,
-# the NCEP+ACARS.201303_6H.obs_seq2013030306 file that comes with the pyDARTdiags package.
+# the NCEP+ACARS.201303_6H.obs_seq2013030306 file.
 # This is 6 hours of observations from March 3, 2013.
-data_dir = os.path.join(os.getcwd(), "../..", "data")
-data_file = os.path.join(data_dir, "NCEP+ACARS.201303_6H.obs_seq2013030306")
+data_file = get_example_data("NCEP+ACARS.201303_6H.obs_seq2013030306")
 
 obs_seq = obsq.ObsSequence(data_file)
 

@@ -10,15 +10,12 @@ and join them together.
 ###########################################
 # Import the obs_sequence module.
 import pydartdiags.obs_sequence.obs_sequence as obsq
+from pydartdiags.data import get_example_data
 
 ###########################################
 # Chose the first obs_seq file to read.
-# In this example, we are using a small obs_seq file "obs_seq.final.1000"
-# that comes with the pyDARTdiags package 
-# in the data directory, so we ``import os`` to get the path to the file.
-import os
-data_dir = os.path.join(os.getcwd(), "../..", "data")
-data_file1 = os.path.join(data_dir, "obs_seq.final.1000")
+# In this example, we are using a small obs_seq file "obs_seq.final.1000".
+data_file1 = get_example_data("obs_seq.final.1000")
 
 ###########################################
 # Read the obs_seq file into an obs_seq object.
@@ -30,7 +27,7 @@ print('obs_seq1 has posterior:', obs_seq1.has_posterior())
 ###########################################
 # Chose the second obs_seq file to read.
 
-data_file2 = os.path.join(data_dir, "obs_seq.final.ascii.small")
+data_file2 = get_example_data("obs_seq.final.ascii.small")
 obs_seq2 = obsq.ObsSequence(data_file2)
 
 print('obs_seq2 has assimilation info:', obs_seq2.has_assimilation_info())

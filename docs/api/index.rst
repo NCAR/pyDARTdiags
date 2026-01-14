@@ -12,3 +12,4 @@ API Guide
     stats
     matplots
     plots
+    example_data

@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools", "wheel"]
+requires = ["setuptools>=64", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -29,3 +29,6 @@ Homepage = "https://github.com/NCAR/pyDARTdiags.git"
 Issues = "https://github.com/NCAR/pyDARTdiags/issues"
 Documentation = "https://ncar.github.io/pyDARTdiags"
 
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["pydartdiags*"]
