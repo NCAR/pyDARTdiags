@@ -1,3 +1,5 @@
+.. _installguide:
+
 =============
 Install Guide
 =============

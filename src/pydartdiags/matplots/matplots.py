@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: Apache-2.0
 from pydartdiags.stats import stats
 import matplotlib.pyplot as plt
+import pandas as pd
 
 # HK @todo color scheme class
 dacolors = ["green", "magenta", "orange", "red"]
@@ -10,7 +11,7 @@ def plot_profile(
     obs_seq, levels, type, bias=True, rmse=True, totalspread=True, depth=False
 ):
     """
-    plot_profile on the levels for prior and  posterior if present
+    plot_profile on the levels for prior and posterior if present
        - bias
        - rmse
        - totalspread
@@ -227,33 +228,47 @@ def plot_profile(
     return fig
 
 
-def plot_rank_histogram(obs_seq, levels, type, ens_size):
+def plot_rank_histogram(obs_seq, type, ens_size, levels=None):
+    """
+    Plot the rank histograms of the requested observation type, ensemble
+    size, and levels (if applicable). Rank histograms are plotted for prior
+    and posterior if present.
+
+    Args:
+        obs_seq: The observation sequence object.
+        type (str): The type of observation to filter by. For identity
+            observations, use "IDENTITY_OBS" or a negative integer
+        ens_size (int): The ensemble size.
+        levels (list, optional): The levels to bin by. If None, no binning by level.
+
+    Returns:
+        fig: The matplotlib figure object.
+    """
 
     qc0 = stats.select_used_qcs(obs_seq.df)  # filter only qc=0, qc=2
-    qc0 = qc0[qc0["type"] == type]  # filter by type
-    if qc0.empty:
-        print(f"No rows found for type: {type}")
-        return None
 
-    if qc0["vert_unit"].nunique() > 1:
+    if (isinstance(type, int) and type < 0) or (type == "IDENTITY_OBS"):
+        type = "IDENTITY_OBS"
         print(
-            f"Multiple vertical units found in the data: {qc0['vert_unit'].unique()} for type: {type}"
-        )
-        return None
+            "Observation type is for identity observations."
+        )  # Filter on types < 0 to get identity observations
 
-    vert_unit = qc0.iloc[0]["vert_unit"]
-    conversion, unit = _get_plot_unit(vert_unit)  # multiplier and unit for y-axis
+        # Only keep rows where 'type' is numeric before comparing
+        qc0 = qc0[pd.to_numeric(qc0["type"], errors="coerce").notnull()]
+        qc0 = qc0[qc0["type"].astype(int) < 0]
+        if qc0.empty:
+            print(f"No rows found for IDENTITY_OBS")
+            return None
 
-    stats.bin_by_layer(qc0, levels, verticalUnit=vert_unit)  # bin by level
+    else:
+        qc0 = qc0[qc0["type"] == type]  # filter by type
 
-    midpoints = qc0["midpoint"].unique()
+        if qc0.empty:
+            print(f"No rows found for type: {type}")
+            return None
 
-    for level in sorted(midpoints):
-
-        df = qc0[qc0["midpoint"] == level]
-        # convert to hPa only for Pressure (Pa)
-        df["midpoint"] = df["midpoint"].astype(float)
-        df["midpoint"] = df["midpoint"] * conversion
+    if levels is None:
+        print(f"No levels given. Proceeding without level binning.")
 
         df = stats.calculate_rank(qc0)
 
@@ -283,6 +298,62 @@ def plot_rank_histogram(obs_seq, levels, type, ens_size):
             ax2.set_title("Posterior Rank Histogram")
             ax2.set_xlabel("Observation Rank (among ensemble members)")
             ax2.set_ylabel("Count")
+
+        fig.suptitle(f"{type}", fontsize=14)
+
+        plt.tight_layout(rect=[0, 0.03, 1, 0.95])
+        plt.show()
+        return None
+
+    elif qc0["vert_unit"].nunique() > 1:
+        print(
+            f"Multiple vertical units found in the data: {qc0['vert_unit'].unique()} for type: {type}"
+        )
+        return None
+
+    else:
+        vert_unit = qc0.iloc[0]["vert_unit"]
+        conversion, unit = _get_plot_unit(vert_unit)  # multiplier and unit for y-axis
+
+        stats.bin_by_layer(qc0, levels, verticalUnit=vert_unit)  # bin by level
+
+        midpoints = qc0["midpoint"].unique()
+
+        for level in sorted(midpoints):
+
+            df = qc0[qc0["midpoint"] == level]
+            # convert to hPa only for Pressure (Pa)
+            df["midpoint"] = df["midpoint"].astype(float)
+            df["midpoint"] = df["midpoint"] * conversion
+
+            df = stats.calculate_rank(qc0)
+
+            if "posterior_rank" in df.columns:
+                fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 6))
+            else:
+                fig, ax1 = plt.subplots()
+
+            # Plot the prior rank histogram
+            bins = list(range(1, ens_size + 2))
+            ax1.hist(
+                df["prior_rank"], bins=bins, color="blue", alpha=0.5, label="prior rank"
+            )
+            ax1.set_title("Prior Rank Histogram")
+            ax1.set_xlabel("Observation Rank (among ensemble members)")
+            ax1.set_ylabel("Count")
+
+            # Plot the posterior rank histogram if it exists
+            if "posterior_rank" in df.columns:
+                ax2.hist(
+                    df["posterior_rank"],
+                    bins=bins,
+                    color="green",
+                    alpha=0.5,
+                    label="posterior rank",
+                )
+                ax2.set_title("Posterior Rank Histogram")
+                ax2.set_xlabel("Observation Rank (among ensemble members)")
+                ax2.set_ylabel("Count")
 
         fig.suptitle(f"{type} at Level {round(level, 1)} {unit}", fontsize=14)
 
