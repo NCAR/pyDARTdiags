@@ -236,9 +236,7 @@ def plot_rank_histogram(obs_seq, type, ens_size, levels=None):
     Args:
         obs_seq: The observation sequence object.
         type (str): The type of observation to filter by. For identity
-            observations, use "IDENTITY_OBS" or a negative integer -x where
-            x is the index in the DART state vector that the observation
-            corresponds to.
+            observations, use "IDENTITY_OBS" or a negative integer
         ens_size (int): The ensemble size.
         levels (list, optional): The levels to bin by. If None, no binning by level.
 
@@ -254,7 +252,7 @@ def plot_rank_histogram(obs_seq, type, ens_size, levels=None):
             "Observation type is for identity observations."
         )  # No filtering by type for identity obs
         if qc0.empty:
-            print(f"No rows found for type: {type}")
+            print(f"No rows found for IDENTITY_OBS")
             return None
 
     else:
