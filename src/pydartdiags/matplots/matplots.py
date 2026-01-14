@@ -10,7 +10,7 @@ def plot_profile(
     obs_seq, levels, type, bias=True, rmse=True, totalspread=True, depth=False
 ):
     """
-    plot_profile on the levels for prior and  posterior if present
+    plot_profile on the levels for prior and posterior if present
        - bias
        - rmse
        - totalspread
@@ -228,16 +228,34 @@ def plot_profile(
 
 
 def plot_rank_histogram(obs_seq, type, ens_size, levels=None):
+    """
+    Plot the rank histograms of the requested observation type, ensemble
+    size, and levels (if applicable). Rank histograms are plotted for prior
+    and posterior if present.
+
+    Args:
+        obs_seq: The observation sequence object.
+        type (str): The type of observation to filter by. For identity
+            observations, use "IDENTITY_OBS" or a negative integer -x where
+            x is the index in the DART state vector that the observation
+            corresponds to.
+        ens_size (int): The ensemble size.
+        levels (list, optional): The levels to bin by. If None, no binning by level.
+
+    Returns:
+        fig: The matplotlib figure object.
+    """
+
     qc0 = stats.select_used_qcs(obs_seq.df)  # filter only qc=0, qc=2
 
     if (isinstance(type, int) and type < 0) or (type == "IDENTITY_OBS"):
+        type = "IDENTITY_OBS"
         print(
             "Observation type is for identity observations."
         )  # No filtering by type for identity obs
         if qc0.empty:
             print(f"No rows found for type: {type}")
             return None
-        type = "IDENTITY_OBS"
 
     else:
         qc0 = qc0[qc0["type"] == type]  # filter by type
