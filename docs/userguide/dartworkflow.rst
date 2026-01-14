@@ -25,14 +25,17 @@ of running a Python program in an interactive session thats uses pyDARTdiags fun
 the observation sequence file, modify the observation error variances, and write out a new
 observation sequence file with the altered data.
 
+You will be working through the examples in this guide in the Lorenz 63 model working directory.
+Navigate to your DART installation directory and then to the ``DART/models/lorenz_63/work``
+directory in your terminal.
+
 First, ensure you have pyDARTdiags installed in your Python environment. If you haven't
 installed it yet, follow the instructions in the :ref:`installguide`.
 
 Start an interactive Python session by entering the command ``python`` or ``python3``
 in your terminal.
 
-Enter the following lines of code one by one. You can copy and paste the code lines below, making
-sure to adjust the path to your observation sequence file and file name as needed:
+Enter the following lines of code one by one. You can copy and paste them from below.
 
 #. Import the necessary modules.
 
@@ -40,11 +43,13 @@ sure to adjust the path to your observation sequence file and file name as neede
 
        import pydartdiags.obs_sequence.obs_sequence as obsq
 
-#. Specify the path to and name of your observation sequence file.
+#. Specify the name of the observation sequence file to be read. This will be the
+   Lorenz 63 ``obs_seq.out`` file that is included in DART and is already located
+   in your current working directory.
 
    .. code-block:: python
 
-       file_name = "/path_to_your_DART_dir/DART/models/lorenz_63/work/obs_seq.out"
+       file_name = "obs_seq.out"
 
 #. Read the obs_seq file into an obs_seq object.
 
@@ -118,8 +123,7 @@ histograms, you will specify the observation type as ``IDENTITY_OBS``.
 Start an interactive Python session by entering the command ``python`` or ``python3``
 in your terminal.
 
-Enter the following lines of code one by one. You can copy and paste the code lines below, making
-sure to adjust the path to your observation sequence file and file name as needed:
+Enter the following lines of code one by one. You can copy and paste them from below.
 
 #. Import the obs_sequence module.
 
@@ -138,14 +142,14 @@ sure to adjust the path to your observation sequence file and file name as neede
 
    .. code-block:: python
 
-       file_name = "/path_to_your_DART_dir/DART/models/lorenz_63/work/obs_seq.final"
+       file_name = "obs_seq.final"
 
 #. Specify the path to and name of the final observation sequence file from
    your second DART data assimilation experiment.
 
    .. code-block:: python
 
-       file_name2 = "/path_to_your_DART_dir/DART/models/lorenz_63/work/obs_seq.final.half_error_variance"
+       file_name2 = "obs_seq.final.half_error_variance"
        
 
 #. Read the first observation sequence file into an obs_seq object.
