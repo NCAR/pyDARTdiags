@@ -78,7 +78,7 @@ pyDARTdiags is a Python package created to address this need by providing a sing
 visualize observation space diagnostics. 
 
 PyDARTdiags ingests observation sequences into an ObsSequence object which contains the metadata about
-an observation sequence and a pandas DataFrame[@pandas] containing all the data for the observations. 
+an observation sequence and a pandas DataFrame [@pandas] containing all the data for the observations. 
 
 This provides several advantages over the existing Fortran+MATLAB DART software: 
 
@@ -90,7 +90,7 @@ This provides several advantages over the existing Fortran+MATLAB DART software:
   Data Assimilation researchers and users to write custom diagnostics based on DataFrames. By decoupling the 
   observation sequence file format from the DataFrame-based analysis, pyDARTdiags ensures that updates to the 
   DART file format do not disrupt user-created diagnostic routines.
-- Supporting both static and interactive plotting (via Matplotlib[@mckinney-proc-scipy-2010; @Hunter:2007] and Plotly[@plotly]), facilities the processing of 
+- Supporting both static and interactive plotting (via Matplotlib [@mckinney-proc-scipy-2010; @Hunter:2007] and Plotly [@plotly]), facilitates the processing of 
   observational datasets, quality control, and gaining insights about the spatial distribution of outliers 
   or other (technical) anomalies.
 - Facilitating reproducible, scriptable workflows for observation-space diagnostics enables the inclusion in
