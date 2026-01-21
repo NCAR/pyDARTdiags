@@ -4,7 +4,7 @@ sphinx-copybutton
 myst-parser
 sphinx-design
 numpy
-pandas
+pandas<3.0.0
 plotly
 sphinx-gallery
 matplotlib
