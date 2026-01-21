@@ -17,7 +17,7 @@ classifiers = [
 ]
 license = "Apache-2.0"
 dependencies = [
-    "pandas>=2.2.0",
+    "pandas>=2.2.0,<3.0.0",
     "numpy>=1.26",
     "plotly>=5.22.0",
     "pyyaml>=6.0.2",
