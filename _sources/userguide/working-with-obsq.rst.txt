@@ -276,10 +276,14 @@ integer of the index in the DART state vector.
 Multi-component Observations
 ------------------------------
 
-:ref:`stats-multi-comp` are a observations constructed from component observations.
+:ref:`stats-multi-comp` are observations constructed from component observations.
 For example, U and V wind components can be combined into a single observation of horizontal wind speed.
 
-You can create composite observations in your workflow as follows:
+pyDARTdiags has a default list of composite observation types defined in 
+`composite_types.yaml <https://github.com/NCAR/pyDARTdiags/blob/main/src/pydartdiags/obs_sequence/composite_types.yaml>`__.
+You can create composite observations in your workflow using the default 
+composite observation types by calling the :func:`obs_sequence.ObsSequence.composite_types` method
+with no arguments:
 
 .. code-block:: python
 
@@ -287,10 +291,22 @@ You can create composite observations in your workflow as follows:
     obs_seq = obsq.ObsSequence('obs_seq.final')
     obs_seq.composite_types()
 
-The default list of composite observation types is defined in 
-`composite_types.yaml <https://github.com/NCAR/pyDARTdiags/blob/main/src/pydartdiags/obs_sequence/composite_types.yaml>`__
-file. You can give a custom list of composite observation types by passing the path to a YAML file
-to the `composite_types` method:  
+After calling ``composite_types()``, the composite observations 
+will be added to the DataFrame. 
+If you have a new composite observation type not in the default list,
+you can define it in a YAML file (e.g., ``my_composite_types.yaml``). 
+The ``components`` should match the observation type names in your data.
+
+.. code-block:: yaml
+
+  satelliteX_horizontal_wind:
+    description: satelliteX horizontal wind speed
+    components:
+      - satellitex_u_wind_component
+      - satellitex_v_wind_component
+
+Pass the path to your YAML file to the ``composite_types`` method to 
+create composite observations using your custom definitions:
 
 .. code-block:: python
 
@@ -298,7 +314,7 @@ to the `composite_types` method:
 
 .. Important::
 
-    By default, duplicate composite observations treated as distinct observations
+    By default, duplicate composite observations are treated as distinct observations
     because this is the behavior of the Fortran obs_diag code, which does not look 
     for nor identify duplicate observations. You can raise an exception if duplicate
     composite observations are found by passing the `raise_on_duplicate` argument: 

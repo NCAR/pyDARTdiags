@@ -14,6 +14,22 @@ For more detailed information, refer to the :ref:`userguide`.
     from pydartdiags.stats import stats
     from pydartdiags.matplots import matplots as mp
 
+Specify an obs_sequence file to work with
+-----------------------------------------
+Note this example uses a small observation sequence file included with pyDARTdiags
+and uses the get_example_data function to retrieve it.
+
+To use your own obs sequence file, simply remove the call to get_example_data and
+replace the value of `datafile` with the path to the file.
+
+.. code-block :: python
+
+    from pydartdiags.data import get_example_data
+    datafile = get_example_data("obs_seq.final.1000")
+
+    #### With your own obs seq:
+    # datafile = "my_obs_seq.final"
+
 
 Read an obs_sequence file
 -------------------------
@@ -22,7 +38,7 @@ Read an observation sequence file into a DataFrame
 
 .. code-block :: python
 
-    obs_seq = obsq.ObsSequence('obs_seq.final.ascii')
+    obs_seq = obsq.ObsSequence(datafile)
 
 
 Examine the DataFrame
@@ -188,7 +204,7 @@ You can then use Pandas methods to explore the data, such as `head()` to view th
         </tr>
     </tbody>
     </table>
-    <p>5 rows × 97 columns</p>
+    <p>5 rows × 180 columns</p>
 
 
 
@@ -213,138 +229,42 @@ Find the number of assimilated (used) observations vs. possible observations by 
         <tr>
         <th>0</th>
         <td>ACARS_TEMPERATURE</td>
-        <td>175429</td>
-        <td>128040</td>
+        <td>314</td>
+        <td>233</td>
         </tr>
         <tr>
         <th>1</th>
         <td>ACARS_U_WIND_COMPONENT</td>
-        <td>176120</td>
-        <td>126946</td>
+        <td>313</td>
+        <td>227</td>
         </tr>
         <tr>
         <th>2</th>
         <td>ACARS_V_WIND_COMPONENT</td>
-        <td>176120</td>
-        <td>127834</td>
+        <td>313</td>
+        <td>228</td>
         </tr>
         <tr>
         <th>3</th>
         <td>AIRCRAFT_TEMPERATURE</td>
-        <td>21335</td>
-        <td>13663</td>
+        <td>20</td>
+        <td>14</td>
         </tr>
         <tr>
         <th>4</th>
         <td>AIRCRAFT_U_WIND_COMPONENT</td>
-        <td>21044</td>
-        <td>13694</td>
+        <td>20</td>
+        <td>14</td>
         </tr>
         <tr>
         <th>5</th>
         <td>AIRCRAFT_V_WIND_COMPONENT</td>
-        <td>21044</td>
-        <td>13642</td>
-        </tr>
-        <tr>
-        <th>6</th>
-        <td>AIRS_SPECIFIC_HUMIDITY</td>
-        <td>6781</td>
-        <td>0</td>
-        </tr>
-        <tr>
-        <th>7</th>
-        <td>AIRS_TEMPERATURE</td>
-        <td>19583</td>
-        <td>7901</td>
-        </tr>
-        <tr>
-        <th>8</th>
-        <td>GPSRO_REFRACTIVITY</td>
-        <td>81404</td>
-        <td>54626</td>
-        </tr>
-        <tr>
-        <th>9</th>
-        <td>LAND_SFC_ALTIMETER</td>
-        <td>21922</td>
-        <td>0</td>
-        </tr>
-        <tr>
-        <th>10</th>
-        <td>MARINE_SFC_ALTIMETER</td>
-        <td>9987</td>
-        <td>0</td>
-        </tr>
-        <tr>
-        <th>11</th>
-        <td>MARINE_SFC_SPECIFIC_HUMIDITY</td>
-        <td>4196</td>
-        <td>0</td>
-        </tr>
-        <tr>
-        <th>12</th>
-        <td>MARINE_SFC_TEMPERATURE</td>
-        <td>8646</td>
-        <td>0</td>
-        </tr>
-        <tr>
-        <th>13</th>
-        <td>MARINE_SFC_U_WIND_COMPONENT</td>
-        <td>8207</td>
-        <td>0</td>
-        </tr>
-        <tr>
-        <th>14</th>
-        <td>MARINE_SFC_V_WIND_COMPONENT</td>
-        <td>8207</td>
-        <td>0</td>
-        </tr>
-        <tr>
-        <th>15</th>
-        <td>RADIOSONDE_SPECIFIC_HUMIDITY</td>
-        <td>14272</td>
-        <td>0</td>
-        </tr>
-        <tr>
-        <th>16</th>
-        <td>RADIOSONDE_SURFACE_ALTIMETER</td>
-        <td>601</td>
-        <td>0</td>
-        </tr>
-        <tr>
-        <th>17</th>
-        <td>RADIOSONDE_TEMPERATURE</td>
-        <td>29275</td>
-        <td>22228</td>
-        </tr>
-        <tr>
-        <th>18</th>
-        <td>RADIOSONDE_U_WIND_COMPONENT</td>
-        <td>36214</td>
-        <td>27832</td>
-        </tr>
-        <tr>
-        <th>19</th>
-        <td>RADIOSONDE_V_WIND_COMPONENT</td>
-        <td>36214</td>
-        <td>27975</td>
-        </tr>
-        <tr>
-        <th>20</th>
-        <td>SAT_U_WIND_COMPONENT</td>
-        <td>107212</td>
-        <td>82507</td>
-        </tr>
-        <tr>
-        <th>21</th>
-        <td>SAT_V_WIND_COMPONENT</td>
-        <td>107212</td>
-        <td>82647</td>
+        <td>20</td>
+        <td>13</td>
         </tr>
     </tbody>
     </table>
-    <p>
+
 
 Examples
 --------

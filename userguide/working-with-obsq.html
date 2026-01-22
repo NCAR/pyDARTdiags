@@ -626,24 +626,38 @@ integer of the index in the DART state vector.</p>
 </section>
 <section id="multi-component-observations">
 <h3>Multi-component Observations<a class="headerlink" href="#multi-component-observations" title="Link to this heading">#</a></h3>
-<p><a class="reference internal" href="statistics.html#stats-multi-comp"><span class="std std-ref">Multi-component Observations</span></a> are a observations constructed from component observations.
+<p><a class="reference internal" href="statistics.html#stats-multi-comp"><span class="std std-ref">Multi-component Observations</span></a> are observations constructed from component observations.
 For example, U and V wind components can be combined into a single observation of horizontal wind speed.</p>
-<p>You can create composite observations in your workflow as follows:</p>
+<p>pyDARTdiags has a default list of composite observation types defined in
+<a class="reference external" href="https://github.com/NCAR/pyDARTdiags/blob/main/src/pydartdiags/obs_sequence/composite_types.yaml">composite_types.yaml</a>.
+You can create composite observations in your workflow using the default
+composite observation types by calling the <a class="reference internal" href="../api/obs_sequence.html#obs_sequence.ObsSequence.composite_types" title="obs_sequence.ObsSequence.composite_types"><code class="xref py py-func docutils literal notranslate"><span class="pre">obs_sequence.ObsSequence.composite_types()</span></code></a> method
+with no arguments:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pydartdiags.obs_sequence.obs_sequence</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">obsq</span>
 <span class="n">obs_seq</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">ObsSequence</span><span class="p">(</span><span class="s1">&#39;obs_seq.final&#39;</span><span class="p">)</span>
 <span class="n">obs_seq</span><span class="o">.</span><span class="n">composite_types</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>The default list of composite observation types is defined in
-<a class="reference external" href="https://github.com/NCAR/pyDARTdiags/blob/main/src/pydartdiags/obs_sequence/composite_types.yaml">composite_types.yaml</a>
-file. You can give a custom list of composite observation types by passing the path to a YAML file
-to the <cite>composite_types</cite> method:</p>
+<p>After calling <code class="docutils literal notranslate"><span class="pre">composite_types()</span></code>, the composite observations
+will be added to the DataFrame.
+If you have a new composite observation type not in the default list,
+you can define it in a YAML file (e.g., <code class="docutils literal notranslate"><span class="pre">my_composite_types.yaml</span></code>).
+The <code class="docutils literal notranslate"><span class="pre">components</span></code> should match the observation type names in your data.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">satelliteX_horizontal_wind</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">satelliteX horizontal wind speed</span>
+<span class="w">  </span><span class="nt">components</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">satellitex_u_wind_component</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">satellitex_v_wind_component</span>
+</pre></div>
+</div>
+<p>Pass the path to your YAML file to the <code class="docutils literal notranslate"><span class="pre">composite_types</span></code> method to
+create composite observations using your custom definitions:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">composite_types</span><span class="p">(</span><span class="n">composite_types</span><span class="o">=</span><span class="s1">&#39;my_composite_types.yaml&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>By default, duplicate composite observations treated as distinct observations
+<p>By default, duplicate composite observations are treated as distinct observations
 because this is the behavior of the Fortran obs_diag code, which does not look
 for nor identify duplicate observations. You can raise an exception if duplicate
 composite observations are found by passing the <cite>raise_on_duplicate</cite> argument:</p>

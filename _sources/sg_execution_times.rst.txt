@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:08.060** total execution time for 10 files **from all galleries**:
+**00:07.248** total execution time for 10 files **from all galleries**:
 
 .. container::
 
@@ -33,32 +33,32 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_examples_01_manipulating_plot_duplicates.py` (``../examples/01_manipulating/plot_duplicates.py``)
-     - 00:04.021
+     - 00:03.959
      - 0.0
    * - :ref:`sphx_glr_examples_03_diagnostics_plot_rank_histogram.py` (``../examples/03_diagnostics/plot_rank_histogram.py``)
-     - 00:01.852
+     - 00:01.500
      - 0.0
    * - :ref:`sphx_glr_examples_03_diagnostics_plot_evolution.py` (``../examples/03_diagnostics/plot_evolution.py``)
-     - 00:00.889
+     - 00:00.737
      - 0.0
    * - :ref:`sphx_glr_examples_03_diagnostics_plot_profiles.py` (``../examples/03_diagnostics/plot_profiles.py``)
-     - 00:00.627
-     - 0.0
-   * - :ref:`sphx_glr_examples_03_diagnostics_plot_grand_stats.py` (``../examples/03_diagnostics/plot_grand_stats.py``)
-     - 00:00.216
+     - 00:00.519
      - 0.0
    * - :ref:`sphx_glr_examples_02_visualizing_plot_qc_hover.py` (``../examples/02_visualizing/plot_qc_hover.py``)
-     - 00:00.215
+     - 00:00.185
+     - 0.0
+   * - :ref:`sphx_glr_examples_03_diagnostics_plot_grand_stats.py` (``../examples/03_diagnostics/plot_grand_stats.py``)
+     - 00:00.146
      - 0.0
    * - :ref:`sphx_glr_examples_01_manipulating_plot_join_obs_seq.py` (``../examples/01_manipulating/plot_join_obs_seq.py``)
-     - 00:00.153
+     - 00:00.128
      - 0.0
    * - :ref:`sphx_glr_examples_01_manipulating_plot_remove_obs.py` (``../examples/01_manipulating/plot_remove_obs.py``)
-     - 00:00.054
+     - 00:00.047
      - 0.0
    * - :ref:`sphx_glr_examples_03_diagnostics_plot_qc_poss_vs_used.py` (``../examples/03_diagnostics/plot_qc_poss_vs_used.py``)
-     - 00:00.024
+     - 00:00.020
      - 0.0
    * - :ref:`sphx_glr_examples_01_manipulating_plot_external_fo.py` (``../examples/01_manipulating/plot_external_fo.py``)
-     - 00:00.009
+     - 00:00.008
      - 0.0
