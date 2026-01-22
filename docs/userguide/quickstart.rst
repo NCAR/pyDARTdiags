@@ -14,13 +14,21 @@ For more detailed information, refer to the :ref:`userguide`.
     from pydartdiags.stats import stats
     from pydartdiags.matplots import matplots as mp
 
-Note this example uses a small observation sequence file included with pyDARTdiags.
-You can replace `datafile` with your own obs sequence file.
+Specify an obs_sequence file to work with
+-----------------------------------------
+Note this example uses a small observation sequence file included with pyDARTdiags
+and uses the get_example_data function to retrieve it.
+
+To use your own obs sequence file, simply remove the call to get_example_data and
+replace the value of `datafile` with the path to the file.
 
 .. code-block :: python
 
     from pydartdiags.data import get_example_data
     datafile = get_example_data("obs_seq.final.1000")
+
+    #### With your own obs seq:
+    # datafile = "my_obs_seq.final"
 
 
 Read an obs_sequence file
