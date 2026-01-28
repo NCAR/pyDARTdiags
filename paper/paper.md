@@ -23,13 +23,13 @@ authors:
     affiliation: 3 
 
 affiliations:
-  - name: NSF National Center for Atmospheric Research, Boulder CO, United States
+  - name: NSF National Center for Atmospheric Research, Boulder CO, United States of America
     index: 1
     ror: 05cvfcr44
-  - name: Texas Tech University
+  - name: Texas Tech University, United States of America
     index: 2
     ror: 0405mnx93
-  - name: University of Vienna
+  - name: University of Vienna, Austria
     index: 3
     ror: 03prydq77
 
