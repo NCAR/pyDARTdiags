@@ -90,12 +90,12 @@ This provides several advantages over the existing Fortran+MATLAB DART software:
   Data Assimilation researchers and users to write custom diagnostics based on DataFrames. By decoupling the 
   observation sequence file format from the DataFrame-based analysis, pyDARTdiags ensures that updates to the 
   DART file format do not disrupt user-created diagnostic routines.
-- Supporting both static and interactive plotting (via Matplotlib [@mckinney-proc-scipy-2010; @Hunter:2007] and Plotly [@plotly]), facilitates the processing of 
+- Supporting both static [via Matplotlib, @Hunter:2007; @mckinney-proc-scipy-2010] and interactive [via Plotly, @plotly] plotting, facilitates the processing of
   observational datasets, quality control, and gaining insights about the spatial distribution of outliers 
   or other (technical) anomalies.
 - Facilitating reproducible, scriptable workflows for observation-space diagnostics enables the inclusion in
   Jupyter notebook workflows. A concrete use case is its integration into the the CESM Regional Ocean and Carbon
-  Configurator with Data Assimilation and Embedding (CROCODILE) [@CROCODILE-CESM] project, which is a community platform for accelerating
+  Configurator with Data Assimilation and Embedding [CROCODILE, @CROCODILE-CESM] project, which is a community platform for accelerating
   observationally-constrained regional ocean modeling. pyDARTdiags is used for observation space diagnostics 
   and model-to-observation comparison in the Jupyter notebook workflows for this project.
 
