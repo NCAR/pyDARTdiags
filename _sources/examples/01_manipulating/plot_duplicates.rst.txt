@@ -270,24 +270,6 @@ We're sorting by latitude to make it easier to see the duplicates.
       </thead>
       <tbody>
         <tr>
-          <th>313866</th>
-          <td>313867</td>
-          <td>1016.865887</td>
-          <td>15.0</td>
-          <td>313866      313868          -1</td>
-          <td>40.33</td>
-          <td>-22.32</td>
-          <td>13.0</td>
-          <td>surface (m)</td>
-          <td>LAND_SFC_ALTIMETER</td>
-          <td>[]</td>
-          <td>[]</td>
-          <td>32400</td>
-          <td>150541</td>
-          <td>2013-03-03 09:00:00</td>
-          <td>1.0</td>
-        </tr>
-        <tr>
           <th>313408</th>
           <td>313409</td>
           <td>1016.865887</td>
@@ -306,14 +288,14 @@ We're sorting by latitude to make it easier to see the duplicates.
           <td>1.0</td>
         </tr>
         <tr>
-          <th>313407</th>
-          <td>313408</td>
-          <td>1014.502434</td>
+          <th>313866</th>
+          <td>313867</td>
+          <td>1016.865887</td>
           <td>15.0</td>
-          <td>313407      313409          -1</td>
-          <td>42.70</td>
-          <td>-17.05</td>
-          <td>10.0</td>
+          <td>313866      313868          -1</td>
+          <td>40.33</td>
+          <td>-22.32</td>
+          <td>13.0</td>
           <td>surface (m)</td>
           <td>LAND_SFC_ALTIMETER</td>
           <td>[]</td>
@@ -329,6 +311,24 @@ We're sorting by latitude to make it easier to see the duplicates.
           <td>1014.502434</td>
           <td>15.0</td>
           <td>313865      313867          -1</td>
+          <td>42.70</td>
+          <td>-17.05</td>
+          <td>10.0</td>
+          <td>surface (m)</td>
+          <td>LAND_SFC_ALTIMETER</td>
+          <td>[]</td>
+          <td>[]</td>
+          <td>32400</td>
+          <td>150541</td>
+          <td>2013-03-03 09:00:00</td>
+          <td>1.0</td>
+        </tr>
+        <tr>
+          <th>313407</th>
+          <td>313408</td>
+          <td>1014.502434</td>
+          <td>15.0</td>
+          <td>313407      313409          -1</td>
           <td>42.70</td>
           <td>-17.05</td>
           <td>10.0</td>
@@ -378,11 +378,11 @@ We're sorting by latitude to make it easier to see the duplicates.
           <td>...</td>
         </tr>
         <tr>
-          <th>274041</th>
-          <td>274042</td>
+          <th>270665</th>
+          <td>270666</td>
           <td>1009.972271</td>
           <td>15.0</td>
-          <td>274041      274043          -1</td>
+          <td>270665      270667          -1</td>
           <td>26.65</td>
           <td>67.37</td>
           <td>179.0</td>
@@ -432,11 +432,11 @@ We're sorting by latitude to make it easier to see the duplicates.
           <td>1.0</td>
         </tr>
         <tr>
-          <th>270664</th>
-          <td>270665</td>
+          <th>274040</th>
+          <td>274041</td>
           <td>1010.755425</td>
           <td>15.0</td>
-          <td>270664      270666          -1</td>
+          <td>274039      274042          -1</td>
           <td>27.03</td>
           <td>69.75</td>
           <td>101.0</td>
@@ -450,11 +450,11 @@ We're sorting by latitude to make it easier to see the duplicates.
           <td>1.0</td>
         </tr>
         <tr>
-          <th>274040</th>
-          <td>274041</td>
+          <th>270664</th>
+          <td>270665</td>
           <td>1010.755425</td>
           <td>15.0</td>
-          <td>274039      274042          -1</td>
+          <td>270664      270666          -1</td>
           <td>27.03</td>
           <td>69.75</td>
           <td>101.0</td>
@@ -521,7 +521,7 @@ The number of obs has been reduced by the number of duplicates
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 3.674 seconds)
+   **Total running time of the script:** (0 minutes 4.001 seconds)
 
 
 .. _sphx_glr_download_examples_01_manipulating_plot_duplicates.py:
