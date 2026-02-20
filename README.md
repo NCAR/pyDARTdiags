@@ -1,6 +1,7 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![codecov](https://codecov.io/gh/NCAR/pyDARTdiags/graph/badge.svg?token=VK55SQZSVD)](https://codecov.io/gh/NCAR/pyDARTdiags)
 [![PyPI version](https://badge.fury.io/py/pydartdiags.svg)](https://pypi.org/project/pydartdiags/)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.09439/status.svg)](https://doi.org/10.21105/joss.09439)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 # pyDARTdiags

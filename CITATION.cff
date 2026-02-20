@@ -1,20 +1,52 @@
-cff-version: 0.6.1
-message: "If you use this software, please cite it as below."
+cff-version: "1.2.0"
 authors:
-- family-names: "Kershaw"
-  given-names: "Helen"
+- family-names: Kershaw
+  given-names: Helen
   orcid: "https://orcid.org/0009-0002-3755-9978"
-- family-names: "Smith"
-  given-names: "Marlee"
+- family-names: Smith
+  given-names: Marlee
   orcid: "https://orcid.org/0009-0008-7616-9060"
-- family-names: "Isaac"
-  given-names: "Arseneau"
+- family-names: Arseneau
+  given-names: Isaac
   orcid: "https://orcid.org/0000-0003-4170-7734"
-- family-names: "Lukas"
-  given-names: "Kugler"
+- family-names: Kugler
+  given-names: Lukas
   orcid: "https://orcid.org/0000-0002-4537-3164"
-title: "pyDARTdiags"
-version: 0.6.1
-doi: 10.5281/zenodo.17315697
-date-released: 2025-07-03
-url: "https://github.com/NCAR/pyDARTdiags"
+contact:
+- family-names: Kershaw
+  given-names: Helen
+  orcid: "https://orcid.org/0009-0002-3755-9978"
+doi: 10.5281/zenodo.18405764
+message: If you use this software, please cite our article in the
+  Journal of Open Source Software.
+preferred-citation:
+  authors:
+  - family-names: Kershaw
+    given-names: Helen
+    orcid: "https://orcid.org/0009-0002-3755-9978"
+  - family-names: Smith
+    given-names: Marlee
+    orcid: "https://orcid.org/0009-0008-7616-9060"
+  - family-names: Arseneau
+    given-names: Isaac
+    orcid: "https://orcid.org/0000-0003-4170-7734"
+  - family-names: Kugler
+    given-names: Lukas
+    orcid: "https://orcid.org/0000-0002-4537-3164"
+  date-published: 2026-02-19
+  doi: 10.21105/joss.09439
+  issn: 2475-9066
+  issue: 118
+  journal: Journal of Open Source Software
+  publisher:
+    name: Open Journals
+  start: 9439
+  title: "pyDARTdiags: A Python package for manipulating observation
+    sequences and calculating observation-space diagnostics for the Data
+    Assimilation Research Testbed (DART)"
+  type: article
+  url: "https://joss.theoj.org/papers/10.21105/joss.09439"
+  volume: 11
+title: "pyDARTdiags: A Python package for manipulating observation
+  sequences and calculating observation-space diagnostics for the Data
+  Assimilation Research Testbed (DART)"
