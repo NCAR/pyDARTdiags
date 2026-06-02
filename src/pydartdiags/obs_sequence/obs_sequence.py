@@ -6,6 +6,7 @@ import os
 import yaml
 import struct
 import functools
+import inspect
 
 
 def _requires_assimilation_info(func):
@@ -158,6 +159,40 @@ class ObsSequence:
         # Replace MISSING_R8s with NaNs in posterior stats where DART_quality_control = 2
         if self.has_posterior():
             ObsSequence._replace_qc2_nan(self.df)
+
+    def info(self):
+        """Print all data attributes and public methods of this ObsSequence."""
+        routines = []
+        non_routines = []
+        for attr in dir(self):
+            if attr.startswith("_"):
+                continue
+            value = getattr(self, attr)
+            if callable(value):
+                routines.append(attr)
+            else:
+                non_routines.append((attr, value))
+        print("Non-routines (data attributes):")
+        for name, value in non_routines:
+            if isinstance(value, pd.DataFrame):
+                print(f"  - {name}: DataFrame{value.shape}")
+            else:
+                print(f"  - {name}: {value}")
+        print("\nRoutines (methods/functions):")
+        for r in routines:
+            print(f"  - {r}")
+
+    def __repr__(self):
+        return f"ObsSequence(file={self.file!r})"
+
+    def __str__(self):
+        return (
+            f"ObsSequence: {self.file}\n"
+            f"  obs types : {list(self.types.keys())}\n"
+            f"  copies    : {self.copie_names}\n"
+            f"  n_obs     : {len(self.df)}\n"
+            f"  loc mod   : {self.loc_mod}"
+        )
 
     def _create_all_obs(self):
         """steps through the generator to create a
