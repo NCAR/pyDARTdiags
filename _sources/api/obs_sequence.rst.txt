@@ -83,6 +83,7 @@ all_obs
 ObsSequence Methods
 =======================
 
+.. automethod:: obs_sequence.ObsSequence.info
 .. automethod:: obs_sequence.ObsSequence.write_obs_seq 
 .. automethod:: obs_sequence.ObsSequence.possible_vs_used
 .. automethod:: obs_sequence.ObsSequence.select_by_dart_qc
