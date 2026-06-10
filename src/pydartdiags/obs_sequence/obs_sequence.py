@@ -1274,6 +1274,12 @@ def _convert_dart_time(seconds, days):
     return time
 
 
+def _convert_to_dart_time(time: dt.datetime):
+    """Converts datetime object to a list of seconds, days after 1601"""
+    dart_time = time - dt.datetime(1601, 1, 1)
+    return [dart_time.seconds, dart_time.days]
+
+
 def _construct_composit(df_comp, composite, components, raise_on_duplicate):
     """
     Creates a new DataFrame by combining pairs of rows from two specified component

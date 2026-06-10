@@ -32,6 +32,26 @@ class TestConvertDartTime:
         assert result == expected
 
 
+class TestConvertToDartTime:
+    def test_epoch(self):
+        result = obsq._convert_to_dart_time(dt.datetime(1601, 1, 1))
+        assert result == [0, 0]
+
+    def test_one_day_as_seconds(self):
+        result = obsq._convert_to_dart_time(dt.datetime(1601, 1, 2))
+        assert result == [0, 1]
+
+    def test_known_dart_time(self):
+        result = obsq._convert_to_dart_time(dt.datetime(2015, 1, 31, 0, 36, 4))
+        assert result == [2164, 151240]
+
+    def test_roundtrip(self):
+        seconds, days = 2164, 151240
+        datetime_obj = obsq._convert_dart_time(seconds, days)
+        result = obsq._convert_to_dart_time(datetime_obj)
+        assert result == [seconds, days]
+
+
 class TestSanitizeInput:
     @pytest.fixture
     def bad_loc_file_path(self):
