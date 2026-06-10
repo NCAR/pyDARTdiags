@@ -554,6 +554,36 @@ class TestCreateHeader:
         assert obj.header == expected_header
 
 
+class TestDisplayInfo:
+    @pytest.fixture
+    def obs_seq(self):
+        obj = obsq.ObsSequence(file=None)
+        obj.types = {"RADIOSONDE_TEMPERATURE": 1}
+        obj.copie_names = ["observation", "DART_quality_control"]
+        obj.loc_mod = "loc3d"
+        obj.df = pd.DataFrame({"observation": [1.0, 2.0]})
+        return obj
+
+    def test_repr(self, obs_seq):
+        assert repr(obs_seq) == "ObsSequence(file=None)"
+
+    def test_str(self, obs_seq):
+        result = str(obs_seq)
+        assert "ObsSequence" in result
+        assert "RADIOSONDE_TEMPERATURE" in result
+        assert "observation" in result
+        assert "2" in result  # n_obs
+        assert "loc3d" in result  # loc_mod
+
+    def test_info(self, obs_seq, capsys):
+        obs_seq.info()
+        captured = capsys.readouterr()
+        assert "Routines (methods/functions):" in captured.out
+        assert "Non-routines (data attributes):" in captured.out
+        assert "df" in captured.out
+        assert "info" in captured.out
+
+
 class TestSplitMetadata:
     def test_split_metadata_with_external_FO(self):
         metadata = ["meta1", "meta2", "external_FO1", "meta3", "meta4"]
