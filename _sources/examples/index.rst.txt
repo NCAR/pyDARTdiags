@@ -15,6 +15,10 @@ to compute and visualize observation space diagnostics.
 
 
 
+.. raw:: html
+
+  <div id='sg-tag-list' class='sphx-glr-tag-list'></div>
+
 
 .. raw:: html
 
@@ -35,6 +39,10 @@ Manipulating Observation Sequences
 
 Here are some examples of how to use pyDARTdiags to read, modify, and write observation sequences
 
+
+.. raw:: html
+
+  <div id='sg-tag-list' class='sphx-glr-tag-list'></div>
 
 
 .. raw:: html
@@ -123,6 +131,10 @@ Visualizing Observation Sequences
 
 Examples of visualizing observation sequence data.
 
+.. raw:: html
+
+  <div id='sg-tag-list' class='sphx-glr-tag-list'></div>
+
 
 .. raw:: html
 
@@ -162,6 +174,10 @@ Examples of the diagnostic tools available in the library.
 
 
 
+
+.. raw:: html
+
+  <div id='sg-tag-list' class='sphx-glr-tag-list'></div>
 
 
 .. raw:: html

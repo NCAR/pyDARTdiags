@@ -11,6 +11,10 @@ Manipulating Observation Sequences
 Here are some examples of how to use pyDARTdiags to read, modify, and write observation sequences
 
 
+.. raw:: html
+
+  <div id='sg-tag-list' class='sphx-glr-tag-list'></div>
+
 
 .. raw:: html
 
