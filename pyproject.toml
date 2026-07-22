@@ -24,6 +24,21 @@ dependencies = [
     "matplotlib>=3.9.4"
 ]
 
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "black",
+]
+docs = [
+    "sphinx",
+    "pydata_sphinx_theme",
+    "sphinx-copybutton",
+    "myst-parser",
+    "sphinx-design",
+    "sphinx-gallery",
+]
+
 [project.urls]
 Homepage = "https://github.com/NCAR/pyDARTdiags.git"
 Issues = "https://github.com/NCAR/pyDARTdiags/issues"
