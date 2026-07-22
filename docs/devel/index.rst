@@ -39,17 +39,11 @@ To set up your development environment, follow these steps:
       git clone https://github.com/NCAR/pyDARTdiags.git
       cd pyDARTdiags
 
-#. Install Dependencies:
+#. Install the Package in Editable Mode with development and documentation dependencies:
 
    .. code-block:: text
 
-      pip install -r docs/requirements.txt
-
-#. Install the Package in Editable Mode:
-
-   .. code-block:: text
-
-      pip install -e .
+      pip install -e ".[dev,docs]"
 
 pyDARTdiags is now installed in your virtual environment in editable mode.
 
