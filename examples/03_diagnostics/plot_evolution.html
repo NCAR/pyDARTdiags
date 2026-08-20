@@ -462,7 +462,7 @@ and the matplots module for plotting.</p>
 <p>Chose an obs_seq file to read.
 In this example, we are using “obs_seq.final.lorenz_96” which is from
 a Lorenz 96 model run with the DART assimilation system.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">data_file</span> <span class="o">=</span> <span class="n">get_example_data</span><span class="p">(</span><span class="s2">&quot;obs_seq.final.lorenz_96&quot;</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">data_file</span> <span class="o">=</span> <span class="n">get_example_data</span><span class="p">(</span><span class="s2">"obs_seq.final.lorenz_96"</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>package_dir: /home/runner/work/pyDARTdiags/pyDARTdiags
@@ -475,11 +475,11 @@ Using development data file: /home/runner/work/pyDARTdiags/pyDARTdiags/data/obs_
 </div>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">plot_evolution</span><span class="p">(</span>
     <span class="n">obs_seq</span><span class="o">=</span><span class="n">obs_seq</span><span class="p">,</span>
-    <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;RAW_STATE_VARIABLE&quot;</span><span class="p">,</span>
-    <span class="n">time_bin_width</span><span class="o">=</span><span class="s2">&quot;3600s&quot;</span><span class="p">,</span>  <span class="c1"># 1-hour bins</span>
-    <span class="n">stat</span><span class="o">=</span><span class="s2">&quot;rmse&quot;</span><span class="p">,</span>
+    <span class="nb">type</span><span class="o">=</span><span class="s2">"RAW_STATE_VARIABLE"</span><span class="p">,</span>
+    <span class="n">time_bin_width</span><span class="o">=</span><span class="s2">"3600s"</span><span class="p">,</span>  <span class="c1"># 1-hour bins</span>
+    <span class="n">stat</span><span class="o">=</span><span class="s2">"rmse"</span><span class="p">,</span>
     <span class="n">tick_interval</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span>
-    <span class="n">time_format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">,</span> <span class="c1"># days</span>
+    <span class="n">time_format</span><span class="o">=</span><span class="s2">"</span><span class="si">%d</span><span class="s2">"</span><span class="p">,</span> <span class="c1"># days</span>
     <span class="n">plot_pvu</span><span class="o">=</span><span class="kc">False</span>
 <span class="p">)</span>
 </pre></div>
@@ -488,11 +488,11 @@ Using development data file: /home/runner/work/pyDARTdiags/pyDARTdiags/data/obs_
 possible vs used observations.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">plot_evolution</span><span class="p">(</span>
     <span class="n">obs_seq</span><span class="o">=</span><span class="n">obs_seq</span><span class="p">,</span>
-    <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;RAW_STATE_VARIABLE&quot;</span><span class="p">,</span>
-    <span class="n">time_bin_width</span><span class="o">=</span><span class="s2">&quot;3600s&quot;</span><span class="p">,</span>  <span class="c1"># 1-hour bins</span>
-    <span class="n">stat</span><span class="o">=</span><span class="s2">&quot;bias&quot;</span><span class="p">,</span>
+    <span class="nb">type</span><span class="o">=</span><span class="s2">"RAW_STATE_VARIABLE"</span><span class="p">,</span>
+    <span class="n">time_bin_width</span><span class="o">=</span><span class="s2">"3600s"</span><span class="p">,</span>  <span class="c1"># 1-hour bins</span>
+    <span class="n">stat</span><span class="o">=</span><span class="s2">"bias"</span><span class="p">,</span>
     <span class="n">tick_interval</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span>
-    <span class="n">time_format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">,</span> <span class="c1"># days</span>
+    <span class="n">time_format</span><span class="o">=</span><span class="s2">"</span><span class="si">%d</span><span class="s2">"</span><span class="p">,</span> <span class="c1"># days</span>
     <span class="n">plot_pvu</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">)</span>
 </pre></div>
@@ -503,11 +503,11 @@ We can do this by accessing the <a class="reference external" href="https://matp
 axes object from the figure and using the <cite>legend</cite> method to move the legend.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">plot_evolution</span><span class="p">(</span>
     <span class="n">obs_seq</span><span class="o">=</span><span class="n">obs_seq</span><span class="p">,</span>
-    <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;RAW_STATE_VARIABLE&quot;</span><span class="p">,</span>
-    <span class="n">time_bin_width</span><span class="o">=</span><span class="s2">&quot;3600s&quot;</span><span class="p">,</span>  <span class="c1"># 1-hour bins</span>
-    <span class="n">stat</span><span class="o">=</span><span class="s2">&quot;bias&quot;</span><span class="p">,</span>
+    <span class="nb">type</span><span class="o">=</span><span class="s2">"RAW_STATE_VARIABLE"</span><span class="p">,</span>
+    <span class="n">time_bin_width</span><span class="o">=</span><span class="s2">"3600s"</span><span class="p">,</span>  <span class="c1"># 1-hour bins</span>
+    <span class="n">stat</span><span class="o">=</span><span class="s2">"bias"</span><span class="p">,</span>
     <span class="n">tick_interval</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span>
-    <span class="n">time_format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">,</span> <span class="c1"># days</span>
+    <span class="n">time_format</span><span class="o">=</span><span class="s2">"</span><span class="si">%d</span><span class="s2">"</span><span class="p">,</span> <span class="c1"># days</span>
     <span class="n">plot_pvu</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">)</span>
 
@@ -515,10 +515,10 @@ axes object from the figure and using the <cite>legend</cite> method to move the
 <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Axis 0 refers to the first Axes object</span>
 
 <span class="c1"># Move the legend to a new location</span>
-<span class="n">legend</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower right&quot;</span><span class="p">)</span>
+<span class="n">legend</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">"lower right"</span><span class="p">)</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_evolution_003.png" srcset="../../_images/sphx_glr_plot_evolution_003.png" alt="RAW_STATE_VARIABLE" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.911 seconds)</p>
+<img src="../../_images/sphx_glr_plot_evolution_003.png" srcset="../../_images/sphx_glr_plot_evolution_003.png" alt="RAW_STATE_VARIABLE" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.625 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-03-diagnostics-plot-evolution-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/d52c59b9fddbf5a8d763495b67900fe5/plot_evolution.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_evolution.ipynb</span></code></a></p>

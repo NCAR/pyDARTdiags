@@ -467,7 +467,7 @@ RAW_TRACER_CONCENTRATION forward operators.</p>
 <p>Read in the observation sequence file. In this example we’ll use the
 obs_seq.out.tracer file.
 This file only has two observations.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">data_file</span> <span class="o">=</span> <span class="n">get_example_data</span><span class="p">(</span><span class="s2">&quot;obs_seq.out.tracer&quot;</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">data_file</span> <span class="o">=</span> <span class="n">get_example_data</span><span class="p">(</span><span class="s2">"obs_seq.out.tracer"</span><span class="p">)</span>
 <span class="n">obs_seq</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">ObsSequence</span><span class="p">(</span><span class="n">data_file</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -552,45 +552,51 @@ Using development data file: /home/runner/work/pyDARTdiags/pyDARTdiags/data/obs_
 <br />
 <br /><p>The external forward operator is stored in the ‘external_FO’ column.
 Currently, the ‘external_FO’ column is empty.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;external_FO&#39;</span><span class="p">]</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">'external_FO'</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[]
 </pre></div>
 </div>
-<p>Let’s add a forward operator to the RAW_TRACER_CONCENTRATION observation.
+<p>Let’s add a forward operator to every observation of type RAW_TRACER_CONCENTRATION.
+This input obs_seq file only has a single observation with the
+RAW_TRACER_CONCENTRATION type, but this example shows how this method can be
+extended to work with larger obs_seq files.
 For this example, we’re going to use random numbers to create our ensemble
 of forward operators. For a scientific experiment, you would use appropriate
 forward operator results from your model.
-We want 80 ensemble members, so we’ll create 80 random numbers, and we want tracer
-concentrations, so we’ll force the numbers to be positive.</p>
+We want 80 ensemble members, so we’ll create 80 random numbers per observation,
+and we want tracer concentrations, so we’ll force the numbers to be positive.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">n</span> <span class="o">=</span> <span class="mi">80</span>
-<span class="n">random_numbers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">))</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">RAW_TRACER_CONCENTRATION_state_idxs</span> <span class="o">=</span> <span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">'type'</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"RAW_TRACER_CONCENTRATION"</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>DART observation sequence files have a specific format. DART expects the list
 of forward operators to have ‘external_FO’ followed by the number of ensemble
 members, followed by the ‘key’ for the forward operator. The ‘key’ is not
-used by DART, so we will just put 1 for the value.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">random_numbers</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;external_FO </span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s1"> 1&#39;</span><span class="p">)</span>
+used by DART, so we will just put 1 for the value.
+Each observation gets its own randomly generated ensemble, assigned one row
+at a time with .at so the list is stored as a single cell value.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">RAW_TRACER_CONCENTRATION_state_idxs</span><span class="p">:</span>
+    <span class="n">random_numbers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">))</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">random_numbers</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="sa">f</span><span class="s1">'external_FO </span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s1"> 1'</span><span class="p">)</span>
+    <span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">'external_FO'</span><span class="p">]</span> <span class="o">=</span> <span class="n">random_numbers</span>
 </pre></div>
 </div>
-<p>Now we can add the forward operator to the ‘external_FO’ column for row 0</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="s1">&#39;external_FO&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">random_numbers</span><span class="p">)</span>
+<p>Now the ‘external_FO’ column has the forward operator for every
+RAW_TRACER_CONCENTRATION observation.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">RAW_TRACER_CONCENTRATION_state_idxs</span><span class="p">,</span> <span class="s1">'external_FO'</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>Now the ‘external_FO’ column has the forward operator.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;external_FO&#39;</span><span class="p">]</span>
-</pre></div>
-</div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;external_FO 80 1&#39;, 0.8544957231910983, 0.8460349062583432, 0.8117483327339544, 0.7241167567288053, 0.7250716896813966, 0.7797923474806725, 0.7488888065520997, 0.8447664449774128, 0.7950484796086781, 0.6297225804694684, 0.7742951578061967, 0.868614111819527, 0.7421216779440458, 0.7991671547114991, 0.7118017748011443, 0.6942657084746412, 0.734930516775477, 0.6553865196833786, 0.8296027747653424, 0.6516793815317159, 0.6043490230545134, 0.6045160193249247, 0.7667359562498394, 0.5781040476150573, 0.7366434267580277, 0.7685900979991958, 0.7296061892500545, 0.6770792757631227, 0.8371467035689915, 0.8180495878484312, 0.7350783455299552, 0.8448491538320178, 0.784529689897741, 0.9327919205075779, 0.5003209967931166, 0.861025336261481, 0.8096149089222401, 0.772749790931047, 0.8027440213728566, 0.7273893122418449, 0.7323031380792401, 0.8217590001770041, 1.1033168759034746, 0.7596163114332201, 0.664765646173799, 0.8994703885396833, 0.7986779497755285, 0.6060560335487923, 0.7940048871806856, 0.7416813464912206, 0.6338224455899262, 0.7020516171609507, 0.6693902083322852, 0.8448374773365621, 0.6658537255279947, 0.6498853765459539, 0.9597995770874246, 0.7200159141989009, 0.657169670508419, 0.6580932551163124, 0.64478139691764, 0.7322386209416442, 0.8047408743814279, 0.8970138860567388, 0.7364323407492417, 0.5891629372799594, 0.7084325931383726, 0.7159335188411728, 0.7898566272171963, 0.7759073072840035, 0.9270949299813049, 0.7325743155327534, 0.516832119161381, 0.7079041804814067, 0.5892394552234248, 0.8435279949053976, 0.8463011567887957, 0.6068501698271995, 0.7745224644294226, 0.7155669388349781]
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0    [external_FO 80 1, 0.7239427073991975, 0.56945...
+Name: external_FO, dtype: object
 </pre></div>
 </div>
 <p>Let’s write the observation sequence file with the new forward operator.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">write_obs_seq</span><span class="p">(</span><span class="s1">&#39;obs_seq.out.tracer_with_external_FO&#39;</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">write_obs_seq</span><span class="p">(</span><span class="s1">'obs_seq.out.tracer_with_external_FO'</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.009 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.008 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-01-manipulating-plot-external-fo-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/4b1e29eb5a16321306a4851e86279a4e/plot_external_fo.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_external_fo.ipynb</span></code></a></p>

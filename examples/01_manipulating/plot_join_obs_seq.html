@@ -459,7 +459,7 @@ and join them together.</p>
 </div>
 <p>Chose the first obs_seq file to read.
 In this example, we are using a small obs_seq file “obs_seq.final.1000”.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">data_file1</span> <span class="o">=</span> <span class="n">get_example_data</span><span class="p">(</span><span class="s2">&quot;obs_seq.final.1000&quot;</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">data_file1</span> <span class="o">=</span> <span class="n">get_example_data</span><span class="p">(</span><span class="s2">"obs_seq.final.1000"</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>package_dir: /home/runner/work/pyDARTdiags/pyDARTdiags
@@ -469,8 +469,8 @@ Using development data file: /home/runner/work/pyDARTdiags/pyDARTdiags/data/obs_
 <p>Read the obs_seq file into an obs_seq object.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq1</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">ObsSequence</span><span class="p">(</span><span class="n">data_file1</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;obs_seq1 has assimilation info:&#39;</span><span class="p">,</span> <span class="n">obs_seq1</span><span class="o">.</span><span class="n">has_assimilation_info</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;obs_seq1 has posterior:&#39;</span><span class="p">,</span> <span class="n">obs_seq1</span><span class="o">.</span><span class="n">has_posterior</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'obs_seq1 has assimilation info:'</span><span class="p">,</span> <span class="n">obs_seq1</span><span class="o">.</span><span class="n">has_assimilation_info</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'obs_seq1 has posterior:'</span><span class="p">,</span> <span class="n">obs_seq1</span><span class="o">.</span><span class="n">has_posterior</span><span class="p">())</span>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>obs_seq1 has assimilation info: True
@@ -478,11 +478,11 @@ obs_seq1 has posterior: True
 </pre></div>
 </div>
 <p>Chose the second obs_seq file to read.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">data_file2</span> <span class="o">=</span> <span class="n">get_example_data</span><span class="p">(</span><span class="s2">&quot;obs_seq.final.ascii.small&quot;</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">data_file2</span> <span class="o">=</span> <span class="n">get_example_data</span><span class="p">(</span><span class="s2">"obs_seq.final.ascii.small"</span><span class="p">)</span>
 <span class="n">obs_seq2</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">ObsSequence</span><span class="p">(</span><span class="n">data_file2</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;obs_seq2 has assimilation info:&#39;</span><span class="p">,</span> <span class="n">obs_seq2</span><span class="o">.</span><span class="n">has_assimilation_info</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;obs_seq2 has posterior:&#39;</span><span class="p">,</span> <span class="n">obs_seq2</span><span class="o">.</span><span class="n">has_posterior</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'obs_seq2 has assimilation info:'</span><span class="p">,</span> <span class="n">obs_seq2</span><span class="o">.</span><span class="n">has_assimilation_info</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'obs_seq2 has posterior:'</span><span class="p">,</span> <span class="n">obs_seq2</span><span class="o">.</span><span class="n">has_posterior</span><span class="p">())</span>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>package_dir: /home/runner/work/pyDARTdiags/pyDARTdiags
@@ -494,8 +494,8 @@ obs_seq2 has posterior: False
 <p>obs_seq1 has posterior information, but obs_seq2 does not.
 So we will remove the posterior columns from obs_seq1 DataFrame, using the pandas
 <cite>drop</cite> method before joining the two obs_seq objects together.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq1</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">obs_seq1</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">like</span><span class="o">=</span><span class="s1">&#39;posterior&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;obs_seq1 has posterior:&#39;</span><span class="p">,</span> <span class="n">obs_seq1</span><span class="o">.</span><span class="n">has_posterior</span><span class="p">())</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq1</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">obs_seq1</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">like</span><span class="o">=</span><span class="s1">'posterior'</span><span class="p">)</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'obs_seq1 has posterior:'</span><span class="p">,</span> <span class="n">obs_seq1</span><span class="o">.</span><span class="n">has_posterior</span><span class="p">())</span>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>obs_seq1 has posterior: False
@@ -507,8 +507,8 @@ on the obs_sequence class, which
 we’ve imported as obsq. The method takes a list of obs_seq objects to join.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq_mega</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">ObsSequence</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">obs_seq1</span><span class="p">,</span> <span class="n">obs_seq2</span><span class="p">])</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;length of obs_seq1: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">obs_seq1</span><span class="o">.</span><span class="n">df</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">),</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;length of obs_seq2: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">obs_seq2</span><span class="o">.</span><span class="n">df</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;length of obs_seq_mega: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">obs_seq_mega</span><span class="o">.</span><span class="n">df</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'length of obs_seq1: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">obs_seq1</span><span class="o">.</span><span class="n">df</span><span class="p">)</span><span class="si">}</span><span class="s1">'</span><span class="p">),</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'length of obs_seq2: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">obs_seq2</span><span class="o">.</span><span class="n">df</span><span class="p">)</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'length of obs_seq_mega: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">obs_seq_mega</span><span class="o">.</span><span class="n">df</span><span class="p">)</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
 
 <span class="n">obs_seq_mega</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
@@ -1052,51 +1052,51 @@ with the prior columns from both obs_seq DataFrames.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq_mega</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Index([&#39;obs_num&#39;, &#39;observation&#39;, &#39;prior_ensemble_mean&#39;,
-       &#39;prior_ensemble_spread&#39;, &#39;prior_ensemble_member_1&#39;,
-       &#39;prior_ensemble_member_2&#39;, &#39;prior_ensemble_member_3&#39;,
-       &#39;prior_ensemble_member_4&#39;, &#39;prior_ensemble_member_5&#39;,
-       &#39;prior_ensemble_member_6&#39;, &#39;prior_ensemble_member_7&#39;,
-       &#39;prior_ensemble_member_8&#39;, &#39;prior_ensemble_member_9&#39;,
-       &#39;prior_ensemble_member_10&#39;, &#39;prior_ensemble_member_11&#39;,
-       &#39;prior_ensemble_member_12&#39;, &#39;prior_ensemble_member_13&#39;,
-       &#39;prior_ensemble_member_14&#39;, &#39;prior_ensemble_member_15&#39;,
-       &#39;prior_ensemble_member_16&#39;, &#39;prior_ensemble_member_17&#39;,
-       &#39;prior_ensemble_member_18&#39;, &#39;prior_ensemble_member_19&#39;,
-       &#39;prior_ensemble_member_20&#39;, &#39;prior_ensemble_member_21&#39;,
-       &#39;prior_ensemble_member_22&#39;, &#39;prior_ensemble_member_23&#39;,
-       &#39;prior_ensemble_member_24&#39;, &#39;prior_ensemble_member_25&#39;,
-       &#39;prior_ensemble_member_26&#39;, &#39;prior_ensemble_member_27&#39;,
-       &#39;prior_ensemble_member_28&#39;, &#39;prior_ensemble_member_29&#39;,
-       &#39;prior_ensemble_member_30&#39;, &#39;prior_ensemble_member_31&#39;,
-       &#39;prior_ensemble_member_32&#39;, &#39;prior_ensemble_member_33&#39;,
-       &#39;prior_ensemble_member_34&#39;, &#39;prior_ensemble_member_35&#39;,
-       &#39;prior_ensemble_member_36&#39;, &#39;prior_ensemble_member_37&#39;,
-       &#39;prior_ensemble_member_38&#39;, &#39;prior_ensemble_member_39&#39;,
-       &#39;prior_ensemble_member_40&#39;, &#39;prior_ensemble_member_41&#39;,
-       &#39;prior_ensemble_member_42&#39;, &#39;prior_ensemble_member_43&#39;,
-       &#39;prior_ensemble_member_44&#39;, &#39;prior_ensemble_member_45&#39;,
-       &#39;prior_ensemble_member_46&#39;, &#39;prior_ensemble_member_47&#39;,
-       &#39;prior_ensemble_member_48&#39;, &#39;prior_ensemble_member_49&#39;,
-       &#39;prior_ensemble_member_50&#39;, &#39;prior_ensemble_member_51&#39;,
-       &#39;prior_ensemble_member_52&#39;, &#39;prior_ensemble_member_53&#39;,
-       &#39;prior_ensemble_member_54&#39;, &#39;prior_ensemble_member_55&#39;,
-       &#39;prior_ensemble_member_56&#39;, &#39;prior_ensemble_member_57&#39;,
-       &#39;prior_ensemble_member_58&#39;, &#39;prior_ensemble_member_59&#39;,
-       &#39;prior_ensemble_member_60&#39;, &#39;prior_ensemble_member_61&#39;,
-       &#39;prior_ensemble_member_62&#39;, &#39;prior_ensemble_member_63&#39;,
-       &#39;prior_ensemble_member_64&#39;, &#39;prior_ensemble_member_65&#39;,
-       &#39;prior_ensemble_member_66&#39;, &#39;prior_ensemble_member_67&#39;,
-       &#39;prior_ensemble_member_68&#39;, &#39;prior_ensemble_member_69&#39;,
-       &#39;prior_ensemble_member_70&#39;, &#39;prior_ensemble_member_71&#39;,
-       &#39;prior_ensemble_member_72&#39;, &#39;prior_ensemble_member_73&#39;,
-       &#39;prior_ensemble_member_74&#39;, &#39;prior_ensemble_member_75&#39;,
-       &#39;prior_ensemble_member_76&#39;, &#39;prior_ensemble_member_77&#39;,
-       &#39;prior_ensemble_member_78&#39;, &#39;prior_ensemble_member_79&#39;,
-       &#39;prior_ensemble_member_80&#39;, &#39;Data_QC&#39;, &#39;DART_quality_control&#39;,
-       &#39;linked_list&#39;, &#39;longitude&#39;, &#39;latitude&#39;, &#39;vertical&#39;, &#39;vert_unit&#39;, &#39;type&#39;,
-       &#39;metadata&#39;, &#39;external_FO&#39;, &#39;seconds&#39;, &#39;days&#39;, &#39;time&#39;, &#39;obs_err_var&#39;],
-      dtype=&#39;object&#39;)
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Index(['obs_num', 'observation', 'prior_ensemble_mean',
+       'prior_ensemble_spread', 'prior_ensemble_member_1',
+       'prior_ensemble_member_2', 'prior_ensemble_member_3',
+       'prior_ensemble_member_4', 'prior_ensemble_member_5',
+       'prior_ensemble_member_6', 'prior_ensemble_member_7',
+       'prior_ensemble_member_8', 'prior_ensemble_member_9',
+       'prior_ensemble_member_10', 'prior_ensemble_member_11',
+       'prior_ensemble_member_12', 'prior_ensemble_member_13',
+       'prior_ensemble_member_14', 'prior_ensemble_member_15',
+       'prior_ensemble_member_16', 'prior_ensemble_member_17',
+       'prior_ensemble_member_18', 'prior_ensemble_member_19',
+       'prior_ensemble_member_20', 'prior_ensemble_member_21',
+       'prior_ensemble_member_22', 'prior_ensemble_member_23',
+       'prior_ensemble_member_24', 'prior_ensemble_member_25',
+       'prior_ensemble_member_26', 'prior_ensemble_member_27',
+       'prior_ensemble_member_28', 'prior_ensemble_member_29',
+       'prior_ensemble_member_30', 'prior_ensemble_member_31',
+       'prior_ensemble_member_32', 'prior_ensemble_member_33',
+       'prior_ensemble_member_34', 'prior_ensemble_member_35',
+       'prior_ensemble_member_36', 'prior_ensemble_member_37',
+       'prior_ensemble_member_38', 'prior_ensemble_member_39',
+       'prior_ensemble_member_40', 'prior_ensemble_member_41',
+       'prior_ensemble_member_42', 'prior_ensemble_member_43',
+       'prior_ensemble_member_44', 'prior_ensemble_member_45',
+       'prior_ensemble_member_46', 'prior_ensemble_member_47',
+       'prior_ensemble_member_48', 'prior_ensemble_member_49',
+       'prior_ensemble_member_50', 'prior_ensemble_member_51',
+       'prior_ensemble_member_52', 'prior_ensemble_member_53',
+       'prior_ensemble_member_54', 'prior_ensemble_member_55',
+       'prior_ensemble_member_56', 'prior_ensemble_member_57',
+       'prior_ensemble_member_58', 'prior_ensemble_member_59',
+       'prior_ensemble_member_60', 'prior_ensemble_member_61',
+       'prior_ensemble_member_62', 'prior_ensemble_member_63',
+       'prior_ensemble_member_64', 'prior_ensemble_member_65',
+       'prior_ensemble_member_66', 'prior_ensemble_member_67',
+       'prior_ensemble_member_68', 'prior_ensemble_member_69',
+       'prior_ensemble_member_70', 'prior_ensemble_member_71',
+       'prior_ensemble_member_72', 'prior_ensemble_member_73',
+       'prior_ensemble_member_74', 'prior_ensemble_member_75',
+       'prior_ensemble_member_76', 'prior_ensemble_member_77',
+       'prior_ensemble_member_78', 'prior_ensemble_member_79',
+       'prior_ensemble_member_80', 'Data_QC', 'DART_quality_control',
+       'linked_list', 'longitude', 'latitude', 'vertical', 'vert_unit', 'type',
+       'metadata', 'external_FO', 'seconds', 'days', 'time', 'obs_err_var'],
+      dtype='object')
 </pre></div>
 </div>
 <p>You can pass a list of columns to the join method to only join the columns you want.
@@ -1104,22 +1104,22 @@ For example, if you only want to join the ‘prior_mean’ and ‘prior_spread�
 and discard the rest of the columns from the obs_seq objects,
 you can do so like this:</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq_no_members</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">ObsSequence</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">obs_seq1</span><span class="p">,</span> <span class="n">obs_seq2</span><span class="p">],</span>
-                                            <span class="p">[</span><span class="s1">&#39;prior_ensemble_mean&#39;</span><span class="p">,</span>
-                                             <span class="s1">&#39;prior_ensemble_spread&#39;</span><span class="p">])</span>
+                                            <span class="p">[</span><span class="s1">'prior_ensemble_mean'</span><span class="p">,</span>
+                                             <span class="s1">'prior_ensemble_spread'</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>Note, the join method will still include the required columns for the obs_seq object to function properly.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq_no_members</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Index([&#39;obs_num&#39;, &#39;observation&#39;, &#39;prior_ensemble_mean&#39;,
-       &#39;prior_ensemble_spread&#39;, &#39;linked_list&#39;, &#39;longitude&#39;, &#39;latitude&#39;,
-       &#39;vertical&#39;, &#39;vert_unit&#39;, &#39;type&#39;, &#39;metadata&#39;, &#39;external_FO&#39;, &#39;seconds&#39;,
-       &#39;days&#39;, &#39;time&#39;, &#39;obs_err_var&#39;],
-      dtype=&#39;object&#39;)
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Index(['obs_num', 'observation', 'prior_ensemble_mean',
+       'prior_ensemble_spread', 'linked_list', 'longitude', 'latitude',
+       'vertical', 'vert_unit', 'type', 'metadata', 'external_FO', 'seconds',
+       'days', 'time', 'obs_err_var'],
+      dtype='object')
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.125 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.093 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-01-manipulating-plot-join-obs-seq-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/59ec61044c62ea21e72b2a07e34c4636/plot_join_obs_seq.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_join_obs_seq.ipynb</span></code></a></p>

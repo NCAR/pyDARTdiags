@@ -588,7 +588,7 @@ You read the observation sequence file into a ObsSequence object, which contains
 information about the observation sequence together with a Pandas DataFrame containing the data for
 all the observations in the sequence.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pydartdiags.obs_sequence.obs_sequence</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">obsq</span>
-<span class="n">obs_seq</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">ObsSequence</span><span class="p">(</span><span class="s1">&#39;obs_seq.final&#39;</span><span class="p">)</span>
+<span class="n">obs_seq</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">ObsSequence</span><span class="p">(</span><span class="s1">'obs_seq.final'</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>You can then examine, change, and visualize the observation sequence data,
@@ -603,7 +603,7 @@ and the observation copies. You can access these attributes using the dot notati
 </pre></div>
 </div>
 <p>For the example above, gives:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[&#39;WOD observation&#39;, &#39;WOD QC&#39;]
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>['WOD observation', 'WOD QC']
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">obs_seq.df</span></code> is the DataFrame containing all the observations.</p>
@@ -624,7 +624,7 @@ or filter by region by masking out lon-lat, or time period, or remove columns th
 There are examples of editing observation sequences in the <a class="reference internal" href="../examples/01_manipulating/index.html#manip-examples-index"><span class="std std-ref">Manipulating Observation Sequences</span></a> gallery.</p>
 <p>To write your modified observation sequence data back to a file, you can use the
 <a class="reference internal" href="../api/obs_sequence.html#obs_sequence.ObsSequence.write_obs_seq" title="obs_sequence.ObsSequence.write_obs_seq"><code class="xref py py-func docutils literal notranslate"><span class="pre">obs_sequence.ObsSequence.write_obs_seq()</span></code></a> method:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">write_obs_seq</span><span class="p">(</span><span class="s1">&#39;modified_obs_seq.out&#39;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">write_obs_seq</span><span class="p">(</span><span class="s1">'modified_obs_seq.out'</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The write_obs_seq method will update the attributes of the ObsSequence object. It updates the header
@@ -662,7 +662,7 @@ You can create composite observations in your workflow using the default
 composite observation types by calling the <a class="reference internal" href="../api/obs_sequence.html#obs_sequence.ObsSequence.composite_types" title="obs_sequence.ObsSequence.composite_types"><code class="xref py py-func docutils literal notranslate"><span class="pre">obs_sequence.ObsSequence.composite_types()</span></code></a> method
 with no arguments:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pydartdiags.obs_sequence.obs_sequence</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">obsq</span>
-<span class="n">obs_seq</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">ObsSequence</span><span class="p">(</span><span class="s1">&#39;obs_seq.final&#39;</span><span class="p">)</span>
+<span class="n">obs_seq</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">ObsSequence</span><span class="p">(</span><span class="s1">'obs_seq.final'</span><span class="p">)</span>
 <span class="n">obs_seq</span><span class="o">.</span><span class="n">composite_types</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -680,7 +680,7 @@ The <code class="docutils literal notranslate"><span class="pre">components</spa
 </div>
 <p>Pass the path to your YAML file to the <code class="docutils literal notranslate"><span class="pre">composite_types</span></code> method to
 create composite observations using your custom definitions:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">composite_types</span><span class="p">(</span><span class="n">composite_types</span><span class="o">=</span><span class="s1">&#39;my_composite_types.yaml&#39;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">composite_types</span><span class="p">(</span><span class="n">composite_types</span><span class="o">=</span><span class="s1">'my_composite_types.yaml'</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="admonition important">

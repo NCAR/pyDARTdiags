@@ -459,7 +459,7 @@ observation sequence and write a new observation sequence file.</p>
 </div>
 <p>Chose an obs_seq file to read.
 In this example, we are using a small obs_seq file “obs_seq.final.medium”.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">data_file</span> <span class="o">=</span> <span class="n">get_example_data</span><span class="p">(</span><span class="s2">&quot;obs_seq.final.ascii.medium&quot;</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">data_file</span> <span class="o">=</span> <span class="n">get_example_data</span><span class="p">(</span><span class="s2">"obs_seq.final.ascii.medium"</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>package_dir: /home/runner/work/pyDARTdiags/pyDARTdiags
@@ -625,7 +625,7 @@ Using development data file: /home/runner/work/pyDARTdiags/pyDARTdiags/data/obs_
 </div>
 <br />
 <br /><p>To count of the number of observations by type, use the groupby method.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'type'</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>type
@@ -643,21 +643,21 @@ dtype: int64
 </div>
 <p>Let’s remove the ‘GPSRO_REFRACTIVITY’ observations.
 Remove rows where <code class="docutils literal notranslate"><span class="pre">'type'</span> <span class="pre">==</span> <span class="pre">'GPSRO_REFRACTIVITY'</span></code></p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;GPSRO_REFRACTIVITY&#39;</span><span class="p">]</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">'type'</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">'GPSRO_REFRACTIVITY'</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>Now let’s check the number of observations by type again.
 For only the ‘GPSRO_REFRACTIVITY’ observations:</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">gpsro_count</span> <span class="o">=</span> <span class="p">(</span><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;GPSRO_REFRACTIVITY&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of observations with type &#39;GPSRO_REFRACTIVITY&#39;: </span><span class="si">{</span><span class="n">gpsro_count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">gpsro_count</span> <span class="o">=</span> <span class="p">(</span><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">'type'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'GPSRO_REFRACTIVITY'</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Number of observations with type 'GPSRO_REFRACTIVITY': </span><span class="si">{</span><span class="n">gpsro_count</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Number of observations with type &#39;GPSRO_REFRACTIVITY&#39;: 0
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Number of observations with type 'GPSRO_REFRACTIVITY': 0
 </pre></div>
 </div>
 <p>Count the observations by type again. You’ll see that the ‘GPSRO_REFRACTIVITY’
 observations have been removed from the dataFrame</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'type'</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>type
@@ -673,11 +673,11 @@ dtype: int64
 </pre></div>
 </div>
 <p>Write the new observation sequence to a file.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">write_obs_seq</span><span class="p">(</span><span class="s1">&#39;obs_seq.final.ascii.medium.no_gpsro&#39;</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span><span class="o">.</span><span class="n">write_obs_seq</span><span class="p">(</span><span class="s1">'obs_seq.final.ascii.medium.no_gpsro'</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The new file will not have the ‘GPSRO_REFRACTIVITY’ observations.</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.033 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.025 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-01-manipulating-plot-remove-obs-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/35cc49d2ff3b046822bbe1eb8f180401/plot_remove_obs.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_remove_obs.ipynb</span></code></a></p>

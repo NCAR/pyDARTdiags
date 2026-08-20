@@ -449,17 +449,17 @@ or create an empty ObsSequence object from scratch.</p>
 If None, an empty ObsSequence object is created from scratch.</p></li>
 <li><p><strong>synonyms</strong> (<em>list</em><em>, </em><em>optional</em>) – <p>List of additional synonyms for the observation column in the DataFrame.
 The default list is</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s1">&#39;NCEP BUFR observation&#39;</span><span class="p">,</span>
-<span class="s1">&#39;AIRS observation&#39;</span><span class="p">,</span>
-<span class="s1">&#39;GTSPP observation&#39;</span><span class="p">,</span>
-<span class="s1">&#39;SST observation&#39;</span><span class="p">,</span>
-<span class="s1">&#39;observations&#39;</span><span class="p">,</span>
-<span class="s1">&#39;WOD observation&#39;</span><span class="p">]</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s1">'NCEP BUFR observation'</span><span class="p">,</span>
+<span class="s1">'AIRS observation'</span><span class="p">,</span>
+<span class="s1">'GTSPP observation'</span><span class="p">,</span>
+<span class="s1">'SST observation'</span><span class="p">,</span>
+<span class="s1">'observations'</span><span class="p">,</span>
+<span class="s1">'WOD observation'</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>You can add more synonyms by providing a list of strings when
 creating the ObsSequence object.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ObsSequence</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">synonyms</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;synonym1&#39;</span><span class="p">,</span> <span class="s1">&#39;synonym2&#39;</span><span class="p">])</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ObsSequence</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">synonyms</span><span class="o">=</span><span class="p">[</span><span class="s1">'synonym1'</span><span class="p">,</span> <span class="s1">'synonym2'</span><span class="p">])</span>
 </pre></div>
 </div>
 </p></li>
@@ -470,7 +470,7 @@ creating the ObsSequence object.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span> <span class="o">=</span> <span class="n">ObsSequence</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="s1">&#39;obs_seq.final&#39;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span> <span class="o">=</span> <span class="n">ObsSequence</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="s1">'obs_seq.final'</span><span class="p">)</span>
 <span class="n">empty_obs_seq</span> <span class="o">=</span> <span class="n">ObsSequence</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -570,7 +570,7 @@ forward observation operators (QC2) is reverted.</p></li>
 <li><p>A ‘linked_list’ column is generated to create a linked list pattern for the observations.</p></li>
 </ul>
 <p class="rubric">Example</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">obsq</span><span class="o">.</span><span class="n">write_obs_seq</span><span class="p">(</span><span class="s1">&#39;obs_seq.new&#39;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">obsq</span><span class="o">.</span><span class="n">write_obs_seq</span><span class="p">(</span><span class="s1">'obs_seq.new'</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -682,9 +682,9 @@ If not provided, all copies are included.</p></li>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq1</span> <span class="o">=</span> <span class="n">ObsSequence</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="s1">&#39;obs_seq1.final&#39;</span><span class="p">)</span>
-<span class="n">obs_seq2</span> <span class="o">=</span> <span class="n">ObsSequence</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="s1">&#39;obs_seq2.final&#39;</span><span class="p">)</span>
-<span class="n">obs_seq3</span> <span class="o">=</span> <span class="n">ObsSequence</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="s1">&#39;obs_seq3.final&#39;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq1</span> <span class="o">=</span> <span class="n">ObsSequence</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="s1">'obs_seq1.final'</span><span class="p">)</span>
+<span class="n">obs_seq2</span> <span class="o">=</span> <span class="n">ObsSequence</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="s1">'obs_seq2.final'</span><span class="p">)</span>
+<span class="n">obs_seq3</span> <span class="o">=</span> <span class="n">ObsSequence</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="s1">'obs_seq3.final'</span><span class="p">)</span>
 <span class="n">combined</span> <span class="o">=</span> <span class="n">ObsSequence</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">obs_seq1</span><span class="p">,</span> <span class="n">obs_seq2</span><span class="p">,</span> <span class="n">obs_seq3</span><span class="p">])</span>
 </pre></div>
 </div>
