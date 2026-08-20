@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pydartdiags"
-version = "0.6.5"
+version = "0.7.0"
 authors = [
   { name="Helen Kershaw", email="hkershaw@ucar.edu" },
 ]
