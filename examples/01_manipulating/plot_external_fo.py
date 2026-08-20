@@ -24,8 +24,7 @@ import numpy as np
 # Read in the observation sequence file. In this example we'll use the
 # obs_seq.out.tracer file.
 # This file only has two observations.
-#data_file = get_example_data("obs_seq.out.tracer")
-data_file = "./obs_seq.out.tracer"
+data_file = get_example_data("obs_seq.out.tracer")
 obs_seq = obsq.ObsSequence(data_file)
 
 ###########################################
@@ -70,4 +69,4 @@ obs_seq.df.loc[RAW_TRACER_CONCENTRATION_state_idxs, 'external_FO']
 
 ###########################################
 # Let's write the observation sequence file with the new forward operator.
-obs_seq.write_obs_seq('obs_seq.out.tracer_with_external_FO.TESTER')
+obs_seq.write_obs_seq('obs_seq.out.tracer_with_external_FO')
