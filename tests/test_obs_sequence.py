@@ -306,6 +306,44 @@ class TestWriteAscii:
         # Compare the written file with the reference file, line by line
         self.compare_files_line_by_line(temp_output_file_path, reference_file_path)
 
+    def test_write_longitude_wraps_to_0_360(self, temp_dir):
+        temp_output_file_path = os.path.join(
+            temp_dir, "obs_seq.final.ascii.write-longitude-wrap"
+        )
+
+        obs_seq_file_path = os.path.join(
+            os.path.dirname(__file__), "data", "obs_seq.final.ascii.small"
+        )
+        obj = obsq.ObsSequence(obs_seq_file_path)
+
+        obj.df.loc[obj.df.index[0], "longitude"] = 365.0
+
+        obj.write_obs_seq(temp_output_file_path)
+
+        assert os.path.exists(temp_output_file_path)
+
+        written = obsq.ObsSequence(temp_output_file_path)
+        assert written.df.loc[written.df.index[0], "longitude"] == pytest.approx(5.0)
+
+    def test_write_longitude_wraps_negative(self, temp_dir):
+        temp_output_file_path = os.path.join(
+            temp_dir, "obs_seq.final.ascii.write-longitude-wrap-negative"
+        )
+
+        obs_seq_file_path = os.path.join(
+            os.path.dirname(__file__), "data", "obs_seq.final.ascii.small"
+        )
+        obj = obsq.ObsSequence(obs_seq_file_path)
+
+        obj.df.loc[obj.df.index[0], "longitude"] = -37.0
+
+        obj.write_obs_seq(temp_output_file_path)
+
+        assert os.path.exists(temp_output_file_path)
+
+        written = obsq.ObsSequence(temp_output_file_path)
+        assert written.df.loc[written.df.index[0], "longitude"] == pytest.approx(323.0)
+
 
 class TestObsDataframe:
     @pytest.fixture
