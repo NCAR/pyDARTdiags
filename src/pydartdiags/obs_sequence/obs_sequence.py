@@ -87,6 +87,7 @@ class ObsSequence:
             "SST observation",
             "observations",
             "WOD observation",
+            "CROCOLAKE observation",
         ]
         if synonyms:
             if isinstance(synonyms, list):
