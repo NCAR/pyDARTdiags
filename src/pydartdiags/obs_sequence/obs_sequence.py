@@ -370,7 +370,7 @@ class ObsSequence:
             df_copy = self.df.copy()  # copy since you want to change for writing.
             # back to radians for obs_seq
             if self.loc_mod == "loc3d":
-                df_copy["longitude"] = np.deg2rad(self.df["longitude"]).round(16)
+                df_copy["longitude"] = np.deg2rad(self.df["longitude"] % 360).round(16)
                 df_copy["latitude"] = np.deg2rad(self.df["latitude"]).round(16)
             if "prior_bias" in df_copy.columns:
                 df_copy = df_copy.drop(
