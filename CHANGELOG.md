@@ -4,6 +4,8 @@ All notable changes to pyDARTdiags will be documented in this file.
 
 ## [Unreleased]
 
+## [0.7.1] - 2026-09-17
+
 - "CROCOLAKE observation" added to list of observation synonyms. 
 - Longitude wrapped 0-360 on write of observation sequence.
 
