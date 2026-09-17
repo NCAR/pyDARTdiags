@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=c83e6b79" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -455,32 +455,28 @@ an observation sequence. For an explanation of the statistics calculations see
 the <a class="reference internal" href="../../userguide/statistics.html#statistics"><span class="std std-ref">Statistics</span></a> guide.</p>
 <p>Import the obs_sequence module
 and the statistics module.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pydartdiags.obs_sequence.obs_sequence</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">obsq</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pydartdiags.stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">stats</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pydartdiags.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_example_data</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="kn">import</span><span class="w"> </span><span class="nn">pydartdiags</span><span class="nn">.</span><span class="nn">obs_sequence</span><span class="nn">.</span><span class="nn">obs_sequence</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">obsq</span><span class="w">
+</span><span class="kn">from</span><span class="w"> </span><span class="nn">pydartdiags</span><span class="nn">.</span><span class="nn">stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">stats</span><span class="w">
+</span><span class="kn">from</span><span class="w"> </span><span class="nn">pydartdiags</span><span class="nn">.</span><span class="nn">data</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_example_data</span><span class="w">
+</span></pre></div></div>
 <p>Chose an obs_seq file to read.
 This is a small obs_seq file “obs_seq.final.ascii.medium”.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">data_file</span> <span class="o">=</span> <span class="n">get_example_data</span><span class="p">(</span><span class="s2">"obs_seq.final.ascii.medium"</span><span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="n">data_file</span> <span class="o">=</span> <span class="n">get_example_data</span><span class="p">(</span><span class="s2">&quot;</span><span class="s2">obs_seq.final.ascii.medium</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>package_dir: /home/runner/work/pyDARTdiags/pyDARTdiags
 Using development data file: /home/runner/work/pyDARTdiags/pyDARTdiags/data/obs_seq.final.ascii.medium
 </pre></div>
 </div>
 <p>Read the obs_seq file into an obs_seq object.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">obs_seq</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">ObsSequence</span><span class="p">(</span><span class="n">data_file</span><span class="p">)</span>
-
-<span class="c1"># Select observations that were used in the assimilation.</span>
-<span class="n">used_obs</span> <span class="o">=</span> <span class="n">obs_seq</span><span class="o">.</span><span class="n">select_used_qcs</span><span class="p">()</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="n">obs_seq</span> <span class="o">=</span> <span class="n">obsq</span><span class="o">.</span><span class="n">ObsSequence</span><span class="p">(</span><span class="n">data_file</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># Select observations that were used in the assimilation.</span><span class="w">
+</span><span class="n">used_obs</span> <span class="o">=</span> <span class="n">obs_seq</span><span class="o">.</span><span class="n">select_used_qcs</span><span class="p">(</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <p><cite>used_obs</cite> is a dataframe with only the observations with QC value of 0.</p>
 <p>The columns of the dataframe are the same as the original obs_seq dataframe.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">used_obs</span><span class="o">.</span><span class="n">columns</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="n">used_obs</span><span class="o">.</span><span class="n">columns</span><span class="w">
+</span></pre></div></div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Index(['obs_num', 'observation', 'prior_ensemble_mean',
        'prior_ensemble_spread', 'Data_QC', 'DART_quality_control',
        'linked_list', 'longitude', 'latitude', 'vertical', 'vert_unit', 'type',
@@ -489,9 +485,8 @@ Using development data file: /home/runner/work/pyDARTdiags/pyDARTdiags/data/obs_
 </pre></div>
 </div>
 <p>Now we calculate the statistics required for DART diagnostics.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">stats</span><span class="o">.</span><span class="n">diag_stats</span><span class="p">(</span><span class="n">used_obs</span><span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="n">stats</span><span class="o">.</span><span class="n">diag_stats</span><span class="p">(</span><span class="n">used_obs</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <div class="output_subarea output_html rendered_html output_result">
 <div>
 <style scoped>
@@ -807,9 +802,8 @@ Using development data file: /home/runner/work/pyDARTdiags/pyDARTdiags/data/obs_
 <br />
 <br /><p>The statistics are calculated for each row in the dataframe,
 and the results are stored in new columns.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">used_obs</span><span class="o">.</span><span class="n">columns</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="n">used_obs</span><span class="o">.</span><span class="n">columns</span><span class="w">
+</span></pre></div></div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Index(['obs_num', 'observation', 'prior_ensemble_mean',
        'prior_ensemble_spread', 'Data_QC', 'DART_quality_control',
        'linked_list', 'longitude', 'latitude', 'vertical', 'vert_unit', 'type',
@@ -820,9 +814,8 @@ and the results are stored in new columns.</p>
 </div>
 <p>The help function can be used to find out more about the diag_stats function
 including what statistics are calculated.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">stats</span><span class="o">.</span><span class="n">diag_stats</span><span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="n">help</span><span class="p">(</span><span class="n">stats</span><span class="o">.</span><span class="n">diag_stats</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Help on function diag_stats in module pydartdiags.stats.stats:
 
 diag_stats(df, phase)
@@ -856,9 +849,8 @@ diag_stats(df, phase)
 </div>
 <p>Summarize the grand statistics, which are the statistics aggregated over all the observations
 for each type of observation.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">stats</span><span class="o">.</span><span class="n">grand_statistics</span><span class="p">(</span><span class="n">used_obs</span><span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="n">stats</span><span class="o">.</span><span class="n">grand_statistics</span><span class="p">(</span><span class="n">used_obs</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <div class="output_subarea output_html rendered_html output_result">
 <div>
 <style scoped>
@@ -946,7 +938,7 @@ for each type of observation.</p>
 </div>
 </div>
 <br />
-<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.112 seconds)</p>
+<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.067 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-03-diagnostics-plot-grand-stats-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/ce101c761d274087ecac0cbfd4585183/plot_grand_stats.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_grand_stats.ipynb</span></code></a></p>
