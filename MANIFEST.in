@@ -1,2 +1,3 @@
 include src/pydartdiags/obs_sequence/composite_types.yaml
 
+include src/pydartdiags/obs_sequence/obs_units.yaml

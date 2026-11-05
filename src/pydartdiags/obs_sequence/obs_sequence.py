@@ -7,6 +7,7 @@ import yaml
 import struct
 import functools
 import inspect
+from .units import infer_units as _infer_units
 
 
 def _requires_assimilation_info(func):
@@ -930,6 +931,17 @@ class ObsSequence:
                 ObsSequence._check_trailing_record_length(f, record_length)
 
                 yield obs
+
+    def infer_units(self, units_file=None):
+        """
+        Best guess of the units of the observation values for each obs type.
+
+        See :func:`pydartdiags.obs_sequence.units.infer_units`.
+
+        Returns:
+            pandas.DataFrame: One row per type with the inferred unit.
+        """
+        return _infer_units(self.df, units_file=units_file)
 
     def composite_types(self, composite_types="use_default", raise_on_duplicate=False):
         """

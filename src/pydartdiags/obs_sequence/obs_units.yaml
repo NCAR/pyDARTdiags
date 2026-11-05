@@ -1,0 +1,40 @@
+# Heuristic plausible value ranges used by infer_units().
+# Each quantity lists name patterns (matched case-insensitively as substrings
+# of the obs type name) and candidate units with a plausible [min, max] range.
+# Ranges should be wide enough to hold real data but tight enough to tell
+# the candidate units apart. Candidates are listed in order of preference
+# and ties are broken in that order.
+# These are starting values and should be reviewed.
+
+ocean_temperature:
+  patterns: [_TEMPERATURE]
+  exclude: [AIRCRAFT, ACARS, RADIOSONDE, SAT, METAR, MARINE, LAND, ATOV, AIRS, GPSRO, SONDE]
+  units:
+    degC: [-3.0, 45.0]
+    K: [270.0, 320.0]
+
+salinity:
+  patterns: [_SALINITY]
+  units:
+    PSU: [0.0, 42.0]
+    g/kg: [0.0, 42.0]
+    ppt: [0.0, 42.0]
+
+atmos_temperature:
+  patterns: [_TEMPERATURE]
+  include: [AIRCRAFT, ACARS, RADIOSONDE, SAT, METAR, MARINE, LAND, ATOV, AIRS, GPSRO, SONDE]
+  units:
+    K: [170.0, 340.0]
+    degC: [-100.0, 60.0]
+
+pressure:
+  patterns: [_PRESSURE, ALTIMETER]
+  units:
+    Pa: [10000.0, 110000.0]
+    hPa: [100.0, 1100.0]
+
+specific_humidity:
+  patterns: [SPECIFIC_HUMIDITY]
+  units:
+    kg/kg: [0.0, 0.05]
+    g/kg: [0.0, 50.0]
