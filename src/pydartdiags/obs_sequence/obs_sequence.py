@@ -76,7 +76,7 @@ class ObsSequence:
 
     reversed_vert = {value: key for key, value in vert.items()}
 
-    def __init__(self, file, synonyms=None):
+    def __init__(self, file=None, synonyms=None):
 
         self.loc_mod = "None"
         self.file = file

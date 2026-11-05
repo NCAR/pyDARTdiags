@@ -1450,6 +1450,34 @@ class TestCovGroup:
         combo = obsq.ObsSequence.join([a, b])
         assert set(combo.df["cov_group"]) == {1, 2}
 
+class TestDefaultConstructor:
+
+    def test_no_arguments(self):
+        obs = obsq.ObsSequence()
+        assert obs.file is None
+        assert obs.loc_mod == "None"
+        assert isinstance(obs.df, pd.DataFrame)
+        assert obs.df.empty
+        assert obs.types == {}
+        assert obs.reverse_types == {}
+        assert obs.copie_names == []
+        assert obs.non_qc_copie_names == []
+        assert obs.qc_copie_names == []
+        assert obs.n_copies == 0
+        assert obs.n_non_qc == 0
+        assert obs.n_qc == 0
+        assert obs.seq == []
+        assert obs.all_obs == []
+
+    def test_matches_file_none(self):
+        default = obsq.ObsSequence()
+        explicit = obsq.ObsSequence(file=None)
+        assert default.__dict__.keys() == explicit.__dict__.keys()
+
+    def test_synonyms_with_default_file(self):
+        obs = obsq.ObsSequence(synonyms="alternate")
+        assert "alternate" in obs.synonyms_for_obs
+
 
 if __name__ == "__main__":
     pytest.main()
