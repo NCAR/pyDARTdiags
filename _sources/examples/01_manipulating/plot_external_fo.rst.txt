@@ -123,6 +123,7 @@ This file only has two observations.
           <th>days</th>
           <th>time</th>
           <th>obs_err_var</th>
+          <th>cov_group</th>
         </tr>
       </thead>
       <tbody>
@@ -141,6 +142,7 @@ This file only has two observations.
           <td>0</td>
           <td>2000-01-01</td>
           <td>10.01</td>
+          <td>-1</td>
         </tr>
         <tr>
           <th>1</th>
@@ -157,6 +159,7 @@ This file only has two observations.
           <td>0</td>
           <td>2000-01-01</td>
           <td>9.99</td>
+          <td>-1</td>
         </tr>
       </tbody>
     </table>
@@ -261,7 +264,7 @@ RAW_TRACER_CONCENTRATION observation.
  .. code-block:: none
 
 
-    0    [external_FO 80 1, 0.8663871066867745, 0.72436...
+    0    [external_FO 80 1, 0.6560555778504276, 0.64167...
     Name: external_FO, dtype: object
 
 
@@ -285,7 +288,7 @@ Let's write the observation sequence file with the new forward operator.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.008 seconds)
+   **Total running time of the script:** (0 minutes 0.010 seconds)
 
 
 .. _sphx_glr_download_examples_01_manipulating_plot_external_fo.py:

@@ -246,7 +246,6 @@ we've imported as obsq. The method takes a list of obs_seq objects to join.
           <th>prior_ensemble_member_35</th>
           <th>prior_ensemble_member_36</th>
           <th>...</th>
-          <th>prior_ensemble_member_55</th>
           <th>prior_ensemble_member_56</th>
           <th>prior_ensemble_member_57</th>
           <th>prior_ensemble_member_58</th>
@@ -286,6 +285,7 @@ we've imported as obsq. The method takes a list of obs_seq objects to join.
           <th>days</th>
           <th>time</th>
           <th>obs_err_var</th>
+          <th>cov_group</th>
         </tr>
       </thead>
       <tbody>
@@ -332,7 +332,6 @@ we've imported as obsq. The method takes a list of obs_seq objects to join.
           <td>230.959715</td>
           <td>230.910665</td>
           <td>...</td>
-          <td>231.264020</td>
           <td>231.250437</td>
           <td>231.464351</td>
           <td>230.930660</td>
@@ -372,6 +371,7 @@ we've imported as obsq. The method takes a list of obs_seq objects to join.
           <td>153005</td>
           <td>2019-12-01 21:00:03</td>
           <td>1.00</td>
+          <td>-1</td>
         </tr>
         <tr>
           <th>1</th>
@@ -416,7 +416,6 @@ we've imported as obsq. The method takes a list of obs_seq objects to join.
           <td>16.049381</td>
           <td>15.238145</td>
           <td>...</td>
-          <td>16.789844</td>
           <td>16.188690</td>
           <td>15.061255</td>
           <td>14.611386</td>
@@ -456,6 +455,7 @@ we've imported as obsq. The method takes a list of obs_seq objects to join.
           <td>153005</td>
           <td>2019-12-01 21:00:03</td>
           <td>6.25</td>
+          <td>-1</td>
         </tr>
         <tr>
           <th>2</th>
@@ -500,7 +500,6 @@ we've imported as obsq. The method takes a list of obs_seq objects to join.
           <td>-3.735192</td>
           <td>-5.350288</td>
           <td>...</td>
-          <td>-5.917664</td>
           <td>-5.111100</td>
           <td>-6.057586</td>
           <td>-3.555137</td>
@@ -540,6 +539,7 @@ we've imported as obsq. The method takes a list of obs_seq objects to join.
           <td>153005</td>
           <td>2019-12-01 21:00:03</td>
           <td>6.25</td>
+          <td>-1</td>
         </tr>
         <tr>
           <th>3</th>
@@ -584,7 +584,6 @@ we've imported as obsq. The method takes a list of obs_seq objects to join.
           <td>264.056010</td>
           <td>264.029595</td>
           <td>...</td>
-          <td>264.063943</td>
           <td>264.063542</td>
           <td>264.057365</td>
           <td>264.052744</td>
@@ -624,6 +623,7 @@ we've imported as obsq. The method takes a list of obs_seq objects to join.
           <td>153005</td>
           <td>2019-12-01 21:00:03</td>
           <td>1.00</td>
+          <td>-1</td>
         </tr>
         <tr>
           <th>4</th>
@@ -668,7 +668,6 @@ we've imported as obsq. The method takes a list of obs_seq objects to join.
           <td>10.019034</td>
           <td>10.229759</td>
           <td>...</td>
-          <td>10.091969</td>
           <td>10.114748</td>
           <td>10.090966</td>
           <td>10.118479</td>
@@ -708,10 +707,11 @@ we've imported as obsq. The method takes a list of obs_seq objects to join.
           <td>153005</td>
           <td>2019-12-01 21:00:03</td>
           <td>6.25</td>
+          <td>-1</td>
         </tr>
       </tbody>
     </table>
-    <p>5 rows × 98 columns</p>
+    <p>5 rows × 99 columns</p>
     </div>
     </div>
     <br />
@@ -781,7 +781,8 @@ with the prior columns from both obs_seq DataFrames.
            'prior_ensemble_member_78', 'prior_ensemble_member_79',
            'prior_ensemble_member_80', 'Data_QC', 'DART_quality_control',
            'linked_list', 'longitude', 'latitude', 'vertical', 'vert_unit', 'type',
-           'metadata', 'external_FO', 'seconds', 'days', 'time', 'obs_err_var'],
+           'metadata', 'external_FO', 'seconds', 'days', 'time', 'obs_err_var',
+           'cov_group'],
           dtype='object')
 
 
@@ -831,7 +832,7 @@ Note, the join method will still include the required columns for the obs_seq ob
     Index(['obs_num', 'observation', 'prior_ensemble_mean',
            'prior_ensemble_spread', 'linked_list', 'longitude', 'latitude',
            'vertical', 'vert_unit', 'type', 'metadata', 'external_FO', 'seconds',
-           'days', 'time', 'obs_err_var'],
+           'days', 'time', 'obs_err_var', 'cov_group'],
           dtype='object')
 
 
@@ -839,7 +840,7 @@ Note, the join method will still include the required columns for the obs_seq ob
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.080 seconds)
+   **Total running time of the script:** (0 minutes 0.118 seconds)
 
 
 .. _sphx_glr_download_examples_01_manipulating_plot_join_obs_seq.py:

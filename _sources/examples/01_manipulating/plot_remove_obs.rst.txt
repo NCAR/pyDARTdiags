@@ -138,6 +138,7 @@ Take a look at the observation sequence.
           <th>days</th>
           <th>time</th>
           <th>obs_err_var</th>
+          <th>cov_group</th>
         </tr>
       </thead>
       <tbody>
@@ -161,6 +162,7 @@ Take a look at the observation sequence.
           <td>153005</td>
           <td>2019-12-01 21:00:03</td>
           <td>1.00</td>
+          <td>-1</td>
         </tr>
         <tr>
           <th>1</th>
@@ -182,6 +184,7 @@ Take a look at the observation sequence.
           <td>153005</td>
           <td>2019-12-01 21:00:03</td>
           <td>6.25</td>
+          <td>-1</td>
         </tr>
         <tr>
           <th>2</th>
@@ -203,6 +206,7 @@ Take a look at the observation sequence.
           <td>153005</td>
           <td>2019-12-01 21:00:03</td>
           <td>6.25</td>
+          <td>-1</td>
         </tr>
         <tr>
           <th>3</th>
@@ -224,6 +228,7 @@ Take a look at the observation sequence.
           <td>153005</td>
           <td>2019-12-01 21:00:03</td>
           <td>1.00</td>
+          <td>-1</td>
         </tr>
         <tr>
           <th>4</th>
@@ -245,6 +250,7 @@ Take a look at the observation sequence.
           <td>153005</td>
           <td>2019-12-01 21:00:03</td>
           <td>6.25</td>
+          <td>-1</td>
         </tr>
       </tbody>
     </table>
@@ -386,7 +392,7 @@ The new file will not have the 'GPSRO_REFRACTIVITY' observations.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.022 seconds)
+   **Total running time of the script:** (0 minutes 0.032 seconds)
 
 
 .. _sphx_glr_download_examples_01_manipulating_plot_remove_obs.py:

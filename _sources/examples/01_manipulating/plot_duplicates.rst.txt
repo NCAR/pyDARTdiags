@@ -266,6 +266,7 @@ We're sorting by latitude to make it easier to see the duplicates.
           <th>days</th>
           <th>time</th>
           <th>obs_err_var</th>
+          <th>cov_group</th>
         </tr>
       </thead>
       <tbody>
@@ -286,6 +287,7 @@ We're sorting by latitude to make it easier to see the duplicates.
           <td>150541</td>
           <td>2013-03-03 09:00:00</td>
           <td>1.0</td>
+          <td>-1</td>
         </tr>
         <tr>
           <th>313408</th>
@@ -304,6 +306,7 @@ We're sorting by latitude to make it easier to see the duplicates.
           <td>150541</td>
           <td>2013-03-03 09:00:00</td>
           <td>1.0</td>
+          <td>-1</td>
         </tr>
         <tr>
           <th>313407</th>
@@ -322,6 +325,7 @@ We're sorting by latitude to make it easier to see the duplicates.
           <td>150541</td>
           <td>2013-03-03 09:00:00</td>
           <td>1.0</td>
+          <td>-1</td>
         </tr>
         <tr>
           <th>313865</th>
@@ -340,6 +344,7 @@ We're sorting by latitude to make it easier to see the duplicates.
           <td>150541</td>
           <td>2013-03-03 09:00:00</td>
           <td>1.0</td>
+          <td>-1</td>
         </tr>
         <tr>
           <th>310087</th>
@@ -358,9 +363,11 @@ We're sorting by latitude to make it easier to see the duplicates.
           <td>150541</td>
           <td>2013-03-03 09:00:00</td>
           <td>1.0</td>
+          <td>-1</td>
         </tr>
         <tr>
           <th>...</th>
+          <td>...</td>
           <td>...</td>
           <td>...</td>
           <td>...</td>
@@ -394,6 +401,7 @@ We're sorting by latitude to make it easier to see the duplicates.
           <td>150541</td>
           <td>2013-03-03 08:39:00</td>
           <td>1.0</td>
+          <td>-1</td>
         </tr>
         <tr>
           <th>311873</th>
@@ -412,6 +420,7 @@ We're sorting by latitude to make it easier to see the duplicates.
           <td>150541</td>
           <td>2013-03-03 09:00:00</td>
           <td>1.0</td>
+          <td>-1</td>
         </tr>
         <tr>
           <th>309527</th>
@@ -430,6 +439,7 @@ We're sorting by latitude to make it easier to see the duplicates.
           <td>150541</td>
           <td>2013-03-03 09:00:00</td>
           <td>1.0</td>
+          <td>-1</td>
         </tr>
         <tr>
           <th>270664</th>
@@ -448,6 +458,7 @@ We're sorting by latitude to make it easier to see the duplicates.
           <td>150541</td>
           <td>2013-03-03 08:39:00</td>
           <td>1.0</td>
+          <td>-1</td>
         </tr>
         <tr>
           <th>274040</th>
@@ -466,10 +477,11 @@ We're sorting by latitude to make it easier to see the duplicates.
           <td>150541</td>
           <td>2013-03-03 08:39:00</td>
           <td>1.0</td>
+          <td>-1</td>
         </tr>
       </tbody>
     </table>
-    <p>1232 rows × 15 columns</p>
+    <p>1232 rows × 16 columns</p>
     </div>
     </div>
     <br />
@@ -521,7 +533,7 @@ The number of obs has been reduced by the number of duplicates
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 3.002 seconds)
+   **Total running time of the script:** (0 minutes 4.221 seconds)
 
 
 .. _sphx_glr_download_examples_01_manipulating_plot_duplicates.py:
