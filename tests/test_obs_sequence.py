@@ -1411,5 +1411,45 @@ class TestQC2Replacement:
         ).all()
 
 
+class TestCovGroup:
+
+    @pytest.fixture
+    def ascii_obs_seq_file_path(self):
+        test_dir = os.path.dirname(__file__)
+        return os.path.join(test_dir, "data", "obs_seq.final.ascii.small")
+
+    def test_default_is_minus_one(self, ascii_obs_seq_file_path):
+        obs = obsq.ObsSequence(ascii_obs_seq_file_path)
+        assert (obs.df["cov_group"] == -1).all()
+
+    def test_pattern_with_groups(self):
+        result = obsq.ObsSequence._generate_linked_list_pattern(3, [1, 2, 2])
+        assert [r.split()[2] for r in result] == ["1", "2", "2"]
+
+    def test_round_trip_and_sort(self, ascii_obs_seq_file_path, tmp_path):
+        obs = obsq.ObsSequence(ascii_obs_seq_file_path)
+        n = len(obs.df)
+        obs.df["cov_group"] = [i % 3 + 1 for i in range(n)]
+        # reverse times so the write must re-sort
+        obs.df["time"] = obs.df["time"].iloc[::-1].values
+        expected = obs.df.sort_values("time", kind="stable")["observation"].tolist()
+        expected_groups = obs.df.sort_values("time", kind="stable")[
+            "cov_group"
+        ].tolist()
+        out = tmp_path / "obs_seq.groups"
+        obs.write_obs_seq(str(out))
+        back = obsq.ObsSequence(str(out))
+        assert back.df["cov_group"].tolist() == expected_groups
+        assert back.df["observation"].tolist() == expected
+
+    def test_join_keeps_groups(self, ascii_obs_seq_file_path):
+        a = obsq.ObsSequence(ascii_obs_seq_file_path)
+        b = obsq.ObsSequence(ascii_obs_seq_file_path)
+        a.df["cov_group"] = 1
+        b.df["cov_group"] = 2
+        combo = obsq.ObsSequence.join([a, b])
+        assert set(combo.df["cov_group"]) == {1, 2}
+
+
 if __name__ == "__main__":
     pytest.main()

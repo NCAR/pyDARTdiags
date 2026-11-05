@@ -4,6 +4,8 @@ All notable changes to pyDARTdiags will be documented in this file.
 
 ## [Unreleased]
 
+- New `cov_group` column holds the third value of the linked list
+
 ## [0.7.1] - 2026-09-17
 
 - "CROCOLAKE observation" added to list of observation synonyms. 

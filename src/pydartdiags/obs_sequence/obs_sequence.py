@@ -254,6 +254,8 @@ class ObsSequence:
                 + dt.timedelta(seconds=int(time[0]), days=int(time[1]))
             )
         data.append(float(obs[-1]))  # obs error variance ?convert to sd?
+        # third value of the linked list line is the group (-1 means no group)
+        data.append(int(obs[self.n_copies + 1].split()[2]))
 
         return data
 
@@ -318,16 +320,24 @@ class ObsSequence:
         return obs
 
     @staticmethod
-    def _generate_linked_list_pattern(n):
-        """Create a list of strings with the linked list pattern for n observations."""
+    def _generate_linked_list_pattern(n, groups=None):
+        """Create a list of strings with the linked list pattern for n observations.
+
+        Args:
+            n (int): number of observations.
+            groups (sequence of int, optional): the group (third column) for each
+                observation. Defaults to -1 (no group) for all.
+        """
+        if groups is None:
+            groups = [-1] * n
         result = []
         for i in range(n - 1):
             col1 = i if i > 0 else -1
             col2 = i + 2
-            col3 = -1
+            col3 = int(groups[i])
             result.append(f"{col1:<12}{col2:<11}{col3}")
-        result.append(f"{n-1:<12}{'-1':<11}{'-1'}")
-        return result
+        result.append(f"{n-1:<12}{'-1':<11}{int(groups[n-1])}" if n > 0 else "")
+        return result[:n]
 
     def write_obs_seq(self, file):
         """
@@ -382,6 +392,8 @@ class ObsSequence:
                 )
             if "midpoint" in df_copy.columns:
                 df_copy = df_copy.drop(columns=["midpoint", "vlevels"])
+            # cov_group is written in the linked_list column
+            df_copy = df_copy.drop(columns=["cov_group"], errors="ignore")
 
             # Revert NaNs back to MISSING_R8s
             if self.has_posterior():
@@ -480,6 +492,7 @@ class ObsSequence:
             "days",
             "time",
             "obs_err_var",
+            "cov_group",
             "location",
         ]
         for copie in self.df.columns:
@@ -508,6 +521,7 @@ class ObsSequence:
         heading.append("days")
         heading.append("time")
         heading.append("obs_err_var")
+        heading.append("cov_group")  # third value of the linked list, -1 = no group
         return heading
 
     @_requires_assimilation_info
@@ -1120,9 +1134,10 @@ class ObsSequence:
         # Iterate over the list of observation sequences and combine their data
         for obs_seq in obs_sequences:
             if copies:
-                combo.df = pd.concat(
-                    [combo.df, obs_seq.df[requested_columns]], ignore_index=True
+                cols = requested_columns + (
+                    ["cov_group"] if "cov_group" in obs_seq.df.columns else []
                 )
+                combo.df = pd.concat([combo.df, obs_seq.df[cols]], ignore_index=True)
             else:
                 combo.df = pd.concat([combo.df, obs_seq.df], ignore_index=True)
 
@@ -1140,7 +1155,11 @@ class ObsSequence:
         """
         df.sort_values(by="time", inplace=True, kind="stable")
         df.reset_index(drop=True, inplace=True)
-        df["linked_list"] = ObsSequence._generate_linked_list_pattern(len(df))
+        groups = None  # no cov_group column means no groups (-1)
+        if "cov_group" in df.columns:
+            df["cov_group"] = df["cov_group"].fillna(-1).astype(int)
+            groups = df["cov_group"].tolist()
+        df["linked_list"] = ObsSequence._generate_linked_list_pattern(len(df), groups)
         df["obs_num"] = df.index + 1
         return None
 
