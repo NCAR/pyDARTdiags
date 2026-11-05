@@ -80,8 +80,10 @@ def plot_profile(
     df_pvu["midpoint"] = df_pvu["midpoint"] * conversion
 
     # Add horizontal stripes alternating between gray and white to represent the vertical levels
-    left = df["vlevels"].apply(lambda x: x.left * conversion)  # todo convert to HPa
-    right = df["vlevels"].apply(lambda x: x.right * conversion)
+    left = df["vlevels"].map(
+        lambda x: x.left * conversion, na_action="ignore"
+    )  # todo convert to HPa
+    right = df["vlevels"].map(lambda x: x.right * conversion, na_action="ignore")
     for i in range(len(left)):
         color = "gray" if i % 2 == 0 else "white"
         ax1.axhspan(left.iloc[i], right.iloc[i], color=color, alpha=0.3)
