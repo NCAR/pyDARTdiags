@@ -232,7 +232,7 @@ def bin_by_layer(df, levels, verticalUnit="pressure (Pa)"):
     df.loc[df["vert_unit"] == verticalUnit, "vlevels"] = pd.cut(
         df.loc[df["vert_unit"] == verticalUnit, "vertical"], levels, include_lowest=True
     )
-    df.loc[:, "midpoint"] = df["vlevels"].apply(lambda x: x.mid)
+    df.loc[:, "midpoint"] = df["vlevels"].map(lambda x: x.mid, na_action="ignore")
 
 
 def bin_by_time(df, time_value):
