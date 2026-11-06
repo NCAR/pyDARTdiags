@@ -45,7 +45,7 @@ Here are some examples of how to use pyDARTdiags to read, modify, and write obse
 
 .. only:: html
 
-  .. image:: /examples/01_manipulating/images/thumb/sphx_glr_plot_external_fo_thumb.png
+  .. image:: /examples/01_manipulating/images/thumb/sphx_glr_plot_external_fo_thumb.webp
     :alt:
 
   :doc:`/examples/01_manipulating/plot_external_fo`
@@ -79,7 +79,7 @@ Here are some examples of how to use pyDARTdiags to read, modify, and write obse
 
 .. only:: html
 
-  .. image:: /examples/01_manipulating/images/thumb/sphx_glr_plot_remove_obs_thumb.png
+  .. image:: /examples/01_manipulating/images/thumb/sphx_glr_plot_remove_obs_thumb.webp
     :alt:
 
   :doc:`/examples/01_manipulating/plot_remove_obs`

@@ -35,7 +35,7 @@ RAW_TRACER_CONCENTRATION forward operators.
 
 Import the obs_sequence module, and numpy
 
-.. GENERATED FROM PYTHON SOURCE LINES 19-23
+.. GENERATED FROM PYTHON SOURCE LINES 19-24
 
 .. code-block:: Python
 
@@ -50,13 +50,14 @@ Import the obs_sequence module, and numpy
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 24-27
+
+.. GENERATED FROM PYTHON SOURCE LINES 26-29
 
 Read in the observation sequence file. In this example we'll use the
 obs_seq.out.tracer file.
 This file only has two observations.
 
-.. GENERATED FROM PYTHON SOURCE LINES 27-30
+.. GENERATED FROM PYTHON SOURCE LINES 29-32
 
 .. code-block:: Python
 
@@ -77,7 +78,7 @@ This file only has two observations.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 31-34
+.. GENERATED FROM PYTHON SOURCE LINES 33-36
 
 .. code-block:: Python
 
@@ -168,12 +169,12 @@ This file only has two observations.
     <br />
     <br />
 
-.. GENERATED FROM PYTHON SOURCE LINES 35-37
+.. GENERATED FROM PYTHON SOURCE LINES 37-39
 
 The external forward operator is stored in the 'external_FO' column.
 Currently, the 'external_FO' column is empty.
 
-.. GENERATED FROM PYTHON SOURCE LINES 37-40
+.. GENERATED FROM PYTHON SOURCE LINES 39-42
 
 .. code-block:: Python
 
@@ -193,7 +194,7 @@ Currently, the 'external_FO' column is empty.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 41-50
+.. GENERATED FROM PYTHON SOURCE LINES 43-52
 
 Let's add a forward operator to every observation of type RAW_TRACER_CONCENTRATION.
 This input obs_seq file only has a single observation with the
@@ -205,7 +206,7 @@ forward operator results from your model.
 We want 80 ensemble members, so we'll create 80 random numbers per observation,
 and we want tracer concentrations, so we'll force the numbers to be positive.
 
-.. GENERATED FROM PYTHON SOURCE LINES 50-53
+.. GENERATED FROM PYTHON SOURCE LINES 52-55
 
 .. code-block:: Python
 
@@ -219,7 +220,7 @@ and we want tracer concentrations, so we'll force the numbers to be positive.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 54-60
+.. GENERATED FROM PYTHON SOURCE LINES 56-62
 
 DART observation sequence files have a specific format. DART expects the list
 of forward operators to have 'external_FO' followed by the number of ensemble
@@ -228,7 +229,7 @@ used by DART, so we will just put 1 for the value.
 Each observation gets its own randomly generated ensemble, assigned one row
 at a time with .at so the list is stored as a single cell value.
 
-.. GENERATED FROM PYTHON SOURCE LINES 60-65
+.. GENERATED FROM PYTHON SOURCE LINES 62-67
 
 .. code-block:: Python
 
@@ -244,12 +245,12 @@ at a time with .at so the list is stored as a single cell value.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 66-68
+.. GENERATED FROM PYTHON SOURCE LINES 68-70
 
 Now the 'external_FO' column has the forward operator for every
 RAW_TRACER_CONCENTRATION observation.
 
-.. GENERATED FROM PYTHON SOURCE LINES 68-70
+.. GENERATED FROM PYTHON SOURCE LINES 70-72
 
 .. code-block:: Python
 
@@ -264,16 +265,16 @@ RAW_TRACER_CONCENTRATION observation.
  .. code-block:: none
 
 
-    0    [external_FO 80 1, 0.6560555778504276, 0.64167...
+    0    [external_FO 80 1, 0.6810521904701471, 0.79175...
     Name: external_FO, dtype: object
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 71-72
+.. GENERATED FROM PYTHON SOURCE LINES 73-74
 
 Let's write the observation sequence file with the new forward operator.
 
-.. GENERATED FROM PYTHON SOURCE LINES 72-73
+.. GENERATED FROM PYTHON SOURCE LINES 74-75
 
 .. code-block:: Python
 
@@ -288,7 +289,7 @@ Let's write the observation sequence file with the new forward operator.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.010 seconds)
+   **Total running time of the script:** (0 minutes 0.011 seconds)
 
 
 .. _sphx_glr_download_examples_01_manipulating_plot_external_fo.py:

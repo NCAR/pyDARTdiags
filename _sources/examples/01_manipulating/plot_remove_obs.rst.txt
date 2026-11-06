@@ -28,7 +28,7 @@ observation sequence and write a new observation sequence file.
 
 Import the obs_sequence module
 
-.. GENERATED FROM PYTHON SOURCE LINES 12-15
+.. GENERATED FROM PYTHON SOURCE LINES 12-16
 
 .. code-block:: Python
 
@@ -42,12 +42,13 @@ Import the obs_sequence module
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 16-18
+
+.. GENERATED FROM PYTHON SOURCE LINES 18-20
 
 Chose an obs_seq file to read.
 In this example, we are using a small obs_seq file "obs_seq.final.medium".
 
-.. GENERATED FROM PYTHON SOURCE LINES 18-20
+.. GENERATED FROM PYTHON SOURCE LINES 20-22
 
 .. code-block:: Python
 
@@ -67,11 +68,11 @@ In this example, we are using a small obs_seq file "obs_seq.final.medium".
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 21-22
+.. GENERATED FROM PYTHON SOURCE LINES 23-24
 
 Read the obs_seq file into an obs_seq object.
 
-.. GENERATED FROM PYTHON SOURCE LINES 22-24
+.. GENERATED FROM PYTHON SOURCE LINES 24-26
 
 .. code-block:: Python
 
@@ -84,11 +85,11 @@ Read the obs_seq file into an obs_seq object.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 25-26
+.. GENERATED FROM PYTHON SOURCE LINES 27-28
 
 Take a look at the observation sequence.
 
-.. GENERATED FROM PYTHON SOURCE LINES 26-28
+.. GENERATED FROM PYTHON SOURCE LINES 28-30
 
 .. code-block:: Python
 
@@ -259,11 +260,11 @@ Take a look at the observation sequence.
     <br />
     <br />
 
-.. GENERATED FROM PYTHON SOURCE LINES 29-30
+.. GENERATED FROM PYTHON SOURCE LINES 31-32
 
 To count of the number of observations by type, use the groupby method.
 
-.. GENERATED FROM PYTHON SOURCE LINES 30-32
+.. GENERATED FROM PYTHON SOURCE LINES 32-34
 
 .. code-block:: Python
 
@@ -292,12 +293,12 @@ To count of the number of observations by type, use the groupby method.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 33-35
+.. GENERATED FROM PYTHON SOURCE LINES 35-37
 
 Let's remove the 'GPSRO_REFRACTIVITY' observations.
 Remove rows where ``'type' == 'GPSRO_REFRACTIVITY'``
 
-.. GENERATED FROM PYTHON SOURCE LINES 35-37
+.. GENERATED FROM PYTHON SOURCE LINES 37-39
 
 .. code-block:: Python
 
@@ -310,12 +311,12 @@ Remove rows where ``'type' == 'GPSRO_REFRACTIVITY'``
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 38-40
+.. GENERATED FROM PYTHON SOURCE LINES 40-42
 
 Now let's check the number of observations by type again.
 For only the 'GPSRO_REFRACTIVITY' observations:
 
-.. GENERATED FROM PYTHON SOURCE LINES 40-43
+.. GENERATED FROM PYTHON SOURCE LINES 42-45
 
 .. code-block:: Python
 
@@ -335,12 +336,12 @@ For only the 'GPSRO_REFRACTIVITY' observations:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 44-46
+.. GENERATED FROM PYTHON SOURCE LINES 46-48
 
 Count the observations by type again. You'll see that the 'GPSRO_REFRACTIVITY' 
 observations have been removed from the dataFrame
 
-.. GENERATED FROM PYTHON SOURCE LINES 46-48
+.. GENERATED FROM PYTHON SOURCE LINES 48-50
 
 .. code-block:: Python
 
@@ -368,11 +369,11 @@ observations have been removed from the dataFrame
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 49-50
+.. GENERATED FROM PYTHON SOURCE LINES 51-52
 
 Write the new observation sequence to a file.
 
-.. GENERATED FROM PYTHON SOURCE LINES 50-52
+.. GENERATED FROM PYTHON SOURCE LINES 52-54
 
 .. code-block:: Python
 
@@ -385,14 +386,14 @@ Write the new observation sequence to a file.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 53-53
+.. GENERATED FROM PYTHON SOURCE LINES 55-55
 
 The new file will not have the 'GPSRO_REFRACTIVITY' observations.
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.032 seconds)
+   **Total running time of the script:** (0 minutes 0.035 seconds)
 
 
 .. _sphx_glr_download_examples_01_manipulating_plot_remove_obs.py:
