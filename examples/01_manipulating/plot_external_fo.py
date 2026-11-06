@@ -20,6 +20,8 @@ import pydartdiags.obs_sequence.obs_sequence as obsq
 from pydartdiags.data import get_example_data
 import numpy as np
 
+# sphinx_gallery_thumbnail_path = '_static/irene.webp'
+
 ###########################################
 # Read in the observation sequence file. In this example we'll use the
 # obs_seq.out.tracer file.

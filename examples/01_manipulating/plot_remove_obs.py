@@ -12,6 +12,8 @@ observation sequence and write a new observation sequence file.
 import pydartdiags.obs_sequence.obs_sequence as obsq
 from pydartdiags.data import get_example_data
 
+# sphinx_gallery_thumbnail_path = '_static/karla.webp'
+
 ###########################################
 # Chose an obs_seq file to read.
 # In this example, we are using a small obs_seq file "obs_seq.final.medium".
