@@ -66,5 +66,5 @@ fig
 # plot can be automatically created and saved as a static figure after
 # each assimilation cycle.
 # To do so, you must pip install kaleido "pip install --upgrade kaleido"
-# in your dartdiags virtual environment
-# Then simply replace the line 'fig' with 'fig.write_image("figure.png")'
+# in your dartdiags virtual environment.
+# Then simply replace the line 'fig' with 'fig.write_image("figure.png")'.
