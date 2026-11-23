@@ -58,3 +58,17 @@ fig.update_layout(
     width=950,  # Set the width of the plot
 )
 fig
+
+
+###########################################
+# This figure can also be saved as a static image in either png
+# or jpeg format, allowing you to automatically generate and save a figure
+# as part of your workflow.
+#
+# To enable this, install kaleido in your virtual environment:
+#
+#    pip install --upgrade kaleido
+#
+# Then replace the line 'fig' with
+#
+#    fig.write_image("figure.png")

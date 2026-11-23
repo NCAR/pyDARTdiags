@@ -35,7 +35,7 @@
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=6a604523" />
   
   <!-- So that users can add custom icons -->
   <script defer src="../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
@@ -49,7 +49,7 @@
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../_static/sg-tags.js?v=d80f6fa4"></script>
-    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../_static/design-tabs.js?v=fcb327ea"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'examples/01_manipulating/plot_external_fo';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -584,14 +584,14 @@ at a time with .at so the list is stored as a single cell value.</p>
 RAW_TRACER_CONCENTRATION observation.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span class="n">obs_seq</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">RAW_TRACER_CONCENTRATION_state_idxs</span><span class="p">,</span> <span class="s1">'</span><span class="s1">external_FO</span><span class="s1">'</span><span class="p">]</span><span class="w">
 </span></pre></div></div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0    [external_FO 80 1, 0.6810521904701471, 0.79175...
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0    [external_FO 80 1, 0.859242001190192, 0.768165...
 Name: external_FO, dtype: object
 </pre></div>
 </div>
 <p>Let’s write the observation sequence file with the new forward operator.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span class="n">obs_seq</span><span class="o">.</span><span class="n">write_obs_seq</span><span class="p">(</span><span class="s1">'</span><span class="s1">obs_seq.out.tracer_with_external_FO</span><span class="s1">'</span><span class="p">)</span><span class="w">
 </span></pre></div></div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.011 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.008 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-01-manipulating-plot-external-fo-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/4b1e29eb5a16321306a4851e86279a4e/plot_external_fo.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_external_fo.ipynb</span></code></a></p>

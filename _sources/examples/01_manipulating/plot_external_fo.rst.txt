@@ -265,7 +265,7 @@ RAW_TRACER_CONCENTRATION observation.
  .. code-block:: none
 
 
-    0    [external_FO 80 1, 0.6810521904701471, 0.79175...
+    0    [external_FO 80 1, 0.859242001190192, 0.768165...
     Name: external_FO, dtype: object
 
 
@@ -289,7 +289,7 @@ Let's write the observation sequence file with the new forward operator.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.011 seconds)
+   **Total running time of the script:** (0 minutes 0.008 seconds)
 
 
 .. _sphx_glr_download_examples_01_manipulating_plot_external_fo.py:
