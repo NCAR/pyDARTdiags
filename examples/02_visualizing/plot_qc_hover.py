@@ -62,9 +62,13 @@ fig
 
 ###########################################
 # This figure can also be saved as a static image in either png
-# or jpeg format. This would allow you to set up workflows in which this
-# plot can be automatically created and saved as a static figure after
-# each assimilation cycle.
-# To do so, you must pip install kaleido "pip install --upgrade kaleido"
-# in your dartdiags virtual environment.
-# Then simply replace the line 'fig' with 'fig.write_image("figure.png")'.
+# or jpeg format, allowing you to automatically generate and save a figure
+# as part of your workflow.
+#
+# To enable this, install kaleido in your virtual environment:
+#
+#    pip install --upgrade kaleido
+#
+# Then replace the line 'fig' with
+#
+#    fig.write_image("figure.png")
