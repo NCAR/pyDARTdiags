@@ -4,7 +4,12 @@ All notable changes to pyDARTdiags will be documented in this file.
 
 ## [Unreleased]
 
-- New `cov_group` column holds the third value of the linked list
+### Added
+- New `cov_group` column holds the third value of the linked list (#149).
+- `ObsSequence()` with no file creates an empty obs_seq object (#150).
+
+### Changed
+- `plot_qc_hover` example shows how to save the interactive geo plot as a static image (#154).
 
 ## [0.7.1] - 2026-09-17
 
